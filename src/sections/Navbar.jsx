@@ -1,0 +1,182 @@
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import useStore from '../store/useStore'
+
+const navItems = [
+    { label: 'Home', href: '#home', num: '01' },
+    { label: 'Tech', href: '#about', num: '02' },
+    { label: 'Work', href: '#projects', num: '03' },
+    { label: 'Credentials', href: '#certificates', num: '04' },
+    { label: 'Contact', href: '#contact', num: '05' },
+]
+
+function NavLink({ item, index }) {
+    const setCursorVariant = useStore((s) => s.setCursorVariant)
+    return (
+        <motion.a
+            href={item.href}
+            onMouseEnter={() => setCursorVariant('hover')}
+            onMouseLeave={() => setCursorVariant('default')}
+            className="relative text-sm tracking-wide text-white/40 hover:text-white/90 transition-colors duration-300 link-underline py-1 group"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2 + index * 0.08, duration: 0.5 }}
+        >
+            <span className="text-[9px] text-white/15 mr-1 group-hover:text-white/30 transition-colors">{item.num}</span>
+            {item.label}
+        </motion.a>
+    )
+}
+
+export default function Navbar() {
+    const [mobileOpen, setMobileOpen] = useState(false)
+    const setCursorVariant = useStore((s) => s.setCursorVariant)
+
+    return (
+        <>
+            <motion.nav
+                className="fixed top-0 left-0 right-0 z-50"
+                initial={{ y: -80, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1, delay: 1.8, ease: [0.76, 0, 0.24, 1] }}
+            >
+                {/* Glass background with gradient border */}
+                <div className="backdrop-blur-xl bg-black/20 border-b border-white/[0.03]">
+                    <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
+                        {/* Logo */}
+                        <a
+                            href="#home"
+                            onMouseEnter={() => setCursorVariant('hover')}
+                            onMouseLeave={() => setCursorVariant('default')}
+                            className="flex items-center gap-3 group"
+                        >
+                            {/* Logo mark */}
+                            <div className="w-8 h-8 border border-white/10 rounded-lg flex items-center justify-center group-hover:border-white/20 transition-colors duration-500">
+                                <span
+                                    className="text-xs font-semibold text-white/60 group-hover:text-white/90 transition-colors duration-500"
+                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                >
+                                    P
+                                </span>
+                            </div>
+                            <span
+                                className="text-sm font-medium tracking-[0.15em] text-white/60 group-hover:text-white/90 transition-colors duration-500 hidden sm:block"
+                                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                            >
+                                PRIYANK
+                            </span>
+                        </a>
+
+                        {/* Desktop Links */}
+                        <div className="hidden md:flex items-center gap-8">
+                            {navItems.map((item, i) => (
+                                <NavLink key={item.label} item={item} index={i} />
+                            ))}
+
+                            {/* Status indicator */}
+                            <motion.div
+                                className="flex items-center gap-2 ml-4 pl-4 border-l border-white/5"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 2.5, duration: 0.5 }}
+                            >
+                                <div className="w-1.5 h-1.5 bg-emerald-500/60 rounded-full animate-pulse-glow" />
+                                <span className="text-[10px] tracking-wider text-white/20 uppercase">Available</span>
+                            </motion.div>
+                        </div>
+
+                        {/* Mobile Hamburger */}
+                        <button
+                            className="md:hidden flex flex-col gap-1.5 p-2"
+                            onClick={() => setMobileOpen(!mobileOpen)}
+                            onMouseEnter={() => setCursorVariant('hover')}
+                            onMouseLeave={() => setCursorVariant('default')}
+                            aria-label="Toggle menu"
+                        >
+                            <motion.span
+                                className="block w-6 h-px bg-white/50"
+                                animate={mobileOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                            />
+                            <motion.span
+                                className="block w-4 h-px bg-white/50 ml-auto"
+                                animate={mobileOpen ? { opacity: 0, width: 0 } : { opacity: 1, width: 16 }}
+                                transition={{ duration: 0.2 }}
+                            />
+                            <motion.span
+                                className="block w-6 h-px bg-white/50"
+                                animate={mobileOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                            />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Bottom glow line */}
+                <div className="h-px glow-line" />
+            </motion.nav>
+
+            {/* Mobile Menu */}
+            <AnimatePresence>
+                {mobileOpen && (
+                    <motion.div
+                        className="fixed inset-0 z-40 bg-[#0a0a0a]/98 backdrop-blur-2xl flex flex-col items-center justify-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        {/* Decorative lines */}
+                        <div className="absolute top-20 left-8 w-px h-32 bg-gradient-to-b from-white/5 to-transparent" />
+                        <div className="absolute bottom-20 right-8 w-px h-32 bg-gradient-to-t from-white/5 to-transparent" />
+
+                        <nav className="flex flex-col items-center gap-6">
+                            <motion.p
+                                className="text-[10px] tracking-[0.5em] uppercase text-white/15 mb-4"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.2 }}
+                            >
+                                Navigation
+                            </motion.p>
+
+                            {navItems.map((item, i) => (
+                                <motion.div
+                                    key={item.label}
+                                    initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+                                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                                    exit={{ opacity: 0, y: -20, filter: 'blur(5px)' }}
+                                    transition={{ delay: i * 0.06 + 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                                >
+                                    <a
+                                        href={item.href}
+                                        onClick={() => setMobileOpen(false)}
+                                        onMouseEnter={() => setCursorVariant('hover')}
+                                        onMouseLeave={() => setCursorVariant('default')}
+                                        className="flex items-center gap-4 text-3xl tracking-wide text-white/60 hover:text-white transition-colors"
+                                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                    >
+                                        <span className="text-xs text-white/15">{item.num}</span>
+                                        {item.label}
+                                    </a>
+                                </motion.div>
+                            ))}
+                        </nav>
+
+                        {/* Footer info in mobile menu */}
+                        <motion.div
+                            className="absolute bottom-12 text-center"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                        >
+                            <p className="text-[10px] tracking-[0.3em] text-white/10 uppercase">
+                                Priyank &mdash; Portfolio 2025
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
+    )
+}
