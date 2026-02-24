@@ -81,7 +81,7 @@ function AnimatedInput({ label, name, type = 'text', textarea = false, required 
         <div className="relative group flex flex-col">
             {/* Floating label */}
             <motion.label
-                className="absolute left-0 text-white/20 pointer-events-none"
+                className="absolute left-0 text-white/45 pointer-events-none"
                 animate={{
                     top: focused || hasValue ? -8 : textarea ? 12 : 12,
                     fontSize: focused || hasValue ? '10px' : '14px',
@@ -206,7 +206,7 @@ export default function Contact() {
                 {/* Section header */}
                 <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-px bg-white/10" />
-                    <p className="text-[11px] tracking-[0.4em] uppercase text-white/20">005 &mdash; Contact</p>
+                    <p className="text-[11px] tracking-[0.4em] uppercase text-white/45">005 &mdash; Contact</p>
                 </div>
                 <h2
                     className="text-3xl md:text-5xl font-bold mb-3 text-white/90"
@@ -214,7 +214,7 @@ export default function Contact() {
                 >
                     Let's Build <span className="text-gradient-silver">Together</span>
                 </h2>
-                <p className="text-sm text-white/25 max-w-lg mb-20">
+                <p className="text-sm text-white/60 max-w-lg mb-20">
                     Have a project in mind or just want to start a conversation? I'm always excited
                     about new challenges and meaningful collaborations.
                 </p>
@@ -253,7 +253,7 @@ export default function Contact() {
                                             </svg>
                                         )}
                                     </motion.button>
-                                    <span className="text-[10px] text-white/10">Usually replies within 24h</span>
+                                    <span className="text-[10px] text-white/60">Usually replies within 24h</span>
                                 </div>
 
                                 <AnimatePresence>
@@ -287,7 +287,7 @@ export default function Contact() {
                     {/* Socials — 2 cols */}
                     <div className="lg:col-span-2 flex flex-col justify-between">
                         <div>
-                            <p className="text-[10px] tracking-[0.3em] uppercase text-white/15 mb-8">Find me on</p>
+                            <p className="text-[10px] tracking-[0.3em] uppercase text-white/60 mb-8">Find me on</p>
                             <div className="flex flex-col gap-3">
                                 {socials.map((s, i) => (
                                     <motion.div
@@ -301,12 +301,12 @@ export default function Contact() {
                                     >
                                         <a href={s.href} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-0 rounded-xl" />
                                         <div className="relative z-10 flex items-center gap-4 w-full pointer-events-none">
-                                            <span className="text-white/15 group-hover:text-white/40 transition-colors duration-300">
+                                            <span className="text-white/60 group-hover:text-white/60 transition-colors duration-300">
                                                 {s.icon}
                                             </span>
                                             <div className="flex-1">
                                                 <span className="text-sm text-white/50 group-hover:text-white/80 transition-colors block">{s.label}</span>
-                                                <span className="text-[10px] text-white/15">{s.desc}</span>
+                                                <span className="text-[10px] text-white/60">{s.desc}</span>
                                             </div>
                                             {s.label === 'LeetCode' && (
                                                 <button
@@ -317,7 +317,7 @@ export default function Contact() {
                                                     Analysis
                                                 </button>
                                             )}
-                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/10 group-hover:text-white/30 group-hover:translate-x-1 transition-[color,transform] duration-300">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/60 group-hover:text-white/45 group-hover:translate-x-1 transition-[color,transform] duration-300">
                                                 <polyline points="9 18 15 12 9 6" />
                                             </svg>
                                         </div>
@@ -330,9 +330,9 @@ export default function Contact() {
                         <div className="mt-12 p-5 rounded-xl bg-white/[0.02] border border-white/[0.04]">
                             <div className="flex items-center gap-2.5 mb-2">
                                 <span className="w-2 h-2 bg-[#60a5fa]/70 rounded-full animate-pulse-glow" />
-                                <span className="text-xs text-white/40 font-medium">Open to internships</span>
+                                <span className="text-xs text-white/60 font-medium">Open to internships</span>
                             </div>
-                            <p className="text-[11px] text-white/20 leading-relaxed">
+                            <p className="text-[11px] text-white/45 leading-relaxed">
                                 Currently looking for internships and small collaborations to apply my fundamentals.
                             </p>
                         </div>
@@ -343,11 +343,11 @@ export default function Contact() {
                 <div className="mt-32 pt-8 border-t border-white/[0.04] flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <div className="w-6 h-6 border border-white/10 rounded-md flex items-center justify-center">
-                            <span className="text-[10px] text-white/30 font-medium" style={{ fontFamily: "'Poppins'" }}>P</span>
+                            <span className="text-[10px] text-white/45 font-medium" style={{ fontFamily: "'Poppins'" }}>P</span>
                         </div>
-                        <span className="text-xs text-white/15">Designed & Built by Priyank</span>
+                        <span className="text-xs text-white/60">Designed & Built by Priyank</span>
                     </div>
-                    <span className="text-[10px] text-white/10">
+                    <span className="text-[10px] text-white/60">
                         &copy; {new Date().getFullYear()} &mdash; All rights reserved
                     </span>
                 </div>
@@ -407,12 +407,12 @@ export default function Contact() {
                                 <div className="flex items-center justify-between pt-6 mt-8 border-t border-white/[0.04]">
                                     <button
                                         onClick={() => setShowLeetCodeModal(false)}
-                                        className="text-xs tracking-[0.2em] uppercase text-white/25 hover:text-white/60 transition-colors flex items-center gap-2"
+                                        className="text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white/60 transition-colors flex items-center gap-2"
                                     >
                                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                                         Close
                                     </button>
-                                    <span className="text-[10px] text-white/10">ESC to dismiss</span>
+                                    <span className="text-[10px] text-white/60">ESC to dismiss</span>
                                 </div>
                             </div>
                         </motion.div>

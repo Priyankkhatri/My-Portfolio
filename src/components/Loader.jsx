@@ -97,7 +97,7 @@ export default function Loader() {
 
                         {/* Eyebrow */}
                         <motion.p
-                            className="text-[10px] tracking-[0.5em] uppercase text-white/15 mb-6"
+                            className="text-[10px] tracking-[0.5em] uppercase text-white/60 mb-6"
                             initial={{ opacity: 0 }}
                             animate={phase >= 1 ? { opacity: 1 } : {}}
                             transition={{ duration: 0.6, delay: 0.2 }}
@@ -127,7 +127,7 @@ export default function Loader() {
 
                         {/* Subtitle */}
                         <motion.p
-                            className="text-[10px] tracking-[0.4em] uppercase text-white/20 mt-4"
+                            className="text-[10px] tracking-[0.4em] uppercase text-white/45 mt-4"
                             initial={{ opacity: 0, y: 10 }}
                             animate={phase >= 2 ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6 }}
@@ -151,7 +151,7 @@ export default function Loader() {
                             animate={phase >= 3 ? { opacity: 1 } : { opacity: 0 }}
                             transition={{ duration: 0.4 }}
                         >
-                            <span className="text-[9px] tracking-[0.35em] text-white/20 uppercase">
+                            <span className="text-[9px] tracking-[0.35em] text-white/45 uppercase">
                                 Loading Experience
                             </span>
 
@@ -169,7 +169,7 @@ export default function Loader() {
 
                             {/* Percentage */}
                             <motion.span
-                                className="text-2xl font-light tracking-[0.15em] text-white/40 stat-number"
+                                className="text-2xl font-light tracking-[0.15em] text-white/60 stat-number"
                                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
                                 {String(Math.round(progress)).padStart(3, '0')}

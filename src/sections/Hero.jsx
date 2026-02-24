@@ -74,7 +74,7 @@ export default function Hero() {
                     {/* Eyebrow */}
                     <motion.div variants={fadeUp} className="flex items-center gap-4 mb-8">
                         <div className="w-12 h-px bg-white/10" />
-                        <p className="text-[11px] tracking-[0.4em] uppercase text-white/25">
+                        <p className="text-[11px] tracking-[0.4em] uppercase text-white/60">
                             BTech CSE Student &bull; Aspiring Developer
                         </p>
                     </motion.div>
@@ -94,24 +94,24 @@ export default function Hero() {
                         className="text-2xl sm:text-3xl md:text-4xl font-bold leading-[1.02] mb-10"
                         style={{ fontFamily: "'Poppins', sans-serif" }}
                     >
-                        <span className="text-gradient-silver">Aspiring Software Developer</span><span className="text-white/30">.</span>
+                        <span className="text-gradient-silver">Aspiring Software Developer</span><span className="text-white/45">.</span>
                     </motion.h2>
 
                     {/* Subtext */}
                     <motion.p
                         variants={fadeUp}
-                        className="text-base md:text-lg leading-[1.8] text-white/35 max-w-xl mb-6"
+                        className="text-base md:text-lg leading-[1.8] text-white/50 max-w-xl mb-6"
                     >
                         Building React apps and REST APIs while pursuing computer science and exploring modern technology stacks.
                     </motion.p>
 
                     {/* Location badge */}
                     <motion.div variants={fadeUp} className="flex items-center gap-2 mb-12">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/20">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/45">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
                         </svg>
-                        <span className="text-xs tracking-wider text-white/20">India &bull; B.Tech CSE</span>
+                        <span className="text-xs tracking-wider text-white/45">India &bull; B.Tech CSE</span>
                     </motion.div>
 
                     {/* CTAs */}
@@ -151,7 +151,7 @@ export default function Hero() {
                                 >
                                     <AnimatedStat value={stat.num} />
                                 </span>
-                                <span className="text-[10px] tracking-[0.25em] uppercase text-white/20">
+                                <span className="text-[10px] tracking-[0.25em] uppercase text-white/45">
                                     {stat.label}
                                 </span>
                             </div>
@@ -212,7 +212,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 4, duration: 1 }}
             >
-                <span className="text-[9px] tracking-[0.3em] text-white/15 uppercase">Scroll</span>
+                <span className="text-[9px] tracking-[0.3em] text-white/60 uppercase">Scroll</span>
                 <motion.div
                     className="w-5 h-8 border border-white/10 rounded-full flex items-start justify-center p-1.5"
                 >

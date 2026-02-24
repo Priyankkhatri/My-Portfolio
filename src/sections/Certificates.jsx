@@ -49,8 +49,8 @@ function CertCard({ cert, index, onClick }) {
             <div className="p-6 md:p-8">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-6">
-                    <span className="text-[10px] tracking-[0.25em] uppercase text-white/15">{cert.category}</span>
-                    <span className="text-[10px] text-white/10">{cert.date}</span>
+                    <span className="text-[10px] tracking-[0.25em] uppercase text-white/60">{cert.category}</span>
+                    <span className="text-[10px] text-white/60">{cert.date}</span>
                 </div>
 
                 {/* Certificate visual */}
@@ -64,7 +64,7 @@ function CertCard({ cert, index, onClick }) {
                     />
                     {/* Certificate icon */}
                     <div className="relative">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" className="text-white/10 group-hover:text-white/20 transition-colors duration-500">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" className="text-white/60 group-hover:text-white/45 transition-colors duration-500">
                             <rect x="3" y="4" width="18" height="16" rx="2" />
                             <path d="M7 8h10M7 12h6M7 16h3" />
                             <circle cx="17" cy="15" r="2" />
@@ -83,16 +83,16 @@ function CertCard({ cert, index, onClick }) {
                     {cert.title}
                 </h4>
                 <div className="flex items-center justify-between">
-                    <p className="text-xs text-white/25">{cert.issuer}</p>
-                    <span className="text-[10px] text-white/15">{cert.hours}</span>
+                    <p className="text-xs text-white/60">{cert.issuer}</p>
+                    <span className="text-[10px] text-white/60">{cert.hours}</span>
                 </div>
 
                 {/* Bottom action hint */}
                 <div className="mt-5 pt-4 border-t border-white/[0.04] flex items-center gap-2">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/15">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/60">
                         <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
                     </svg>
-                    <span className="text-[10px] text-white/15 group-hover:text-white/30 transition-colors">Click to view</span>
+                    <span className="text-[10px] text-white/60 group-hover:text-white/45 transition-colors">Click to view</span>
                 </div>
             </div>
         </motion.div>
@@ -126,7 +126,7 @@ export default function Certificates() {
             >
                 <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-px bg-white/10" />
-                    <p className="text-[11px] tracking-[0.4em] uppercase text-white/20">004 &mdash; Credentials</p>
+                    <p className="text-[11px] tracking-[0.4em] uppercase text-white/45">004 &mdash; Credentials</p>
                 </div>
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
                     <div>
@@ -136,11 +136,11 @@ export default function Certificates() {
                         >
                             Certificates & <span className="text-gradient-silver">Awards</span>
                         </h2>
-                        <p className="text-sm text-white/25 max-w-md">
+                        <p className="text-sm text-white/60 max-w-md">
                             Continuous learning is at the heart of what I do. Here are some highlights from my journey.
                         </p>
                     </div>
-                    <span className="text-xs text-white/10 mt-4 md:mt-0">{certificates.length} credentials</span>
+                    <span className="text-xs text-white/60 mt-4 md:mt-0">{certificates.length} credentials</span>
                 </div>
 
                 {/* Horizontal scroll */}
@@ -164,10 +164,10 @@ export default function Certificates() {
                     transition={{ delay: 0.8 }}
                 >
                     <div className="w-8 h-px bg-white/10" />
-                    <span className="text-[10px] tracking-[0.3em] text-white/15 uppercase">
+                    <span className="text-[10px] tracking-[0.3em] text-white/60 uppercase">
                         Drag to explore
                     </span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/15">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/60">
                         <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
                     </svg>
                 </motion.div>
@@ -198,7 +198,7 @@ export default function Certificates() {
 
                             <div className="p-8 md:p-12">
                                 {/* Category badge */}
-                                <span className="inline-block px-3 py-1 text-[10px] tracking-[0.2em] uppercase bg-white/5 border border-white/5 rounded-full text-white/30 mb-6">
+                                <span className="inline-block px-3 py-1 text-[10px] tracking-[0.2em] uppercase bg-white/5 border border-white/5 rounded-full text-white/45 mb-6">
                                     {selected.category}
                                 </span>
 
@@ -210,7 +210,7 @@ export default function Certificates() {
                                             backgroundSize: '20px 20px',
                                         }}
                                     />
-                                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/15">
+                                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/60">
                                         <rect x="3" y="4" width="18" height="16" rx="2" />
                                         <path d="M7 8h10M7 12h6M7 16h3" />
                                         <circle cx="17" cy="15" r="2" /><path d="M17 17v2" />
@@ -224,23 +224,23 @@ export default function Certificates() {
                                     {selected.title}
                                 </h3>
 
-                                <div className="flex items-center gap-3 text-sm text-white/30 mb-2">
+                                <div className="flex items-center gap-3 text-sm text-white/45 mb-2">
                                     <span>{selected.issuer}</span>
                                     <span className="w-1 h-1 rounded-full bg-white/15" />
                                     <span>{selected.date}</span>
                                 </div>
 
-                                <p className="text-xs text-white/15 mb-8">{selected.hours}</p>
+                                <p className="text-xs text-white/60 mb-8">{selected.hours}</p>
 
                                 <div className="flex items-center justify-between pt-6 border-t border-white/[0.04]">
                                     <button
                                         onClick={() => setSelected(null)}
-                                        className="text-xs tracking-[0.2em] uppercase text-white/25 hover:text-white/60 transition-colors flex items-center gap-2"
+                                        className="text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white/60 transition-colors flex items-center gap-2"
                                     >
                                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                                         Close
                                     </button>
-                                    <span className="text-[10px] text-white/10">ESC to dismiss</span>
+                                    <span className="text-[10px] text-white/60">ESC to dismiss</span>
                                 </div>
                             </div>
                         </motion.div>

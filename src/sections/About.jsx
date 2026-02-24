@@ -105,7 +105,7 @@ export default function About() {
                 {/* Section header */}
                 <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-px bg-white/10" />
-                    <p className="text-[11px] tracking-[0.4em] uppercase text-white/20">002 &mdash; About</p>
+                    <p className="text-[11px] tracking-[0.4em] uppercase text-white/45">002 &mdash; About</p>
                 </div>
                 <h2
                     className="text-3xl md:text-5xl font-bold mb-6 text-white/90"
@@ -113,7 +113,7 @@ export default function About() {
                 >
                     Building with <span className="text-gradient-silver">Purpose</span>
                 </h2>
-                <p className="text-sm md:text-base text-white/25 max-w-lg mb-16">
+                <p className="text-sm md:text-base text-white/60 max-w-lg mb-16">
                     A passionate student discovering the intricacies of web development,
                     from crafting pixel-perfect UIs to designing robust APIs.
                 </p>
@@ -125,30 +125,30 @@ export default function About() {
                     <TiltCard span="lg:col-span-2 lg:row-span-2" delay={0}>
                         <div className="h-full flex flex-col justify-between">
                             <div>
-                                <p className="text-[10px] tracking-[0.3em] uppercase text-white/20 mb-6">Who I Am</p>
+                                <p className="text-[10px] tracking-[0.3em] uppercase text-white/45 mb-6">Who I Am</p>
                                 <h3
                                     className="text-2xl md:text-3xl font-bold text-white/90 mb-2"
                                     style={{ fontFamily: "'Poppins', sans-serif" }}
                                 >
                                     Priyank
                                 </h3>
-                                <p className="text-sm text-white/30 mb-6">B.Tech CSE &bull; Full-Stack Developer</p>
-                                <p className="text-sm leading-[1.8] text-white/35 mb-4">
+                                <p className="text-sm text-white/45 mb-6">B.Tech CSE &bull; Full-Stack Developer</p>
+                                <p className="text-sm leading-[1.8] text-white/50 mb-4">
                                     I’m a 2nd-semester Computer Science student at Coding Gita. I build small web apps (image galleries, movie explorers), REST APIs with <span className="text-white/55">Node.js + MongoDB</span>, and browser games with <span className="text-white/55">HTML/CSS/JS</span>.
                                 </p>
-                                <p className="text-sm leading-[1.8] text-white/30">
+                                <p className="text-sm leading-[1.8] text-white/45">
                                     Currently learning React/Next.js, data structures, and backend architecture. I love experimenting with UI/UX, performance optimization, and system fundamentals.
                                 </p>
                             </div>
 
                             <div className="flex items-center gap-3 mt-8 pt-6 border-t border-white/[0.04]">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/20">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/45">
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
                                 </svg>
-                                <span className="text-xs text-white/20">India</span>
+                                <span className="text-xs text-white/45">India</span>
                                 <span className="ml-auto flex items-center gap-1.5">
                                     <span className="w-1.5 h-1.5 bg-[#60a5fa]/60 rounded-full animate-pulse-glow" />
-                                    <span className="text-[10px] text-white/15">Open to internships</span>
+                                    <span className="text-[10px] text-white/60">Open to internships</span>
                                 </span>
                             </div>
                         </div>
@@ -156,7 +156,7 @@ export default function About() {
 
                     {/* Experience Timeline */}
                     <TiltCard span="lg:col-span-2" delay={0.1}>
-                        <p className="text-[10px] tracking-[0.3em] uppercase text-white/20 mb-6">Journey</p>
+                        <p className="text-[10px] tracking-[0.3em] uppercase text-white/45 mb-6">Journey</p>
                         <div className="flex flex-col gap-5">
                             {experience.map((exp, i) => (
                                 <div key={i} className="flex gap-4 group">
@@ -165,9 +165,9 @@ export default function About() {
                                         {i < experience.length - 1 && <div className="w-px h-full bg-white/[0.04] mt-1" />}
                                     </div>
                                     <div className="pb-4">
-                                        <span className="text-[10px] tracking-[0.2em] text-white/15 uppercase">{exp.year}</span>
+                                        <span className="text-[10px] tracking-[0.2em] text-white/60 uppercase">{exp.year}</span>
                                         <h4 className="text-sm font-medium text-white/70 mt-1">{exp.title}</h4>
-                                        <p className="text-xs text-white/25 mt-0.5">{exp.desc}</p>
+                                        <p className="text-xs text-white/60 mt-0.5">{exp.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -176,7 +176,7 @@ export default function About() {
 
                     {/* Interests Card */}
                     <TiltCard span="lg:col-span-2" delay={0.15}>
-                        <p className="text-[10px] tracking-[0.3em] uppercase text-white/20 mb-6">Beyond Code</p>
+                        <p className="text-[10px] tracking-[0.3em] uppercase text-white/45 mb-6">Beyond Code</p>
                         <div className="grid grid-cols-2 gap-4">
                             {interests.map((item, i) => (
                                 <div
@@ -186,7 +186,7 @@ export default function About() {
                                     <span className="text-xl mt-0.5">{item.icon}</span>
                                     <div>
                                         <span className="text-sm font-medium text-white/60 block">{item.label}</span>
-                                        <span className="text-[10px] text-white/20">{item.desc}</span>
+                                        <span className="text-[10px] text-white/45">{item.desc}</span>
                                     </div>
                                 </div>
                             ))}
@@ -196,8 +196,8 @@ export default function About() {
                     {/* Tech Stack — full width */}
                     <TiltCard span="lg:col-span-4" delay={0.2}>
                         <div className="flex items-start justify-between mb-6">
-                            <p className="text-[10px] tracking-[0.3em] uppercase text-white/20">Tech Stack</p>
-                            <span className="text-[10px] text-white/10">{techStack.length} technologies</span>
+                            <p className="text-[10px] tracking-[0.3em] uppercase text-white/45">Tech Stack</p>
+                            <span className="text-[10px] text-white/60">{techStack.length} technologies</span>
                         </div>
                         <div className="flex flex-wrap gap-2.5">
                             {techStack.map((tech, i) => (

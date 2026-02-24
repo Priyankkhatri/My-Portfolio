@@ -27,55 +27,22 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Main Background ───────────────────────────────────── */
 body {
   margin: 0;
   padding: 0;
+  /* The main dark blue colour the user requested to fix */
   background-color: #0a0e17;
   color: #e8edf5;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
-}
-
-/* ── Animated Background ───────────────────────────────── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
+  /* Add the static gradients here directly instead of animating on a pseudo-element which breaks some browsers */
+  background-image: 
     radial-gradient(ellipse 80% 50% at 50% -20%, rgba(96, 165, 250, 0.08) 0%, transparent 60%),
     radial-gradient(ellipse 60% 40% at 80% 60%, rgba(167, 139, 250, 0.06) 0%, transparent 50%),
     radial-gradient(ellipse 50% 50% at 20% 80%, rgba(96, 165, 250, 0.04) 0%, transparent 50%);
-  animation: bgShift 20s ease-in-out infinite alternate;
-}
-
-@keyframes bgShift {
-  0% {
-    background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(96, 165, 250, 0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 60%, rgba(167, 139, 250, 0.06) 0%, transparent 50%),
-      radial-gradient(ellipse 50% 50% at 20% 80%, rgba(96, 165, 250, 0.04) 0%, transparent 50%);
-  }
-  33% {
-    background:
-      radial-gradient(ellipse 70% 60% at 30% 10%, rgba(167, 139, 250, 0.07) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 50% at 70% 50%, rgba(96, 165, 250, 0.05) 0%, transparent 50%),
-      radial-gradient(ellipse 60% 40% at 50% 90%, rgba(167, 139, 250, 0.04) 0%, transparent 50%);
-  }
-  66% {
-    background:
-      radial-gradient(ellipse 60% 50% at 70% -10%, rgba(96, 165, 250, 0.06) 0%, transparent 55%),
-      radial-gradient(ellipse 80% 40% at 20% 40%, rgba(167, 139, 250, 0.07) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 50% at 60% 90%, rgba(96, 165, 250, 0.04) 0%, transparent 50%);
-  }
-  100% {
-    background:
-      radial-gradient(ellipse 80% 50% at 40% 0%, rgba(167, 139, 250, 0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 90% 70%, rgba(96, 165, 250, 0.06) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 50% at 10% 60%, rgba(167, 139, 250, 0.04) 0%, transparent 50%);
-  }
+  background-attachment: fixed;
 }
 
 /* ── Animated Floating Particles ──────────────────────── */

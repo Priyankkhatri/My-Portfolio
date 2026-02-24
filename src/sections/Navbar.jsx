@@ -17,12 +17,12 @@ function NavLink({ item, index, active }) {
             href={item.href}
             onMouseEnter={() => setCursorVariant('hover')}
             onMouseLeave={() => setCursorVariant('default')}
-            className={`relative text-sm tracking-wide transition-colors duration-300 link-underline py-1 group ${active ? 'text-white/90' : 'text-white/40 hover:text-white/90'}`}
+            className={`relative text-sm tracking-wide transition-colors duration-300 link-underline py-1 group ${active ? 'text-white/90' : 'text-white/60 hover:text-white/90'}`}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2 + index * 0.08, duration: 0.5 }}
         >
-            <span className={`text-[9px] mr-1 transition-colors ${active ? 'text-white/50' : 'text-white/15 group-hover:text-white/30'}`}>{item.num}</span>
+            <span className={`text-[9px] mr-1 transition-colors ${active ? 'text-white/50' : 'text-white/60 group-hover:text-white/45'}`}>{item.num}</span>
             {item.label}
             {active && (
                 <motion.div
@@ -122,7 +122,7 @@ export default function Navbar() {
                                 transition={{ delay: 2.5, duration: 0.5 }}
                             >
                                 <div className="w-1.5 h-1.5 bg-[#60a5fa]/80 rounded-full animate-pulse-glow" />
-                                <span className="text-[10px] tracking-wider text-white/20 uppercase">Available</span>
+                                <span className="text-[10px] tracking-wider text-white/45 uppercase">Available</span>
                             </motion.div>
                         </div>
 
@@ -173,7 +173,7 @@ export default function Navbar() {
 
                         <nav className="flex flex-col items-center gap-6">
                             <motion.p
-                                className="text-[10px] tracking-[0.5em] uppercase text-white/15 mb-4"
+                                className="text-[10px] tracking-[0.5em] uppercase text-white/60 mb-4"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.2 }}
@@ -197,7 +197,7 @@ export default function Navbar() {
                                         className={`flex items-center gap-4 text-3xl tracking-wide transition-colors ${activeSection === item.href ? 'text-white' : 'text-white/60 hover:text-white'}`}
                                         style={{ fontFamily: "'Poppins', sans-serif" }}
                                     >
-                                        <span className={`text-xs ${activeSection === item.href ? 'text-[#60a5fa]' : 'text-white/15'}`}>{item.num}</span>
+                                        <span className={`text-xs ${activeSection === item.href ? 'text-[#60a5fa]' : 'text-white/60'}`}>{item.num}</span>
                                         {item.label}
                                     </a>
                                 </motion.div>
@@ -211,7 +211,7 @@ export default function Navbar() {
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.5 }}
                         >
-                            <p className="text-[10px] tracking-[0.3em] text-white/10 uppercase">
+                            <p className="text-[10px] tracking-[0.3em] text-white/60 uppercase">
                                 Priyank &mdash; Portfolio 2026
                             </p>
                         </motion.div>
