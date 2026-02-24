@@ -77,13 +77,12 @@ function ProjectCard({ project, index, onClick }) {
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 80, filter: 'blur(8px)' }}
+            initial={{ opacity: 0, y: 80 }}
             animate={
                 isInView
                     ? {
                         opacity: 1,
                         y: 0,
-                        filter: 'blur(0px)',
                         rotateX: tilt.x,
                         rotateY: tilt.y,
                         scale: isHovered ? 1.01 : 1,
@@ -302,9 +301,9 @@ export default function Projects() {
 
                         <motion.div
                             className="relative glass-card max-w-lg w-full z-10 overflow-hidden"
-                            initial={{ scale: 0.85, opacity: 0, y: 30, filter: 'blur(10px)' }}
-                            animate={{ scale: 1, opacity: 1, y: 0, filter: 'blur(0px)' }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20, filter: 'blur(5px)' }}
+                            initial={{ scale: 0.85, opacity: 0, y: 30 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                             onClick={(e) => e.stopPropagation()}
                         >

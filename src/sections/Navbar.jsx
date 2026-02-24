@@ -184,9 +184,9 @@ export default function Navbar() {
                             {navItems.map((item, i) => (
                                 <motion.div
                                     key={item.label}
-                                    initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
-                                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                                    exit={{ opacity: 0, y: -20, filter: 'blur(5px)' }}
+                                    initial={{ opacity: 0, y: 40 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
                                     transition={{ delay: i * 0.06 + 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                                 >
                                     <a

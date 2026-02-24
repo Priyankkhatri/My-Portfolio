@@ -10,11 +10,10 @@ const container = {
 }
 
 const fadeUp = {
-    hidden: { opacity: 0, y: 50, filter: 'blur(10px)' },
+    hidden: { opacity: 0, y: 50 },
     visible: {
         opacity: 1,
         y: 0,
-        filter: 'blur(0px)',
         transition: { duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] },
     },
 }
@@ -162,16 +161,24 @@ export default function Hero() {
 
                 {/* Profile Image - Right Side */}
                 <motion.div
-                    className="relative hidden lg:flex flex-col items-center justify-center w-[400px] h-[400px] shrink-0"
-                    initial={{ opacity: 0, scale: 0.8, filter: 'blur(10px)' }}
-                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                    className="relative hidden lg:flex flex-col items-center justify-center w-[400px] h-[400px] shrink-0 group/pfp"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1.2, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
-                    {/* Concentric Rings — PfpMorphButton shrinks these into the corner */}
-                    <div id="heroPfpRings" className="absolute inset-0 z-0">
-                        <div className="absolute inset-0 rounded-full border border-white/5 animate-[spin_20s_linear_infinite]" />
-                        <div className="absolute inset-4 rounded-full border border-white/10 border-dashed animate-[spin_30s_linear_infinite_reverse]" />
-                        <div className="absolute inset-8 rounded-full border border-white/5" />
+                    {/* Ethereal Ripple Rings — Auras pulsing outward on hover */}
+                    <div id="heroPfpRings" className="absolute inset-0 z-10 pointer-events-none">
+                        {/* Base subtle blue glow behind the frame */}
+                        <div className="absolute inset-4 rounded-full bg-gradient-radial from-[#60a5fa]/10 to-transparent blur-xl ripple-bg" />
+
+                        {/* Ripple 1 */}
+                        <div className="absolute inset-4 rounded-full border border-[#60a5fa]/40 ripple-ring shadow-[0_0_15px_rgba(96,165,250,0.3)]" />
+
+                        {/* Ripple 2 (Staggered by 1s) */}
+                        <div className="absolute inset-4 rounded-full border border-[#a78bfa]/30 ripple-ring shadow-[0_0_15px_rgba(167,139,250,0.2)]" style={{ animationDelay: '1s' }} />
+
+                        {/* Ripple 3 (Staggered by 2s) */}
+                        <div className="absolute inset-4 rounded-full border border-white/20 ripple-ring shadow-[0_0_15px_rgba(255,255,255,0.1)]" style={{ animationDelay: '2s' }} />
                     </div>
 
                     {/* Image Container — PfpMorphButton transforms this on scroll */}

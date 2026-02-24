@@ -29,13 +29,12 @@ function TiltCard({ children, className = '', span = '', delay = 0 }) {
             onMouseMove={handleMouse}
             onMouseEnter={() => { setIsHovered(true); setCursorVariant('hover') }}
             onMouseLeave={handleLeave}
-            initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+            initial={{ opacity: 0, y: 40 }}
             animate={
                 inView
                     ? {
                         opacity: 1,
                         y: 0,
-                        filter: 'blur(0px)',
                         rotateX: tilt.x,
                         rotateY: tilt.y,
                     }
