@@ -52,10 +52,33 @@ const socials = [
 function AnimatedInput({ label, name, type = 'text', textarea = false, required = false }) {
     const [focused, setFocused] = useState(false)
     const [hasValue, setHasValue] = useState(false)
+    const [error, setError] = useState('')
     const InputTag = textarea ? 'textarea' : 'input'
 
+    const validate = (val) => {
+        if (required && !val.trim()) {
+            return 'This field is required'
+        }
+        if (type === 'email' && val) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            if (!emailRegex.test(val)) return 'Please enter a valid email'
+        }
+        return ''
+    }
+
+    const handleBlur = (e) => {
+        setFocused(false)
+        setHasValue(!!e.target.value)
+        setError(validate(e.target.value))
+    }
+
+    const handleChange = (e) => {
+        setHasValue(!!e.target.value)
+        if (error) setError(validate(e.target.value))
+    }
+
     return (
-        <div className="relative group">
+        <div className="relative group flex flex-col">
             {/* Floating label */}
             <motion.label
                 className="absolute left-0 text-white/20 pointer-events-none"
@@ -63,7 +86,7 @@ function AnimatedInput({ label, name, type = 'text', textarea = false, required 
                     top: focused || hasValue ? -8 : textarea ? 12 : 12,
                     fontSize: focused || hasValue ? '10px' : '14px',
                     letterSpacing: focused || hasValue ? '0.2em' : '0.05em',
-                    color: focused ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.15)',
+                    color: error ? 'rgba(248,113,113,0.8)' : focused ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.15)',
                 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
             >
@@ -76,12 +99,9 @@ function AnimatedInput({ label, name, type = 'text', textarea = false, required 
                 required={required}
                 rows={textarea ? 5 : undefined}
                 onFocus={() => setFocused(true)}
-                onBlur={(e) => {
-                    setFocused(false)
-                    setHasValue(!!e.target.value)
-                }}
-                onChange={(e) => setHasValue(!!e.target.value)}
-                className="w-full bg-transparent border-b border-white/[0.06] text-white/80 text-sm py-3 focus:outline-none resize-none"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                className={`w-full bg-transparent border-b ${error ? 'border-red-400/[0.4]' : 'border-white/[0.06]'} text-white/80 text-sm py-3 focus:outline-none resize-none`}
             />
 
             {/* Animated underline */}
@@ -89,12 +109,26 @@ function AnimatedInput({ label, name, type = 'text', textarea = false, required 
                 <div className="absolute inset-0 bg-white/[0.04]" />
                 <motion.div
                     className="absolute inset-y-0 left-0"
-                    style={{ background: 'linear-gradient(90deg, rgba(96, 165, 250, 0.4), rgba(167, 139, 250, 0.4))' }}
+                    style={{ background: error ? 'rgba(248,113,113,0.8)' : 'linear-gradient(90deg, rgba(96, 165, 250, 0.4), rgba(167, 139, 250, 0.4))' }}
                     initial={{ width: '0%' }}
                     animate={{ width: focused ? '100%' : '0%' }}
                     transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                 />
             </div>
+
+            {/* Error Message */}
+            <AnimatePresence>
+                {error && (
+                    <motion.span
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        className="text-[10px] text-red-400 mt-1.5 absolute -bottom-5 left-0"
+                    >
+                        {error}
+                    </motion.span>
+                )}
+            </AnimatePresence>
         </div>
     )
 }

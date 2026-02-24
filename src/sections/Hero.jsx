@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { motion, animate, useInView } from 'framer-motion'
+import { useRef, useEffect, useState } from 'react'
 import useStore from '../store/useStore'
 
 const container = {
@@ -23,6 +24,32 @@ const stats = [
     { num: '4+', label: 'Learning Projects' },
     { num: '10+', label: 'Technologies' },
 ]
+
+function AnimatedStat({ value }) {
+    const ref = useRef(null)
+    const inView = useInView(ref, { once: true })
+    const [display, setDisplay] = useState("0")
+
+    useEffect(() => {
+        if (!inView) return
+        const match = value.match(/^(\d+)(.*)$/)
+        if (!match) {
+            setDisplay(value)
+            return
+        }
+        const target = parseInt(match[1], 10)
+        const suffix = match[2] || ''
+
+        const controls = animate(0, target, {
+            duration: 2.5,
+            ease: "easeOut",
+            onUpdate: (v) => setDisplay(Math.round(v) + suffix)
+        })
+        return () => controls.stop()
+    }, [inView, value])
+
+    return <span ref={ref}>{display}</span>
+}
 
 export default function Hero() {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
@@ -123,7 +150,7 @@ export default function Hero() {
                                     className="text-2xl md:text-3xl font-bold text-white/80 stat-number"
                                     style={{ fontFamily: "'JetBrains Mono', monospace" }}
                                 >
-                                    {stat.num}
+                                    <AnimatedStat value={stat.num} />
                                 </span>
                                 <span className="text-[10px] tracking-[0.25em] uppercase text-white/20">
                                     {stat.label}

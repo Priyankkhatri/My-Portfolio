@@ -10,26 +10,34 @@ const navItems = [
     { label: 'Contact', href: '#contact', num: '05' },
 ]
 
-function NavLink({ item, index }) {
+function NavLink({ item, index, active }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     return (
         <motion.a
             href={item.href}
             onMouseEnter={() => setCursorVariant('hover')}
             onMouseLeave={() => setCursorVariant('default')}
-            className="relative text-sm tracking-wide text-white/40 hover:text-white/90 transition-colors duration-300 link-underline py-1 group"
+            className={`relative text-sm tracking-wide transition-colors duration-300 link-underline py-1 group ${active ? 'text-white/90' : 'text-white/40 hover:text-white/90'}`}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2 + index * 0.08, duration: 0.5 }}
         >
-            <span className="text-[9px] text-white/15 mr-1 group-hover:text-white/30 transition-colors">{item.num}</span>
+            <span className={`text-[9px] mr-1 transition-colors ${active ? 'text-white/50' : 'text-white/15 group-hover:text-white/30'}`}>{item.num}</span>
             {item.label}
+            {active && (
+                <motion.div
+                    layoutId="navbar-indicator"
+                    className="absolute -bottom-2 left-0 right-0 h-[2px] bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] rounded-full"
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                />
+            )}
         </motion.a>
     )
 }
 
 export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false)
+    const [activeSection, setActiveSection] = useState('#home')
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const { scrollYProgress } = useScroll()
     const scaleX = useSpring(scrollYProgress, {
@@ -37,6 +45,27 @@ export default function Navbar() {
         damping: 30,
         restDelta: 0.001
     })
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setActiveSection(`#${entry.target.id}`)
+                    }
+                })
+            },
+            { threshold: 0.3, rootMargin: '-10% 0px -40% 0px' }
+        )
+
+        navItems.forEach((item) => {
+            const sectionId = item.href.replace('#', '')
+            const element = document.getElementById(sectionId)
+            if (element) observer.observe(element)
+        })
+
+        return () => observer.disconnect()
+    }, [])
 
     return (
         <>
@@ -82,7 +111,7 @@ export default function Navbar() {
                         {/* Desktop Links */}
                         <div className="hidden md:flex items-center gap-8">
                             {navItems.map((item, i) => (
-                                <NavLink key={item.label} item={item} index={i} />
+                                <NavLink key={item.label} item={item} index={i} active={activeSection === item.href} />
                             ))}
 
                             {/* Status indicator */}
@@ -165,10 +194,10 @@ export default function Navbar() {
                                         onClick={() => setMobileOpen(false)}
                                         onMouseEnter={() => setCursorVariant('hover')}
                                         onMouseLeave={() => setCursorVariant('default')}
-                                        className="flex items-center gap-4 text-3xl tracking-wide text-white/60 hover:text-white transition-colors"
+                                        className={`flex items-center gap-4 text-3xl tracking-wide transition-colors ${activeSection === item.href ? 'text-white' : 'text-white/60 hover:text-white'}`}
                                         style={{ fontFamily: "'Poppins', sans-serif" }}
                                     >
-                                        <span className="text-xs text-white/15">{item.num}</span>
+                                        <span className={`text-xs ${activeSection === item.href ? 'text-[#60a5fa]' : 'text-white/15'}`}>{item.num}</span>
                                         {item.label}
                                     </a>
                                 </motion.div>
