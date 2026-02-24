@@ -6,6 +6,7 @@ import useStore from '../store/useStore'
 function TiltCard({ children, className = '', span = '', delay = 0 }) {
     const ref = useRef(null)
     const [tilt, setTilt] = useState({ x: 0, y: 0 })
+    const [isHovered, setIsHovered] = useState(false)
     const inView = useInView(ref, { once: true, margin: '-60px' })
     const setCursorVariant = useStore((s) => s.setCursorVariant)
 
@@ -14,10 +15,11 @@ function TiltCard({ children, className = '', span = '', delay = 0 }) {
         const rect = ref.current.getBoundingClientRect()
         const x = (e.clientX - rect.left) / rect.width - 0.5
         const y = (e.clientY - rect.top) / rect.height - 0.5
-        setTilt({ x: y * -10, y: x * 10 })
+        setTilt({ x: y * -8, y: x * 8 })
     }
     const handleLeave = () => {
         setTilt({ x: 0, y: 0 })
+        setIsHovered(false)
         setCursorVariant('default')
     }
 
@@ -25,21 +27,33 @@ function TiltCard({ children, className = '', span = '', delay = 0 }) {
         <motion.div
             ref={ref}
             onMouseMove={handleMouse}
-            onMouseEnter={() => setCursorVariant('hover')}
+            onMouseEnter={() => { setIsHovered(true); setCursorVariant('hover') }}
             onMouseLeave={handleLeave}
             initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
-            animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-            transition={{ duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{
-                transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-                transition: 'transform 0.15s ease-out',
-            }}
+            animate={
+                inView
+                    ? {
+                        opacity: 1,
+                        y: 0,
+                        filter: 'blur(0px)',
+                        rotateX: tilt.x,
+                        rotateY: tilt.y,
+                    }
+                    : {}
+            }
+            transition={
+                isHovered
+                    ? { rotateX: { duration: 0.15, ease: 'easeOut' }, rotateY: { duration: 0.15, ease: 'easeOut' }, default: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] } }
+                    : { rotateX: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }, rotateY: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }, default: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] } }
+            }
+            style={{ perspective: 800 }}
             className={`glass-card glass-card-hover p-6 md:p-8 relative ${span} ${className}`}
         >
             {children}
         </motion.div>
     )
 }
+
 
 /* ── Tech Icon with hover glow ──────────────────────────── */
 const techStack = [
@@ -80,8 +94,8 @@ export default function About() {
             <div className="section-divider mb-32" />
 
             {/* Floating decorative orbs */}
-            <div className="floating-orb w-72 h-72 bg-slate-600 top-20 -right-32" />
-            <div className="floating-orb w-48 h-48 bg-indigo-900 bottom-40 left-10" />
+            <div className="floating-orb w-72 h-72 bg-blue-500 top-20 -right-32" />
+            <div className="floating-orb w-48 h-48 bg-violet-800 bottom-40 left-10" />
 
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -96,7 +110,7 @@ export default function About() {
                 </div>
                 <h2
                     className="text-3xl md:text-5xl font-bold mb-6 text-white/90"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
                     Building with <span className="text-gradient-silver">Purpose</span>
                 </h2>
@@ -115,7 +129,7 @@ export default function About() {
                                 <p className="text-[10px] tracking-[0.3em] uppercase text-white/20 mb-6">Who I Am</p>
                                 <h3
                                     className="text-2xl md:text-3xl font-bold text-white/90 mb-2"
-                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                    style={{ fontFamily: "'Poppins', sans-serif" }}
                                 >
                                     Priyank
                                 </h3>
@@ -134,7 +148,7 @@ export default function About() {
                                 </svg>
                                 <span className="text-xs text-white/20">India</span>
                                 <span className="ml-auto flex items-center gap-1.5">
-                                    <span className="w-1.5 h-1.5 bg-emerald-500/50 rounded-full animate-pulse-glow" />
+                                    <span className="w-1.5 h-1.5 bg-[#60a5fa]/60 rounded-full animate-pulse-glow" />
                                     <span className="text-[10px] text-white/15">Open to internships</span>
                                 </span>
                             </div>

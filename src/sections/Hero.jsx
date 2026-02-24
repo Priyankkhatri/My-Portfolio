@@ -35,8 +35,8 @@ export default function Hero() {
             {/* Decorative elements */}
             <div className="absolute top-32 right-12 w-px h-40 bg-gradient-to-b from-transparent via-white/5 to-transparent hidden lg:block" />
             <div className="absolute bottom-32 left-12 w-32 h-px bg-gradient-to-r from-white/5 to-transparent hidden lg:block" />
-            <div className="floating-orb w-96 h-96 bg-slate-500 -top-20 -right-20" />
-            <div className="floating-orb w-64 h-64 bg-blue-900 bottom-20 left-20" />
+            <div className="floating-orb w-96 h-96 bg-blue-500 -top-20 -right-20" />
+            <div className="floating-orb w-64 h-64 bg-violet-800 bottom-20 left-20" />
 
             <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-24 relative z-10">
                 <motion.div
@@ -57,7 +57,7 @@ export default function Hero() {
                     <motion.div variants={fadeUp} className="mb-4">
                         <h1
                             className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.02]"
-                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                            style={{ fontFamily: "'Poppins', sans-serif" }}
                         >
                             Priyank Khatri
                         </h1>
@@ -66,7 +66,7 @@ export default function Hero() {
                     <motion.h2
                         variants={fadeUp}
                         className="text-2xl sm:text-3xl md:text-4xl font-bold leading-[1.02] mb-10"
-                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                        style={{ fontFamily: "'Poppins', sans-serif" }}
                     >
                         <span className="text-gradient-silver">Aspiring Software Developer</span><span className="text-white/30">.</span>
                     </motion.h2>
@@ -94,7 +94,7 @@ export default function Hero() {
                             href="#projects"
                             onMouseEnter={() => setCursorVariant('hover')}
                             onMouseLeave={() => setCursorVariant('default')}
-                            className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-[#0a0a0a] text-sm font-medium tracking-wide rounded-full hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 shadow-lg shadow-white/5"
+                            className="group btn-shine inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#60a5fa]/15 to-[#a78bfa]/15 border border-[#60a5fa]/25 text-white/90 text-sm font-medium tracking-wide rounded-full hover:border-[#60a5fa]/45 active:scale-[0.97] transition-all duration-300 shadow-lg shadow-[#60a5fa]/5"
                         >
                             View Projects
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform duration-300">
@@ -107,7 +107,7 @@ export default function Hero() {
                             onMouseLeave={() => setCursorVariant('default')}
                             className="group inline-flex items-center gap-3 px-8 py-4 border border-white/10 text-white/60 text-sm font-medium tracking-wide rounded-full hover:bg-white/5 hover:border-white/20 hover:text-white/80 transition-all duration-300"
                         >
-                            <span className="w-1.5 h-1.5 bg-emerald-500/50 rounded-full group-hover:bg-emerald-400/80 transition-colors" />
+                            <span className="w-1.5 h-1.5 bg-[#60a5fa]/60 rounded-full group-hover:bg-[#60a5fa] transition-colors" />
                             Contact / Hire me
                         </a>
                     </motion.div>
@@ -121,7 +121,7 @@ export default function Hero() {
                             <div key={i} className="flex flex-col gap-1">
                                 <span
                                     className="text-2xl md:text-3xl font-bold text-white/80 stat-number"
-                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
                                 >
                                     {stat.num}
                                 </span>
@@ -140,19 +140,33 @@ export default function Hero() {
                     animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                     transition={{ duration: 1.2, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
-                    {/* Outer animated rings */}
-                    <div className="absolute inset-0 rounded-full border border-white/5 animate-[spin_20s_linear_infinite]" />
-                    <div className="absolute inset-4 rounded-full border border-white/10 border-dashed animate-[spin_30s_linear_infinite_reverse]" />
-                    <div className="absolute inset-8 rounded-full border border-white/5 animate-pulse-glow" />
+                    {/* Concentric Rings — PfpMorphButton shrinks these into the corner */}
+                    <div id="heroPfpRings" className="absolute inset-0 z-0">
+                        <div className="absolute inset-0 rounded-full border border-white/5 animate-[spin_20s_linear_infinite]" />
+                        <div className="absolute inset-4 rounded-full border border-white/10 border-dashed animate-[spin_30s_linear_infinite_reverse]" />
+                        <div className="absolute inset-8 rounded-full border border-white/5" />
+                    </div>
 
-                    {/* Image Container */}
-                    <div className="absolute inset-12 rounded-full overflow-hidden bg-gradient-to-br from-white/10 to-transparent border border-white/20 flex items-center justify-center backdrop-blur-md group">
+                    {/* Image Container — PfpMorphButton transforms this on scroll */}
+                    <div id="heroPfpFrame" className="absolute inset-12 rounded-full bg-gradient-to-br from-white/10 to-transparent border border-white/20 backdrop-blur-md">
                         <img
-                            src="https://images.unsplash.com/photo-1549692520-ACC6669E2F0C?auto=format&fit=crop&q=80&w=400&h=400"
-                            alt="Profile"
-                            className="w-full h-full object-cover object-center mix-blend-luminosity opacity-80 group-hover:mix-blend-normal group-hover:opacity-100 transition-all duration-700"
+                            id="heroPfp"
+                            src="/profile.jpg"
+                            alt="Priyank Khatri profile photo"
+                            className="w-full h-full object-cover object-center rounded-full"
                         />
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-700" />
+                        <div className="absolute inset-0 bg-black/30 rounded-full transition-opacity duration-500" id="heroPfpOverlay" />
+                        {/* Arrow overlay — shown by JS when morphed into button */}
+                        <div
+                            id="heroPfpArrow"
+                            className="absolute inset-0 flex items-center justify-center text-white rounded-full"
+                            style={{ opacity: 0, background: 'linear-gradient(135deg, rgba(10,14,23,0.75), rgba(22,32,56,0.8))', pointerEvents: 'none' }}
+                        >
+                            <svg className="w-1/2 h-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="19" x2="12" y2="5" />
+                                <polyline points="5 12 12 5 19 12" />
+                            </svg>
+                        </div>
                     </div>
                 </motion.div>
             </div>

@@ -36,7 +36,7 @@ export default function Cursor() {
                 animate={{
                     width: isHover ? 6 : 8,
                     height: isHover ? 6 : 8,
-                    backgroundColor: isHover ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.9)',
+                    backgroundColor: isHover ? 'rgba(96, 165, 250, 0.6)' : 'rgba(232, 237, 245, 0.9)',
                 }}
                 transition={{ duration: 0.2 }}
             />
@@ -53,8 +53,8 @@ export default function Cursor() {
                 animate={{
                     width: isHover ? 64 : 44,
                     height: isHover ? 64 : 44,
-                    borderColor: isHover ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.2)',
-                    opacity: isHover ? 0.5 : 0.7,
+                    borderColor: isHover ? 'rgba(96, 165, 250, 0.25)' : 'rgba(232, 237, 245, 0.2)',
+                    opacity: isHover ? 0.6 : 0.8,
                 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
             />
@@ -69,7 +69,7 @@ export default function Cursor() {
                     translateY: '-50%',
                     width: 100,
                     height: 100,
-                    background: 'radial-gradient(circle, rgba(148,163,184,0.03) 0%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(96, 165, 250, 0.04) 0%, transparent 70%)',
                 }}
             />
         </>

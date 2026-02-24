@@ -54,23 +54,57 @@ const projects = [
 
 function ProjectCard({ project, index, onClick }) {
     const ref = useRef(null)
+    const [tilt, setTilt] = useState({ x: 0, y: 0 })
+    const [isHovered, setIsHovered] = useState(false)
     const isInView = useInView(ref, { once: true, margin: '-60px' })
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const isEven = index % 2 === 0
     const num = String(index + 1).padStart(2, '0')
 
+    const handleMouse = (e) => {
+        if (!ref.current) return
+        const rect = ref.current.getBoundingClientRect()
+        const x = (e.clientX - rect.left) / rect.width - 0.5
+        const y = (e.clientY - rect.top) / rect.height - 0.5
+        setTilt({ x: y * -5, y: x * 5 })
+    }
+    const handleLeave = () => {
+        setTilt({ x: 0, y: 0 })
+        setIsHovered(false)
+        setCursorVariant('default')
+    }
+
     return (
         <motion.div
             ref={ref}
             initial={{ opacity: 0, y: 80, filter: 'blur(8px)' }}
-            animate={isInView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-            transition={{ duration: 0.9, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+            animate={
+                isInView
+                    ? {
+                        opacity: 1,
+                        y: 0,
+                        filter: 'blur(0px)',
+                        rotateX: tilt.x,
+                        rotateY: tilt.y,
+                        scale: isHovered ? 1.01 : 1,
+                    }
+                    : {}
+            }
+            transition={
+                isHovered
+                    ? { rotateX: { duration: 0.15, ease: 'easeOut' }, rotateY: { duration: 0.15, ease: 'easeOut' }, scale: { duration: 0.3 }, default: { duration: 0.9, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] } }
+                    : { rotateX: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }, rotateY: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }, scale: { duration: 0.4 }, default: { duration: 0.9, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] } }
+            }
+            style={{ perspective: 1000 }}
             className={`glass-card glass-card-hover overflow-hidden ${onClick ? 'cursor-pointer' : ''}`}
-            onMouseEnter={() => setCursorVariant('hover')}
-            onMouseLeave={() => setCursorVariant('default')}
+            onMouseMove={handleMouse}
+            onMouseEnter={() => { setIsHovered(true); setCursorVariant('hover') }}
+            onMouseLeave={handleLeave}
             onClick={onClick}
         >
-            <div className={`grid grid-cols-1 lg:grid-cols-5 min-h-[400px]`}>
+            <div
+                className={`grid grid-cols-1 lg:grid-cols-5 min-h-[400px]`}
+            >
                 {/* Image area — 2 cols */}
                 <div
                     className={`relative col-span-2 bg-gradient-to-br from-white/[0.02] to-white/[0.005] overflow-hidden group ${!isEven ? 'lg:order-2' : ''
@@ -80,7 +114,7 @@ function ProjectCard({ project, index, onClick }) {
                     <div className="absolute inset-0 flex items-center justify-center">
                         <span
                             className="text-[8rem] md:text-[12rem] font-bold text-white/[0.02] select-none group-hover:text-white/[0.04] transition-colors duration-700"
-                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
                         >
                             {num}
                         </span>
@@ -116,7 +150,7 @@ function ProjectCard({ project, index, onClick }) {
                     {/* Title */}
                     <h3
                         className="text-2xl md:text-4xl font-bold text-white/90 mb-2"
-                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                        style={{ fontFamily: "'Poppins', sans-serif" }}
                     >
                         {project.title}
                     </h3>
@@ -192,7 +226,7 @@ export default function Projects() {
             {/* Section divider */}
             <div className="section-divider mb-32" />
 
-            <div className="floating-orb w-80 h-80 bg-indigo-900 -top-20 right-0" />
+            <div className="floating-orb w-80 h-80 bg-violet-800 -top-20 right-0" />
 
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -209,7 +243,7 @@ export default function Projects() {
                     <div>
                         <h2
                             className="text-3xl md:text-5xl font-bold mb-3 text-white/90"
-                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                            style={{ fontFamily: "'Poppins', sans-serif" }}
                         >
                             Selected <span className="text-gradient-silver">Projects</span>
                         </h2>
@@ -280,7 +314,7 @@ export default function Projects() {
                             <div className="p-8 md:p-12">
                                 <h3
                                     className="text-xl md:text-2xl font-bold text-white/90 mb-6"
-                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                    style={{ fontFamily: "'Poppins', sans-serif" }}
                                 >
                                     Mini Games Collection
                                 </h3>

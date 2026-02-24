@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import useStore from '../store/useStore'
 
 const navItems = [
@@ -31,17 +31,29 @@ function NavLink({ item, index }) {
 export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false)
     const setCursorVariant = useStore((s) => s.setCursorVariant)
+    const { scrollYProgress } = useScroll()
+    const scaleX = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    })
 
     return (
         <>
+            {/* Scroll Progress Bar */}
+            <motion.div
+                className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] origin-left z-[60]"
+                style={{ scaleX }}
+            />
+
             <motion.nav
-                className="fixed top-0 left-0 right-0 z-50"
+                className="fixed top-0 left-0 right-0 z-50 pt-[2px]"
                 initial={{ y: -80, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1, delay: 1.8, ease: [0.76, 0, 0.24, 1] }}
             >
                 {/* Glass background with gradient border */}
-                <div className="backdrop-blur-xl bg-black/20 border-b border-white/[0.03]">
+                <div className="backdrop-blur-md bg-[#0a0e17]/60 border-b border-white/[0.04]">
                     <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
                         {/* Logo */}
                         <a
@@ -54,14 +66,14 @@ export default function Navbar() {
                             <div className="w-8 h-8 border border-white/10 rounded-lg flex items-center justify-center group-hover:border-white/20 transition-colors duration-500">
                                 <span
                                     className="text-xs font-semibold text-white/60 group-hover:text-white/90 transition-colors duration-500"
-                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                    style={{ fontFamily: "'Poppins', sans-serif" }}
                                 >
                                     P
                                 </span>
                             </div>
                             <span
                                 className="text-sm font-medium tracking-[0.15em] text-white/60 group-hover:text-white/90 transition-colors duration-500 hidden sm:block"
-                                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                style={{ fontFamily: "'Poppins', sans-serif" }}
                             >
                                 PRIYANK
                             </span>
@@ -80,7 +92,7 @@ export default function Navbar() {
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 2.5, duration: 0.5 }}
                             >
-                                <div className="w-1.5 h-1.5 bg-emerald-500/60 rounded-full animate-pulse-glow" />
+                                <div className="w-1.5 h-1.5 bg-[#60a5fa]/80 rounded-full animate-pulse-glow" />
                                 <span className="text-[10px] tracking-wider text-white/20 uppercase">Available</span>
                             </motion.div>
                         </div>
@@ -120,7 +132,7 @@ export default function Navbar() {
             <AnimatePresence>
                 {mobileOpen && (
                     <motion.div
-                        className="fixed inset-0 z-40 bg-[#0a0a0a]/98 backdrop-blur-2xl flex flex-col items-center justify-center"
+                        className="fixed inset-0 z-40 bg-[#0a0e17]/98 backdrop-blur-2xl flex flex-col items-center justify-center"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -154,7 +166,7 @@ export default function Navbar() {
                                         onMouseEnter={() => setCursorVariant('hover')}
                                         onMouseLeave={() => setCursorVariant('default')}
                                         className="flex items-center gap-4 text-3xl tracking-wide text-white/60 hover:text-white transition-colors"
-                                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                        style={{ fontFamily: "'Poppins', sans-serif" }}
                                     >
                                         <span className="text-xs text-white/15">{item.num}</span>
                                         {item.label}
@@ -171,7 +183,7 @@ export default function Navbar() {
                             transition={{ delay: 0.5 }}
                         >
                             <p className="text-[10px] tracking-[0.3em] text-white/10 uppercase">
-                                Priyank &mdash; Portfolio 2025
+                                Priyank &mdash; Portfolio 2026
                             </p>
                         </motion.div>
                     </motion.div>

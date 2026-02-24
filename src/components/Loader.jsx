@@ -1,13 +1,25 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useProgress } from '@react-three/drei'
 import useStore from '../store/useStore'
 
 export default function Loader() {
-    const { progress } = useProgress()
+    const [progress, setProgress] = useState(0)
     const setIsLoaded = useStore((s) => s.setIsLoaded)
     const [phase, setPhase] = useState(0)
     const [show, setShow] = useState(true)
+
+    useEffect(() => {
+        let currentProgress = 0
+        const interval = setInterval(() => {
+            currentProgress += Math.random() * 15
+            if (currentProgress >= 100) {
+                currentProgress = 100
+                clearInterval(interval)
+            }
+            setProgress(currentProgress)
+        }, 120)
+        return () => clearInterval(interval)
+    }, [])
 
     useEffect(() => {
         const t1 = setTimeout(() => setPhase(1), 600)
@@ -41,7 +53,7 @@ export default function Loader() {
                 <div className="fixed inset-0 z-[100] flex">
                     {/* Left curtain */}
                     <motion.div
-                        className="w-1/2 h-full bg-[#0a0a0a] relative overflow-hidden"
+                        className="w-1/2 h-full bg-[#0a0e17] relative overflow-hidden"
                         animate={phase === 4 ? { x: '-100%' } : { x: 0 }}
                         transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
                     >
@@ -56,7 +68,7 @@ export default function Loader() {
 
                     {/* Right curtain */}
                     <motion.div
-                        className="w-1/2 h-full bg-[#0a0a0a] relative overflow-hidden"
+                        className="w-1/2 h-full bg-[#0a0e17] relative overflow-hidden"
                         animate={phase === 4 ? { x: '100%' } : { x: 0 }}
                         transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
                     >
@@ -81,7 +93,6 @@ export default function Loader() {
                             initial={{ scaleY: 0, opacity: 0 }}
                             animate={phase >= 1 ? { scaleY: 1, opacity: 1 } : {}}
                             transition={{ duration: 0.8 }}
-                            style2={{ transformOrigin: 'top' }}
                         />
 
                         {/* Eyebrow */}
@@ -100,7 +111,7 @@ export default function Loader() {
                                 <motion.span
                                     key={i}
                                     className="text-4xl md:text-6xl lg:text-7xl font-light text-white/90 inline-block"
-                                    style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '0.2em' }}
+                                    style={{ fontFamily: "'Poppins', sans-serif", letterSpacing: '0.2em' }}
                                     initial={{ y: 80, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{
@@ -150,7 +161,7 @@ export default function Loader() {
                                     className="h-full rounded-full"
                                     style={{
                                         width: `${progress}%`,
-                                        background: 'linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3))',
+                                        background: 'linear-gradient(90deg, rgba(96, 165, 250, 0.2), rgba(167, 139, 250, 0.4))',
                                     }}
                                     transition={{ duration: 0.1 }}
                                 />
@@ -159,7 +170,7 @@ export default function Loader() {
                             {/* Percentage */}
                             <motion.span
                                 className="text-2xl font-light tracking-[0.15em] text-white/40 stat-number"
-                                style={{ fontFamily: "'Space Grotesk', monospace" }}
+                                style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
                                 {String(Math.round(progress)).padStart(3, '0')}
                             </motion.span>
@@ -173,7 +184,7 @@ export default function Loader() {
                             transition={{ delay: 0.5, duration: 0.8 }}
                         >
                             <div className="w-4 h-4 border border-white/10 rounded-full flex items-center justify-center">
-                                <div className="w-1 h-1 bg-white/20 rounded-full animate-pulse-glow" />
+                                <div className="w-1 h-1 bg-[#60a5fa]/80 rounded-full animate-pulse-glow" />
                             </div>
                         </motion.div>
                     </motion.div>

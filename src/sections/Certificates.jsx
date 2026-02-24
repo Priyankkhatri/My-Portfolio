@@ -40,7 +40,7 @@ function CertCard({ cert, index, onClick }) {
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
             transition={{ duration: 0.6, delay: index * 0.08 }}
-            whileHover={{ y: -6, transition: { duration: 0.3 } }}
+            whileHover={{ y: -4, transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } }}
             className="glass-card glass-card-hover min-w-[300px] md:min-w-[340px] flex-shrink-0 select-none group"
         >
             {/* Top gradient bar */}
@@ -72,13 +72,13 @@ function CertCard({ cert, index, onClick }) {
                         </svg>
                     </div>
                     {/* Hover shine */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
                 </div>
 
                 {/* Info */}
                 <h4
                     className="text-sm font-semibold text-white/75 mb-1.5 group-hover:text-white/90 transition-colors duration-300"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
                     {cert.title}
                 </h4>
@@ -132,7 +132,7 @@ export default function Certificates() {
                     <div>
                         <h2
                             className="text-3xl md:text-5xl font-bold mb-3 text-white/90"
-                            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                            style={{ fontFamily: "'Poppins', sans-serif" }}
                         >
                             Certificates & <span className="text-gradient-silver">Awards</span>
                         </h2>
@@ -146,8 +146,8 @@ export default function Certificates() {
                 {/* Horizontal scroll */}
                 <div className="relative">
                     {/* Fade edges */}
-                    <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+                    <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0a0e17] to-transparent z-10 pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0a0e17] to-transparent z-10 pointer-events-none" />
 
                     <div className="flex gap-5 overflow-x-auto pb-4 px-2 no-scrollbar" style={{ scrollbarWidth: 'none' }}>
                         {certificates.map((cert, i) => (
@@ -219,7 +219,7 @@ export default function Certificates() {
 
                                 <h3
                                     className="text-xl md:text-2xl font-bold text-white/90 mb-2"
-                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                    style={{ fontFamily: "'Poppins', sans-serif" }}
                                 >
                                     {selected.title}
                                 </h3>
