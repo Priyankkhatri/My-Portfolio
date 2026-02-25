@@ -1,18 +1,83 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-900: #0a0e17;
-  --color-bg-800: #0f1520;
-  --color-card: rgba(255, 255, 255, 0.035);
-  --color-glass: rgba(255, 255, 255, 0.055);
-  --color-accent-1: #60a5fa;
-  --color-accent-2: #a78bfa;
-  --color-text-primary: #e8edf5;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-card: var(--card-bg);
+  --color-glass: var(--glass-bg);
+  --color-border: var(--border-color);
+  
+  --color-accent-1: var(--accent-1);
+  --color-accent-2: var(--accent-2);
+  
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Poppins', 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ── Theme Definitions ──────────────────────────────────── */
+:root {
+  /* Default: Dark Theme */
+  --bg-primary: #0a0e17;
+  --bg-secondary: #0f1520;
+  --card-bg: rgba(255, 255, 255, 0.035);
+  --glass-bg: rgba(255, 255, 255, 0.055);
+  --border-color: rgba(255, 255, 255, 0.06);
+  
+  --accent-1: #60a5fa;
+  --accent-2: #a78bfa;
+  
+  --text-primary: #e8edf5;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --bg-gradient-1: rgba(96, 165, 250, 0.08);
+  --bg-gradient-2: rgba(167, 139, 250, 0.06);
+  --bg-gradient-3: rgba(96, 165, 250, 0.04);
+  
+  --particle-1: rgba(96, 165, 250, 0.3);
+  --particle-2: rgba(167, 139, 250, 0.25);
+
+  --bg-highlight: rgba(255, 255, 255, 0.03);
+  --bg-highlight-hover: rgba(255, 255, 255, 0.08);
+
+  --gradient-silver-1: #e8edf5;
+  --gradient-silver-2: #94a3b8;
+  --gradient-silver-3: #cbd5e1;
+}
+
+[data-theme="light"] {
+  /* Light Theme (Ambient Sky Concept) */
+  --bg-primary: #e4ecf7; /* Richer slate-blue base — noticeably tinted, not white */
+  --bg-secondary: #dae3f0;
+  --card-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg: rgba(255, 255, 255, 0.82);
+  --border-color: rgba(15, 23, 42, 0.09);
+  
+  --accent-1: #3b82f6;
+  --accent-2: #8b5cf6;
+  
+  --text-primary: #020617;
+  --text-secondary: #0f172a;
+  --text-muted: #475569;
+
+  --bg-gradient-1: rgba(59, 130, 246, 0.25); /* Bolder blue blobs */
+  --bg-gradient-2: rgba(139, 92, 246, 0.20); /* Bolder purple */
+  --bg-gradient-3: rgba(99, 102, 241, 0.20); /* Bolder indigo */
+  
+  --particle-1: rgba(59, 130, 246, 0.55);
+  --particle-2: rgba(139, 92, 246, 0.50);
+
+  --bg-highlight: rgba(15, 23, 42, 0.05);
+  --bg-highlight-hover: rgba(15, 23, 42, 0.09);
+
+  --gradient-silver-1: #334155;
+  --gradient-silver-2: #64748b;
+  --gradient-silver-3: #475569;
 }
 
 /* ── Base Reset ─────────────────────────────────────────── */
@@ -31,18 +96,39 @@ html {
 body {
   margin: 0;
   padding: 0;
-  /* The main dark blue colour the user requested to fix */
-  background-color: #0a0e17;
-  color: #e8edf5;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
-  /* Add the static gradients here directly instead of animating on a pseudo-element which breaks some browsers */
+  transition: background-color 0.5s ease, color 0.5s ease;
   background-image: 
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(96, 165, 250, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(167, 139, 250, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(96, 165, 250, 0.04) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 50% at 50% -20%, var(--bg-gradient-1) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 60%, var(--bg-gradient-2) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, var(--bg-gradient-3) 0%, transparent 50%);
   background-attachment: fixed;
+}
+
+/* Light mode: extra ambient aurora layer for visual richness */
+[data-theme="light"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 25% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 75% 25%, rgba(139, 92, 246, 0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 40% at 60% 85%, rgba(99, 102, 241, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 10% 60%, rgba(56, 189, 248, 0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 35% at 90% 70%, rgba(168, 85, 247, 0.08) 0%, transparent 60%);
+  animation: auroraShift 20s ease-in-out infinite alternate;
+}
+
+@keyframes auroraShift {
+  0% { opacity: 0.85; transform: scale(1) translateY(0); }
+  50% { opacity: 1; transform: scale(1.05) translateY(-10px); }
+  100% { opacity: 0.9; transform: scale(1) translateY(5px); }
 }
 
 /* ── Animated Floating Particles ──────────────────────── */
@@ -53,17 +139,18 @@ body::after {
   z-index: 1;
   pointer-events: none;
   background-image:
-    radial-gradient(1px 1px at 10% 20%, rgba(96, 165, 250, 0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 30% 50%, rgba(167, 139, 250, 0.25) 0%, transparent 100%),
-    radial-gradient(1px 1px at 50% 10%, rgba(96, 165, 250, 0.2) 0%, transparent 100%),
-    radial-gradient(1px 1px at 70% 40%, rgba(167, 139, 250, 0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 90% 70%, rgba(96, 165, 250, 0.2) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 15% 80%, rgba(167, 139, 250, 0.35) 0%, transparent 100%),
-    radial-gradient(1px 1px at 85% 15%, rgba(96, 165, 250, 0.25) 0%, transparent 100%),
-    radial-gradient(1px 1px at 45% 65%, rgba(167, 139, 250, 0.2) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 60% 85%, rgba(96, 165, 250, 0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 25% 35%, rgba(167, 139, 250, 0.2) 0%, transparent 100%);
+    radial-gradient(1px 1px at 10% 20%, var(--particle-1) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 50%, var(--particle-2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 10%, var(--particle-1) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 40%, var(--particle-2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 70%, var(--particle-1) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 80%, var(--particle-2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 15%, var(--particle-1) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 65%, var(--particle-2) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 60% 85%, var(--particle-1) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 35%, var(--particle-2) 0%, transparent 100%);
   animation: particleDrift 30s ease-in-out infinite alternate;
+  transition: background-image 0.5s ease;
 }
 
 @keyframes particleDrift {
@@ -103,9 +190,14 @@ body,
   color: #e8edf5;
 }
 
+[data-theme="light"] ::selection {
+  background: rgba(59, 130, 246, 0.25);
+  color: #020617;
+}
+
 /* ── Gradient Utilities ─────────────────────────────────── */
 .text-gradient-silver {
-  background: linear-gradient(135deg, #e8edf5 0%, #94a3b8 40%, #cbd5e1 70%, #e8edf5 100%);
+  background: linear-gradient(135deg, var(--gradient-silver-1) 0%, var(--gradient-silver-2) 40%, var(--gradient-silver-3) 70%, var(--gradient-silver-1) 100%);
   background-size: 200% 200%;
   animation: shimmer 6s ease-in-out infinite;
   -webkit-background-clip: text;
@@ -127,14 +219,15 @@ body,
 
 /* ── Glass Cards ────────────────────────────────────────── */
 .glass-card {
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--card-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
   border-radius: 20px;
   position: relative;
   overflow: hidden;
   will-change: transform;
+  transition: background 0.5s ease, border-color 0.5s ease;
 }
 
 .glass-card::before {
@@ -151,6 +244,15 @@ body,
   pointer-events: none;
 }
 
+[data-theme="light"] .glass-card::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+}
+
 .glass-card-hover {
   transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
@@ -162,6 +264,15 @@ body,
     0 16px 48px rgba(0, 0, 0, 0.5),
     0 0 40px rgba(96, 165, 250, 0.04),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(15, 23, 42, 0.12);
+  box-shadow:
+    0 16px 48px rgba(15, 23, 42, 0.08),
+    0 0 40px rgba(59, 130, 246, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 /* ── Glow Effects ───────────────────────────────────────── */
@@ -241,10 +352,10 @@ h1, h2, h3, h4, h5, h6 {
   padding: 6px 14px;
   font-size: 11px;
   letter-spacing: 0.05em;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--bg-highlight);
+  border: 1px solid var(--border-color);
   border-radius: 999px;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-secondary);
   transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -254,15 +365,15 @@ h1, h2, h3, h4, h5, h6 {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.08) 0%, transparent 100%);
+  background: linear-gradient(135deg, var(--bg-highlight-hover) 0%, transparent 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .tech-pill:hover {
-  background: rgba(96, 165, 250, 0.08);
-  border-color: rgba(96, 165, 250, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--bg-highlight-hover);
+  border-color: var(--bg-highlight-hover);
+  color: var(--text-primary);
   box-shadow: 0 0 20px rgba(96, 165, 250, 0.06);
 }
 

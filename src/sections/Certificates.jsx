@@ -44,27 +44,27 @@ function CertCard({ cert, index, onClick }) {
             className="glass-card glass-card-hover min-w-[300px] md:min-w-[340px] flex-shrink-0 select-none group"
         >
             {/* Top gradient bar */}
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
 
             <div className="p-6 md:p-8">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-6">
-                    <span className="text-[10px] tracking-[0.25em] uppercase text-white/60">{cert.category}</span>
-                    <span className="text-[10px] text-white/60">{cert.date}</span>
+                    <span className="text-[10px] tracking-[0.25em] uppercase text-[var(--text-secondary)]">{cert.category}</span>
+                    <span className="text-[10px] text-[var(--text-secondary)]">{cert.date}</span>
                 </div>
 
                 {/* Certificate visual */}
-                <div className="w-full aspect-[16/10] rounded-xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] mb-6 flex items-center justify-center relative overflow-hidden">
+                <div className="w-full aspect-[16/10] rounded-xl bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-6 flex items-center justify-center relative overflow-hidden">
                     {/* Grid pattern */}
                     <div className="absolute inset-0 opacity-[0.04]"
                         style={{
-                            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                            backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
                             backgroundSize: '24px 24px',
                         }}
                     />
                     {/* Certificate icon */}
                     <div className="relative">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" className="text-white/60 group-hover:text-white/45 transition-colors duration-500">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)] group-hover:text-[var(--accent-1)] transition-colors duration-500">
                             <rect x="3" y="4" width="18" height="16" rx="2" />
                             <path d="M7 8h10M7 12h6M7 16h3" />
                             <circle cx="17" cy="15" r="2" />
@@ -72,27 +72,27 @@ function CertCard({ cert, index, onClick }) {
                         </svg>
                     </div>
                     {/* Hover shine */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[var(--bg-highlight)] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
                 </div>
 
                 {/* Info */}
                 <h4
-                    className="text-sm font-semibold text-white/75 mb-1.5 group-hover:text-white/90 transition-colors duration-300"
+                    className="text-sm font-semibold text-[var(--text-primary)]/75 mb-1.5 group-hover:text-[var(--text-primary)] transition-colors duration-300"
                     style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
                     {cert.title}
                 </h4>
                 <div className="flex items-center justify-between">
-                    <p className="text-xs text-white/60">{cert.issuer}</p>
-                    <span className="text-[10px] text-white/60">{cert.hours}</span>
+                    <p className="text-xs text-[var(--text-secondary)]">{cert.issuer}</p>
+                    <span className="text-[10px] text-[var(--text-secondary)]">{cert.hours}</span>
                 </div>
 
                 {/* Bottom action hint */}
-                <div className="mt-5 pt-4 border-t border-white/[0.04] flex items-center gap-2">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/60">
+                <div className="mt-5 pt-4 border-t border-[var(--border-color)] flex items-center gap-2">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)]">
                         <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
                     </svg>
-                    <span className="text-[10px] text-white/60 group-hover:text-white/45 transition-colors">Click to view</span>
+                    <span className="text-[10px] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">Click to view</span>
                 </div>
             </div>
         </motion.div>
@@ -125,29 +125,29 @@ export default function Certificates() {
                 className="max-w-7xl mx-auto"
             >
                 <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-px bg-white/10" />
-                    <p className="text-[11px] tracking-[0.4em] uppercase text-white/45">004 &mdash; Credentials</p>
+                    <div className="w-12 h-px bg-[var(--bg-highlight-hover)]" />
+                    <p className="text-[11px] tracking-[0.4em] uppercase text-[var(--text-secondary)]">004 &mdash; Credentials</p>
                 </div>
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
                     <div>
                         <h2
-                            className="text-3xl md:text-5xl font-bold mb-3 text-white/90"
+                            className="text-3xl md:text-5xl font-bold mb-3 text-[var(--text-primary)]"
                             style={{ fontFamily: "'Poppins', sans-serif" }}
                         >
                             Certificates & <span className="text-gradient-silver">Awards</span>
                         </h2>
-                        <p className="text-sm text-white/60 max-w-md">
+                        <p className="text-sm text-[var(--text-secondary)] max-w-md">
                             Continuous learning is at the heart of what I do. Here are some highlights from my journey.
                         </p>
                     </div>
-                    <span className="text-xs text-white/60 mt-4 md:mt-0">{certificates.length} credentials</span>
+                    <span className="text-xs text-[var(--text-secondary)] mt-4 md:mt-0">{certificates.length} credentials</span>
                 </div>
 
                 {/* Horizontal scroll */}
                 <div className="relative">
                     {/* Fade edges */}
-                    <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0a0e17] to-transparent z-10 pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0a0e17] to-transparent z-10 pointer-events-none" />
+                    <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[var(--bg-primary)] to-transparent z-10 pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[var(--bg-primary)] to-transparent z-10 pointer-events-none" />
 
                     <div className="flex gap-5 overflow-x-auto pb-4 px-2 no-scrollbar" style={{ scrollbarWidth: 'none' }}>
                         {certificates.map((cert, i) => (
@@ -163,11 +163,11 @@ export default function Certificates() {
                     animate={isInView ? { opacity: 1 } : {}}
                     transition={{ delay: 0.8 }}
                 >
-                    <div className="w-8 h-px bg-white/10" />
-                    <span className="text-[10px] tracking-[0.3em] text-white/60 uppercase">
+                    <div className="w-8 h-px bg-[var(--bg-highlight-hover)]" />
+                    <span className="text-[10px] tracking-[0.3em] text-[var(--text-secondary)] uppercase">
                         Drag to explore
                     </span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/60">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[var(--text-secondary)]">
                         <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
                     </svg>
                 </motion.div>
@@ -194,23 +194,23 @@ export default function Certificates() {
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Top bar */}
-                            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+                            <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
 
                             <div className="p-8 md:p-12">
                                 {/* Category badge */}
-                                <span className="inline-block px-3 py-1 text-[10px] tracking-[0.2em] uppercase bg-white/5 border border-white/5 rounded-full text-white/45 mb-6">
+                                <span className="inline-block px-3 py-1 text-[10px] tracking-[0.2em] uppercase bg-[var(--bg-highlight)] border border-[var(--border-color)] rounded-full text-[var(--text-secondary)] mb-6">
                                     {selected.category}
                                 </span>
 
                                 {/* Certificate visual */}
-                                <div className="w-full aspect-[16/9] rounded-xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] mb-8 flex items-center justify-center relative overflow-hidden">
+                                <div className="w-full aspect-[16/9] rounded-xl bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-8 flex items-center justify-center relative overflow-hidden">
                                     <div className="absolute inset-0 opacity-[0.04]"
                                         style={{
-                                            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                                            backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
                                             backgroundSize: '20px 20px',
                                         }}
                                     />
-                                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/60">
+                                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)]">
                                         <rect x="3" y="4" width="18" height="16" rx="2" />
                                         <path d="M7 8h10M7 12h6M7 16h3" />
                                         <circle cx="17" cy="15" r="2" /><path d="M17 17v2" />
@@ -218,29 +218,29 @@ export default function Certificates() {
                                 </div>
 
                                 <h3
-                                    className="text-xl md:text-2xl font-bold text-white/90 mb-2"
+                                    className="text-xl md:text-2xl font-bold text-[var(--text-primary)] mb-2"
                                     style={{ fontFamily: "'Poppins', sans-serif" }}
                                 >
                                     {selected.title}
                                 </h3>
 
-                                <div className="flex items-center gap-3 text-sm text-white/45 mb-2">
+                                <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)] mb-2">
                                     <span>{selected.issuer}</span>
-                                    <span className="w-1 h-1 rounded-full bg-white/15" />
+                                    <span className="w-1 h-1 rounded-full bg-[var(--bg-highlight-hover)]" />
                                     <span>{selected.date}</span>
                                 </div>
 
-                                <p className="text-xs text-white/60 mb-8">{selected.hours}</p>
+                                <p className="text-xs text-[var(--text-secondary)] mb-8">{selected.hours}</p>
 
-                                <div className="flex items-center justify-between pt-6 border-t border-white/[0.04]">
+                                <div className="flex items-center justify-between pt-6 border-t border-[var(--border-color)]">
                                     <button
                                         onClick={() => setSelected(null)}
-                                        className="text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white/60 transition-colors flex items-center gap-2"
+                                        className="text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2"
                                     >
                                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                                         Close
                                     </button>
-                                    <span className="text-[10px] text-white/60">ESC to dismiss</span>
+                                    <span className="text-[10px] text-[var(--text-secondary)]">ESC to dismiss</span>
                                 </div>
                             </div>
                         </motion.div>

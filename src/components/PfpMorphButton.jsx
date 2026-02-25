@@ -351,7 +351,7 @@ export default function PfpMorphButton() {
                     onClick={scrollToTopFallback}
                     onMouseEnter={() => setCursorVariant('hover')}
                     onMouseLeave={() => setCursorVariant('default')}
-                    className="!fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[10000] p-4 rounded-full glass-card glass-card-hover group border border-[#60a5fa]/20 bg-[#0a0e17]/90 backdrop-blur-xl shadow-lg shadow-[#60a5fa]/10 hover:shadow-[#60a5fa]/30 hover:border-[#60a5fa]/50 transition-all duration-300 lg:hidden"
+                    className="!fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[10000] p-4 rounded-full glass-card glass-card-hover group border border-[#60a5fa]/20 bg-[var(--bg-primary)]/90 backdrop-blur-xl shadow-lg shadow-[#60a5fa]/10 hover:shadow-[#60a5fa]/30 hover:border-[#60a5fa]/50 transition-all duration-300 lg:hidden"
                     aria-label="Back to top"
                 >
                     <svg
@@ -363,7 +363,7 @@ export default function PfpMorphButton() {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="text-white/70 group-hover:text-white relative z-10"
+                        className="text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] relative z-10"
                     >
                         <line x1="12" y1="19" x2="12" y2="5" />
                         <polyline points="5 12 12 5 19 12" />

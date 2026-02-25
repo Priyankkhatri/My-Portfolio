@@ -81,12 +81,13 @@ function AnimatedInput({ label, name, type = 'text', textarea = false, required 
         <div className="relative group flex flex-col">
             {/* Floating label */}
             <motion.label
-                className="absolute left-0 text-white/45 pointer-events-none"
+                className="absolute left-0 text-[var(--text-secondary)] pointer-events-none"
                 animate={{
                     top: focused || hasValue ? -8 : textarea ? 12 : 12,
                     fontSize: focused || hasValue ? '10px' : '14px',
                     letterSpacing: focused || hasValue ? '0.2em' : '0.05em',
-                    color: error ? 'rgba(248,113,113,0.8)' : focused ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.15)',
+                    color: error ? 'rgba(248,113,113,0.8)' : focused ? 'var(--text-secondary)' : 'var(--text-muted)',
+                    opacity: error ? 1 : focused ? 0.9 : 0.7,
                 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
             >
@@ -101,12 +102,12 @@ function AnimatedInput({ label, name, type = 'text', textarea = false, required 
                 onFocus={() => setFocused(true)}
                 onBlur={handleBlur}
                 onChange={handleChange}
-                className={`w-full bg-transparent border-b ${error ? 'border-red-400/[0.4]' : 'border-white/[0.06]'} text-white/80 text-sm py-3 focus:outline-none resize-none`}
+                className={`w-full bg-transparent border-b ${error ? 'border-red-400/[0.4]' : 'border-[var(--border-color)]'} text-[var(--text-primary)] text-sm py-3 focus:outline-none resize-none`}
             />
 
             {/* Animated underline */}
             <div className="relative h-px w-full">
-                <div className="absolute inset-0 bg-white/[0.04]" />
+                <div className="absolute inset-0 bg-[var(--bg-highlight)]" />
                 <motion.div
                     className="absolute inset-y-0 left-0"
                     style={{ background: error ? 'rgba(248,113,113,0.8)' : 'linear-gradient(90deg, rgba(96, 165, 250, 0.4), rgba(167, 139, 250, 0.4))' }}
@@ -205,16 +206,16 @@ export default function Contact() {
             >
                 {/* Section header */}
                 <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-px bg-white/10" />
-                    <p className="text-[11px] tracking-[0.4em] uppercase text-white/45">005 &mdash; Contact</p>
+                    <div className="w-12 h-px bg-[var(--bg-highlight-hover)]" />
+                    <p className="text-[11px] tracking-[0.4em] uppercase text-[var(--text-secondary)]">005 &mdash; Contact</p>
                 </div>
                 <h2
-                    className="text-3xl md:text-5xl font-bold mb-3 text-white/90"
+                    className="text-3xl md:text-5xl font-bold mb-3 text-[var(--text-primary)]"
                     style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
                     Let's Build <span className="text-gradient-silver">Together</span>
                 </h2>
-                <p className="text-sm text-white/60 max-w-lg mb-20">
+                <p className="text-sm text-[var(--text-secondary)] max-w-lg mb-20">
                     Have a project in mind or just want to start a conversation? I'm always excited
                     about new challenges and meaningful collaborations.
                 </p>
@@ -244,7 +245,7 @@ export default function Contact() {
                                         onMouseLeave={() => setCursorVariant('default')}
                                         whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                                         whileTap={{ scale: isSubmitting ? 1 : 0.97 }}
-                                        className={`group btn-shine inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#60a5fa]/15 to-[#a78bfa]/15 border border-[#60a5fa]/25 text-white/90 text-sm font-medium tracking-wide rounded-full shadow-lg shadow-[#60a5fa]/5 transition-all duration-300 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:border-[#60a5fa]/45'}`}
+                                        className={`group btn-shine inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#60a5fa]/15 to-[#a78bfa]/15 border border-[#60a5fa]/25 text-[var(--text-primary)] text-sm font-medium tracking-wide rounded-full shadow-lg shadow-[#60a5fa]/5 transition-all duration-300 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:border-[#60a5fa]/45'}`}
                                     >
                                         {isSubmitting ? 'Sending...' : 'Send Message'}
                                         {!isSubmitting && (
@@ -253,7 +254,7 @@ export default function Contact() {
                                             </svg>
                                         )}
                                     </motion.button>
-                                    <span className="text-[10px] text-white/60">Usually replies within 24h</span>
+                                    <span className="text-[10px] text-[var(--text-secondary)]">Usually replies within 24h</span>
                                 </div>
 
                                 <AnimatePresence>
@@ -287,7 +288,7 @@ export default function Contact() {
                     {/* Socials — 2 cols */}
                     <div className="lg:col-span-2 flex flex-col justify-between">
                         <div>
-                            <p className="text-[10px] tracking-[0.3em] uppercase text-white/60 mb-8">Find me on</p>
+                            <p className="text-[10px] tracking-[0.3em] uppercase text-[var(--text-secondary)] mb-8">Find me on</p>
                             <div className="flex flex-col gap-3">
                                 {socials.map((s, i) => (
                                     <motion.div
@@ -295,29 +296,29 @@ export default function Contact() {
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={isInView ? { opacity: 1, x: 0 } : {}}
                                         transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
-                                        className="relative flex items-center p-4 rounded-xl bg-white/[0.01] border border-white/[0.03] hover:bg-white/[0.04] hover:border-white/[0.08] transition-[background-color,border-color] duration-300 group"
+                                        className="relative flex items-center p-4 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--bg-highlight-hover)] transition-[background-color,border-color] duration-300 group"
                                         onMouseEnter={() => setCursorVariant('hover')}
                                         onMouseLeave={() => setCursorVariant('default')}
                                     >
                                         <a href={s.href} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-0 rounded-xl" />
                                         <div className="relative z-10 flex items-center gap-4 w-full pointer-events-none">
-                                            <span className="text-white/60 group-hover:text-white/60 transition-colors duration-300">
+                                            <span className="text-[var(--text-secondary)] group-hover:text-[var(--accent-1)] transition-colors duration-300">
                                                 {s.icon}
                                             </span>
                                             <div className="flex-1">
-                                                <span className="text-sm text-white/50 group-hover:text-white/80 transition-colors block">{s.label}</span>
-                                                <span className="text-[10px] text-white/60">{s.desc}</span>
+                                                <span className="text-sm text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors block">{s.label}</span>
+                                                <span className="text-[10px] text-[var(--text-secondary)]">{s.desc}</span>
                                             </div>
                                             {s.label === 'LeetCode' && (
                                                 <button
                                                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowLeetCodeModal(true); }}
-                                                    className="pointer-events-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#60a5fa]/10 border border-[#60a5fa]/20 text-[#60a5fa] hover:bg-[#60a5fa]/20 hover:text-white transition-colors text-[10px] font-medium tracking-wide uppercase mr-2"
+                                                    className="pointer-events-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#60a5fa]/10 border border-[#60a5fa]/20 text-[#60a5fa] hover:bg-[#60a5fa]/20 hover:text-[var(--text-primary)] transition-colors text-[10px] font-medium tracking-wide uppercase mr-2"
                                                 >
                                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></svg>
                                                     Analysis
                                                 </button>
                                             )}
-                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/60 group-hover:text-white/45 group-hover:translate-x-1 transition-[color,transform] duration-300">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-[color,transform] duration-300">
                                                 <polyline points="9 18 15 12 9 6" />
                                             </svg>
                                         </div>
@@ -327,12 +328,12 @@ export default function Contact() {
                         </div>
 
                         {/* Availability badge */}
-                        <div className="mt-12 p-5 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                        <div className="mt-12 p-5 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)]">
                             <div className="flex items-center gap-2.5 mb-2">
                                 <span className="w-2 h-2 bg-[#60a5fa]/70 rounded-full animate-pulse-glow" />
-                                <span className="text-xs text-white/60 font-medium">Open to internships</span>
+                                <span className="text-xs text-[var(--text-secondary)] font-medium">Open to internships</span>
                             </div>
-                            <p className="text-[11px] text-white/45 leading-relaxed">
+                            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
                                 Currently looking for internships and small collaborations to apply my fundamentals.
                             </p>
                         </div>
@@ -340,14 +341,14 @@ export default function Contact() {
                 </div>
 
                 {/* Footer */}
-                <div className="mt-32 pt-8 border-t border-white/[0.04] flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="mt-32 pt-8 border-t border-[var(--border-color)] flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                        <div className="w-6 h-6 border border-white/10 rounded-md flex items-center justify-center">
-                            <span className="text-[10px] text-white/45 font-medium" style={{ fontFamily: "'Poppins'" }}>P</span>
+                        <div className="w-6 h-6 border border-[var(--border-color)] rounded-md flex items-center justify-center">
+                            <span className="text-[10px] text-[var(--text-secondary)] font-medium" style={{ fontFamily: "'Poppins'" }}>P</span>
                         </div>
-                        <span className="text-xs text-white/60">Designed & Built by Priyank</span>
+                        <span className="text-xs text-[var(--text-secondary)]">Designed & Built by Priyank</span>
                     </div>
-                    <span className="text-[10px] text-white/60">
+                    <span className="text-[10px] text-[var(--text-secondary)]">
                         &copy; {new Date().getFullYear()} &mdash; All rights reserved
                     </span>
                 </div>
@@ -379,7 +380,7 @@ export default function Contact() {
                             <div className="p-8 md:p-12">
                                 <div className="flex items-center justify-between mb-8">
                                     <h3
-                                        className="text-xl md:text-2xl font-bold text-white/90"
+                                        className="text-xl md:text-2xl font-bold text-[var(--text-primary)]"
                                         style={{ fontFamily: "'Poppins', sans-serif" }}
                                     >
                                         LeetCode <span className="text-gradient-silver">Analysis</span>
@@ -388,14 +389,14 @@ export default function Contact() {
                                         href="https://leetcode.com/u/priyankkhatrii/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.08] hover:border-white/[0.1] transition-all text-xs text-white/60 flex items-center gap-2"
+                                        className="px-4 py-2 rounded-lg bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--border-color)] transition-all text-xs text-[var(--text-secondary)] flex items-center gap-2"
                                     >
                                         View Profile
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
                                     </a>
                                 </div>
 
-                                <div className="w-full bg-[#1e1e1e] rounded-xl border border-white/5 p-4 flex items-center justify-center overflow-hidden min-h-[200px]">
+                                <div className="w-full bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-4 flex items-center justify-center overflow-hidden min-h-[200px]">
                                     <img
                                         src="https://leetcard.jacoblin.cool/priyankkhatrii?theme=dark&font=Inter&ext=activity"
                                         alt="LeetCode Stats"
@@ -404,15 +405,15 @@ export default function Contact() {
                                     />
                                 </div>
 
-                                <div className="flex items-center justify-between pt-6 mt-8 border-t border-white/[0.04]">
+                                <div className="flex items-center justify-between pt-6 mt-8 border-t border-[var(--border-color)]">
                                     <button
                                         onClick={() => setShowLeetCodeModal(false)}
-                                        className="text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white/60 transition-colors flex items-center gap-2"
+                                        className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
                                     >
                                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                                         Close
                                     </button>
-                                    <span className="text-[10px] text-white/60">ESC to dismiss</span>
+                                    <span className="text-[10px] text-[var(--text-secondary)]">ESC to dismiss</span>
                                 </div>
                             </div>
                         </motion.div>

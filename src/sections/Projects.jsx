@@ -106,13 +106,13 @@ function ProjectCard({ project, index, onClick }) {
             >
                 {/* Image area — 2 cols */}
                 <div
-                    className={`relative col-span-2 bg-gradient-to-br from-white/[0.02] to-white/[0.005] overflow-hidden group ${!isEven ? 'lg:order-2' : ''
+                    className={`relative col-span-2 bg-gradient-to-br from-[var(--bg-highlight)] to-transparent overflow-hidden group ${!isEven ? 'lg:order-2' : ''
                         }`}
                 >
                     {/* Number watermark */}
                     <div className="absolute inset-0 flex items-center justify-center">
                         <span
-                            className="text-[8rem] md:text-[12rem] font-bold text-white/[0.02] select-none group-hover:text-white/[0.04] transition-colors duration-700"
+                            className="text-[8rem] md:text-[12rem] font-bold text-[var(--text-primary)]/[0.02] select-none group-hover:text-[var(--text-primary)]/[0.04] transition-colors duration-700"
                             style={{ fontFamily: "'JetBrains Mono', monospace" }}
                         >
                             {num}
@@ -122,43 +122,43 @@ function ProjectCard({ project, index, onClick }) {
                     {/* Decorative grid pattern */}
                     <div className="absolute inset-0 opacity-[0.03]"
                         style={{
-                            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                            backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
                             backgroundSize: '40px 40px',
                         }}
                     />
 
                     {/* Corner accent */}
                     <div className="absolute top-6 left-6 flex items-center gap-2">
-                        <div className="w-3 h-3 border border-white/10 rounded-sm" />
-                        <span className="text-[9px] tracking-[0.3em] text-white/60 uppercase">{project.year}</span>
+                        <div className="w-3 h-3 border border-[var(--border-color)] rounded-sm" />
+                        <span className="text-[9px] tracking-[0.3em] text-[var(--text-secondary)] uppercase">{project.year}</span>
                     </div>
 
                     {/* Hover shine effect */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[var(--bg-highlight)] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
                 </div>
 
                 {/* Content — 3 cols */}
                 <div className={`col-span-3 p-8 md:p-12 flex flex-col justify-center ${!isEven ? 'lg:order-1' : ''}`}>
                     {/* Meta row */}
                     <div className="flex items-center gap-3 mb-6">
-                        <span className="text-[10px] tracking-[0.3em] uppercase text-white/60">Project {num}</span>
-                        <span className="w-8 h-px bg-white/10" />
-                        <span className="text-[10px] tracking-[0.2em] text-white/60">{project.role}</span>
+                        <span className="text-[10px] tracking-[0.3em] uppercase text-[var(--text-secondary)]">Project {num}</span>
+                        <span className="w-8 h-px bg-[var(--bg-highlight-hover)]" />
+                        <span className="text-[10px] tracking-[0.2em] text-[var(--text-secondary)]">{project.role}</span>
                     </div>
 
                     {/* Title */}
                     <h3
-                        className="text-2xl md:text-4xl font-bold text-white/90 mb-2"
+                        className="text-2xl md:text-4xl font-bold text-[var(--text-primary)] mb-2"
                         style={{ fontFamily: "'Poppins', sans-serif" }}
                     >
                         {project.title}
                     </h3>
 
                     {/* Tagline */}
-                    <p className="text-sm text-white/45 italic mb-6">{project.tagline}</p>
+                    <p className="text-sm text-[var(--text-secondary)] italic mb-6">{project.tagline}</p>
 
                     {/* Description */}
-                    <p className="text-sm leading-[1.8] text-white/50 mb-8 max-w-lg">
+                    <p className="text-sm leading-[1.8] text-[var(--text-secondary)] mb-8 max-w-lg">
                         {project.description}
                     </p>
 
@@ -170,13 +170,13 @@ function ProjectCard({ project, index, onClick }) {
                     </div>
 
                     {/* Links */}
-                    <div className="flex gap-6 pt-6 border-t border-white/[0.04]">
+                    <div className="flex gap-6 pt-6 border-t border-[var(--border-color)]">
                         <a
                             href={project.live}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => onClick && e.stopPropagation()}
-                            className="group inline-flex items-center gap-2.5 text-sm text-white/60 hover:text-white/80 transition-colors link-underline"
+                            className="group inline-flex items-center gap-2.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
                         >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-12 transition-transform duration-300">
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
@@ -190,7 +190,7 @@ function ProjectCard({ project, index, onClick }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => onClick && e.stopPropagation()}
-                            className="group inline-flex items-center gap-2.5 text-sm text-white/60 hover:text-white/80 transition-colors link-underline"
+                            className="group inline-flex items-center gap-2.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
                         >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-12 transition-transform duration-300">
                                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
@@ -235,23 +235,23 @@ export default function Projects() {
             >
                 {/* Section header */}
                 <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-px bg-white/10" />
-                    <p className="text-[11px] tracking-[0.4em] uppercase text-white/45">003 &mdash; Work</p>
+                    <div className="w-12 h-px bg-[var(--bg-highlight-hover)]" />
+                    <p className="text-[11px] tracking-[0.4em] uppercase text-[var(--text-secondary)]">003 &mdash; Work</p>
                 </div>
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
                     <div>
                         <h2
-                            className="text-3xl md:text-5xl font-bold mb-3 text-white/90"
+                            className="text-3xl md:text-5xl font-bold mb-3 text-[var(--text-primary)]"
                             style={{ fontFamily: "'Poppins', sans-serif" }}
                         >
                             Selected <span className="text-gradient-silver">Projects</span>
                         </h2>
-                        <p className="text-sm text-white/60 max-w-md">
+                        <p className="text-sm text-[var(--text-secondary)] max-w-md">
                             A curated selection of projects that showcase my approach to solving
                             complex problems with elegant solutions.
                         </p>
                     </div>
-                    <span className="text-xs text-white/60 mt-4 md:mt-0">{projects.length} projects</span>
+                    <span className="text-xs text-[var(--text-secondary)] mt-4 md:mt-0">{projects.length} projects</span>
                 </div>
 
                 <div className="flex flex-col gap-8">
@@ -272,12 +272,12 @@ export default function Projects() {
                     animate={isInView ? { opacity: 1 } : {}}
                     transition={{ delay: 1, duration: 0.6 }}
                 >
-                    <p className="text-xs text-white/60 mb-4">Want to see more?</p>
+                    <p className="text-xs text-[var(--text-secondary)] mb-4">Want to see more?</p>
                     <a
                         href="https://github.com/priyank"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm text-white/45 hover:text-white/60 transition-colors link-underline"
+                        className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
                     >
                         View all on GitHub
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -308,11 +308,11 @@ export default function Projects() {
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Top bar */}
-                            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+                            <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
 
                             <div className="p-8 md:p-12">
                                 <h3
-                                    className="text-xl md:text-2xl font-bold text-white/90 mb-6"
+                                    className="text-xl md:text-2xl font-bold text-[var(--text-primary)] mb-6"
                                     style={{ fontFamily: "'Poppins', sans-serif" }}
                                 >
                                     Mini Games Collection
@@ -325,30 +325,30 @@ export default function Projects() {
                                             href={game.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="group flex flex-col p-4 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.06] hover:border-white/[0.1] transition-all duration-300"
+                                            className="group flex flex-col p-4 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--border-color)] transition-all duration-300"
                                             onMouseEnter={() => setCursorVariant('hover')}
                                             onMouseLeave={() => setCursorVariant('default')}
                                         >
                                             <div className="flex items-center justify-between mb-1">
-                                                <span className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors">{game.title}</span>
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/45 group-hover:text-white/80 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
+                                                <span className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--text-primary)] transition-colors">{game.title}</span>
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
                                                     <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
                                                 </svg>
                                             </div>
-                                            <span className="text-xs text-white/60">{game.desc}</span>
+                                            <span className="text-xs text-[var(--text-secondary)]">{game.desc}</span>
                                         </a>
                                     ))}
                                 </div>
 
-                                <div className="flex items-center justify-between pt-6 border-t border-white/[0.04]">
+                                <div className="flex items-center justify-between pt-6 border-t border-[var(--border-color)]">
                                     <button
                                         onClick={() => setShowGamesModal(false)}
-                                        className="text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white/60 transition-colors flex items-center gap-2"
+                                        className="text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2"
                                     >
                                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                                         Close
                                     </button>
-                                    <span className="text-[10px] text-white/60">ESC to dismiss</span>
+                                    <span className="text-[10px] text-[var(--text-secondary)]">ESC to dismiss</span>
                                 </div>
                             </div>
                         </motion.div>

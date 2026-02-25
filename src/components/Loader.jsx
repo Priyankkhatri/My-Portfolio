@@ -53,13 +53,13 @@ export default function Loader() {
                 <div className="fixed inset-0 z-[100] flex">
                     {/* Left curtain */}
                     <motion.div
-                        className="w-1/2 h-full bg-[#0a0e17] relative overflow-hidden"
+                        className="w-1/2 h-full bg-[var(--bg-primary)] relative overflow-hidden"
                         animate={phase === 4 ? { x: '-100%' } : { x: 0 }}
                         transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
                     >
                         {/* Decorative diagonal line */}
                         <motion.div
-                            className="absolute top-0 right-0 w-px h-full bg-gradient-to-b from-transparent via-white/5 to-transparent"
+                            className="absolute top-0 right-0 w-px h-full bg-gradient-to-b from-transparent via-[var(--text-primary)]/5 to-transparent"
                             initial={{ scaleY: 0 }}
                             animate={{ scaleY: 1 }}
                             transition={{ delay: 0.3, duration: 1.5 }}
@@ -68,12 +68,12 @@ export default function Loader() {
 
                     {/* Right curtain */}
                     <motion.div
-                        className="w-1/2 h-full bg-[#0a0e17] relative overflow-hidden"
+                        className="w-1/2 h-full bg-[var(--bg-primary)] relative overflow-hidden"
                         animate={phase === 4 ? { x: '100%' } : { x: 0 }}
                         transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
                     >
                         <motion.div
-                            className="absolute top-0 left-0 w-px h-full bg-gradient-to-b from-transparent via-white/5 to-transparent"
+                            className="absolute top-0 left-0 w-px h-full bg-gradient-to-b from-transparent via-[var(--text-primary)]/5 to-transparent"
                             initial={{ scaleY: 0 }}
                             animate={{ scaleY: 1 }}
                             transition={{ delay: 0.3, duration: 1.5 }}
@@ -89,7 +89,7 @@ export default function Loader() {
                         {/* Top ornament */}
                         <motion.div
                             className="w-px h-16 mb-8"
-                            style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.1))' }}
+                            style={{ background: 'linear-gradient(to bottom, transparent, var(--border-color))' }}
                             initial={{ scaleY: 0, opacity: 0 }}
                             animate={phase >= 1 ? { scaleY: 1, opacity: 1 } : {}}
                             transition={{ duration: 0.8 }}
@@ -97,7 +97,7 @@ export default function Loader() {
 
                         {/* Eyebrow */}
                         <motion.p
-                            className="text-[10px] tracking-[0.5em] uppercase text-white/60 mb-6"
+                            className="text-[10px] tracking-[0.5em] uppercase text-[var(--text-muted)] mb-6"
                             initial={{ opacity: 0 }}
                             animate={phase >= 1 ? { opacity: 1 } : {}}
                             transition={{ duration: 0.6, delay: 0.2 }}
@@ -110,7 +110,7 @@ export default function Loader() {
                             {'PRIYANK'.split('').map((char, i) => (
                                 <motion.span
                                     key={i}
-                                    className="text-4xl md:text-6xl lg:text-7xl font-light text-white/90 inline-block"
+                                    className="text-4xl md:text-6xl lg:text-7xl font-light text-[var(--text-primary)]/90 inline-block"
                                     style={{ fontFamily: "'Poppins', sans-serif", letterSpacing: '0.2em' }}
                                     initial={{ y: 80, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
@@ -127,7 +127,7 @@ export default function Loader() {
 
                         {/* Subtitle */}
                         <motion.p
-                            className="text-[10px] tracking-[0.4em] uppercase text-white/45 mt-4"
+                            className="text-[10px] tracking-[0.4em] uppercase text-[var(--text-muted)] mt-4"
                             initial={{ opacity: 0, y: 10 }}
                             animate={phase >= 2 ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6 }}
@@ -151,12 +151,12 @@ export default function Loader() {
                             animate={phase >= 3 ? { opacity: 1 } : { opacity: 0 }}
                             transition={{ duration: 0.4 }}
                         >
-                            <span className="text-[9px] tracking-[0.35em] text-white/45 uppercase">
+                            <span className="text-[9px] tracking-[0.35em] text-[var(--text-muted)] uppercase">
                                 Loading Experience
                             </span>
 
                             {/* Progress bar */}
-                            <div className="w-56 h-px bg-white/5 overflow-hidden rounded-full">
+                            <div className="w-56 h-px bg-[var(--bg-highlight)] overflow-hidden rounded-full">
                                 <motion.div
                                     className="h-full rounded-full"
                                     style={{
@@ -169,7 +169,7 @@ export default function Loader() {
 
                             {/* Percentage */}
                             <motion.span
-                                className="text-2xl font-light tracking-[0.15em] text-white/60 stat-number"
+                                className="text-2xl font-light tracking-[0.15em] text-[var(--text-secondary)] stat-number"
                                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
                                 {String(Math.round(progress)).padStart(3, '0')}
@@ -183,7 +183,7 @@ export default function Loader() {
                             animate={phase >= 2 ? { opacity: 1 } : {}}
                             transition={{ delay: 0.5, duration: 0.8 }}
                         >
-                            <div className="w-4 h-4 border border-white/10 rounded-full flex items-center justify-center">
+                            <div className="w-4 h-4 border border-[var(--border-color)] rounded-full flex items-center justify-center">
                                 <div className="w-1 h-1 bg-[#60a5fa]/80 rounded-full animate-pulse-glow" />
                             </div>
                         </motion.div>

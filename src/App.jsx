@@ -14,12 +14,12 @@ import PfpMorphButton from './components/PfpMorphButton'
 function MarqueeStrip() {
     const text = 'REACT — NEXT.JS — NODE.JS — MONGODB — TAILWINDCSS — CREATIVE DEVELOPMENT — '
     return (
-        <div className="relative py-6 overflow-hidden border-y border-white/[0.03] group cursor-default">
+        <div className="relative py-6 overflow-hidden border-y border-[var(--border-color)] group cursor-default">
             <div className="flex animate-marquee whitespace-nowrap group-hover:[animation-play-state:paused] transition-all duration-500">
                 {[...Array(4)].map((_, i) => (
                     <span
                         key={i}
-                        className="text-xs tracking-[0.35em] text-white/[0.06] uppercase mx-4"
+                        className="text-xs tracking-[0.35em] text-[var(--text-muted)]/30 uppercase mx-4"
                         style={{ fontFamily: "'Poppins', sans-serif" }}
                     >
                         {text}

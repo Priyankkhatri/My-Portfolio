@@ -37,7 +37,7 @@ export default function ScrollToTop() {
                     onClick={scrollToTop}
                     onMouseEnter={() => setCursorVariant('hover')}
                     onMouseLeave={() => setCursorVariant('default')}
-                    className="!fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 p-4 rounded-full glass-card glass-card-hover group border border-[#60a5fa]/20 bg-[#0a0e17]/80 backdrop-blur-xl shadow-lg shadow-[#60a5fa]/10 hover:shadow-[#60a5fa]/20 hover:border-[#60a5fa]/40 transition-all duration-300"
+                    className="!fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 p-4 rounded-full glass-card glass-card-hover group border border-[#60a5fa]/20 bg-[var(--bg-primary)]/80 backdrop-blur-xl shadow-lg shadow-[#60a5fa]/10 hover:shadow-[#60a5fa]/20 hover:border-[#60a5fa]/40 transition-all duration-300"
                     aria-label="Scroll to top"
                 >
                     {/* Inner glowing ring on hover */}
@@ -52,7 +52,7 @@ export default function ScrollToTop() {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="text-white/70 group-hover:text-white group-hover:-translate-y-1 transition-all duration-300 relative z-10"
+                        className="text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] group-hover:-translate-y-1 transition-all duration-300 relative z-10"
                     >
                         <line x1="12" y1="19" x2="12" y2="5" />
                         <polyline points="5 12 12 5 19 12" />
