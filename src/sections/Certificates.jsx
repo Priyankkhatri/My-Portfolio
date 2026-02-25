@@ -6,9 +6,12 @@ const certificates = [
     {
         title: 'Introduction to Front-End Development',
         issuer: 'Coursera (Meta)',
-        date: 'In Progress',
+        date: 'Feb 24, 2026',
         category: 'Frontend',
-        hours: 'Pending',
+        hours: 'Grade: 99%',
+        credentialId: 'OEJDQXOP4W5Y',
+        credentialUrl: 'https://coursera.org/verify/OEJDQXOP4W5Y',
+        image: '/meta-frontend-cert.jpg',
     },
     {
         title: 'Introduction to Back-End Development',
@@ -41,7 +44,7 @@ function CertCard({ cert, index, onClick }) {
             animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
             transition={{ duration: 0.6, delay: index * 0.08 }}
             whileHover={{ y: -4, transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } }}
-            className="glass-card glass-card-hover min-w-[300px] md:min-w-[340px] flex-shrink-0 select-none group"
+            className="glass-card glass-card-hover w-[300px] min-w-[300px] max-w-[300px] md:w-[340px] md:min-w-[340px] md:max-w-[340px] flex-shrink-0 select-none group"
         >
             {/* Top gradient bar */}
             <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
@@ -54,25 +57,31 @@ function CertCard({ cert, index, onClick }) {
                 </div>
 
                 {/* Certificate visual */}
-                <div className="w-full aspect-[16/10] rounded-xl bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-6 flex items-center justify-center relative overflow-hidden">
-                    {/* Grid pattern */}
-                    <div className="absolute inset-0 opacity-[0.04]"
-                        style={{
-                            backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
-                            backgroundSize: '24px 24px',
-                        }}
-                    />
-                    {/* Certificate icon */}
-                    <div className="relative">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)] group-hover:text-[var(--accent-1)] transition-colors duration-500">
-                            <rect x="3" y="4" width="18" height="16" rx="2" />
-                            <path d="M7 8h10M7 12h6M7 16h3" />
-                            <circle cx="17" cy="15" r="2" />
-                            <path d="M17 17v2" />
-                        </svg>
-                    </div>
-                    {/* Hover shine */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[var(--bg-highlight)] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+                <div className="w-full aspect-video rounded-lg bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-6 flex items-center justify-center relative overflow-hidden group-hover:from-[var(--bg-highlight-hover)] transition-colors duration-500">
+                    {cert.image ? (
+                        <img
+                            src={cert.image}
+                            alt={`${cert.title} Certificate`}
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <>
+                            <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
+                                style={{
+                                    backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
+                                    backgroundSize: '16px 16px',
+                                }}
+                            />
+                            {/* Certificate icon */}
+                            <div className="relative">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)] group-hover:text-[var(--accent-1)] transition-colors duration-500">
+                                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                                    <path d="M7 8h10M7 12h6M7 16h3" />
+                                    <circle cx="17" cy="15" r="2" />
+                                </svg>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {/* Info */}
@@ -203,18 +212,28 @@ export default function Certificates() {
                                 </span>
 
                                 {/* Certificate visual */}
-                                <div className="w-full aspect-[16/9] rounded-xl bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-8 flex items-center justify-center relative overflow-hidden">
-                                    <div className="absolute inset-0 opacity-[0.04]"
-                                        style={{
-                                            backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
-                                            backgroundSize: '20px 20px',
-                                        }}
-                                    />
-                                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)]">
-                                        <rect x="3" y="4" width="18" height="16" rx="2" />
-                                        <path d="M7 8h10M7 12h6M7 16h3" />
-                                        <circle cx="17" cy="15" r="2" /><path d="M17 17v2" />
-                                    </svg>
+                                <div className="w-full aspect-[16/9] rounded-xl bg-[var(--bg-highlight)] mb-8 flex items-center justify-center relative overflow-hidden">
+                                    {selected.image ? (
+                                        <img
+                                            src={selected.image}
+                                            alt={`${selected.title} Certificate`}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    ) : (
+                                        <>
+                                            <div className="absolute inset-0 opacity-[0.04]"
+                                                style={{
+                                                    backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
+                                                    backgroundSize: '20px 20px',
+                                                }}
+                                            />
+                                            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)]">
+                                                <rect x="3" y="4" width="18" height="16" rx="2" />
+                                                <path d="M7 8h10M7 12h6M7 16h3" />
+                                                <circle cx="17" cy="15" r="2" /><path d="M17 17v2" />
+                                            </svg>
+                                        </>
+                                    )}
                                 </div>
 
                                 <h3
@@ -224,23 +243,43 @@ export default function Certificates() {
                                     {selected.title}
                                 </h3>
 
-                                <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)] mb-2">
+                                <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-secondary)] mb-2">
                                     <span>{selected.issuer}</span>
                                     <span className="w-1 h-1 rounded-full bg-[var(--bg-highlight-hover)]" />
                                     <span>{selected.date}</span>
+                                    {selected.credentialId && (
+                                        <>
+                                            <span className="w-1 h-1 rounded-full bg-[var(--bg-highlight-hover)]" />
+                                            <span className="text-[10px] uppercase tracking-wider font-mono">ID: {selected.credentialId}</span>
+                                        </>
+                                    )}
                                 </div>
 
                                 <p className="text-xs text-[var(--text-secondary)] mb-8">{selected.hours}</p>
 
-                                <div className="flex items-center justify-between pt-6 border-t border-[var(--border-color)]">
-                                    <button
-                                        onClick={() => setSelected(null)}
-                                        className="text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2"
-                                    >
-                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
-                                        Close
-                                    </button>
-                                    <span className="text-[10px] text-[var(--text-secondary)]">ESC to dismiss</span>
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-6 border-t border-[var(--border-color)]">
+                                    <div className="flex items-center gap-6">
+                                        <button
+                                            onClick={() => setSelected(null)}
+                                            className="text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2"
+                                        >
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                            Close
+                                        </button>
+
+                                        {selected.credentialUrl && (
+                                            <a
+                                                href={selected.credentialUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-xs tracking-[0.2em] uppercase text-[var(--accent-1)] hover:text-[var(--accent-2)] transition-colors flex items-center gap-2"
+                                            >
+                                                View Credential
+                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                            </a>
+                                        )}
+                                    </div>
+                                    <span className="text-[10px] text-[var(--text-secondary)] hidden sm:block">ESC to dismiss</span>
                                 </div>
                             </div>
                         </motion.div>
