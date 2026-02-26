@@ -12,22 +12,23 @@ const miniGamesList = [
 const projects = [
     {
         title: 'API Image Gallery',
-        tagline: 'Custom REST API with lazy loading',
-        description: 'Image gallery using a custom REST API with search, filters and lazy loading. I learned how to build and consume a custom REST API, lazy load images, and implement basic pagination.',
-        tech: ['Node.js', 'Express', 'MongoDB', 'Vanilla JS', 'Netlify'],
+        tagline: 'Dynamic search & lazy loading',
+        image: '/api-image-gallery.png',
+        description: 'A responsive image gallery that fetches high-quality images via the Pexels API. Features dynamic keyword search, lazy loading without page reloads, and a fast frontend UI.',
+        tech: ['HTML5', 'CSS3', 'JS', 'Pexels API', 'Netlify'],
         live: 'https://api-image-gallery.netlify.app',
-        source: 'https://github.com/Priyankkhatri',
-        year: '2024',
-        role: 'Frontend & Backend',
+        source: 'https://github.com/Priyankkhatri/My-Projects',
+        year: '2025',
+        role: 'Frontend Developer',
     },
     {
         title: 'Movie Explorer',
         tagline: 'Cinematic details & dynamic search',
-        description: 'Movie search & details explorer using an external movie API; cinematic details hero. Great experience with dynamic search, API integration, and building clean detail pages with a blurred poster hero.',
-        tech: ['HTML', 'CSS', 'JavaScript', 'Netlify'],
+        description: 'Movie search & details explorer using the OMDb API; cinematic details hero. Built to practice dynamic search, API integration, and creating clean detail pages with React and Tailwind.',
+        tech: ['React.js', 'Tailwind CSS', 'OMDb API', 'Netlify'],
         live: 'https://api-movie-explorer.netlify.app',
         source: 'https://github.com/Priyankkhatri',
-        year: '2024',
+        year: '2026',
         role: 'Frontend Developer',
     },
     {
@@ -47,7 +48,7 @@ const projects = [
         tech: ['Vanilla JS', 'HTML', 'CSS'],
         live: '#',
         source: 'https://github.com/Priyankkhatri',
-        year: '2024',
+        year: '2025',
         role: 'Frontend',
     },
 ]
@@ -77,24 +78,25 @@ function ProjectCard({ project, index, onClick }) {
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 80 }}
+            initial={{ opacity: 0, y: 80, z: 0 }}
             animate={
                 isInView
                     ? {
                         opacity: 1,
                         y: 0,
+                        z: 0,
                         rotateX: tilt.x,
                         rotateY: tilt.y,
                         scale: isHovered ? 1.01 : 1,
                     }
-                    : {}
+                    : { z: 0 }
             }
             transition={
                 isHovered
                     ? { rotateX: { duration: 0.15, ease: 'easeOut' }, rotateY: { duration: 0.15, ease: 'easeOut' }, scale: { duration: 0.3 }, default: { duration: 0.9, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] } }
                     : { rotateX: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }, rotateY: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }, scale: { duration: 0.4 }, default: { duration: 0.9, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] } }
             }
-            style={{ perspective: 1000 }}
+            style={{ perspective: 1000, transformStyle: 'preserve-3d' }}
             className={`glass-card glass-card-hover overflow-hidden ${onClick ? 'cursor-pointer' : ''}`}
             onMouseMove={handleMouse}
             onMouseEnter={() => { setIsHovered(true); setCursorVariant('hover') }}
@@ -106,26 +108,39 @@ function ProjectCard({ project, index, onClick }) {
             >
                 {/* Image area — 2 cols */}
                 <div
-                    className={`relative col-span-2 bg-gradient-to-br from-[var(--bg-highlight)] to-transparent overflow-hidden group ${!isEven ? 'lg:order-2' : ''
+                    className={`relative col-span-2 bg-[var(--bg-secondary)] overflow-hidden group ${!isEven ? 'lg:order-2' : ''
                         }`}
                 >
-                    {/* Number watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <span
-                            className="text-[8rem] md:text-[12rem] font-bold text-[var(--text-primary)]/[0.02] select-none group-hover:text-[var(--text-primary)]/[0.04] transition-colors duration-700"
-                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                        >
-                            {num}
-                        </span>
-                    </div>
+                    {project.image ? (
+                        <div className="absolute inset-0 bg-black">
+                            <img
+                                src={project.image}
+                                alt={project.title}
+                                className="w-full h-full object-cover select-none opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-tr from-[var(--bg-highlight)] to-transparent opacity-20 mix-blend-overlay" />
+                        </div>
+                    ) : (
+                        <>
+                            {/* Number watermark */}
+                            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[var(--bg-highlight)] to-transparent">
+                                <span
+                                    className="text-[8rem] md:text-[12rem] font-bold text-[var(--text-primary)]/[0.02] select-none group-hover:text-[var(--text-primary)]/[0.04] transition-colors duration-700"
+                                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                                >
+                                    {num}
+                                </span>
+                            </div>
 
-                    {/* Decorative grid pattern */}
-                    <div className="absolute inset-0 opacity-[0.03]"
-                        style={{
-                            backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
-                            backgroundSize: '40px 40px',
-                        }}
-                    />
+                            {/* Decorative grid pattern */}
+                            <div className="absolute inset-0 opacity-[0.03]"
+                                style={{
+                                    backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
+                                    backgroundSize: '40px 40px',
+                                }}
+                            />
+                        </>
+                    )}
 
                     {/* Corner accent */}
                     <div className="absolute top-6 left-6 flex items-center gap-2">
