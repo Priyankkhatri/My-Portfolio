@@ -102,6 +102,43 @@ export default function PfpMorphButton() {
 
         const p = smoothed.current.p
 
+        // ── When at the very top, reset all inline styles so Tailwind classes apply cleanly ──
+        if (p === 0) {
+            el.style.transform = ''
+            el.style.position = ''
+            el.style.top = ''
+            el.style.left = ''
+            el.style.right = ''
+            el.style.bottom = ''
+            el.style.width = ''
+            el.style.height = ''
+            el.style.transformOrigin = ''
+            el.style.border = ''
+            el.style.boxShadow = ''
+            el.style.outline = ''
+            el.style.outlineOffset = ''
+            el.style.cursor = ''
+
+            if (rings) {
+                rings.style.transform = ''
+                rings.style.opacity = ''
+            }
+
+            const arrow = document.getElementById('heroPfpArrow')
+            if (arrow) arrow.style.opacity = '0'
+
+            if (wasBtn.current) {
+                wasBtn.current = false
+                el.classList.remove('hero-pfp--button-mode')
+                el.classList.add('group')
+                el.setAttribute('tabindex', '-1')
+                el.removeAttribute('aria-label')
+            }
+            return
+        }
+
+        // ── Morphing is active (p > 0) ──
+
         // Sizing Targets
         const TARGET_SIZE = 48
         const PAD = vw < 768 ? 24 : 40 // Mobile vs Desktop padding
@@ -109,10 +146,6 @@ export default function PfpMorphButton() {
         // Sizing & Positioning Targets
         const currentSize = ho.size + (TARGET_SIZE - ho.size) * p
         const scale = currentSize / ho.size
-
-        // The morph fundamentally changes how the element is positioned
-        // At p=0, it's relative to its native position in Hero layout.
-        // At p>0, we mathematically pull it toward the bottom-right of the viewport window
 
         const targetVX = vw - TARGET_SIZE - PAD
         const targetVY = vh - TARGET_SIZE - PAD
@@ -122,11 +155,6 @@ export default function PfpMorphButton() {
 
         const deltaX = targetVX - naturalVX
         const deltaY = targetVY - naturalVY
-
-        // CSS STACKING CONTEXT BUG: 
-        // We cannot use position: fixed. The parent <motion.div> in App.jsx applies 
-        // opacity/transforms which creates a new containing block, breaking position: fixed.
-        // Therefore, we MUST keep position: absolute and mathematically pin it to the scroll window.
 
         el.style.position = 'absolute'
         el.style.bottom = 'auto'
@@ -175,11 +203,9 @@ export default function PfpMorphButton() {
             const ringScale = Math.max(0, 1 - p * 1.2);
             const ringOpacity = Math.max(0, 1 - p * 1.5);
 
-            // If the parent goes fixed, rings disappear entirely anyway, keep them absolute
             rings.style.transformOrigin = 'center';
             rings.style.transform = `translate3d(${ringTx}px, ${ringTy}px, 0) scale(${ringScale})`;
             rings.style.opacity = ringOpacity;
-            // ensure it remains behind the image
             rings.style.zIndex = '9999';
         }
 
@@ -188,7 +214,6 @@ export default function PfpMorphButton() {
             wasBtn.current = isBtn
             if (isBtn) {
                 el.classList.add('hero-pfp--button-mode')
-                // Remove Hero's original group hover so button feels standalone
                 el.classList.remove('group')
                 el.setAttribute('tabindex', '0')
                 el.setAttribute('aria-label', 'Back to top')

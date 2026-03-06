@@ -59,10 +59,8 @@ export default function Hero() {
             className="relative min-h-screen flex items-center px-6 md:px-12 lg:px-24 pt-24 pb-16"
         >
             {/* Decorative elements */}
-            <div className="absolute top-32 right-12 w-px h-40 bg-gradient-to-b from-transparent via-[var(--bg-highlight)] to-transparent hidden lg:block" />
-            <div className="absolute bottom-32 left-12 w-32 h-px bg-gradient-to-r from-[var(--bg-highlight)] to-transparent hidden lg:block" />
-            <div className="floating-orb w-96 h-96 bg-blue-500 -top-20 -right-20" />
-            <div className="floating-orb w-64 h-64 bg-violet-800 bottom-20 left-20" />
+            <div className="absolute top-32 right-12 w-px h-40 bg-gradient-to-b from-transparent via-[var(--bg-highlight)] to-transparent hidden lg:block pointer-events-none" />
+            <div className="absolute bottom-32 left-12 w-32 h-px bg-gradient-to-r from-[var(--bg-highlight)] to-transparent hidden lg:block pointer-events-none" />
 
             <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-24 relative z-10">
                 <motion.div
@@ -185,9 +183,9 @@ export default function Hero() {
                     <div id="heroPfpFrame" className="absolute inset-12 rounded-full bg-gradient-to-br from-[var(--bg-highlight-hover)] to-transparent border border-[var(--border-color)] backdrop-blur-md">
                         <img
                             id="heroPfp"
-                            src="/profile.jpg"
+                            src="/profile.png"
                             alt="Priyank Khatri profile photo"
-                            className="w-full h-full object-cover object-center rounded-full"
+                            className="w-full h-full object-cover object-[60%_20%] rounded-full"
                         />
                         <div className="absolute inset-0 bg-[var(--bg-primary)]/20 rounded-full transition-opacity duration-500" id="heroPfpOverlay" />
                         {/* Arrow overlay — shown by JS when morphed into button */}

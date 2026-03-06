@@ -9,6 +9,7 @@ import Certificates from './sections/Certificates'
 import Contact from './sections/Contact'
 import useStore from './store/useStore'
 import PfpMorphButton from './components/PfpMorphButton'
+import HeroBackground from './components/HeroBackground'
 
 /* Marquee text strip between sections */
 function MarqueeStrip() {
@@ -43,6 +44,9 @@ export default function App() {
 
             {/* Scroll-driven PFP morph → back-to-top */}
             <PfpMorphButton />
+
+            {/* Global 3D Background */}
+            <HeroBackground />
 
             {/* DOM Layer */}
             <motion.div
