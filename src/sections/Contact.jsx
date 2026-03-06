@@ -3,6 +3,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import useStore from '../store/useStore'
 import emailjs from '@emailjs/browser'
 
+
 const socials = [
     {
         label: 'GitHub',
@@ -423,3 +424,5 @@ export default function Contact() {
         </section>
     )
 }
+
+/*hyyyy*/
