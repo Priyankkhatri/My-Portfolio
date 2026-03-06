@@ -180,7 +180,7 @@ export default function Hero() {
                     </div>
 
                     {/* Image Container — PfpMorphButton transforms this on scroll */}
-                    <div id="heroPfpFrame" className="absolute inset-12 rounded-full bg-gradient-to-br from-[var(--bg-highlight-hover)] to-transparent border border-[var(--border-color)] backdrop-blur-md">
+                    <div id="heroPfpFrame" className="absolute inset-12 rounded-full bg-gradient-to-br from-[var(--bg-highlight-hover)] to-transparent border-2 border-[#60a5fa]/40 shadow-[0_0_20px_rgba(96,165,250,0.15)] backdrop-blur-md">
                         <img
                             id="heroPfp"
                             src="/profile.png"
