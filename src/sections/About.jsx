@@ -177,7 +177,7 @@ export default function About() {
                     {/* Interests Card */}
                     <TiltCard span="lg:col-span-2" delay={0.15}>
                         <p className="text-[10px] tracking-[0.3em] uppercase text-[var(--text-secondary)] mb-6">Beyond Code</p>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {interests.map((item, i) => (
                                 <div
                                     key={i}

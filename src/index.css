@@ -81,8 +81,13 @@
 }
 
 /* ── Base Reset ─────────────────────────────────────────── */
-* {
-  cursor: none !important;
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
+*, *::before, *::after {
   box-sizing: border-box;
 }
 

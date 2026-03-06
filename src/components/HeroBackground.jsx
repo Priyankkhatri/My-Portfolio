@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
@@ -48,17 +48,49 @@ const THEMES = {
     }
 }
 
+// Responsive breakpoints
+function useResponsive() {
+    const [tier, setTier] = useState(() => {
+        if (typeof window === 'undefined') return 'desktop'
+        const w = window.innerWidth
+        if (w < 768) return 'mobile'
+        if (w < 1024) return 'tablet'
+        return 'desktop'
+    })
+
+    useEffect(() => {
+        let timeout
+        const update = () => {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                const w = window.innerWidth
+                if (w < 768) setTier('mobile')
+                else if (w < 1024) setTier('tablet')
+                else setTier('desktop')
+            }, 200)
+        }
+        window.addEventListener('resize', update, { passive: true })
+        return () => {
+            clearTimeout(timeout)
+            window.removeEventListener('resize', update)
+        }
+    }, [])
+
+    return tier
+}
+
+const RESPONSIVE = {
+    mobile:  { particles: 60,  dpr: [1, 1],   fov: 50, parallax: 0.5, bloom: false, gridSize: 30, gridDivs: 30 },
+    tablet:  { particles: 100, dpr: [1, 1.2], fov: 55, parallax: 1.0, bloom: true,  gridSize: 40, gridDivs: 40 },
+    desktop: { particles: 150, dpr: [1, 1.5], fov: 60, parallax: 1.5, bloom: true,  gridSize: 50, gridDivs: 50 },
+}
+
 // Subtle fading grid floor
-function GridFloor({ colors }) {
+function GridFloor({ colors, gridSize = 50, gridDivs = 50 }) {
     const gridRef = useRef()
     const matRef = useRef()
 
     useFrame(() => {
-        if (gridRef.current) {
-            const c = gridRef.current
-            // gridHelper doesn't support dynamic color updates easily,
-            // so we just keep it as-is — the floor plane color matters more
-        }
         if (matRef.current) {
             matRef.current.color.lerp(new THREE.Color(colors.floorColor), 0.05)
         }
@@ -66,9 +98,9 @@ function GridFloor({ colors }) {
 
     return (
         <group position={[0, -2.5, 0]}>
-            <gridHelper ref={gridRef} args={[50, 50, colors.gridLine, colors.gridLine]} />
+            <gridHelper ref={gridRef} args={[gridSize, gridDivs, colors.gridLine, colors.gridLine]} />
             <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-                <planeGeometry args={[50, 50]} />
+                <planeGeometry args={[gridSize, gridSize]} />
                 <meshStandardMaterial
                     ref={matRef}
                     color={colors.floorColor}
@@ -141,24 +173,49 @@ function Particles({ count = 150, colors }) {
     )
 }
 
-// Mouse parallax rig
-function CameraRig() {
+// Mouse/touch parallax rig
+function CameraRig({ parallaxStrength = 1.5 }) {
     const { camera } = useThree()
     const mouse = useRef({ x: 0, y: 0 })
     const vec = useMemo(() => new THREE.Vector3(), [])
 
-    useMemo(() => {
+    useEffect(() => {
+        // Pointer (desktop)
         const onMove = (e) => {
             mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1
             mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1
         }
+        // Touch (mobile/tablet) — use first touch
+        const onTouch = (e) => {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0]
+                mouse.current.x = (touch.clientX / window.innerWidth) * 2 - 1
+                mouse.current.y = -(touch.clientY / window.innerHeight) * 2 + 1
+            }
+        }
+        // Device orientation (gyroscope on mobile)
+        const onOrientation = (e) => {
+            if (e.gamma !== null && e.beta !== null) {
+                // gamma: -90 to 90 (tilt left-right), beta: -180 to 180 (tilt front-back)
+                mouse.current.x = Math.max(-1, Math.min(1, e.gamma / 30))
+                mouse.current.y = Math.max(-1, Math.min(1, (e.beta - 45) / 30))
+            }
+        }
+
         window.addEventListener('pointermove', onMove)
-        return () => window.removeEventListener('pointermove', onMove)
+        window.addEventListener('touchmove', onTouch, { passive: true })
+        window.addEventListener('deviceorientation', onOrientation, { passive: true })
+
+        return () => {
+            window.removeEventListener('pointermove', onMove)
+            window.removeEventListener('touchmove', onTouch)
+            window.removeEventListener('deviceorientation', onOrientation)
+        }
     }, [])
 
     useFrame(() => {
         camera.position.lerp(
-            vec.set(mouse.current.x * 1.5, mouse.current.y * 0.8, 5),
+            vec.set(mouse.current.x * parallaxStrength, mouse.current.y * (parallaxStrength * 0.5), 5),
             0.03
         )
         camera.lookAt(0, 0, 0)
@@ -225,13 +282,15 @@ function AnimatedLights({ colors }) {
 export default function HeroBackground() {
     const theme = useStore((s) => s.theme)
     const colors = THEMES[theme] || THEMES.dark
+    const tier = useResponsive()
+    const r = RESPONSIVE[tier]
 
     return (
         <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: -1 }}>
             <Canvas
-                camera={{ position: [0, 0, 5], fov: 60 }}
+                camera={{ position: [0, 0, 5], fov: r.fov }}
                 gl={{ antialias: false, powerPreference: "high-performance" }}
-                dpr={[1, 1.5]}
+                dpr={r.dpr}
                 style={{ background: colors.bg }}
             >
                 <color attach="background" args={[colors.bg]} />
@@ -241,20 +300,22 @@ export default function HeroBackground() {
                 <AnimatedLights colors={colors} />
 
                 {/* Scene Elements */}
-                <CameraRig />
-                <Particles count={150} colors={colors} />
-                <GridFloor colors={colors} />
+                <CameraRig parallaxStrength={r.parallax} />
+                <Particles count={r.particles} colors={colors} />
+                <GridFloor colors={colors} gridSize={r.gridSize} gridDivs={r.gridDivs} />
 
-                {/* Postprocessing */}
-                <EffectComposer disableNormalPass multisampling={0}>
-                    <Bloom
-                        luminanceThreshold={colors.bloomThreshold}
-                        luminanceSmoothing={0.9}
-                        intensity={colors.bloomIntensity}
-                        mipmapBlur
-                    />
-                    <Vignette eskil={false} offset={colors.vignetteOffset} darkness={colors.vignetteDarkness} />
-                </EffectComposer>
+                {/* Postprocessing — disabled on mobile for performance */}
+                {r.bloom && (
+                    <EffectComposer disableNormalPass multisampling={0}>
+                        <Bloom
+                            luminanceThreshold={colors.bloomThreshold}
+                            luminanceSmoothing={0.9}
+                            intensity={colors.bloomIntensity}
+                            mipmapBlur
+                        />
+                        <Vignette eskil={false} offset={colors.vignetteOffset} darkness={colors.vignetteDarkness} />
+                    </EffectComposer>
+                )}
             </Canvas>
         </div>
     )

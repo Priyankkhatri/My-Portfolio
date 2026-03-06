@@ -44,7 +44,7 @@ function CertCard({ cert, index, onClick }) {
             animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
             transition={{ duration: 0.6, delay: index * 0.08 }}
             whileHover={{ y: -4, transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } }}
-            className="glass-card glass-card-hover w-[300px] min-w-[300px] max-w-[300px] md:w-[340px] md:min-w-[340px] md:max-w-[340px] flex-shrink-0 select-none group"
+            className="glass-card glass-card-hover w-[260px] min-w-[260px] max-w-[260px] sm:w-[300px] sm:min-w-[300px] sm:max-w-[300px] md:w-[340px] md:min-w-[340px] md:max-w-[340px] flex-shrink-0 select-none group"
         >
             {/* Top gradient bar */}
             <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />

@@ -113,7 +113,7 @@ export default function Hero() {
                     </motion.div>
 
                     {/* CTAs */}
-                    <motion.div variants={fadeUp} className="flex flex-wrap gap-4 mb-20">
+                    <motion.div variants={fadeUp} className="flex flex-wrap gap-3 sm:gap-4 mb-12 sm:mb-20">
                         <a
                             href="#projects"
                             onMouseEnter={() => setCursorVariant('hover')}
@@ -139,7 +139,7 @@ export default function Hero() {
                     {/* Stats row */}
                     <motion.div
                         variants={fadeUp}
-                        className="flex flex-wrap gap-12 pt-8 border-t border-[var(--border-color)]"
+                        className="flex flex-wrap gap-6 sm:gap-12 pt-8 border-t border-[var(--border-color)]"
                     >
                         {stats.map((stat, i) => (
                             <div key={i} className="flex flex-col gap-1">

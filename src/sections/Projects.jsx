@@ -104,7 +104,7 @@ function ProjectCard({ project, index, onClick }) {
             onClick={onClick}
         >
             <div
-                className={`grid grid-cols-1 lg:grid-cols-5 min-h-[400px]`}
+                className={`grid grid-cols-1 lg:grid-cols-5 lg:min-h-[400px]`}
             >
                 {/* Image area — 2 cols */}
                 <div
@@ -153,7 +153,7 @@ function ProjectCard({ project, index, onClick }) {
                 </div>
 
                 {/* Content — 3 cols */}
-                <div className={`col-span-3 p-8 md:p-12 flex flex-col justify-center ${!isEven ? 'lg:order-1' : ''}`}>
+                <div className={`col-span-3 p-6 sm:p-8 md:p-12 flex flex-col justify-center ${!isEven ? 'lg:order-1' : ''}`}>
                     {/* Meta row */}
                     <div className="flex items-center gap-3 mb-6">
                         <span className="text-[10px] tracking-[0.3em] uppercase text-[var(--text-secondary)]">Project {num}</span>

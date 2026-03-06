@@ -378,7 +378,7 @@ export default function Contact() {
                             {/* Top bar */}
                             <div className="h-px w-full bg-gradient-to-r from-transparent via-[#60a5fa]/30 to-transparent" />
 
-                            <div className="p-8 md:p-12">
+                            <div className="p-6 sm:p-8 md:p-12">
                                 <div className="flex items-center justify-between mb-8">
                                     <h3
                                         className="text-xl md:text-2xl font-bold text-[var(--text-primary)]"
@@ -401,7 +401,7 @@ export default function Contact() {
                                     <img
                                         src="https://leetcard.jacoblin.cool/priyankkhatrii?theme=dark&font=Inter&ext=activity"
                                         alt="LeetCode Stats"
-                                        className="max-w-full h-auto object-contain"
+                                        className="max-w-full max-h-[40vh] sm:max-h-[50vh] h-auto object-contain"
                                         loading="lazy"
                                     />
                                 </div>
