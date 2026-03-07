@@ -387,7 +387,7 @@ export default function Contact() {
                                         LeetCode <span className="text-gradient-silver">Analysis</span>
                                     </h3>
                                     <a
-                                        href="https://leetcode.com/u/priyankkhatrii/"
+                                        href="https://leetcode.com/u/Priyank_Khatri/"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="px-4 py-2 rounded-lg bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--border-color)] transition-all text-xs text-[var(--text-secondary)] flex items-center gap-2"
