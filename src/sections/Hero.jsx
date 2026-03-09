@@ -72,7 +72,7 @@ export default function Hero() {
                     {/* Eyebrow */}
                     <motion.div variants={fadeUp} className="flex items-center gap-4 mb-8">
                         <div className="w-12 h-px bg-[var(--bg-highlight-hover)]" />
-                        <p className="text-[11px] tracking-[0.4em] uppercase text-[var(--text-secondary)]">
+                        <p className="text-[11px] tracking-[0.2em] sm:tracking-[0.4em] uppercase text-[var(--text-secondary)]">
                             BTech CSE Student &bull; Aspiring Developer
                         </p>
                     </motion.div>
@@ -113,12 +113,12 @@ export default function Hero() {
                     </motion.div>
 
                     {/* CTAs */}
-                    <motion.div variants={fadeUp} className="flex flex-wrap gap-3 sm:gap-4 mb-12 sm:mb-20">
+                    <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-12 sm:mb-20">
                         <a
                             href="#projects"
                             onMouseEnter={() => setCursorVariant('hover')}
                             onMouseLeave={() => setCursorVariant('default')}
-                            className="group btn-shine inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#60a5fa]/15 to-[#a78bfa]/15 border border-[#60a5fa]/25 text-[var(--text-primary)] text-sm font-medium tracking-wide rounded-full hover:border-[#60a5fa]/45 active:scale-[0.97] transition-all duration-300 shadow-lg shadow-[#60a5fa]/5"
+                            className="group btn-shine inline-flex justify-center items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#60a5fa]/15 to-[#a78bfa]/15 border border-[#60a5fa]/25 text-[var(--text-primary)] text-sm font-medium tracking-wide rounded-full hover:border-[#60a5fa]/45 active:scale-[0.97] transition-all duration-300 shadow-lg shadow-[#60a5fa]/5 w-full sm:w-auto"
                         >
                             View Projects
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform duration-300">
@@ -129,7 +129,7 @@ export default function Hero() {
                             href="mailto:priyank@example.com"
                             onMouseEnter={() => setCursorVariant('hover')}
                             onMouseLeave={() => setCursorVariant('default')}
-                            className="group inline-flex items-center gap-3 px-8 py-4 border border-[var(--border-color)] text-[var(--text-secondary)] text-sm font-medium tracking-wide rounded-full hover:bg-[var(--bg-highlight)] hover:border-[var(--border-color)] hover:text-[var(--text-primary)] transition-all duration-300"
+                            className="group inline-flex justify-center items-center gap-3 px-8 py-4 border border-[var(--border-color)] text-[var(--text-secondary)] text-sm font-medium tracking-wide rounded-full hover:bg-[var(--bg-highlight)] hover:border-[var(--border-color)] hover:text-[var(--text-primary)] transition-all duration-300 w-full sm:w-auto"
                         >
                             <span className="w-1.5 h-1.5 bg-[#60a5fa]/60 rounded-full group-hover:bg-[#60a5fa] transition-colors" />
                             Contact / Hire me
@@ -139,7 +139,7 @@ export default function Hero() {
                     {/* Stats row */}
                     <motion.div
                         variants={fadeUp}
-                        className="flex flex-wrap gap-6 sm:gap-12 pt-8 border-t border-[var(--border-color)]"
+                        className="flex flex-wrap gap-4 sm:gap-12 pt-8 border-t border-[var(--border-color)]"
                     >
                         {stats.map((stat, i) => (
                             <div key={i} className="flex flex-col gap-1">
@@ -205,7 +205,7 @@ export default function Hero() {
 
             {/* Scroll indicator */}
             <motion.div
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-3"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 4, duration: 1 }}

@@ -164,6 +164,11 @@ body::after {
   100% { transform: translateY(-5px) translateX(-8px); opacity: 0.6; }
 }
 
+/* ── Prevent mobile horizontal overflow ─────────────────── */
+#root {
+  overflow-x: hidden;
+}
+
 /* ── Noise Overlay ──────────────────────────────────────── */
 #root::after {
   content: '';

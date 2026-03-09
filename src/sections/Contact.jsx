@@ -217,8 +217,8 @@ export default function Contact() {
     }, [])
 
     return (
-        <section id="contact" ref={sectionRef} className="py-32 px-6 md:px-12 lg:px-24 relative">
-            <div className="section-divider mb-32" />
+        <section id="contact" ref={sectionRef} className="py-16 sm:py-32 px-6 md:px-12 lg:px-24 relative">
+            <div className="section-divider mb-16 sm:mb-32" />
 
             <div className="floating-orb w-64 h-64 bg-blue-500 top-40 -right-20" />
 
@@ -239,7 +239,7 @@ export default function Contact() {
                 >
                     Let's Build <span className="text-gradient-silver">Together</span>
                 </h2>
-                <p className="text-sm text-[var(--text-secondary)] max-w-lg mb-20">
+                <p className="text-sm text-[var(--text-secondary)] max-w-lg mb-10 sm:mb-20">
                     Have a project in mind or just want to start a conversation? I'm always excited
                     about new challenges and meaningful collaborations.
                 </p>
@@ -261,7 +261,7 @@ export default function Contact() {
                             <AnimatedInput label="Message" name="message" textarea required />
 
                             <div className="flex flex-col gap-4 mt-4">
-                                <div className="flex items-center gap-6">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
                                     <motion.button
                                         type="submit"
                                         disabled={isSubmitting}
@@ -339,7 +339,7 @@ export default function Contact() {
                                                     className="pointer-events-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#60a5fa]/10 border border-[#60a5fa]/20 text-[#60a5fa] hover:bg-[#60a5fa]/20 hover:text-[var(--text-primary)] transition-colors text-[10px] font-medium tracking-wide uppercase mr-2"
                                                 >
                                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></svg>
-                                                    Analysis
+                                                    <span className="hidden sm:inline">Analysis</span>
                                                 </button>
                                             )}
                                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-[color,transform] duration-300">
@@ -365,7 +365,7 @@ export default function Contact() {
                 </div>
 
                 {/* Footer */}
-                <div className="mt-32 pt-8 border-t border-[var(--border-color)] flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="mt-16 sm:mt-32 pt-8 border-t border-[var(--border-color)] flex flex-col md:flex-row items-center justify-between gap-4 text-center sm:text-left">
                     <div className="flex items-center gap-4">
                         <div className="w-6 h-6 border border-[var(--border-color)] rounded-md flex items-center justify-center">
                             <span className="text-[10px] text-[var(--text-secondary)] font-medium" style={{ fontFamily: "'Poppins'" }}>P</span>

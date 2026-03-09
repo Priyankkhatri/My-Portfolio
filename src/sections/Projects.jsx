@@ -108,7 +108,7 @@ function ProjectCard({ project, index, onClick }) {
             >
                 {/* Image area — 2 cols */}
                 <div
-                    className={`relative col-span-2 bg-[var(--bg-secondary)] overflow-hidden group ${!isEven ? 'lg:order-2' : ''
+                    className={`relative col-span-2 bg-[var(--bg-secondary)] overflow-hidden group min-h-[220px] lg:min-h-0 ${!isEven ? 'lg:order-2' : ''
                         }`}
                 >
                     {project.image ? (
@@ -191,7 +191,7 @@ function ProjectCard({ project, index, onClick }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => onClick && e.stopPropagation()}
-                            className="group inline-flex items-center gap-2.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
+                            className="group inline-flex items-center gap-2.5 text-sm py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
                         >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-12 transition-transform duration-300">
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
@@ -205,7 +205,7 @@ function ProjectCard({ project, index, onClick }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => onClick && e.stopPropagation()}
-                            className="group inline-flex items-center gap-2.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
+                            className="group inline-flex items-center gap-2.5 text-sm py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
                         >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-12 transition-transform duration-300">
                                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
@@ -236,9 +236,9 @@ export default function Projects() {
     }, [])
 
     return (
-        <section id="projects" ref={sectionRef} className="py-32 px-6 md:px-12 lg:px-24 relative">
+        <section id="projects" ref={sectionRef} className="py-16 sm:py-32 px-6 md:px-12 lg:px-24 relative">
             {/* Section divider */}
-            <div className="section-divider mb-32" />
+            <div className="section-divider mb-16 sm:mb-32" />
 
             <div className="floating-orb w-80 h-80 bg-violet-800 -top-20 right-0" />
 

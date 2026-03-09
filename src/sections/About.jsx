@@ -88,9 +88,9 @@ export default function About() {
     const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
 
     return (
-        <section id="about" ref={sectionRef} className="py-32 px-6 md:px-12 lg:px-24 relative">
+        <section id="about" ref={sectionRef} className="py-16 sm:py-32 px-6 md:px-12 lg:px-24 relative">
             {/* Section divider */}
-            <div className="section-divider mb-32" />
+            <div className="section-divider mb-16 sm:mb-32" />
 
             {/* Floating decorative orbs */}
             <div className="floating-orb w-72 h-72 bg-blue-500 top-20 -right-32" />

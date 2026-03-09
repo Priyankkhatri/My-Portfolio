@@ -157,7 +157,7 @@ export default function Navbar() {
 
                         {/* Mobile Hamburger */}
                         <button
-                            className="md:hidden flex flex-col gap-1.5 p-2"
+                            className="md:hidden flex flex-col gap-1.5 p-3"
                             onClick={() => setMobileOpen(!mobileOpen)}
                             onMouseEnter={() => setCursorVariant('hover')}
                             onMouseLeave={() => setCursorVariant('default')}
