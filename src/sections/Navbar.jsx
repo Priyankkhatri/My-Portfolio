@@ -41,7 +41,15 @@ export default function Navbar() {
     const [activeSection, setActiveSection] = useState('#home')
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const theme = useStore((s) => s.theme)
-    const toggleTheme = useStore((s) => s.toggleTheme)
+    const startThemeTransition = useStore((s) => s.startThemeTransition)
+
+    const handleThemeToggle = (e) => {
+        const btn = e.currentTarget
+        const rect = btn.getBoundingClientRect()
+        const x = rect.left + rect.width / 2
+        const y = rect.top + rect.height / 2
+        startThemeTransition(x, y)
+    }
 
     // Scroll click state to prevent intermediate tab highlighting
     const isClickScrolling = useRef(false)
@@ -187,7 +195,7 @@ export default function Navbar() {
 
                             {/* Theme Toggle Button */}
                             <motion.button
-                                onClick={toggleTheme}
+                                onClick={handleThemeToggle}
                                 onMouseEnter={() => setCursorVariant('hover')}
                                 onMouseLeave={() => setCursorVariant('default')}
                                 className="ml-2 w-9 h-9 rounded-full flex items-center justify-center border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-[var(--glass-bg)] transition-all duration-300 group"
@@ -292,7 +300,7 @@ export default function Navbar() {
 
                             {/* Theme Toggle in mobile menu */}
                             <motion.button
-                                onClick={toggleTheme}
+                                onClick={handleThemeToggle}
                                 className="mt-6 flex items-center gap-3 px-6 py-3 rounded-full border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-[var(--glass-bg)] transition-all duration-300"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
