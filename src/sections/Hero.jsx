@@ -79,7 +79,7 @@ export default function Hero() {
                                 alt="Priyank Khatri profile photo"
                                 className="w-full h-full object-cover object-[60%_20%] rounded-full"
                             />
-                            <div className="absolute inset-0 bg-[var(--bg-primary)]/10 rounded-full" />
+                            <div className="absolute inset-0 bg-black/10 rounded-full" />
                         </div>
                     </div>
                 </motion.div>
@@ -208,7 +208,7 @@ export default function Hero() {
                             alt="Priyank Khatri profile photo"
                             className="w-full h-full object-cover object-[60%_20%] rounded-full"
                         />
-                        <div className="absolute inset-0 bg-[var(--bg-primary)]/20 rounded-full transition-opacity duration-500" id="heroPfpOverlay" />
+                        <div className="absolute inset-0 bg-black/20 rounded-full transition-opacity duration-500" id="heroPfpOverlay" />
                         {/* Arrow overlay — shown by JS when morphed into button */}
                         <div
                             id="heroPfpArrow"
