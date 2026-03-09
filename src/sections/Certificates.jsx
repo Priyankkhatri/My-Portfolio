@@ -153,12 +153,15 @@ export default function Certificates() {
                 </div>
 
                 {/* Horizontal scroll */}
-                <div className="relative">
-                    {/* Fade edges */}
-                    <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[var(--bg-primary)] to-transparent z-10 pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[var(--bg-primary)] to-transparent z-10 pointer-events-none" />
-
-                    <div className="flex gap-5 overflow-x-auto pb-4 px-2 no-scrollbar" style={{ scrollbarWidth: 'none' }}>
+                <div className="relative -mx-4 sm:-mx-0">
+                    <div 
+                        className="flex gap-5 overflow-x-auto pb-4 px-4 sm:px-8 no-scrollbar scroll-smooth" 
+                        style={{ 
+                            scrollbarWidth: 'none',
+                            maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+                            WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
+                        }}
+                    >
                         {certificates.map((cert, i) => (
                             <CertCard key={i} cert={cert} index={i} onClick={() => setSelected(cert)} />
                         ))}
