@@ -136,7 +136,7 @@ export default function Loader() {
                             animate={phase >= 2 ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6 }}
                         >
-                            Full-Stack Developer
+                            An aspiring software developer
                         </motion.p>
 
                         {/* Horizontal line */}
