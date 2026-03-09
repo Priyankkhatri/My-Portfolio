@@ -9,6 +9,10 @@ export default function Loader() {
     const [show, setShow] = useState(true)
 
     useEffect(() => {
+        // Preload hero image during loader
+        const img = new Image()
+        img.src = '/profile.png'
+
         let currentProgress = 0
         const interval = setInterval(() => {
             currentProgress += Math.random() * 15
