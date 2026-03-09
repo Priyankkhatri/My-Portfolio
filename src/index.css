@@ -124,6 +124,10 @@ body {
   z-index: 0;
   pointer-events: none;
   background-image:
+    /* Attractive side gradients */
+    radial-gradient(ellipse 60% 120% at -10% 50%, rgba(59, 130, 246, 0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 120% at 110% 50%, rgba(139, 92, 246, 0.25) 0%, transparent 70%),
+    /* Existing aurora blobs */
     radial-gradient(ellipse 70% 60% at 25% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 70%),
     radial-gradient(ellipse 50% 50% at 75% 25%, rgba(139, 92, 246, 0.12) 0%, transparent 65%),
     radial-gradient(ellipse 80% 40% at 60% 85%, rgba(99, 102, 241, 0.14) 0%, transparent 60%),
