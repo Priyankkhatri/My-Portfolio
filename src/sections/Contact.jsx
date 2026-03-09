@@ -48,6 +48,29 @@ const socials = [
             </svg>
         ),
     },
+    {
+        label: 'Instagram',
+        href: 'https://www.instagram.com/priyankhatrii/',
+        desc: 'Life & creative updates',
+        icon: (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+        ),
+    },
+    {
+        label: 'X (Twitter)',
+        href: 'https://x.com/PriyankKhatrii',
+        desc: 'Thoughts & short updates',
+        icon: (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 4l11.733 16h4.267l-11.733-16z"/>
+                <path d="M4 20l6.768-6.768m2.46-2.46l6.772-6.772"/>
+            </svg>
+        ),
+    },
 ]
 
 function AnimatedInput({ label, name, type = 'text', textarea = false, required = false }) {
