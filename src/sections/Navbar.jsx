@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import useStore from '../store/useStore'
 
@@ -10,11 +10,12 @@ const navItems = [
     { label: 'Contact', href: '#contact', num: '05' },
 ]
 
-function NavLink({ item, index, active }) {
+function NavLink({ item, index, active, onClick }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     return (
         <motion.a
             href={item.href}
+            onClick={onClick}
             onMouseEnter={() => setCursorVariant('hover')}
             onMouseLeave={() => setCursorVariant('default')}
             className={`relative text-sm tracking-wide transition-colors duration-300 link-underline py-1 group ${active ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
@@ -41,6 +42,23 @@ export default function Navbar() {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const theme = useStore((s) => s.theme)
     const toggleTheme = useStore((s) => s.toggleTheme)
+
+    // Scroll click state to prevent intermediate tab highlighting
+    const isClickScrolling = useRef(false)
+    const clickScrollTimeout = useRef(null)
+
+    const handleNavClick = (href, isMobile = false) => {
+        setActiveSection(href)
+        isClickScrolling.current = true
+        
+        if (clickScrollTimeout.current) clearTimeout(clickScrollTimeout.current)
+        clickScrollTimeout.current = setTimeout(() => {
+            isClickScrolling.current = false
+        }, 1000)
+
+        if (isMobile) setMobileOpen(false)
+    }
+
     const { scrollYProgress } = useScroll()
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
@@ -49,24 +67,64 @@ export default function Navbar() {
     })
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        setActiveSection(`#${entry.target.id}`)
-                    }
-                })
-            },
-            { threshold: 0.3, rootMargin: '-10% 0px -40% 0px' }
-        )
+        let rafId = null
 
-        navItems.forEach((item) => {
-            const sectionId = item.href.replace('#', '')
-            const element = document.getElementById(sectionId)
-            if (element) observer.observe(element)
-        })
+        const detectActiveSection = () => {
+            if (isClickScrolling.current) return
 
-        return () => observer.disconnect()
+            const viewportHeight = window.innerHeight
+            const scrollTop = window.scrollY
+            const docHeight = document.documentElement.scrollHeight
+
+            // Edge case: near the very bottom → last section
+            if (scrollTop + viewportHeight >= docHeight - 50) {
+                setActiveSection(navItems[navItems.length - 1].href)
+                return
+            }
+
+            // Edge case: near the very top → first section
+            if (scrollTop < 100) {
+                setActiveSection('#home')
+                return
+            }
+
+            // Find the section with the most visible area in the viewport
+            let bestMatch = null
+            let bestVisibleArea = 0
+
+            navItems.forEach((item) => {
+                const el = document.getElementById(item.href.replace('#', ''))
+                if (!el) return
+
+                const rect = el.getBoundingClientRect()
+                const visibleTop = Math.max(0, rect.top)
+                const visibleBottom = Math.min(viewportHeight, rect.bottom)
+                const visibleHeight = Math.max(0, visibleBottom - visibleTop)
+
+                if (visibleHeight > bestVisibleArea) {
+                    bestVisibleArea = visibleHeight
+                    bestMatch = item.href
+                }
+            })
+
+            if (bestMatch) {
+                setActiveSection(bestMatch)
+            }
+        }
+
+        const handleScroll = () => {
+            if (rafId) cancelAnimationFrame(rafId)
+            rafId = requestAnimationFrame(detectActiveSection)
+        }
+
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        // Run once on mount to set initial state
+        detectActiveSection()
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            if (rafId) cancelAnimationFrame(rafId)
+        }
     }, [])
 
     return (
@@ -113,7 +171,7 @@ export default function Navbar() {
                         {/* Desktop Links */}
                         <div className="hidden md:flex items-center gap-8">
                             {navItems.map((item, i) => (
-                                <NavLink key={item.label} item={item} index={i} active={activeSection === item.href} />
+                                <NavLink key={item.label} item={item} index={i} active={activeSection === item.href} onClick={() => handleNavClick(item.href)} />
                             ))}
 
                             {/* Status indicator */}
@@ -220,7 +278,7 @@ export default function Navbar() {
                                 >
                                     <a
                                         href={item.href}
-                                        onClick={() => setMobileOpen(false)}
+                                        onClick={() => handleNavClick(item.href, true)}
                                         onMouseEnter={() => setCursorVariant('hover')}
                                         onMouseLeave={() => setCursorVariant('default')}
                                         className={`flex items-center gap-4 text-3xl tracking-wide transition-colors ${activeSection === item.href ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
