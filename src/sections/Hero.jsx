@@ -62,7 +62,28 @@ export default function Hero() {
             <div className="absolute top-32 right-12 w-px h-40 bg-gradient-to-b from-transparent via-[var(--bg-highlight)] to-transparent hidden lg:block pointer-events-none" />
             <div className="absolute bottom-32 left-12 w-32 h-px bg-gradient-to-r from-[var(--bg-highlight)] to-transparent hidden lg:block pointer-events-none" />
 
-            <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-24 relative z-10">
+            <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-24 relative z-10">
+
+                {/* Mobile Profile Picture — shown only below lg */}
+                <motion.div
+                    className="flex lg:hidden items-center justify-center mt-4"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1, delay: 2.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                    <div className="relative w-36 h-36 sm:w-44 sm:h-44">
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#60a5fa]/20 to-[#a78bfa]/10 blur-xl" />
+                        <div className="absolute inset-0 rounded-full border-2 border-[#60a5fa]/30 shadow-[0_0_20px_rgba(96,165,250,0.15)]">
+                            <img
+                                src="/profile.png"
+                                alt="Priyank Khatri profile photo"
+                                className="w-full h-full object-cover object-[60%_20%] rounded-full"
+                            />
+                            <div className="absolute inset-0 bg-[var(--bg-primary)]/10 rounded-full" />
+                        </div>
+                    </div>
+                </motion.div>
+
                 <motion.div
                     className="max-w-xl w-full"
                     variants={container}
@@ -157,7 +178,7 @@ export default function Hero() {
                     </motion.div>
                 </motion.div>
 
-                {/* Profile Image - Right Side */}
+                {/* Profile Image - Right Side (Desktop only) */}
                 <motion.div
                     className="relative hidden lg:flex flex-col items-center justify-center w-[400px] h-[400px] shrink-0 group/pfp"
                     initial={{ opacity: 0, scale: 0.8 }}
