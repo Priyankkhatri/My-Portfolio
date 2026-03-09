@@ -27,22 +27,22 @@ const THEMES = {
         fogFar: 20,
     },
     light: {
-        bg: '#e4ecf7',
-        gridLine: '#c5d0e0',
-        floorColor: '#dae3f0',
-        particleColor: '#4f46e5',
-        particleOpacity: 0.6,
-        light1: '#3b82f6',
-        light2: '#8b5cf6',
-        light3: '#0ea5e9',
-        ambientIntensity: 0.6,
-        light1Intensity: 0.6,
+        bg: '#f8fafc',
+        gridLine: '#4f46e5', // Deep neon indigo
+        floorColor: '#f1f5f9',
+        particleColor: '#6d28d9', // Deep neon violet
+        particleOpacity: 0.9,
+        light1: '#4338ca',
+        light2: '#7c3aed',
+        light3: '#3b82f6',
+        ambientIntensity: 0.8,
+        light1Intensity: 0.4,
         light2Intensity: 0.3,
-        light3Intensity: 1,
-        bloomIntensity: 0.4,
-        bloomThreshold: 0.5,
+        light3Intensity: 0.5,
+        bloomIntensity: 0.5, // Increased for neon glow
+        bloomThreshold: 0.3, // Lowered so dark colors bloom
         vignetteOffset: 0.2,
-        vignetteDarkness: 0.3,
+        vignetteDarkness: 0.1,
         fogNear: 6,
         fogFar: 22,
     }

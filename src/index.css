@@ -51,33 +51,35 @@
 }
 
 [data-theme="light"] {
-  /* Light Theme (Ambient Sky Concept) */
-  --bg-primary: #e4ecf7; /* Richer slate-blue base — noticeably tinted, not white */
-  --bg-secondary: #dae3f0;
-  --card-bg: rgba(255, 255, 255, 0.72);
-  --glass-bg: rgba(255, 255, 255, 0.82);
-  --border-color: rgba(15, 23, 42, 0.09);
+  /* Light Theme (Crisp Modern Slate Concept) */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --card-bg: rgba(255, 255, 255, 0.65);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --border-color: rgba(148, 163, 184, 0.25);
   
-  --accent-1: #3b82f6;
-  --accent-2: #8b5cf6;
+  --accent-1: #2563eb;
+  --accent-2: #7c3aed;
   
-  --text-primary: #020617;
-  --text-secondary: #0f172a;
-  --text-muted: #475569;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
 
-  --bg-gradient-1: rgba(59, 130, 246, 0.25); /* Bolder blue blobs */
-  --bg-gradient-2: rgba(139, 92, 246, 0.20); /* Bolder purple */
-  --bg-gradient-3: rgba(99, 102, 241, 0.20); /* Bolder indigo */
+  /* Subtle watercolor-like background gradients */
+  --bg-gradient-1: rgba(37, 99, 235, 0.12);
+  --bg-gradient-2: rgba(124, 58, 237, 0.12);
+  --bg-gradient-3: rgba(59, 130, 246, 0.08);
   
-  --particle-1: rgba(59, 130, 246, 0.55);
-  --particle-2: rgba(139, 92, 246, 0.50);
+  --particle-1: rgba(37, 99, 235, 0.6);
+  --particle-2: rgba(124, 58, 237, 0.5);
 
-  --bg-highlight: rgba(15, 23, 42, 0.05);
-  --bg-highlight-hover: rgba(15, 23, 42, 0.09);
+  --bg-highlight: rgba(15, 23, 42, 0.04);
+  --bg-highlight-hover: rgba(15, 23, 42, 0.08);
 
-  --gradient-silver-1: #334155;
-  --gradient-silver-2: #64748b;
-  --gradient-silver-3: #475569;
+  /* Bold, dark metallic effect for Light Mode */
+  --gradient-silver-1: #0f172a;
+  --gradient-silver-2: #475569;
+  --gradient-silver-3: #1e293b;
 }
 
 /* ── Base Reset ─────────────────────────────────────────── */
