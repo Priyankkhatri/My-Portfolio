@@ -9,6 +9,7 @@ import Certificates from './sections/Certificates'
 import Contact from './sections/Contact'
 import useStore from './store/useStore'
 import PfpMorphButton from './components/PfpMorphButton'
+import AiChatButton from './components/AiChatButton'
 import HeroBackground from './components/HeroBackground'
 
 /* Marquee text strip between sections */
@@ -44,6 +45,9 @@ export default function App() {
 
             {/* Scroll-driven PFP morph → back-to-top */}
             <PfpMorphButton />
+
+            {/* AI Chat Assistant */}
+            <AiChatButton />
 
             {/* Global 3D Background */}
             <HeroBackground />

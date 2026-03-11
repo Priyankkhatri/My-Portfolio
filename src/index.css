@@ -616,3 +616,22 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── Mobile back-to-top fallback ───────────────────────── */
 /* Handled fully by inline Framer Motion in PfpMorphButton.jsx */
+
+/* ── AI Chat Button Glow ───────────────────────────────── */
+@keyframes ai-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(167, 139, 250, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.25), 0 0 40px rgba(167, 139, 250, 0.12), 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.ai-glow-pulse {
+  animation: ai-glow-pulse 3s ease-in-out infinite;
+}
+
+.ai-glow-pulse:hover {
+  animation: none;
+  box-shadow: 0 0 24px rgba(96, 165, 250, 0.3), 0 0 48px rgba(167, 139, 250, 0.15), 0 4px 16px rgba(0, 0, 0, 0.15);
+}

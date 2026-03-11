@@ -4,12 +4,15 @@ const useStore = create((set, get) => ({
     isLoaded: false,
     cursorVariant: 'default',
     theme: 'dark', // default to dark
+    isChatOpen: false, // AI Chat panel state
 
     // Theme transition state for the energy wave animation
     themeTransition: { active: false, origin: { x: 0, y: 0 }, oldTheme: 'dark' },
 
     setIsLoaded: (val) => set({ isLoaded: val }),
     setCursorVariant: (variant) => set({ cursorVariant: variant }),
+    toggleChat: () => set((s) => ({ isChatOpen: !s.isChatOpen })),
+    setChatOpen: (val) => set({ isChatOpen: val }),
 
     // Simple toggle (fallback)
     toggleTheme: () => set((state) => {

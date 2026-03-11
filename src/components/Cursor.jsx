@@ -26,7 +26,7 @@ export default function Cursor() {
         <>
             {/* Inner dot — instant */}
             <motion.div
-                className="fixed top-0 left-0 rounded-full pointer-events-none z-[9998] mix-blend-difference"
+                className="fixed top-0 left-0 rounded-full pointer-events-none z-[10000] mix-blend-difference"
                 style={{
                     x: mouseX,
                     y: mouseY,
@@ -43,7 +43,7 @@ export default function Cursor() {
 
             {/* Outer ring — spring lag */}
             <motion.div
-                className="fixed top-0 left-0 rounded-full border pointer-events-none z-[9998] mix-blend-difference"
+                className="fixed top-0 left-0 rounded-full border pointer-events-none z-[10000] mix-blend-difference"
                 style={{
                     x: springX,
                     y: springY,
@@ -61,7 +61,7 @@ export default function Cursor() {
 
             {/* Glow trail — very subtle */}
             <motion.div
-                className="fixed top-0 left-0 rounded-full pointer-events-none z-[9997]"
+                className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999]"
                 style={{
                     x: springX,
                     y: springY,
