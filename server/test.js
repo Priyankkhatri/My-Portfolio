@@ -7,7 +7,7 @@ console.log('SDK version check...')
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
 async function test() {
-    const models = ['gemini-2.0-flash', 'gemini-1.5-flash-latest', 'gemini-pro']
+    const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
     
     for (const modelName of models) {
         console.log(`\n=== Testing: ${modelName} ===`)

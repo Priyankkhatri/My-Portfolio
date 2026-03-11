@@ -204,9 +204,9 @@ export default function AiChatPanel({ isOpen, onClose }) {
                             backdropFilter: 'blur(24px)',
                             WebkitBackdropFilter: 'blur(24px)',
                         }}
-                        initial={{ opacity: 0, scale: 0.9, y: 40, transformOrigin: 'bottom right' }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 40 }}
+                        initial={{ opacity: 0, scale: 0.9, x: 40, transformOrigin: 'right bottom' }}
+                        animate={{ opacity: 1, scale: 1, x: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, x: 40 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                     >
                         {/* Top gradient accent line */}
