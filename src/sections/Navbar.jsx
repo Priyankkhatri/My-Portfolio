@@ -23,7 +23,6 @@ function NavLink({ item, index, active, onClick }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2 + index * 0.08, duration: 0.5 }}
         >
-            <span className={`text-[9px] mr-1 transition-colors ${active ? 'text-[var(--accent-1)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-secondary)]'}`}>{item.num}</span>
             {item.label}
             {active && (
                 <motion.div
@@ -220,31 +219,6 @@ export default function Navbar() {
                                 </div>
                             </motion.button>
 
-                            {/* AI Chat Button */}
-                            <motion.button
-                                onClick={() => useStore.getState().toggleChat()}
-                                onMouseEnter={() => setCursorVariant('hover')}
-                                onMouseLeave={() => setCursorVariant('default')}
-                                className="ml-1 w-9 h-9 rounded-full flex items-center justify-center border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-[var(--glass-bg)] hover:border-[#a78bfa]/40 transition-all duration-300 group"
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 2.7, duration: 0.5, type: 'spring' }}
-                                aria-label="Open AI Assistant"
-                            >
-                                <svg
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="1.8"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="text-[var(--text-secondary)] group-hover:text-[#a78bfa] transition-colors duration-300"
-                                >
-                                    <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" />
-                                </svg>
-                            </motion.button>
                         </div>
 
                         {/* Mobile Hamburger */}
@@ -349,19 +323,7 @@ export default function Navbar() {
                                 <span className="text-sm text-[var(--text-secondary)]">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
                             </motion.button>
 
-                            {/* AI Chat in mobile menu */}
-                            <motion.button
-                                onClick={() => { useStore.getState().toggleChat(); setMobileOpen(false) }}
-                                className="flex items-center gap-3 px-6 py-3 rounded-full border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-[var(--glass-bg)] transition-all duration-300"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5, duration: 0.4 }}
-                            >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-[var(--text-secondary)]">
-                                    <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" />
-                                </svg>
-                                <span className="text-sm text-[var(--text-secondary)]">AI Assistant</span>
-                            </motion.button>
+
                         </nav>
 
                         {/* Footer info in mobile menu */}

@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import useStore from '../store/useStore'
-import { getAiResponse } from '../utils/aiEngine'
 
 /* ── Typing indicator dots ────────────────────────────────── */
 function TypingIndicator() {
@@ -144,7 +143,7 @@ export default function AiChatPanel({ isOpen, onClose }) {
     }, [isOpen])
 
     const handleSend = useCallback(
-        (text) => {
+        async (text) => {
             const msg = (text || input).trim()
             if (!msg || isTyping) return
 
@@ -153,12 +152,25 @@ export default function AiChatPanel({ isOpen, onClose }) {
             setInput('')
             setIsTyping(true)
 
-            // Simulate AI "thinking"
-            setTimeout(() => {
-                const response = getAiResponse(msg)
-                setMessages((prev) => [...prev, { role: 'bot', text: response }])
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg }),
+                })
+
+                if (!res.ok) throw new Error('API request failed')
+
+                const data = await res.json()
+                setMessages((prev) => [...prev, { role: 'bot', text: data.response }])
+            } catch (error) {
+                setMessages((prev) => [
+                    ...prev,
+                    { role: 'bot', text: '⚠️ Sorry, I couldn\'t reach the AI server. Please try again later!' },
+                ])
+            } finally {
                 setIsTyping(false)
-            }, 600 + Math.random() * 400)
+            }
         },
         [input, isTyping]
     )
@@ -186,15 +198,15 @@ export default function AiChatPanel({ isOpen, onClose }) {
 
                     {/* Chat Panel */}
                     <motion.div
-                        className="fixed top-[4.5rem] right-4 sm:right-6 md:right-10 z-[9999] w-[calc(100%-2rem)] sm:w-[380px] h-[520px] max-h-[calc(100vh-6rem)] flex flex-col rounded-2xl overflow-hidden border border-[var(--border-color)] shadow-2xl shadow-black/20"
+                        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-10 md:right-10 z-[9999] w-[calc(100%-2rem)] sm:w-[380px] h-[520px] max-h-[80vh] flex flex-col rounded-2xl overflow-hidden border border-[var(--border-color)] shadow-2xl shadow-black/20"
                         style={{
                             background: 'var(--bg-primary)',
                             backdropFilter: 'blur(24px)',
                             WebkitBackdropFilter: 'blur(24px)',
                         }}
-                        initial={{ opacity: 0, scale: 0.95, y: -20, transformOrigin: 'top right' }}
+                        initial={{ opacity: 0, scale: 0.9, y: 40, transformOrigin: 'bottom right' }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 40 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                     >
                         {/* Top gradient accent line */}

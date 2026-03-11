@@ -289,7 +289,7 @@ export default function Projects() {
                 >
                     <p className="text-xs text-[var(--text-secondary)] mb-4">Want to see more?</p>
                     <a
-                        href="https://github.com/priyank"
+                        href="https://github.com/Priyankkhatri/My-Projects"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
