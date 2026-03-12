@@ -72,36 +72,51 @@ export default function AiChatButton() {
                         />
 
                         {/* The AI Button traveling the line */}
-                        <motion.button
+                        <motion.div 
                             style={{ y: buttonY }}
-                            onClick={toggleChat}
-                            onMouseEnter={() => setCursorVariant('hover')}
-                            onMouseLeave={() => setCursorVariant('default')}
-                            className="absolute w-12 h-12 rounded-full flex items-center justify-center border border-[var(--border-color)] bg-[var(--bg-primary)]/90 backdrop-blur-xl shadow-lg pointer-events-auto hover:bg-[var(--glass-bg)] hover:border-[#a78bfa]/50 transition-colors duration-300 group"
-                            aria-label="Open AI Assistant"
+                            className="absolute w-12 h-12 flex items-center justify-center pointer-events-none"
                         >
-                            {/* Inner glowing halo adapting to scroll */}
-                            <motion.div 
-                                className="absolute inset-0 rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity"
-                                style={{ backgroundColor: iconColor }}
-                            />
-
-                            {/* The adapting sparkle icon */}
-                            <motion.svg
-                                style={{ rotate: iconRotate, color: iconColor }}
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="relative z-10 drop-shadow-md"
+                            {/* Animated Text */}
+                            <motion.div
+                                animate={{ opacity: [0, 1, 0] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                                className="absolute right-14 whitespace-nowrap text-[10px] sm:text-xs font-bold tracking-widest uppercase drop-shadow-md"
                             >
-                                <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" />
-                            </motion.svg>
-                        </motion.button>
+                                <motion.span style={{ color: iconColor }}>
+                                    AI CHAT
+                                </motion.span>
+                            </motion.div>
+
+                            <button
+                                onClick={toggleChat}
+                                onMouseEnter={() => setCursorVariant('hover')}
+                                onMouseLeave={() => setCursorVariant('default')}
+                                className="absolute w-12 h-12 rounded-full flex items-center justify-center border border-[var(--border-color)] bg-[var(--bg-primary)]/90 backdrop-blur-xl shadow-lg pointer-events-auto hover:bg-[var(--glass-bg)] hover:border-[#a78bfa]/50 transition-colors duration-300 group"
+                                aria-label="Open AI Assistant"
+                            >
+                                {/* Inner glowing halo adapting to scroll */}
+                                <motion.div 
+                                    className="absolute inset-0 rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity"
+                                    style={{ backgroundColor: iconColor }}
+                                />
+
+                                {/* The adapting sparkle icon */}
+                                <motion.svg
+                                    style={{ rotate: iconRotate, color: iconColor }}
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="relative z-10 drop-shadow-md"
+                                >
+                                    <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" />
+                                </motion.svg>
+                            </button>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>

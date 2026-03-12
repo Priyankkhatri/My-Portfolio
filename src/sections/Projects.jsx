@@ -13,7 +13,7 @@ const projects = [
     {
         title: 'API Image Gallery',
         tagline: 'Dynamic search & lazy loading',
-        image: '/api-image-gallery.png',
+        image: '/project-api-gallery.png',
         description: 'A responsive image gallery that fetches high-quality images via the Pexels API. Features dynamic keyword search, lazy loading without page reloads, and a fast frontend UI.',
         tech: ['HTML5', 'CSS3', 'JS', 'Pexels API', 'Netlify'],
         live: 'https://api-image-gallery.netlify.app',
