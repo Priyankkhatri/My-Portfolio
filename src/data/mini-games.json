@@ -1,0 +1,38 @@
+[
+  {
+    "id": "beyond-snack",
+    "title": "Beyond Snack",
+    "path": "https://beyond-snack.netlify.app",
+    "description": "Beyond Snack website clone"
+  },
+  {
+    "id": "dji",
+    "title": "DJI",
+    "path": "https://dji-clone.netlify.app",
+    "description": "DJI tech store clone"
+  },
+  {
+    "id": "drink-prime",
+    "title": "Drink Prime",
+    "path": "https://drinkprime-clone.netlify.app",
+    "description": "Prime drinks website clone"
+  },
+  {
+    "id": "nothing",
+    "title": "Nothing",
+    "path": "https://nothing-india.netlify.app",
+    "description": "Nothing phone website clone"
+  },
+  {
+    "id": "snitch",
+    "title": "Snitch",
+    "path": "https://clone-snitch.netlify.app",
+    "description": "Snitch fashion website clone"
+  },
+  {
+    "id": "soylent",
+    "title": "Soylent",
+    "path": "https://soylent-clone.netlify.app",
+    "description": "Soylent nutrition website clone"
+  }
+]

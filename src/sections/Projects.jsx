@@ -1,13 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import useStore from '../store/useStore'
-
-const miniGamesList = [
-    { title: 'Snake Game', desc: 'Classic snake with a modern UI', link: '#' },
-    { title: 'Tic Tac Toe', desc: 'Unbeatable AI using Minimax', link: '#' },
-    { title: 'Memory Match', desc: 'Find the matching pairs', link: '#' },
-    { title: 'Typing Speed Test', desc: 'Measure your WPM', link: '#' },
-]
+import cloneWebsites from '../data/mini-games.json'
 
 const projects = [
     {
@@ -42,10 +36,10 @@ const projects = [
         role: 'Backend Developer',
     },
     {
-        title: 'Mini Games',
-        tagline: 'Arcade and logic browser games',
-        description: 'Small browser games (snake, arcade, etc.) built to practice JS game loops and DOM management. Helps in understanding fundamentals before jumping into heavy game frameworks.',
-        tech: ['Vanilla JS', 'HTML', 'CSS'],
+        title: 'Clone Websites',
+        tagline: 'Pixel-perfect website recreations',
+        description: 'Frontend clones of popular brand websites (DJI, Nothing, Prime, etc.) built to practice layout, responsiveness, and modern CSS techniques.',
+        tech: ['HTML5', 'CSS3', 'JavaScript'],
         live: '#',
         source: 'https://github.com/Priyankkhatri',
         year: '2025',
@@ -223,17 +217,27 @@ export default function Projects() {
     const sectionRef = useRef(null)
     const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
     const [showGamesModal, setShowGamesModal] = useState(false)
+    const [activeClone, setActiveClone] = useState(null)
     const setCursorVariant = useStore((s) => s.setCursorVariant)
 
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === 'Escape') {
-                setShowGamesModal(false)
+                if (activeClone) {
+                    setActiveClone(null)
+                } else {
+                    setShowGamesModal(false)
+                }
             }
         }
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [])
+    }, [activeClone])
+
+    const closeModal = () => {
+        setShowGamesModal(false)
+        setActiveClone(null)
+    }
 
     return (
         <section id="projects" ref={sectionRef} className="py-16 sm:py-32 px-6 md:px-12 lg:px-24 relative">
@@ -275,7 +279,7 @@ export default function Projects() {
                             key={project.title}
                             project={project}
                             index={i}
-                            onClick={project.title === 'Mini Games' ? () => setShowGamesModal(true) : undefined}
+                            onClick={project.title === 'Clone Websites' ? () => setShowGamesModal(true) : undefined}
                         />
                     ))}
                 </div>
@@ -295,14 +299,12 @@ export default function Projects() {
                         className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
                     >
                         View all on GitHub
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-                        </svg>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
                     </a>
                 </motion.div>
             </motion.div>
 
-            {/* Games Modal */}
+            {/* Clone Websites Modal */}
             <AnimatePresence>
                 {showGamesModal && (
                     <motion.div
@@ -310,62 +312,127 @@ export default function Projects() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        onClick={() => setShowGamesModal(false)}
+                        onClick={closeModal}
                     >
                         <div className="absolute inset-0 bg-black/85 backdrop-blur-2xl" />
 
                         <motion.div
-                            className="relative glass-card max-w-lg w-full z-10 overflow-hidden"
+                            className={`relative glass-card ${activeClone ? 'max-w-5xl' : 'max-w-lg'} w-full z-10 overflow-hidden`}
                             initial={{ scale: 0.85, opacity: 0, y: 30 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                             onClick={(e) => e.stopPropagation()}
+                            layout
                         >
                             {/* Top bar */}
                             <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
 
-                            <div className="p-8 md:p-12">
-                                <h3
-                                    className="text-xl md:text-2xl font-bold text-[var(--text-primary)] mb-6"
-                                    style={{ fontFamily: "'Poppins', sans-serif" }}
-                                >
-                                    Mini Games Collection
-                                </h3>
-
-                                <div className="flex flex-col gap-4 mb-8">
-                                    {miniGamesList.map((game, i) => (
-                                        <a
-                                            key={i}
-                                            href={game.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="group flex flex-col p-4 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--border-color)] transition-all duration-300"
-                                            onMouseEnter={() => setCursorVariant('hover')}
-                                            onMouseLeave={() => setCursorVariant('default')}
-                                        >
-                                            <div className="flex items-center justify-between mb-1">
-                                                <span className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--text-primary)] transition-colors">{game.title}</span>
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
-                                                    <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
+                            {activeClone ? (
+                                /* ── Iframe View ── */
+                                <div className="flex flex-col" style={{ height: '80vh' }}>
+                                    {/* Iframe header */}
+                                    <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-color)]">
+                                        <div className="flex items-center gap-3">
+                                            <button
+                                                onClick={() => setActiveClone(null)}
+                                                className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                                            >
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polyline points="15 18 9 12 15 6" />
                                                 </svg>
-                                            </div>
-                                            <span className="text-xs text-[var(--text-secondary)]">{game.desc}</span>
-                                        </a>
-                                    ))}
-                                </div>
+                                                Back
+                                            </button>
+                                            <span className="w-px h-4 bg-[var(--border-color)]" />
+                                            <span
+                                                className="text-sm font-semibold text-[var(--text-primary)]"
+                                                style={{ fontFamily: "'Poppins', sans-serif" }}
+                                            >
+                                                {activeClone.title}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <a
+                                                href={activeClone.path}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-[10px] tracking-[0.15em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1.5"
+                                            >
+                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                    <polyline points="15 3 21 3 21 9" />
+                                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                                </svg>
+                                                New Tab
+                                            </a>
+                                            <button
+                                                onClick={closeModal}
+                                                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                                            >
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                            </button>
+                                        </div>
+                                    </div>
 
-                                <div className="flex items-center justify-between pt-6 border-t border-[var(--border-color)]">
-                                    <button
-                                        onClick={() => setShowGamesModal(false)}
-                                        className="text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2"
-                                    >
-                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
-                                        Close
-                                    </button>
-                                    <span className="text-[10px] text-[var(--text-secondary)]">ESC to dismiss</span>
+                                    {/* Iframe */}
+                                    <div className="flex-1 bg-white">
+                                        <iframe
+                                            src={activeClone.path}
+                                            title={activeClone.title}
+                                            className="w-full h-full border-0"
+                                            sandbox="allow-scripts allow-same-origin"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                /* ── List View ── */
+                                <div className="p-8 md:p-12">
+                                    <h3
+                                        className="text-xl md:text-2xl font-bold text-[var(--text-primary)] mb-2"
+                                        style={{ fontFamily: "'Poppins', sans-serif" }}
+                                    >
+                                        Clone Websites Collection
+                                    </h3>
+                                    <p className="text-xs text-[var(--text-secondary)] mb-6">
+                                        {cloneWebsites.length} pixel-perfect website recreations
+                                    </p>
+
+                                    <div className="flex flex-col gap-3 mb-8">
+                                        {cloneWebsites.map((site) => (
+                                            <button
+                                                key={site.id}
+                                                onClick={() => setActiveClone(site)}
+                                                className="group flex items-center justify-between p-4 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--border-color)] transition-all duration-300 text-left"
+                                                onMouseEnter={() => setCursorVariant('hover')}
+                                                onMouseLeave={() => setCursorVariant('default')}
+                                            >
+                                                <div>
+                                                    <span className="text-sm font-semibold text-[var(--text-primary)] block mb-0.5">
+                                                        {site.title}
+                                                    </span>
+                                                    <span className="text-xs text-[var(--text-secondary)]">
+                                                        {site.description}
+                                                    </span>
+                                                </div>
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-all shrink-0 ml-4">
+                                                    <polyline points="9 18 15 12 9 6" />
+                                                </svg>
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex items-center justify-between pt-6 border-t border-[var(--border-color)]">
+                                        <button
+                                            onClick={closeModal}
+                                            className="text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2"
+                                        >
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                            Close
+                                        </button>
+                                        <span className="text-[10px] text-[var(--text-secondary)]">ESC to dismiss</span>
+                                    </div>
+                                </div>
+                            )}
                         </motion.div>
                     </motion.div>
                 )}
