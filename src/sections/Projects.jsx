@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import useStore from '../store/useStore'
-import cloneWebsites from '../data/mini-games.json'
+import cloneWebsites from '../data/clone-websites.json'
+import miniGamesData from '../data/mini-games.json'
 
 const projects = [
     {
@@ -44,6 +45,16 @@ const projects = [
         source: 'https://github.com/Priyankkhatri',
         year: '2025',
         role: 'Frontend',
+    },
+    {
+        title: 'Mini Games',
+        tagline: 'Interactive fun & logic challenges',
+        description: 'A collection of small, interactive games including Tic Tac Toe, Whack A Mole, and more, built to practice game logic and UI interactions.',
+        tech: ['HTML5', 'CSS3', 'JS', 'Logic'],
+        live: '#',
+        source: 'https://github.com/Priyankkhatri',
+        year: '2025',
+        role: 'Frontend Developer',
     },
 ]
 
@@ -216,7 +227,7 @@ function ProjectCard({ project, index, onClick }) {
 export default function Projects() {
     const sectionRef = useRef(null)
     const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
-    const [showGamesModal, setShowGamesModal] = useState(false)
+    const [modalType, setModalType] = useState(null) // 'clones' or 'games'
     const [activeClone, setActiveClone] = useState(null)
     const setCursorVariant = useStore((s) => s.setCursorVariant)
 
@@ -226,7 +237,7 @@ export default function Projects() {
                 if (activeClone) {
                     setActiveClone(null)
                 } else {
-                    setShowGamesModal(false)
+                    setModalType(null)
                 }
             }
         }
@@ -235,7 +246,7 @@ export default function Projects() {
     }, [activeClone])
 
     const closeModal = () => {
-        setShowGamesModal(false)
+        setModalType(null)
         setActiveClone(null)
     }
 
@@ -279,7 +290,13 @@ export default function Projects() {
                             key={project.title}
                             project={project}
                             index={i}
-                            onClick={project.title === 'Clone Websites' ? () => setShowGamesModal(true) : undefined}
+                            onClick={
+                                project.title === 'Clone Websites' 
+                                    ? () => setModalType('clones') 
+                                    : project.title === 'Mini Games'
+                                    ? () => setModalType('games')
+                                    : undefined
+                            }
                         />
                     ))}
                 </div>
@@ -306,7 +323,7 @@ export default function Projects() {
 
             {/* Clone Websites Modal */}
             <AnimatePresence>
-                {showGamesModal && (
+                {modalType && (
                     <motion.div
                         className="fixed inset-0 z-[80] flex items-center justify-center px-6"
                         initial={{ opacity: 0 }}
@@ -353,7 +370,7 @@ export default function Projects() {
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <a
-                                                href={activeClone.path}
+                                                href={activeClone.path || activeClone.url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-[10px] tracking-[0.15em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1.5"
@@ -377,7 +394,7 @@ export default function Projects() {
                                     {/* Iframe */}
                                     <div className="flex-1 bg-white">
                                         <iframe
-                                            src={activeClone.path}
+                                            src={activeClone.path || activeClone.url}
                                             title={activeClone.title}
                                             className="w-full h-full border-0"
                                             sandbox="allow-scripts allow-same-origin"
@@ -391,32 +408,54 @@ export default function Projects() {
                                         className="text-xl md:text-2xl font-bold text-[var(--text-primary)] mb-2"
                                         style={{ fontFamily: "'Poppins', sans-serif" }}
                                     >
-                                        Clone Websites Collection
+                                        {modalType === 'clones' ? 'Clone Websites Collection' : 'Mini Games Collection'}
                                     </h3>
                                     <p className="text-xs text-[var(--text-secondary)] mb-6">
-                                        {cloneWebsites.length} pixel-perfect website recreations
+                                        {modalType === 'clones' 
+                                            ? `${cloneWebsites.length} pixel-perfect website recreations`
+                                            : `${miniGamesData.length} fun interactive games`
+                                        }
                                     </p>
 
-                                    <div className="flex flex-col gap-3 mb-8">
-                                        {cloneWebsites.map((site) => (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
+                                        {(modalType === 'clones' ? cloneWebsites : miniGamesData).map((item) => (
                                             <button
-                                                key={site.id}
-                                                onClick={() => setActiveClone(site)}
-                                                className="group flex items-center justify-between p-4 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--border-color)] transition-all duration-300 text-left"
+                                                key={item.id || item.title}
+                                                onClick={() => {
+                                                    if (modalType === 'clones') {
+                                                        setActiveClone(item)
+                                                    } else {
+                                                        window.open(item.url, '_blank', 'noopener,noreferrer')
+                                                    }
+                                                }}
+                                                className="group flex flex-col justify-between p-5 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--bg-highlight-hover)] hover:scale-[1.02] transition-all duration-300 text-left relative overflow-hidden"
                                                 onMouseEnter={() => setCursorVariant('hover')}
                                                 onMouseLeave={() => setCursorVariant('default')}
                                             >
-                                                <div>
-                                                    <span className="text-sm font-semibold text-[var(--text-primary)] block mb-0.5">
-                                                        {site.title}
-                                                    </span>
-                                                    <span className="text-xs text-[var(--text-secondary)]">
-                                                        {site.description}
-                                                    </span>
+                                                {/* Subtle glowing background on hover */}
+                                                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                
+                                                <div className="relative z-10 flex flex-col h-full">
+                                                    <div className="flex items-start justify-between mb-3">
+                                                        <span className="text-sm font-bold text-[var(--text-primary)] group-hover:text-white transition-colors">
+                                                            {item.title}
+                                                        </span>
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)] group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
+                                                            {modalType === 'clones' ? (
+                                                                <polyline points="9 18 15 12 9 6" />
+                                                            ) : (
+                                                                <>
+                                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                                    <polyline points="15 3 21 3 21 9" />
+                                                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                                                </>
+                                                            )}
+                                                        </svg>
+                                                    </div>
+                                                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed group-hover:text-[var(--text-primary)] transition-colors">
+                                                        {item.description || 'Interactive web experience'}
+                                                    </p>
                                                 </div>
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-all shrink-0 ml-4">
-                                                    <polyline points="9 18 15 12 9 6" />
-                                                </svg>
                                             </button>
                                         ))}
                                     </div>

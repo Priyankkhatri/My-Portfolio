@@ -1,38 +1,30 @@
 [
   {
-    "id": "beyond-snack",
-    "title": "Beyond Snack",
-    "path": "https://beyond-snack.netlify.app",
-    "description": "Beyond Snack website clone"
+    "title": "Tic Tac Toe",
+    "url": "https://tictactoee-game.netlify.app"
   },
   {
-    "id": "dji",
-    "title": "DJI",
-    "path": "https://dji-clone.netlify.app",
-    "description": "DJI tech store clone"
+    "title": "Todo List",
+    "url": "https://todo-lists-game.netlify.app"
   },
   {
-    "id": "drink-prime",
-    "title": "Drink Prime",
-    "path": "https://drinkprime-clone.netlify.app",
-    "description": "Prime drinks website clone"
+    "title": "Memory Flipping",
+    "url": "https://memory-flipping-game.netlify.app"
   },
   {
-    "id": "nothing",
-    "title": "Nothing",
-    "path": "https://nothing-india.netlify.app",
-    "description": "Nothing phone website clone"
+    "title": "Typing Speed Test",
+    "url": "https://typing-tester-game.netlify.app"
   },
   {
-    "id": "snitch",
-    "title": "Snitch",
-    "path": "https://clone-snitch.netlify.app",
-    "description": "Snitch fashion website clone"
+    "title": "Whack A Mole",
+    "url": "https://whack-a-mole-gamee.netlify.app"
   },
   {
-    "id": "soylent",
-    "title": "Soylent",
-    "path": "https://soylent-clone.netlify.app",
-    "description": "Soylent nutrition website clone"
+    "title": "Guess The Color",
+    "url": "https://guessing-the-color-game.netlify.app"
+  },
+  {
+    "title": "Click Counter",
+    "url": "https://click-counting.netlify.app"
   }
 ]
