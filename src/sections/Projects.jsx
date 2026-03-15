@@ -195,7 +195,13 @@ function ProjectCard({ project, index, onClick }) {
                             href={project.live}
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={(e) => onClick && e.stopPropagation()}
+                            onClick={(e) => {
+                                if (onClick) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    onClick();
+                                }
+                            }}
                             className="group inline-flex items-center gap-2.5 text-sm py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors link-underline"
                         >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-12 transition-transform duration-300">
@@ -203,7 +209,7 @@ function ProjectCard({ project, index, onClick }) {
                                 <polyline points="15 3 21 3 21 9" />
                                 <line x1="10" y1="14" x2="21" y2="3" />
                             </svg>
-                            Live Demo
+                            Open
                         </a>
                         <a
                             href={project.source}
@@ -325,19 +331,50 @@ export default function Projects() {
             <AnimatePresence>
                 {modalType && (
                     <motion.div
-                        className="fixed inset-0 z-[80] flex items-center justify-center px-6"
+                        className="fixed inset-0 z-[80] flex items-center justify-center px-4 md:px-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={closeModal}
                     >
-                        <div className="absolute inset-0 bg-black/85 backdrop-blur-2xl" />
+                        {/* ── Animated Aura Backdrop ── */}
+                        <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl overflow-hidden">
+                            {/* Floating animated orbs for dynamic feel */}
+                            <motion.div 
+                                animate={{ 
+                                    x: [0, 100, -50, 0],
+                                    y: [0, -50, 100, 0],
+                                    scale: [1, 1.2, 0.8, 1],
+                                    rotate: [0, 90, 180, 270, 360]
+                                }}
+                                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                                className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-violet-600/20 rounded-full blur-[120px] mix-blend-screen"
+                            />
+                            <motion.div 
+                                animate={{ 
+                                    x: [0, -120, 80, 0],
+                                    y: [0, 100, -80, 0],
+                                    scale: [1, 0.9, 1.1, 1],
+                                    rotate: [360, 270, 180, 90, 0]
+                                }}
+                                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                className="absolute -bottom-[10%] -right-[15%] w-[70%] h-[70%] bg-blue-600/20 rounded-full blur-[140px] mix-blend-screen"
+                            />
+                            <motion.div 
+                                animate={{ 
+                                    opacity: [0.1, 0.3, 0.1],
+                                    scale: [1, 1.1, 1]
+                                }}
+                                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-radial from-violet-900/10 to-transparent"
+                            />
+                        </div>
 
                         <motion.div
-                            className={`relative glass-card ${activeClone ? 'max-w-5xl' : 'max-w-lg'} w-full z-10 overflow-hidden`}
-                            initial={{ scale: 0.85, opacity: 0, y: 30 }}
+                            className={`relative glass-card ${activeClone ? 'max-w-6xl' : 'max-w-4xl'} w-full z-10 overflow-hidden shadow-2xl border-white/10`}
+                            initial={{ scale: 0.9, opacity: 0, y: 40 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
                             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                             onClick={(e) => e.stopPropagation()}
                             layout
@@ -417,7 +454,7 @@ export default function Projects() {
                                         }
                                     </p>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
                                         {(modalType === 'clones' ? cloneWebsites : miniGamesData).map((item) => (
                                             <button
                                                 key={item.id || item.title}
