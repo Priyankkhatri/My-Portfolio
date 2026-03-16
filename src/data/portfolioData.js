@@ -116,7 +116,7 @@ export const socials = [
     { label: 'GitHub', href: 'https://github.com/Priyankkhatri', desc: 'Student projects & code' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/priyankkhatrii/', desc: 'Professional network' },
     { label: 'YouTube', href: 'https://www.youtube.com/@PriyankCreates', desc: 'Project demos & videos' },
-    { label: 'LeetCode', href: 'https://leetcode.com/u/priyankkhatrii/', desc: 'DSA & problem solving' },
+    { label: 'LeetCode', href: 'https://leetcode.com/u/Priyank_Khatri/', desc: 'DSA & problem solving' },
     { label: 'Instagram', href: 'https://www.instagram.com/priyankhatrii/', desc: 'Life & creative updates' },
     { label: 'X (Twitter)', href: 'https://x.com/PriyankKhatrii', desc: 'Thoughts & short updates' },
 ]

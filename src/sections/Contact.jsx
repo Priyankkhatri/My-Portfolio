@@ -39,7 +39,7 @@ const socials = [
     },
     {
         label: 'LeetCode',
-        href: 'https://leetcode.com/u/priyankkhatrii/',
+        href: 'https://leetcode.com/u/Priyank_Khatri/',
         desc: 'DSA & problem solving',
         icon: (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -424,7 +424,7 @@ export default function Contact() {
 
                                 <div className="w-full bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-4 flex items-center justify-center overflow-hidden min-h-[200px]">
                                     <img
-                                        src="https://leetcard.jacoblin.cool/priyankkhatrii?theme=dark&font=Inter&ext=activity"
+                                        src="https://leetcard.jacoblin.cool/Priyank_Khatri?theme=dark&font=Inter&ext=activity"
                                         alt="LeetCode Stats"
                                         className="max-w-full max-h-[40vh] sm:max-h-[50vh] h-auto object-contain"
                                         loading="lazy"
