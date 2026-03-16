@@ -19,6 +19,7 @@ const projects = [
     {
         title: 'Movie Explorer',
         tagline: 'Cinematic details & dynamic search',
+        image: '/project-movie-explorer.jpeg',
         description: 'Movie search & details explorer using the OMDb API; cinematic details hero. Built to practice dynamic search, API integration, and creating clean detail pages with React and Tailwind.',
         tech: ['React.js', 'Tailwind CSS', 'OMDb API', 'Netlify'],
         live: 'https://api-movie-explorer.netlify.app',
@@ -29,6 +30,7 @@ const projects = [
     {
         title: 'Weather API',
         tagline: 'Upcoming personal API wrapper',
+        image: '/project-weather-api.jpeg',
         description: '[Upcoming Project] Personal API wrapper over a public weather API with caching and a small frontend. Planning to use Redis or Mongo for caching to optimize external API requests.',
         tech: ['Node.js', 'Redis/Mongo', 'Render'],
         live: '#',
@@ -39,6 +41,7 @@ const projects = [
     {
         title: 'Clone Websites',
         tagline: 'Pixel-perfect website recreations',
+        image: '/project-clones.jpeg',
         description: 'Frontend clones of popular brand websites (DJI, Nothing, Prime, etc.) built to practice layout, responsiveness, and modern CSS techniques.',
         tech: ['HTML5', 'CSS3', 'JavaScript'],
         live: '#',
@@ -49,6 +52,7 @@ const projects = [
     {
         title: 'Mini Games',
         tagline: 'Interactive fun & logic challenges',
+        image: '/project-mini-games.jpeg',
         description: 'A collection of small, interactive games including Tic Tac Toe, Whack A Mole, and more, built to practice game logic and UI interactions.',
         tech: ['HTML5', 'CSS3', 'JS', 'Logic'],
         live: '#',

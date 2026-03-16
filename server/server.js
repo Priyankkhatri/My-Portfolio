@@ -36,11 +36,27 @@ Use emojis sparingly for visual appeal. Do NOT use markdown headers (##) — use
 - Deployment: Netlify, Render
 - Tools: Git/GitHub, Chrome DevTools
 
-**Projects:**
-1. API Image Gallery — Dynamic search & lazy loading. Responsive image gallery using Pexels API. Tech: HTML5, CSS3, JS, Pexels API, Netlify. Live: https://api-image-gallery.netlify.app | Year: 2025
-2. Movie Explorer — Cinematic details & dynamic search using OMDb API. Tech: React.js, Tailwind CSS, OMDb API, Netlify. Live: https://api-movie-explorer.netlify.app | Year: 2026
+**Primary Projects:**
+1. API Image Gallery — Dynamic search & lazy loading. Tech: HTML5, CSS3, JS, Pexels API, Netlify. Live: https://api-image-gallery.netlify.app | Year: 2025
+2. Movie Explorer — Cinematic details & dynamic search. Tech: React.js, Tailwind CSS, OMDb API, Netlify. Live: https://api-movie-explorer.netlify.app | Year: 2026
 3. Weather API — [Upcoming] Personal API wrapper with caching. Tech: Node.js, Redis/Mongo, Render. Year: Planned
-4. Mini Games — Snake, Tic Tac Toe (Minimax AI), Memory Match, Typing Speed Test. Tech: Vanilla JS, HTML, CSS. Year: 2025
+
+**Clone Websites (Pixel-perfect brand recreations):**
+1. Beyond Snack — Beyond Snack website clone. Live: https://beyond-snack.netlify.app
+2. DJI — DJI tech store clone. Live: https://dji-clone.netlify.app
+3. Drink Prime — Prime drinks website clone. Live: https://drinkprime-clone.netlify.app
+4. Nothing — Nothing phone website clone. Live: https://nothing-india.netlify.app
+5. Snitch — Snitch fashion website clone. Live: https://clone-snitch.netlify.app
+6. Soylent — Soylent nutrition website clone. Live: https://soylent-clone.netlify.app
+
+**Mini Games (Interactive logic challenges):**
+1. Tic Tac Toe — Classic game. Live: https://tictactoee-game.netlify.app
+2. Todo List — Productivity app. Live: https://todo-lists-game.netlify.app
+3. Memory Flipping — Concentration game. Live: https://memory-flipping-game.netlify.app
+4. Typing Speed Test — Real-time typing evaluation. Live: https://typing-tester-game.netlify.app
+5. Whack A Mole — Reflex game. Live: https://whack-a-mole-gamee.netlify.app
+6. Guess The Color — HSL color guessing game. Live: https://guessing-the-color-game.netlify.app
+7. Click Counter — Simple click tracking. Live: https://click-counting.netlify.app
 
 **Certificates:**
 1. Introduction to Front-End Development — Coursera (Meta), Feb 24 2026, Grade: 99%, Credential ID: OEJDQXOP4W5Y, Verify: https://coursera.org/verify/OEJDQXOP4W5Y (Completed)

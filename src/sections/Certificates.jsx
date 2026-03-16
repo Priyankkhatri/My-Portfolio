@@ -189,100 +189,147 @@ export default function Certificates() {
             <AnimatePresence>
                 {selected && (
                     <motion.div
-                        className="fixed inset-0 z-[80] flex items-center justify-center px-6"
+                        className="fixed inset-0 z-[80] flex items-center justify-center px-4 md:px-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setSelected(null)}
                     >
-                        <div className="absolute inset-0 bg-black/85 backdrop-blur-2xl" />
+                        {/* ── Animated Aura Backdrop ── */}
+                        <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl overflow-hidden">
+                            <motion.div 
+                                animate={{ 
+                                    x: [0, 100, -50, 0],
+                                    y: [0, -50, 100, 0],
+                                    scale: [1, 1.2, 0.8, 1],
+                                    rotate: [0, 90, 180, 270, 360]
+                                }}
+                                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                                className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-violet-600/20 rounded-full blur-[120px] mix-blend-screen"
+                            />
+                            <motion.div 
+                                animate={{ 
+                                    x: [0, -120, 80, 0],
+                                    y: [0, 100, -80, 0],
+                                    scale: [1, 0.9, 1.1, 1],
+                                    rotate: [360, 270, 180, 90, 0]
+                                }}
+                                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                className="absolute -bottom-[10%] -right-[15%] w-[70%] h-[70%] bg-blue-600/20 rounded-full blur-[140px] mix-blend-screen"
+                            />
+                        </div>
 
                         <motion.div
-                            className="relative glass-card max-w-lg w-full z-10 overflow-hidden"
-                            initial={{ scale: 0.85, opacity: 0, y: 30 }}
+                            className="relative glass-card max-w-lg w-full z-10 overflow-hidden shadow-2xl border-white/10"
+                            initial={{ scale: 0.9, opacity: 0, y: 40 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
                             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                             onClick={(e) => e.stopPropagation()}
+                            layout
                         >
-                            {/* Top bar */}
+                            {/* Top bar accent */}
                             <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
 
-                            <div className="p-8 md:p-12">
-                                {/* Category badge */}
-                                <span className="inline-block px-3 py-1 text-[10px] tracking-[0.2em] uppercase bg-[var(--bg-highlight)] border border-[var(--border-color)] rounded-full text-[var(--text-secondary)] mb-6">
-                                    {selected.category}
-                                </span>
+                            <div className="p-6 md:p-8">
+                                {/* Header with category and close */}
+                                <div className="flex items-center justify-between mb-6">
+                                    <span className="px-3 py-1 text-[9px] tracking-[0.2em] font-medium uppercase bg-[var(--bg-highlight)] border border-[var(--border-color)] rounded-full text-[var(--accent-1)]">
+                                        {selected.category}
+                                    </span>
+                                    <button
+                                        onClick={() => setSelected(null)}
+                                        className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-1"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                    </button>
+                                </div>
 
                                 {/* Certificate visual */}
-                                <div className="w-full aspect-[16/9] rounded-xl bg-[var(--bg-highlight)] mb-8 flex items-center justify-center relative overflow-hidden">
+                                <div className="w-full aspect-video rounded-xl bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-6 flex items-center justify-center relative shadow-inner-glow overflow-hidden group">
                                     {selected.image ? (
                                         <img
                                             src={selected.image}
                                             alt={`${selected.title} Certificate`}
-                                            className="w-full h-full object-contain"
+                                            className="w-full h-full object-contain p-1"
                                         />
                                     ) : (
                                         <>
-                                            <div className="absolute inset-0 opacity-[0.04]"
+                                            <div className="absolute inset-0 opacity-[0.05]"
                                                 style={{
                                                     backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
                                                     backgroundSize: '20px 20px',
                                                 }}
                                             />
-                                            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)]">
-                                                <rect x="3" y="4" width="18" height="16" rx="2" />
-                                                <path d="M7 8h10M7 12h6M7 16h3" />
-                                                <circle cx="17" cy="15" r="2" /><path d="M17 17v2" />
-                                            </svg>
+                                            <div className="relative group-hover:scale-110 transition-transform duration-700">
+                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)]">
+                                                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                                                    <path d="M7 8h10M7 12h6M7 16h3" />
+                                                    <circle cx="17" cy="15" r="2" /><path d="M17 17v2" />
+                                                </svg>
+                                            </div>
                                         </>
                                     )}
+                                    {/* Glass reflection overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
                                 </div>
 
-                                <h3
-                                    className="text-xl md:text-2xl font-bold text-[var(--text-primary)] mb-2"
-                                    style={{ fontFamily: "'Poppins', sans-serif" }}
-                                >
-                                    {selected.title}
-                                </h3>
-
-                                <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-secondary)] mb-2">
-                                    <span>{selected.issuer}</span>
-                                    <span className="w-1 h-1 rounded-full bg-[var(--bg-highlight-hover)]" />
-                                    <span>{selected.date}</span>
-                                    {selected.credentialId && (
-                                        <>
-                                            <span className="w-1 h-1 rounded-full bg-[var(--bg-highlight-hover)]" />
-                                            <span className="text-[10px] uppercase tracking-wider font-mono">ID: {selected.credentialId}</span>
-                                        </>
-                                    )}
-                                </div>
-
-                                <p className="text-xs text-[var(--text-secondary)] mb-8">{selected.hours}</p>
-
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-6 border-t border-[var(--border-color)]">
-                                    <div className="flex items-center gap-6">
-                                        <button
-                                            onClick={() => setSelected(null)}
-                                            className="text-xs tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2"
+                                <div className="space-y-5">
+                                    <div>
+                                        <h3
+                                            className="text-lg md:text-xl font-bold text-[var(--text-primary)] mb-2"
+                                            style={{ fontFamily: "'Poppins', sans-serif" }}
                                         >
-                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
-                                            Close
-                                        </button>
+                                            {selected.title}
+                                        </h3>
 
-                                        {selected.credentialUrl && (
-                                            <a
-                                                href={selected.credentialUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-xs tracking-[0.2em] uppercase text-[var(--accent-1)] hover:text-[var(--accent-2)] transition-colors flex items-center gap-2"
-                                            >
-                                                View Credential
-                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                                            </a>
-                                        )}
+                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-[var(--text-secondary)]">
+                                            <div className="flex items-center gap-1.5">
+                                                <div className="w-1 h-1 rounded-full bg-[var(--accent-1)]" />
+                                                <span className="font-medium text-[var(--text-primary)]/80">{selected.issuer}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5 text-[10px]">
+                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                                                <span>{selected.date}</span>
+                                            </div>
+                                            {selected.credentialId && (
+                                                <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md bg-[var(--bg-highlight)] border border-[var(--border-color)]">
+                                                    <span className="text-[8px] uppercase tracking-widest font-mono text-[var(--text-muted)]">ID: {selected.credentialId}</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
-                                    <span className="text-[10px] text-[var(--text-secondary)] hidden sm:block">ESC to dismiss</span>
+
+                                    {selected.hours && (
+                                        <div className="p-3 rounded-lg bg-[var(--bg-highlight)]/50 border border-[var(--border-color)]">
+                                            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{selected.hours}</p>
+                                        </div>
+                                    )}
+
+                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[var(--border-color)]">
+                                        <div className="flex items-center gap-6">
+                                            <button
+                                                onClick={() => setSelected(null)}
+                                                className="text-[10px] tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2 group"
+                                            >
+                                                <svg className="group-hover:-translate-x-1 transition-transform" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                                Dismiss
+                                            </button>
+
+                                            {selected.credentialUrl && (
+                                                <a
+                                                    href={selected.credentialUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-[10px] tracking-[0.2em] uppercase text-[var(--accent-1)] hover:text-[var(--accent-2)] transition-all flex items-center gap-2 group"
+                                                >
+                                                    Verify Online
+                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                                </a>
+                                            )}
+                                        </div>
+                                        <span className="text-[9px] tracking-wider text-[var(--text-muted)] hidden sm:block uppercase">ESC TO CLOSE</span>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
