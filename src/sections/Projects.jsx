@@ -111,6 +111,7 @@ function ProjectCard({ project, index, onClick }) {
             onMouseEnter={() => { setIsHovered(true); setCursorVariant('hover') }}
             onMouseLeave={handleLeave}
             onClick={onClick}
+            whileTap={{ scale: 0.98, transition: { duration: 0.15 } }}
         >
             <div
                 className={`grid grid-cols-1 lg:grid-cols-5 lg:min-h-[400px]`}
@@ -458,7 +459,7 @@ export default function Projects() {
                                         }
                                     </p>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 max-h-[70vh] sm:max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
                                         {(modalType === 'clones' ? cloneWebsites : miniGamesData).map((item) => (
                                             <button
                                                 key={item.id || item.title}
@@ -469,7 +470,7 @@ export default function Projects() {
                                                         window.open(item.url, '_blank', 'noopener,noreferrer')
                                                     }
                                                 }}
-                                                className="group flex flex-col justify-between p-5 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--bg-highlight-hover)] hover:scale-[1.02] transition-all duration-300 text-left relative overflow-hidden"
+                                                className="group flex flex-col justify-between p-4 sm:p-5 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--bg-highlight-hover)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-left relative overflow-hidden"
                                                 onMouseEnter={() => setCursorVariant('hover')}
                                                 onMouseLeave={() => setCursorVariant('default')}
                                             >

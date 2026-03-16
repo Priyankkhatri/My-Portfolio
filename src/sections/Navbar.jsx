@@ -259,10 +259,10 @@ export default function Navbar() {
                 {mobileOpen && (
                     <motion.div
                         className="fixed inset-0 z-40 bg-[var(--bg-primary)]/98 backdrop-blur-2xl flex flex-col items-center justify-center transition-colors duration-500"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
+                        initial={{ opacity: 0, filter: 'blur(10px)' }}
+                        animate={{ opacity: 1, filter: 'blur(0px)' }}
+                        exit={{ opacity: 0, filter: 'blur(10px)' }}
+                        transition={{ duration: 0.4 }}
                     >
                         {/* Decorative lines */}
                         <div className="absolute top-20 left-8 w-px h-32 bg-gradient-to-b from-[var(--bg-highlight)] to-transparent" />
@@ -281,10 +281,10 @@ export default function Navbar() {
                             {navItems.map((item, i) => (
                                 <motion.div
                                     key={item.label}
-                                    initial={{ opacity: 0, y: 40 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ delay: i * 0.06 + 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                                    initial={{ opacity: 0, x: -30, y: 20, filter: 'blur(4px)' }}
+                                    animate={{ opacity: 1, x: 0, y: 0, filter: 'blur(0px)' }}
+                                    exit={{ opacity: 0, x: 20, y: -10 }}
+                                    transition={{ delay: i * 0.07 + 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                                 >
                                     <a
                                         href={item.href}
@@ -296,6 +296,13 @@ export default function Navbar() {
                                     >
                                         <span className={`text-xs ${activeSection === item.href ? 'text-[var(--accent-1)]' : 'text-[var(--text-muted)]'}`}>{item.num}</span>
                                         {item.label}
+                                        {activeSection === item.href && (
+                                            <motion.span
+                                                layoutId="mobile-nav-indicator"
+                                                className="w-2 h-2 rounded-full bg-[#60a5fa] shadow-[0_0_8px_rgba(96,165,250,0.5)]"
+                                                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                                            />
+                                        )}
                                     </a>
                                 </motion.div>
                             ))}
@@ -330,11 +337,15 @@ export default function Navbar() {
 
                         {/* Footer info in mobile menu */}
                         <motion.div
-                            className="absolute bottom-12 text-center"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
+                            className="absolute bottom-12 text-center flex flex-col items-center gap-3"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
                         >
+                            <div className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 bg-[#60a5fa]/70 rounded-full animate-pulse-glow" />
+                                <span className="text-[10px] tracking-[0.3em] text-[var(--text-secondary)] uppercase">Available for work</span>
+                            </div>
                             <p className="text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">
                                 Priyank &mdash; Portfolio 2026
                             </p>

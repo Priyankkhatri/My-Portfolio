@@ -249,7 +249,7 @@ export default function Contact() {
                     <div className="lg:col-span-3">
                         <form
                             onSubmit={handleSubmit}
-                            className="flex flex-col gap-10"
+                            className="flex flex-col gap-8 sm:gap-10"
                         >
                             <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
 
@@ -318,8 +318,10 @@ export default function Contact() {
                                     <motion.div
                                         key={s.label}
                                         initial={{ opacity: 0, x: 20 }}
-                                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                                        transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true, margin: '-20px' }}
+                                        transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }}
+                                        whileTap={{ scale: 0.98 }}
                                         className="relative flex items-center p-4 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--bg-highlight-hover)] transition-[background-color,border-color] duration-300 group"
                                         onMouseEnter={() => setCursorVariant('hover')}
                                         onMouseLeave={() => setCursorVariant('default')}

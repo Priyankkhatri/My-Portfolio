@@ -44,6 +44,7 @@ function CertCard({ cert, index, onClick }) {
             animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
             transition={{ duration: 0.6, delay: index * 0.08 }}
             whileHover={{ y: -4, transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } }}
+            whileTap={{ scale: 0.97, transition: { duration: 0.15 } }}
             className="glass-card glass-card-hover w-[240px] min-w-[240px] max-w-[240px] sm:w-[300px] sm:min-w-[300px] sm:max-w-[300px] md:w-[340px] md:min-w-[340px] md:max-w-[340px] flex-shrink-0 select-none group"
         >
             {/* Top gradient bar */}
@@ -177,7 +178,7 @@ export default function Certificates() {
                 >
                     <div className="w-8 h-px bg-[var(--bg-highlight-hover)]" />
                     <span className="text-[10px] tracking-[0.3em] text-[var(--text-secondary)] uppercase">
-                        Drag to explore
+                        Swipe to explore
                     </span>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[var(--text-secondary)]">
                         <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />

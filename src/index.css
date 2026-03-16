@@ -264,6 +264,39 @@ body::after {
   100% { transform: translateY(-5px) translateX(-8px); opacity: 0.6; }
 }
 
+/* ── Mobile performance optimizations ──────────────────── */
+@media (max-width: 640px) {
+  body::after {
+    /* Reduce number of particles on mobile for performance */
+    background-image:
+      radial-gradient(2px 2px at 10% 20%, var(--particle-1) 0%, transparent 100%),
+      radial-gradient(2px 2px at 50% 10%, var(--particle-1) 0%, transparent 100%),
+      radial-gradient(2px 2px at 70% 40%, var(--particle-2) 0%, transparent 100%),
+      radial-gradient(2px 2px at 90% 70%, var(--particle-1) 0%, transparent 100%),
+      radial-gradient(2px 2px at 25% 35%, var(--particle-2) 0%, transparent 100%);
+    filter: drop-shadow(0 0 2px var(--particle-1));
+  }
+
+  .floating-orb {
+    filter: blur(60px);
+    opacity: 0.02;
+    animation-duration: 18s;
+  }
+
+  .glass-card {
+    border-radius: 16px;
+  }
+}
+
+/* ── Reduced motion preference ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
 /* ── Prevent mobile horizontal overflow ─────────────────── */
 #root {
   overflow-x: hidden;
@@ -373,22 +406,37 @@ body,
   transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-.glass-card-hover:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.5),
-    0 0 40px rgba(96, 165, 250, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+@media (hover: hover) {
+  .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 16px 48px rgba(0, 0, 0, 0.5),
+      0 0 40px rgba(96, 165, 250, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  [data-theme="light"] .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(15, 23, 42, 0.12);
+    box-shadow:
+      0 16px 48px rgba(15, 23, 42, 0.08),
+      0 0 40px rgba(59, 130, 246, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
 }
 
-[data-theme="light"] .glass-card-hover:hover {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(15, 23, 42, 0.12);
-  box-shadow:
-    0 16px 48px rgba(15, 23, 42, 0.08),
-    0 0 40px rgba(59, 130, 246, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+/* Touch devices: active state as hover fallback */
+@media (hover: none) {
+  .glass-card-hover:active {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  [data-theme="light"] .glass-card-hover:active {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(15, 23, 42, 0.12);
+  }
 }
 
 /* ── Glow Effects ───────────────────────────────────────── */

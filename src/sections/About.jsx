@@ -41,6 +41,7 @@ function TiltCard({ children, className = '', span = '', delay = 0 }) {
                     }
                     : {}
             }
+            whileTap={{ scale: 0.97, transition: { duration: 0.15 } }}
             transition={
                 isHovered
                     ? { rotateX: { duration: 0.15, ease: 'easeOut' }, rotateY: { duration: 0.15, ease: 'easeOut' }, default: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] } }
@@ -241,8 +242,13 @@ export default function About() {
                         <p className="text-[10px] tracking-[0.3em] uppercase text-[var(--text-secondary)] mb-6">Beyond Code</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {interests.map((item, i) => (
-                                <div
+                                <motion.div
                                     key={i}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: '-20px' }}
+                                    transition={{ delay: i * 0.08, duration: 0.5 }}
+                                    whileTap={{ scale: 0.97 }}
                                     className="flex items-start gap-3 p-3 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight)] hover:border-[var(--border-color)] transition-all duration-300"
                                 >
                                     <item.Icon size={18} style={{ color: item.color }} className="mt-0.5 shrink-0" />
@@ -250,7 +256,7 @@ export default function About() {
                                         <span className="text-sm font-medium text-[var(--text-secondary)] block">{item.label}</span>
                                         <span className="text-[10px] text-[var(--text-secondary)]">{item.desc}</span>
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                     </TiltCard>

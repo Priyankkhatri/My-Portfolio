@@ -57,22 +57,26 @@ export default function Hero() {
     return (
         <section
             id="home"
-            className="relative min-h-screen flex items-center px-6 md:px-12 lg:px-24 pt-24 pb-16"
+            className="relative min-h-screen flex items-center px-6 md:px-12 lg:px-24 pt-20 sm:pt-24 pb-12 sm:pb-16"
         >
             {/* Decorative elements */}
             <div className="absolute top-32 right-12 w-px h-40 bg-gradient-to-b from-transparent via-[var(--bg-highlight)] to-transparent hidden lg:block pointer-events-none" />
             <div className="absolute bottom-32 left-12 w-32 h-px bg-gradient-to-r from-[var(--bg-highlight)] to-transparent hidden lg:block pointer-events-none" />
 
-            <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-24 relative z-10">
+            <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-8 lg:gap-24 relative z-10">
 
                 {/* Mobile Profile Picture — shown only below lg */}
                 <motion.div
-                    className="flex lg:hidden items-center justify-center mt-4"
+                    className="flex lg:hidden items-center justify-center mt-2 sm:mt-4"
                     initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                     animate={loaderPhase >= 4 ? { opacity: 1, scale: 1, filter: "blur(0px)" } : {}}
                     transition={{ duration: 1.2, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
-                    <div className="relative w-36 h-36 sm:w-44 sm:h-44">
+                    <motion.div
+                        className="relative w-32 h-32 sm:w-44 sm:h-44"
+                        animate={{ y: [0, -6, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                    >
                         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#60a5fa]/20 to-[#a78bfa]/10 blur-xl" />
                         <div className="absolute inset-0 rounded-full border-2 border-[#60a5fa]/30 shadow-[0_0_20px_rgba(96,165,250,0.15)]">
                             <img
@@ -82,7 +86,7 @@ export default function Hero() {
                             />
                             <div className="absolute inset-0 bg-black/10 rounded-full" />
                         </div>
-                    </div>
+                    </motion.div>
                 </motion.div>
 
                 <motion.div
@@ -227,7 +231,7 @@ export default function Hero() {
 
             {/* Scroll indicator */}
             <motion.div
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-3"
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 4, duration: 1 }}
