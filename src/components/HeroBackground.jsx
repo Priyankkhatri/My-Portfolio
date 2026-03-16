@@ -133,7 +133,7 @@ function Particles({ count = 150, colors, loaderPhase }) {
         hasTransitioned: false // Persistent flag to prevent re-triggering
     })
     const TRANSITION_MULT = 12     // speed multiplier during transition
-    const BURST_DURATION = 0.5     // seconds to hold fast speed
+    const BURST_DURATION = 1.0     // seconds to hold fast speed
     const SETTLE_DURATION = 1.0    // seconds to ease back to 1.0
 
     const dummy = useMemo(() => new THREE.Object3D(), [])
