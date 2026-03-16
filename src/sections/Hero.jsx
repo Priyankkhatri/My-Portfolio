@@ -5,16 +5,16 @@ import useStore from '../store/useStore'
 const container = {
     hidden: {},
     visible: {
-        transition: { staggerChildren: 0.1, delayChildren: 2.4 },
+        transition: { staggerChildren: 0.1, delayChildren: 0.8 },
     },
 }
 
 const fadeUp = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] },
+        transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
     },
 }
 
@@ -52,6 +52,7 @@ function AnimatedStat({ value }) {
 
 export default function Hero() {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
+    const loaderPhase = useStore((s) => s.loaderPhase)
 
     return (
         <section
@@ -67,9 +68,9 @@ export default function Hero() {
                 {/* Mobile Profile Picture — shown only below lg */}
                 <motion.div
                     className="flex lg:hidden items-center justify-center mt-4"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1, delay: 2.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+                    animate={loaderPhase >= 4 ? { opacity: 1, scale: 1, filter: "blur(0px)" } : {}}
+                    transition={{ duration: 1.2, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
                     <div className="relative w-36 h-36 sm:w-44 sm:h-44">
                         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#60a5fa]/20 to-[#a78bfa]/10 blur-xl" />
@@ -88,7 +89,7 @@ export default function Hero() {
                     className="max-w-xl w-full"
                     variants={container}
                     initial="hidden"
-                    animate="visible"
+                    animate={loaderPhase >= 4 ? "visible" : "hidden"}
                 >
                     {/* Eyebrow */}
                     <motion.div variants={fadeUp} className="flex items-center gap-4 mb-8">
@@ -181,9 +182,9 @@ export default function Hero() {
                 {/* Profile Image - Right Side (Desktop only) */}
                 <motion.div
                     className="relative hidden lg:flex flex-col items-center justify-center w-[400px] h-[400px] shrink-0 group/pfp"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1.2, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)", x: 100 }}
+                    animate={loaderPhase >= 4 ? { opacity: 1, scale: 1, filter: "blur(0px)", x: 0 } : { opacity: 0, scale: 0.5, filter: "blur(20px)", x: 100 }}
+                    transition={{ duration: 1.6, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
                     {/* Ethereal Ripple Rings — Auras pulsing outward on hover */}
                     <div id="heroPfpRings" className="absolute inset-0 z-10 pointer-events-none">

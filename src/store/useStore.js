@@ -2,6 +2,7 @@ import { create } from 'zustand'
 
 const useStore = create((set, get) => ({
     isLoaded: false,
+    loaderPhase: 0, // 0-3: Loading, 4: Warp/Split, 5: Fully loaded Hero
     cursorVariant: 'default',
     theme: 'dark', // default to dark
     isChatOpen: false, // AI Chat panel state
@@ -10,6 +11,7 @@ const useStore = create((set, get) => ({
     themeTransition: { active: false, origin: { x: 0, y: 0 }, oldTheme: 'dark' },
 
     setIsLoaded: (val) => set({ isLoaded: val }),
+    setLoaderPhase: (phase) => set({ loaderPhase: phase }),
     setCursorVariant: (variant) => set({ cursorVariant: variant }),
     toggleChat: () => set((s) => ({ isChatOpen: !s.isChatOpen })),
     setChatOpen: (val) => set({ isChatOpen: val }),

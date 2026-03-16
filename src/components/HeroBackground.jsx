@@ -86,18 +86,25 @@ const RESPONSIVE = {
 }
 
 // Subtle fading grid floor
-function GridFloor({ colors, gridSize = 50, gridDivs = 50 }) {
+function GridFloor({ colors, gridSize = 50, gridDivs = 50, loaderPhase }) {
     const gridRef = useRef()
     const matRef = useRef()
+    const groupRef = useRef()
 
     useFrame(() => {
         if (matRef.current) {
             matRef.current.color.lerp(new THREE.Color(colors.floorColor), 0.05)
+            const targetOpacity = loaderPhase >= 4 ? 0.6 : 0;
+            matRef.current.opacity += (targetOpacity - matRef.current.opacity) * 0.05;
+        }
+        if (groupRef.current) {
+            const targetY = loaderPhase >= 4 ? -2.5 : -15;
+            groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.05;
         }
     })
 
     return (
-        <group position={[0, -2.5, 0]}>
+        <group ref={groupRef} position={[0, -15, 0]}>
             <gridHelper ref={gridRef} args={[gridSize, gridDivs, colors.gridLine, colors.gridLine]} />
             <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
                 <planeGeometry args={[gridSize, gridSize]} />
@@ -105,7 +112,7 @@ function GridFloor({ colors, gridSize = 50, gridDivs = 50 }) {
                     ref={matRef}
                     color={colors.floorColor}
                     transparent
-                    opacity={0.6}
+                    opacity={0}
                     roughness={0.8}
                     metalness={0.2}
                 />
@@ -114,10 +121,20 @@ function GridFloor({ colors, gridSize = 50, gridDivs = 50 }) {
     )
 }
 
-// Glowing Soft Particles — slow, smooth drifting
-function Particles({ count = 150, colors }) {
+// Glowing Soft Particles — slow, smooth drifting with cinematic transition
+function Particles({ count = 150, colors, loaderPhase }) {
     const mesh = useRef()
     const matRef = useRef()
+
+    const transition = useRef({
+        state: 'idle',
+        multiplier: 1,       
+        timer: 0,      
+        hasTransitioned: false // Persistent flag to prevent re-triggering
+    })
+    const TRANSITION_MULT = 12     // speed multiplier during transition
+    const BURST_DURATION = 0.5     // seconds to hold fast speed
+    const SETTLE_DURATION = 1.0    // seconds to ease back to 1.0
 
     const dummy = useMemo(() => new THREE.Object3D(), [])
     const particles = useMemo(() => {
@@ -129,30 +146,79 @@ function Particles({ count = 150, colors }) {
             const xFactor = -15 + Math.random() * 30
             const yFactor = -8 + Math.random() * 16
             const zFactor = -10 + Math.random() * 15
-            temp.push({ t, factor, speed, xFactor, yFactor, zFactor })
+            temp.push({ t, factor, speed, xFactor, yFactor, zFactor, zBurst: 0 })
         }
         return temp
     }, [count])
 
-    useFrame(() => {
+    useFrame((_, delta) => {
         // Smoothly transition particle color
         if (matRef.current) {
             matRef.current.color.lerp(new THREE.Color(colors.particleColor), 0.05)
             matRef.current.opacity += (colors.particleOpacity - matRef.current.opacity) * 0.05
         }
 
+        // --- Transition state machine ---
+        const tr = transition.current
+
+        // Only start if we haven't finished a transition yet
+        if (loaderPhase >= 4 && !tr.hasTransitioned) {
+            if (tr.state === 'idle') {
+                tr.state = 'transition'
+                tr.timer = 0
+            }
+        }
+
+        if (tr.state === 'transition') {
+            tr.timer += delta
+            if (tr.timer < BURST_DURATION) {
+                tr.multiplier = TRANSITION_MULT
+            } else {
+                const decelProgress = Math.min((tr.timer - BURST_DURATION) / SETTLE_DURATION, 1.0)
+                const eased = 1 - Math.pow(1 - decelProgress, 3) // power3.out for smoother end
+                tr.multiplier = TRANSITION_MULT + (1 - TRANSITION_MULT) * eased
+
+                if (decelProgress >= 1.0) {
+                    tr.state = 'settled'
+                    tr.multiplier = 1
+                    tr.hasTransitioned = true // Lock it here
+                }
+            }
+        } else {
+            tr.multiplier = 1
+            if (tr.hasTransitioned) tr.state = 'settled'
+        }
+
+        // --- Original particle movement logic (unchanged) ---
         particles.forEach((particle, i) => {
             let { factor, xFactor, yFactor, zFactor } = particle
-            const t = (particle.t += particle.speed)
 
+            // Apply the transition multiplier to time progression only
+            particle.t += particle.speed * tr.multiplier
+
+            const t = particle.t
             const s = Math.max(0.3, (Math.cos(t) + 1) / 2)
 
-            dummy.position.set(
-                xFactor + Math.sin(t * 0.3) * factor * 0.5,
-                yFactor + Math.cos(t * 0.2) * factor * 0.3,
-                zFactor + Math.sin(t * 0.15) * factor * 0.3
-            )
-            dummy.scale.setScalar(s)
+            let x = xFactor + Math.sin(t * 0.3) * factor * 0.5
+            let y = yFactor + Math.cos(t * 0.2) * factor * 0.3
+            let z = zFactor + Math.sin(t * 0.15) * factor * 0.3
+
+            // Forward burst toward camera during transition
+            const extraVelocity = Math.max(0, tr.multiplier - 1)
+            if (extraVelocity > 0.01) {
+                // Push particles forward proportional to extra speed
+                particle.zBurst = (particle.zBurst || 0) + extraVelocity * 0.02
+                if (particle.zBurst > 15) particle.zBurst = -20 // wrap back
+                z += particle.zBurst
+            } else if (particle.zBurst) {
+                // After transition, smoothly retract burst offset back to 0
+                particle.zBurst += (0 - particle.zBurst) * 0.05
+                if (Math.abs(particle.zBurst) < 0.05) particle.zBurst = 0
+                z += particle.zBurst
+            }
+
+            dummy.position.set(x, y, z)
+            dummy.scale.set(s, s, s)
             dummy.updateMatrix()
 
             mesh.current.setMatrixAt(i, dummy.matrix)
@@ -196,7 +262,6 @@ function CameraRig({ parallaxStrength = 1.5 }) {
         // Device orientation (gyroscope on mobile)
         const onOrientation = (e) => {
             if (e.gamma !== null && e.beta !== null) {
-                // gamma: -90 to 90 (tilt left-right), beta: -180 to 180 (tilt front-back)
                 mouse.current.x = Math.max(-1, Math.min(1, e.gamma / 30))
                 mouse.current.y = Math.max(-1, Math.min(1, (e.beta - 45) / 30))
             }
@@ -214,10 +279,13 @@ function CameraRig({ parallaxStrength = 1.5 }) {
     }, [])
 
     useFrame(() => {
-        camera.position.lerp(
-            vec.set(mouse.current.x * parallaxStrength, mouse.current.y * (parallaxStrength * 0.5), 5),
-            0.03
-        )
+        // Parallax only — no zoom, no camera animation
+        const targetX = mouse.current.x * parallaxStrength
+        const targetY = mouse.current.y * (parallaxStrength * 0.5)
+
+        camera.position.x += (targetX - camera.position.x) * 0.05
+        camera.position.y += (targetY - camera.position.y) * 0.05
+
         camera.lookAt(0, 0, 0)
     })
 
@@ -285,6 +353,8 @@ export default function HeroBackground() {
     const tier = useResponsive()
     const r = RESPONSIVE[tier]
 
+    const loaderPhase = useStore((s) => s.loaderPhase)
+
     return (
         <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: -1 }}>
             <Canvas
@@ -301,8 +371,8 @@ export default function HeroBackground() {
 
                 {/* Scene Elements */}
                 <CameraRig parallaxStrength={r.parallax} />
-                <Particles count={r.particles} colors={colors} />
-                <GridFloor colors={colors} gridSize={r.gridSize} gridDivs={r.gridDivs} />
+                <Particles count={r.particles} colors={colors} loaderPhase={loaderPhase} />
+                <GridFloor colors={colors} gridSize={r.gridSize} gridDivs={r.gridDivs} loaderPhase={loaderPhase} />
 
                 {/* Postprocessing — disabled on mobile for performance */}
                 {r.bloom && (

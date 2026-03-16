@@ -109,6 +109,7 @@ function MarqueeStrip() {
 
 export default function App() {
     const isLoaded = useStore((s) => s.isLoaded)
+    const loaderPhase = useStore((s) => s.loaderPhase)
 
     return (
         <>
@@ -131,8 +132,8 @@ export default function App() {
             <motion.div
                 className="relative z-10"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: isLoaded ? 1 : 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+                animate={loaderPhase >= 4 ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.5 }}
             >
                 <Navbar />
                 <main>

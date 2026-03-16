@@ -5,7 +5,8 @@ import useStore from '../store/useStore'
 export default function Loader() {
     const [progress, setProgress] = useState(0)
     const setIsLoaded = useStore((s) => s.setIsLoaded)
-    const [phase, setPhase] = useState(0)
+    const loaderPhase = useStore((s) => s.loaderPhase)
+    const setLoaderPhase = useStore((s) => s.setLoaderPhase)
     const [show, setShow] = useState(true)
 
     useEffect(() => {
@@ -26,28 +27,29 @@ export default function Loader() {
     }, [])
 
     useEffect(() => {
-        const t1 = setTimeout(() => setPhase(1), 600)
-        const t2 = setTimeout(() => setPhase(2), 1200)
-        const t3 = setTimeout(() => setPhase(3), 1800)
+        const t1 = setTimeout(() => setLoaderPhase(1), 600)
+        const t2 = setTimeout(() => setLoaderPhase(2), 1200)
+        const t3 = setTimeout(() => setLoaderPhase(3), 1800)
         return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
-    }, [])
+    }, [setLoaderPhase])
 
     useEffect(() => {
-        if (progress >= 100 && phase >= 3) {
-            const t = setTimeout(() => setPhase(4), 600)
+        if (progress >= 100 && loaderPhase >= 3) {
+            const t = setTimeout(() => setLoaderPhase(4), 600)
             return () => clearTimeout(t)
         }
-    }, [progress, phase])
+    }, [progress, loaderPhase, setLoaderPhase])
 
     useEffect(() => {
-        if (phase === 4) {
+        if (loaderPhase === 4) {
             const t = setTimeout(() => {
                 setShow(false)
                 setIsLoaded(true)
-            }, 1200)
+                setLoaderPhase(5) // Final phase: Hero settled
+            }, 1500) // Increased slightly for cinematic duration
             return () => clearTimeout(t)
         }
-    }, [phase, setIsLoaded])
+    }, [loaderPhase, setIsLoaded, setLoaderPhase])
 
     if (!show) return null
 
@@ -55,15 +57,37 @@ export default function Loader() {
         <AnimatePresence>
             {show && (
                 <div className="fixed inset-0 z-[100] flex">
+                    {/* Central Cinematic Beam (Activates at Phase 4) */}
+                    <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 pointer-events-none z-50 flex justify-center">
+                        <motion.div
+                            className="w-[2px] h-full bg-[#60a5fa] shadow-[0_0_20px_4px_rgba(96,165,250,0.8)]"
+                            initial={{ scaleY: 0, opacity: 0, scaleX: 1 }}
+                            animate={
+                                loaderPhase === 4
+                                    ? { 
+                                        scaleY: [0, 1, 1, 1], 
+                                        opacity: [0, 1, 1, 0], 
+                                        scaleX: [1, 2, 80, 0] 
+                                      }
+                                    : { scaleY: 0, opacity: 0 }
+                            }
+                            transition={{ 
+                                duration: 1.2, 
+                                ease: "easeInOut",
+                                times: [0, 0.3, 0.7, 1] 
+                            }}
+                        />
+                    </div>
+
                     {/* Left curtain */}
                     <motion.div
-                        className="w-1/2 h-full bg-[var(--bg-primary)] relative overflow-hidden"
-                        animate={phase === 4 ? { x: '-100%' } : { x: 0 }}
-                        transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+                        className="w-1/2 h-full bg-[#0a0f1b] relative overflow-hidden"
+                        animate={loaderPhase >= 4 ? { x: '-100%' } : { x: 0 }}
+                        transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 0.3 }}
                     >
                         {/* Decorative diagonal line */}
                         <motion.div
-                            className="absolute top-0 right-0 w-px h-full bg-gradient-to-b from-transparent via-[var(--text-primary)]/5 to-transparent"
+                            className="absolute top-0 right-0 w-px h-full bg-gradient-to-b from-transparent via-[#60a5fa]/30 to-transparent shadow-[0_0_15px_rgba(96,165,250,0.2)]"
                             initial={{ scaleY: 0 }}
                             animate={{ scaleY: 1 }}
                             transition={{ delay: 0.3, duration: 1.5 }}
@@ -72,12 +96,12 @@ export default function Loader() {
 
                     {/* Right curtain */}
                     <motion.div
-                        className="w-1/2 h-full bg-[var(--bg-primary)] relative overflow-hidden"
-                        animate={phase === 4 ? { x: '100%' } : { x: 0 }}
-                        transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+                        className="w-1/2 h-full bg-[#0a0f1b] relative overflow-hidden"
+                        animate={loaderPhase >= 4 ? { x: '100%' } : { x: 0 }}
+                        transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 0.3 }}
                     >
                         <motion.div
-                            className="absolute top-0 left-0 w-px h-full bg-gradient-to-b from-transparent via-[var(--text-primary)]/5 to-transparent"
+                            className="absolute top-0 left-0 w-px h-full bg-gradient-to-b from-transparent via-[#60a5fa]/30 to-transparent shadow-[0_0_15px_rgba(96,165,250,0.2)]"
                             initial={{ scaleY: 0 }}
                             animate={{ scaleY: 1 }}
                             transition={{ delay: 0.3, duration: 1.5 }}
@@ -87,15 +111,15 @@ export default function Loader() {
                     {/* Center content */}
                     <motion.div
                         className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
-                        animate={phase === 4 ? { opacity: 0, scale: 0.95 } : { opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5 }}
+                        animate={loaderPhase >= 4 ? { opacity: 0, scale: 1.1, filter: "blur(8px)" } : { opacity: 1, scale: 1, filter: "blur(0px)" }}
+                        transition={{ duration: 0.8, ease: "easeIn" }}
                     >
                         {/* Top ornament */}
                         <motion.div
                             className="w-px h-16 mb-8"
                             style={{ background: 'linear-gradient(to bottom, transparent, var(--border-color))' }}
                             initial={{ scaleY: 0, opacity: 0 }}
-                            animate={phase >= 1 ? { scaleY: 1, opacity: 1 } : {}}
+                            animate={loaderPhase >= 1 ? { scaleY: 1, opacity: 1 } : {}}
                             transition={{ duration: 0.8 }}
                         />
 
@@ -103,14 +127,14 @@ export default function Loader() {
                         <motion.p
                             className="text-[10px] tracking-[0.5em] uppercase text-[var(--text-muted)] mb-6"
                             initial={{ opacity: 0 }}
-                            animate={phase >= 1 ? { opacity: 1 } : {}}
+                            animate={loaderPhase >= 1 ? { opacity: 1 } : {}}
                             transition={{ duration: 0.6, delay: 0.2 }}
                         >
                             Portfolio
                         </motion.p>
 
                         {/* Name — letter by letter */}
-                        <div className="flex overflow-hidden">
+                        <div className="flex overflow-hidden relative z-10">
                             {'PRIYANK'.split('').map((char, i) => (
                                 <motion.span
                                     key={i}
@@ -131,9 +155,9 @@ export default function Loader() {
 
                         {/* Subtitle */}
                         <motion.p
-                            className="text-[10px] tracking-[0.4em] uppercase text-[var(--text-muted)] mt-4"
+                            className="text-[10px] tracking-[0.4em] uppercase text-[#60a5fa]/80 mt-4 glow-text-sm"
                             initial={{ opacity: 0, y: 10 }}
-                            animate={phase >= 2 ? { opacity: 1, y: 0 } : {}}
+                            animate={loaderPhase >= 2 ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6 }}
                         >
                             An aspiring software developer
@@ -142,9 +166,9 @@ export default function Loader() {
                         {/* Horizontal line */}
                         <motion.div
                             className="h-px mt-8"
-                            style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
+                            style={{ background: 'linear-gradient(90deg, transparent, rgba(96,165,250,0.5), transparent)' }}
                             initial={{ width: 0 }}
-                            animate={phase >= 2 ? { width: 160 } : { width: 0 }}
+                            animate={loaderPhase >= 2 ? { width: 160 } : { width: 0 }}
                             transition={{ duration: 0.8, ease: 'easeInOut' }}
                         />
 
@@ -152,11 +176,11 @@ export default function Loader() {
                         <motion.div
                             className="mt-10 flex flex-col items-center gap-4"
                             initial={{ opacity: 0 }}
-                            animate={phase >= 3 ? { opacity: 1 } : { opacity: 0 }}
+                            animate={loaderPhase >= 3 ? { opacity: 1 } : { opacity: 0 }}
                             transition={{ duration: 0.4 }}
                         >
                             <span className="text-[9px] tracking-[0.35em] text-[var(--text-muted)] uppercase">
-                                Loading Experience
+                                System Boot
                             </span>
 
                             {/* Progress bar */}
@@ -165,7 +189,7 @@ export default function Loader() {
                                     className="h-full rounded-full"
                                     style={{
                                         width: `${progress}%`,
-                                        background: 'linear-gradient(90deg, rgba(96, 165, 250, 0.2), rgba(167, 139, 250, 0.4))',
+                                        background: 'linear-gradient(90deg, rgba(96, 165, 250, 0.5), rgba(167, 139, 250, 0.8))',
                                     }}
                                     transition={{ duration: 0.1 }}
                                 />
@@ -173,7 +197,7 @@ export default function Loader() {
 
                             {/* Percentage */}
                             <motion.span
-                                className="text-2xl font-light tracking-[0.15em] text-[var(--text-secondary)] stat-number"
+                                className="text-2xl font-light tracking-[0.15em] text-[#a78bfa] stat-number glow-text"
                                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
                                 {String(Math.round(progress)).padStart(3, '0')}
@@ -184,7 +208,7 @@ export default function Loader() {
                         <motion.div
                             className="absolute bottom-16 flex flex-col items-center gap-3"
                             initial={{ opacity: 0 }}
-                            animate={phase >= 2 ? { opacity: 1 } : {}}
+                            animate={loaderPhase >= 2 ? { opacity: 1 } : {}}
                             transition={{ delay: 0.5, duration: 0.8 }}
                         >
                             <div className="w-4 h-4 border border-[var(--border-color)] rounded-full flex items-center justify-center">

@@ -12,6 +12,7 @@ const navItems = [
 
 function NavLink({ item, index, active, onClick }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
+    const loaderPhase = useStore((s) => s.loaderPhase)
     return (
         <motion.a
             href={item.href}
@@ -20,8 +21,8 @@ function NavLink({ item, index, active, onClick }) {
             onMouseLeave={() => setCursorVariant('default')}
             className={`relative text-sm tracking-wide transition-colors duration-300 link-underline py-1 group ${active ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
             initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2 + index * 0.08, duration: 0.5 }}
+            animate={loaderPhase >= 4 ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+            transition={{ delay: 0.8 + index * 0.08, duration: 0.5 }}
         >
             {item.label}
             {active && (
@@ -41,6 +42,7 @@ export default function Navbar() {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const theme = useStore((s) => s.theme)
     const startThemeTransition = useStore((s) => s.startThemeTransition)
+    const loaderPhase = useStore((s) => s.loaderPhase)
 
     const handleThemeToggle = (e) => {
         const btn = e.currentTarget
@@ -144,9 +146,9 @@ export default function Navbar() {
 
             <motion.nav
                 className="fixed top-0 left-0 right-0 z-50 pt-[2px]"
-                initial={{ y: -80, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1, delay: 1.8, ease: [0.76, 0, 0.24, 1] }}
+                initial={{ y: '20vh', opacity: 0 }}
+                animate={loaderPhase >= 4 ? { y: 0, opacity: 1 } : { y: '20vh', opacity: 0 }}
+                transition={{ duration: 1.5, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
                 {/* Glass background with gradient border */}
                 <div className="backdrop-blur-md bg-[var(--bg-primary)]/70 border-b border-[var(--border-color)] transition-colors duration-500">
@@ -185,8 +187,8 @@ export default function Navbar() {
                             <motion.div
                                 className="flex items-center gap-2 ml-4 pl-4 border-l border-[var(--border-color)]"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 2.5, duration: 0.5 }}
+                                animate={loaderPhase >= 4 ? { opacity: 1 } : { opacity: 0 }}
+                                transition={{ delay: 1.2, duration: 0.5 }}
                             >
                                 <div className="w-1.5 h-1.5 bg-[#60a5fa]/80 rounded-full animate-pulse-glow" />
                                 <span className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Available</span>
@@ -199,8 +201,8 @@ export default function Navbar() {
                                 onMouseLeave={() => setCursorVariant('default')}
                                 className="ml-2 w-9 h-9 rounded-full flex items-center justify-center border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-[var(--glass-bg)] transition-all duration-300 group"
                                 initial={{ opacity: 0, scale: 0.5 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 2.6, duration: 0.5, type: 'spring' }}
+                                animate={loaderPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                                transition={{ delay: 1.3, duration: 0.5, type: 'spring' }}
                                 aria-label="Toggle Theme"
                             >
                                 <div className="relative w-4 h-4 overflow-hidden">
