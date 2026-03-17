@@ -161,13 +161,12 @@ export default function Navbar() {
                             className="flex items-center gap-3 group"
                         >
                             {/* Logo mark */}
-                            <div className="w-8 h-8 border border-[var(--border-color)] rounded-lg flex items-center justify-center group-hover:border-[var(--text-secondary)] transition-colors duration-500">
-                                <span
-                                    className="text-xs font-semibold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors duration-500"
-                                    style={{ fontFamily: "'Poppins', sans-serif" }}
-                                >
-                                    P
-                                </span>
+                            <div className="w-10 h-10 border border-[var(--border-color)] rounded-xl flex items-center justify-center group-hover:border-[#60a5fa]/50 transition-all duration-500 overflow-hidden group-hover:shadow-[0_0_20px_rgba(96,165,250,0.3)] bg-[var(--bg-highlight)]/30">
+                                <img 
+                                    src="/p.png" 
+                                    alt="P" 
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                />
                             </div>
                             <span
                                 className="text-sm font-medium tracking-[0.15em] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors duration-500 hidden sm:block"
