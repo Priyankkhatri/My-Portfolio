@@ -1,4 +1,4 @@
-import { motion, animate, useInView } from 'framer-motion'
+import { motion, animate, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import useStore from '../store/useStore'
 
@@ -53,6 +53,17 @@ function AnimatedStat({ value }) {
 export default function Hero() {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const loaderPhase = useStore((s) => s.loaderPhase)
+    const [showResume, setShowResume] = useState(false)
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' && showResume) {
+                setShowResume(false)
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [showResume])
 
     return (
         <section
@@ -151,15 +162,15 @@ export default function Hero() {
                                 <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
                             </svg>
                         </a>
-                        <a
-                            href="mailto:priyank@example.com"
+                        <button
+                            onClick={() => setShowResume(true)}
                             onMouseEnter={() => setCursorVariant('hover')}
                             onMouseLeave={() => setCursorVariant('default')}
                             className="group inline-flex justify-center items-center gap-3 px-8 py-4 border border-[var(--border-color)] text-[var(--text-secondary)] text-sm font-medium tracking-wide rounded-full hover:bg-[var(--bg-highlight)] hover:border-[var(--border-color)] hover:text-[var(--text-primary)] transition-all duration-300 w-full sm:w-auto"
                         >
                             <span className="w-1.5 h-1.5 bg-[#60a5fa]/60 rounded-full group-hover:bg-[#60a5fa] transition-colors" />
-                            Contact / Hire me
-                        </a>
+                            View Resume
+                        </button>
                     </motion.div>
 
                     {/* Stats row */}
@@ -247,6 +258,111 @@ export default function Hero() {
                     />
                 </motion.div>
             </motion.div>
+
+            {/* Resume Modal */}
+            <AnimatePresence>
+                {showResume && (
+                    <motion.div
+                        className="fixed inset-0 z-[100] flex items-center justify-center px-4 md:px-6"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowResume(false)}
+                    >
+                        {/* ── Animated Aura Backdrop ── */}
+                        <div className="absolute inset-0 bg-black/70 backdrop-blur-2xl overflow-hidden">
+                            <motion.div 
+                                animate={{ 
+                                    x: [0, 100, -50, 0],
+                                    y: [0, -50, 100, 0],
+                                    scale: [1, 1.2, 0.8, 1],
+                                    rotate: [0, 90, 180, 270, 360]
+                                }}
+                                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                                className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-violet-600/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none"
+                            />
+                            <motion.div 
+                                animate={{ 
+                                    opacity: [0.1, 0.3, 0.1],
+                                    scale: [1, 1.1, 1]
+                                }}
+                                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[150%] bg-gradient-radial from-[#60a5fa]/5 to-transparent pointer-events-none"
+                            />
+                        </div>
+
+                        <motion.div
+                            className="relative glass-card max-w-5xl w-full z-10 overflow-hidden shadow-2xl border-white/10"
+                            initial={{ scale: 0.9, opacity: 0, y: 40 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Top bar */}
+                            <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
+
+                            <div className="flex flex-col h-[85vh]">
+                                {/* Header */}
+                                <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-color)]">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full bg-[var(--bg-highlight)] flex items-center justify-center border border-[var(--border-color)] shadow-[0_0_10px_rgba(96,165,250,0.1)]">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)]">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                                            </svg>
+                                        </div>
+                                        <span
+                                            className="text-base font-semibold text-[var(--text-primary)] tracking-wide"
+                                            style={{ fontFamily: "'Poppins', sans-serif" }}
+                                        >
+                                            Resume Document
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <a
+                                            href="/Resume.pdf"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group text-[10px] tracking-[0.15em] uppercase text-[var(--text-secondary)] hover:text-[#60a5fa] transition-colors flex items-center gap-2"
+                                        >
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-y-0.5 transition-transform">
+                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                                            </svg>
+                                            Open PDF
+                                        </a>
+                                        <span className="w-px h-4 bg-[var(--border-color)]" />
+                                        <button
+                                            onClick={() => setShowResume(false)}
+                                            className="text-[var(--text-secondary)] hover:text-white bg-[var(--bg-highlight)] hover:bg-red-500/20 p-1.5 rounded-md transition-all border border-transparent hover:border-red-500/30"
+                                            title="Close (ESC)"
+                                        >
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* PDF Viewer */}
+                                <div className="flex-1 relative bg-black/40 overflow-hidden">
+                                    {/* Loading State Spinner */}
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                        <div className="w-8 h-8 border-2 border-[#60a5fa]/30 border-t-[#60a5fa] rounded-full animate-spin mb-4" />
+                                        <span className="text-[10px] tracking-[0.2em] text-[var(--text-secondary)] uppercase">Loading PDF...</span>
+                                    </div>
+                                    
+                                    <iframe
+                                        src="/Resume.pdf#toolbar=0"
+                                        title="Resume"
+                                        className="w-full h-full border-0 relative z-10 rounded-b-xl"
+                                    />
+                                    
+                                    {/* Glass reflection overly on edges to blend it nicely */}
+                                    <div className="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-black/20 to-transparent pointer-events-none z-20" />
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     )
 }
