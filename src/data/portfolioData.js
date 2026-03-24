@@ -30,14 +30,14 @@ export const techStack = [
 
 export const projects = [
     {
-        title: 'API Image Gallery',
-        tagline: 'Dynamic search & lazy loading',
-        description: 'A responsive image gallery that fetches high-quality images via the Pexels API. Features dynamic keyword search, lazy loading without page reloads, and a fast frontend UI.',
-        tech: ['HTML5', 'CSS3', 'JS', 'Pexels API', 'Netlify'],
-        live: 'https://api-image-gallery.netlify.app',
-        source: 'https://github.com/Priyankkhatri/My-Projects',
-        year: '2025',
-        role: 'Frontend Developer',
+        title: 'AI-Adaptive Onboarding Engine',
+        tagline: 'Resume parsing & personalized roadmaps',
+        description: 'A sophisticated tool that analyzes resumes against target job descriptions to identify skill gaps. Generates dependency-aware learning roadmaps featuring dynamic visualizations, instant demo mode, and professional PDF exports.',
+        tech: ['React.js', 'Node.js', 'Express', 'MongoDB'],
+        live: 'https://ai-onboarding-engine.netlify.app',
+        source: 'https://github.com/Priyankkhatri/AI-Onboarding-Engine',
+        year: '2026',
+        role: 'Full-Stack Developer',
     },
     {
         title: 'Movie Explorer',
@@ -50,14 +50,14 @@ export const projects = [
         role: 'Frontend Developer',
     },
     {
-        title: 'Weather API',
-        tagline: 'Upcoming personal API wrapper',
-        description: '[Upcoming Project] Personal API wrapper over a public weather API with caching and a small frontend. Planning to use Redis or Mongo for caching to optimize external API requests.',
-        tech: ['Node.js', 'Redis/Mongo', 'Render'],
-        live: '#',
-        source: 'https://github.com/Priyankkhatri',
-        year: 'Planned',
-        role: 'Backend Developer',
+        title: 'API Image Gallery',
+        tagline: 'Dynamic search & lazy loading',
+        description: 'A responsive image gallery that fetches high-quality images via the Pexels API. Features dynamic keyword search, lazy loading without page reloads, and a fast frontend UI.',
+        tech: ['HTML5', 'CSS3', 'JS', 'Pexels API', 'Netlify'],
+        live: 'https://api-image-gallery.netlify.app',
+        source: 'https://github.com/Priyankkhatri/My-Projects',
+        year: '2025',
+        role: 'Frontend Developer',
     },
     {
         title: 'Clone Websites',
@@ -68,6 +68,16 @@ export const projects = [
         source: 'https://github.com/Priyankkhatri',
         year: '2025',
         role: 'Frontend',
+    },
+    {
+        title: 'Weather API',
+        tagline: 'Upcoming personal API wrapper',
+        description: '[Upcoming Project] Personal API wrapper over a public weather API with caching and a small frontend. Planning to use Redis or Mongo for caching to optimize external API requests.',
+        tech: ['Node.js', 'Redis/Mongo', 'Render'],
+        live: '#',
+        source: 'https://github.com/Priyankkhatri',
+        year: 'Planned',
+        role: 'Backend Developer',
     },
 ]
 
