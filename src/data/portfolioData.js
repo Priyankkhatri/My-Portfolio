@@ -69,16 +69,6 @@ export const projects = [
         year: '2025',
         role: 'Frontend',
     },
-    {
-        title: 'Weather API',
-        tagline: 'Upcoming personal API wrapper',
-        description: '[Upcoming Project] Personal API wrapper over a public weather API with caching and a small frontend. Planning to use Redis or Mongo for caching to optimize external API requests.',
-        tech: ['Node.js', 'Redis/Mongo', 'Render'],
-        live: '#',
-        source: 'https://github.com/Priyankkhatri',
-        year: 'Planned',
-        role: 'Backend Developer',
-    },
 ]
 
 export const certificates = [
