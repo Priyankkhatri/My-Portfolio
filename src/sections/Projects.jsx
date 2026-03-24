@@ -8,7 +8,7 @@ const projects = [
     {
         title: 'AI-Adaptive Onboarding Engine',
         tagline: 'Resume parsing & personalized roadmaps',
-        image: '',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1774382055/Gemini_Generated_Image_sznh8isznh8isznh_1_ktrq0n.png',
         description: 'A sophisticated tool that analyzes resumes against target job descriptions to identify skill gaps. Generates dependency-aware learning roadmaps featuring dynamic visualizations, instant demo mode, and professional PDF exports.',
         tech: ['React.js', 'Node.js', 'Express', 'MongoDB'],
         live: 'https://ai-onboarding-engine.netlify.app',
@@ -41,7 +41,7 @@ const projects = [
     {
         title: 'Clone Websites',
         tagline: 'Pixel-perfect website recreations',
-        image: '/project-clones.jpeg',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1774382567/Gemini_Generated_Image_v5x5dv5x5dv5x5dv-Photoroom_1_t3ouer.png',
         description: 'Frontend clones of popular brand websites (DJI, Nothing, Prime, etc.) built to practice layout, responsiveness, and modern CSS techniques.',
         tech: ['HTML5', 'CSS3', 'JavaScript'],
         live: '#',
@@ -52,7 +52,7 @@ const projects = [
     {
         title: 'Mini Games',
         tagline: 'Interactive fun & logic challenges',
-        image: '/project-mini-games.jpeg',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1774382788/Gemini_Generated_Image_87hur187hur187hu-Photoroom_1_dakre0.png',
         description: 'A collection of small, interactive games including Tic Tac Toe, Whack A Mole, and more, built to practice game logic and UI interactions.',
         tech: ['HTML5', 'CSS3', 'JS', 'Logic'],
         live: '#',

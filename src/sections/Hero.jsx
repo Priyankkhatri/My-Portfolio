@@ -91,7 +91,7 @@ export default function Hero() {
                         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#60a5fa]/20 to-[#a78bfa]/10 blur-xl" />
                         <div className="absolute inset-0 rounded-full border-2 border-[#60a5fa]/30 shadow-[0_0_20px_rgba(96,165,250,0.15)]">
                             <img
-                                src="/profile.png"
+                                src="https://res.cloudinary.com/dqvpsorso/image/upload/v1774380805/Gemini_Generated_Image_3zwevl3zwevl3zwe_1_whtbb6.png"
                                 alt="Priyank Khatri profile photo"
                                 className="w-full h-full object-cover object-[60%_20%] rounded-full"
                             />
@@ -220,7 +220,7 @@ export default function Hero() {
                     <div id="heroPfpFrame" className="absolute inset-12 rounded-full bg-gradient-to-br from-[var(--bg-highlight-hover)] to-transparent border-2 border-[#60a5fa]/40 shadow-[0_0_20px_rgba(96,165,250,0.15)] backdrop-blur-md">
                         <img
                             id="heroPfp"
-                            src="/profile.png"
+                            src="https://res.cloudinary.com/dqvpsorso/image/upload/v1774380805/Gemini_Generated_Image_3zwevl3zwevl3zwe_1_whtbb6.png"
                             alt="Priyank Khatri profile photo"
                             className="w-full h-full object-cover object-[60%_20%] rounded-full"
                         />
