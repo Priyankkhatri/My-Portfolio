@@ -1,33 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import useStore from '../store/useStore'
-
-const certificates = [
-    {
-        title: 'Introduction to Front-End Development',
-        issuer: 'Coursera (Meta)',
-        date: 'Feb 24, 2026',
-        category: 'Frontend',
-        hours: 'Grade: 99%',
-        credentialId: 'OEJDQXOP4W5Y',
-        credentialUrl: 'https://coursera.org/verify/OEJDQXOP4W5Y',
-        image: '/meta-frontend-cert.jpg',
-    },
-    {
-        title: 'Introduction to Back-End Development',
-        issuer: 'Coursera (Meta)',
-        date: 'Upcoming',
-        category: 'Backend',
-        hours: 'Pending',
-    },
-    {
-        title: 'Maximize Productivity With AI Tools',
-        issuer: 'Coursera (Google)',
-        date: 'Upcoming',
-        category: 'Tools',
-        hours: 'Pending',
-    },
-]
+import { certificates } from '../data/portfolioData'
 
 function CertCard({ cert, index, onClick }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
