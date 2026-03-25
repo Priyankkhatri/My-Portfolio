@@ -186,9 +186,23 @@ export default function AiChatPanel({ isOpen, onClose }) {
         <AnimatePresence>
             {isOpen && (
                 <>
+                    <style>{`
+                        .chat-scrollbar::-webkit-scrollbar { width: 4px; }
+                        .chat-scrollbar::-webkit-scrollbar-track { background: rgba(10, 15, 30, 0.5); }
+                        .chat-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 255, 200, 0.2); border-radius: 4px; }
+                        .chat-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 255, 200, 0.5); }
+                        @keyframes pulse-cyan {
+                            0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(0, 255, 200, 0.6); transform: scale(1); }
+                            50% { opacity: 0.6; box-shadow: 0 0 2px rgba(0, 255, 200, 0.2); transform: scale(0.95); }
+                        }
+                        .animate-pulse-cyan {
+                            animation: pulse-cyan 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                            background-color: rgba(0, 255, 200, 1);
+                        }
+                    `}</style>
                     {/* Backdrop on mobile */}
                     <motion.div
-                        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998] sm:hidden"
+                        className="fixed inset-0 bg-[#0a0f1e]/80 backdrop-blur-sm z-[9998] sm:hidden"
                         style={{ cursor: 'auto' }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -198,24 +212,24 @@ export default function AiChatPanel({ isOpen, onClose }) {
 
                     {/* Chat Panel */}
                     <motion.div
-                        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-10 md:right-10 z-[9999] w-[calc(100%-2rem)] sm:w-[380px] h-[520px] max-h-[80vh] flex flex-col rounded-2xl overflow-hidden border border-[var(--border-color)] shadow-2xl shadow-black/20"
+                        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-10 md:right-10 z-[9999] w-[calc(100%-2rem)] sm:w-[380px] h-[520px] max-h-[80vh] flex flex-col rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(0,255,200,0.05)] border border-[#00ffc8]/15"
                         style={{
-                            background: 'var(--bg-primary)',
+                            background: 'rgba(10, 15, 30, 0.85)',
                             backdropFilter: 'blur(24px)',
                             WebkitBackdropFilter: 'blur(24px)',
                         }}
-                        initial={{ opacity: 0, scale: 0.9, x: 40, transformOrigin: 'right bottom' }}
-                        animate={{ opacity: 1, scale: 1, x: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, x: 40 }}
+                        initial={{ opacity: 0, scale: 0.95, y: 20, transformOrigin: 'right bottom' }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                     >
                         {/* Top gradient accent line */}
-                        <div className="h-px w-full bg-gradient-to-r from-[#60a5fa]/40 via-[#a78bfa]/40 to-[#60a5fa]/40 shrink-0" />
+                        <div className="h-px w-full bg-gradient-to-r from-transparent via-[#00ffc8]/40 to-transparent shrink-0" />
 
                         {/* Header */}
-                        <div className="px-5 py-4 flex items-center justify-between border-b border-[var(--border-color)] shrink-0">
+                        <div className="px-5 py-4 flex items-center justify-between border-b border-[#00ffc8]/10 bg-gradient-to-r from-[#00ffc8]/5 to-transparent shrink-0">
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#60a5fa]/20 to-[#a78bfa]/20 border border-[#a78bfa]/25 flex items-center justify-center">
+                                <div className="w-8 h-8 rounded-full border border-[#00ffc8]/30 flex items-center justify-center shadow-[0_0_10px_rgba(0,255,200,0.1)]">
                                     <svg
                                         width="14"
                                         height="14"
@@ -223,21 +237,20 @@ export default function AiChatPanel({ isOpen, onClose }) {
                                         fill="none"
                                         stroke="currentColor"
                                         strokeWidth="1.8"
-                                        className="text-[#a78bfa]"
+                                        className="text-[#00ffc8]"
                                     >
                                         <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" />
                                     </svg>
                                 </div>
                                 <div>
                                     <h3
-                                        className="text-sm font-semibold text-[var(--text-primary)]"
-                                        style={{ fontFamily: "'Poppins', sans-serif" }}
+                                        className="text-sm font-semibold font-mono tracking-tight text-[#e2e8f0]"
                                     >
                                         AI Assistant
                                     </h3>
-                                    <span className="flex items-center gap-1.5">
-                                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-                                        <span className="text-[10px] text-[var(--text-muted)]">Online</span>
+                                    <span className="flex items-center gap-1.5 mt-0.5">
+                                        <span className="w-1.5 h-1.5 rounded-full animate-pulse-cyan" />
+                                        <span className="text-[10px] text-[var(--text-muted)] font-mono">ONLINE</span>
                                     </span>
                                 </div>
                             </div>
@@ -246,7 +259,7 @@ export default function AiChatPanel({ isOpen, onClose }) {
                                 onClick={onClose}
                                 onMouseEnter={() => setCursorVariant('hover')}
                                 onMouseLeave={() => setCursorVariant('default')}
-                                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[var(--bg-highlight-hover)] transition-colors"
+                                className="w-8 h-8 flex items-center justify-center rounded-lg text-[#00ffc8]/40 hover:text-[#00ffc8] hover:bg-[#00ffc8]/10 hover:border-[#00ffc8]/30 transition-colors"
                                 aria-label="Close chat"
                             >
                                 <svg
@@ -265,7 +278,7 @@ export default function AiChatPanel({ isOpen, onClose }) {
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 no-scrollbar">
+                        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 chat-scrollbar">
                             {messages.map((msg, i) => (
                                 <motion.div
                                     key={i}
@@ -275,18 +288,18 @@ export default function AiChatPanel({ isOpen, onClose }) {
                                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                                 >
                                     <div
-                                        className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+                                        className={`max-w-[85%] px-4 py-3 ${
                                             msg.role === 'user'
-                                                ? 'bg-gradient-to-br from-[#60a5fa]/15 to-[#a78bfa]/15 border border-[#60a5fa]/20 rounded-br-md'
-                                                : 'bg-[var(--bg-highlight)] border border-[var(--border-color)] rounded-bl-md'
+                                                ? 'bg-[#00ffc8]/10 border border-[#00ffc8]/20 rounded-t-xl rounded-bl-xl rounded-br-sm shadow-[0_0_15px_rgba(0,255,200,0.02)]'
+                                                : 'bg-[#111827]/80 border-l-[3px] border-l-[#00ffc8] border-y border-y-[#00ffc8]/10 border-r border-r-[#00ffc8]/10 rounded-r-xl rounded-tl-xl rounded-bl-sm shadow-[0_0_15px_rgba(0,255,200,0.02)]'
                                         }`}
                                     >
                                         {msg.role === 'user' ? (
-                                            <p className="text-xs leading-[1.7] text-[var(--text-primary)]">
+                                            <p className="text-xs leading-[1.7] text-[#e2e8f0]">
                                                 {msg.text}
                                             </p>
                                         ) : (
-                                            <div className="ai-message-content">{renderMessage(msg.text)}</div>
+                                            <div className="ai-message-content text-slate-300">{renderMessage(msg.text)}</div>
                                         )}
                                     </div>
                                 </motion.div>
@@ -299,7 +312,7 @@ export default function AiChatPanel({ isOpen, onClose }) {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="flex justify-start"
                                 >
-                                    <div className="bg-[var(--bg-highlight)] border border-[var(--border-color)] rounded-2xl rounded-bl-md">
+                                    <div className="bg-[#111827]/80 border-l-[3px] border-l-[#00ffc8] border-y border-y-[#00ffc8]/10 border-r border-r-[#00ffc8]/10 rounded-r-xl rounded-tl-xl rounded-bl-sm shadow-[0_0_15px_rgba(0,255,200,0.02)]">
                                         <TypingIndicator />
                                     </div>
                                 </motion.div>
@@ -319,7 +332,7 @@ export default function AiChatPanel({ isOpen, onClose }) {
                                             onClick={() => handleSend(s)}
                                             onMouseEnter={() => setCursorVariant('hover')}
                                             onMouseLeave={() => setCursorVariant('default')}
-                                            className="px-3 py-1.5 text-[10px] tracking-wide rounded-full border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-highlight-hover)] hover:border-[var(--bg-highlight-hover)] transition-all duration-300"
+                                            className="px-3 py-1.5 text-[10px] tracking-wide rounded-full border border-[#00ffc8]/30 bg-transparent text-[#94a3b8] hover:text-[#00ffc8] hover:bg-[#00ffc8]/10 hover:shadow-[0_0_10px_rgba(0,255,200,0.15)] transition-all duration-200"
                                         >
                                             {s}
                                         </button>
@@ -331,8 +344,8 @@ export default function AiChatPanel({ isOpen, onClose }) {
                         </div>
 
                         {/* Input Area */}
-                        <div className="px-4 py-3 border-t border-[var(--border-color)] shrink-0">
-                            <div className="flex items-center gap-2 rounded-xl bg-[var(--bg-highlight)] border border-[var(--border-color)] px-4 py-2 focus-within:border-[#60a5fa]/30 transition-colors">
+                        <div className="px-4 py-3 shrink-0 bg-transparent">
+                            <div className="flex items-center gap-2 rounded-none bg-black/20 border-b border-[#00ffc8]/20 px-4 py-3 focus-within:border-[#00ffc8]/60 focus-within:bg-[#00ffc8]/5 transition-all duration-300 shadow-inner group">
                                 <input
                                     ref={inputRef}
                                     type="text"
@@ -340,7 +353,7 @@ export default function AiChatPanel({ isOpen, onClose }) {
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyDown={handleKeyDown}
                                     placeholder="Ask about projects, skills, education..."
-                                    className="flex-1 bg-transparent text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none"
+                                    className="flex-1 bg-transparent text-xs text-[#e2e8f0] placeholder:text-[#00ffc8]/40 focus:outline-none focus:ring-0"
                                     disabled={isTyping}
                                 />
                                 <button
@@ -348,7 +361,7 @@ export default function AiChatPanel({ isOpen, onClose }) {
                                     disabled={!input.trim() || isTyping}
                                     onMouseEnter={() => setCursorVariant('hover')}
                                     onMouseLeave={() => setCursorVariant('default')}
-                                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#60a5fa]/20 to-[#a78bfa]/20 border border-[#60a5fa]/20 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[#60a5fa]/40 disabled:opacity-30 disabled:hover:text-[var(--text-secondary)] transition-all duration-300 shrink-0"
+                                    className="w-8 h-8 flex items-center justify-center rounded bg-transparent text-[#00ffc8]/50 hover:text-[#00ffc8] hover:shadow-[0_0_15px_rgba(0,255,200,0.4)] disabled:opacity-30 disabled:hover:shadow-none transition-all duration-200 shrink-0"
                                     aria-label="Send message"
                                 >
                                     <svg
@@ -366,7 +379,7 @@ export default function AiChatPanel({ isOpen, onClose }) {
                                     </svg>
                                 </button>
                             </div>
-                            <p className="text-[9px] text-[var(--text-muted)] text-center mt-2">
+                            <p className="text-[9px] text-[var(--text-muted)] text-center mt-3 font-mono">
                                 Powered by portfolio data · ESC to close
                             </p>
                         </div>
