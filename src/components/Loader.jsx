@@ -27,15 +27,15 @@ export default function Loader() {
     }, [])
 
     useEffect(() => {
-        const t1 = setTimeout(() => setLoaderPhase(1), 200)
-        const t2 = setTimeout(() => setLoaderPhase(2), 400)
-        const t3 = setTimeout(() => setLoaderPhase(3), 600)
+        const t1 = setTimeout(() => setLoaderPhase(1), 600)
+        const t2 = setTimeout(() => setLoaderPhase(2), 1200)
+        const t3 = setTimeout(() => setLoaderPhase(3), 1800)
         return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
     }, [setLoaderPhase])
 
     useEffect(() => {
         if (progress >= 100 && loaderPhase >= 3) {
-            const t = setTimeout(() => setLoaderPhase(4), 200)
+            const t = setTimeout(() => setLoaderPhase(4), 600)
             return () => clearTimeout(t)
         }
     }, [progress, loaderPhase, setLoaderPhase])
@@ -46,7 +46,7 @@ export default function Loader() {
                 setShow(false)
                 setIsLoaded(true)
                 setLoaderPhase(5) // Final phase: Hero settled
-            }, 500) // Optimized for fast LCP
+            }, 1500) // Cinematic duration for loading animation
             return () => clearTimeout(t)
         }
     }, [loaderPhase, setIsLoaded, setLoaderPhase])
