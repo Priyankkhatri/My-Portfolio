@@ -94,6 +94,9 @@ export default function Hero() {
                                 src="https://res.cloudinary.com/dqvpsorso/image/upload/v1774380805/Gemini_Generated_Image_3zwevl3zwevl3zwe_1_whtbb6.png"
                                 alt="Priyank Khatri profile photo"
                                 className="w-full h-full object-cover object-[60%_20%] rounded-full"
+                                width="176"
+                                height="176"
+                                loading="lazy"
                             />
                             <div className="absolute inset-0 bg-black/10 rounded-full" />
                         </div>
@@ -223,6 +226,9 @@ export default function Hero() {
                             src="https://res.cloudinary.com/dqvpsorso/image/upload/v1774380805/Gemini_Generated_Image_3zwevl3zwevl3zwe_1_whtbb6.png"
                             alt="Priyank Khatri profile photo"
                             className="w-full h-full object-cover object-[60%_20%] rounded-full"
+                            width="400"
+                            height="400"
+                            fetchPriority="high"
                         />
                         <div className="absolute inset-0 bg-black/20 rounded-full transition-opacity duration-500" id="heroPfpOverlay" />
                         {/* Arrow overlay — shown by JS when morphed into button */}

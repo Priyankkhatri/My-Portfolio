@@ -1,16 +1,21 @@
+import { lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import Loader from './components/Loader'
 import Cursor from './components/Cursor'
 import Navbar from './sections/Navbar'
 import Hero from './sections/Hero'
-import About from './sections/About'
-import Projects from './sections/Projects'
-import Certificates from './sections/Certificates'
-import Contact from './sections/Contact'
 import useStore from './store/useStore'
 import PfpMorphButton from './components/PfpMorphButton'
 import AiChatButton from './components/AiChatButton'
-import HeroBackground from './components/HeroBackground'
+
+/* Lazy-loaded: splits Three.js (~500KB) out of critical path */
+const HeroBackground = lazy(() => import('./components/HeroBackground'))
+
+/* Lazy-loaded: below-the-fold sections */
+const About = lazy(() => import('./sections/About'))
+const Projects = lazy(() => import('./sections/Projects'))
+const Certificates = lazy(() => import('./sections/Certificates'))
+const Contact = lazy(() => import('./sections/Contact'))
 
 /* Marquee logo strip between sections */
 const marqueeLogos = [
@@ -125,8 +130,10 @@ export default function App() {
             {/* AI Chat Assistant */}
             <AiChatButton />
 
-            {/* Global 3D Background */}
-            <HeroBackground />
+            {/* Global 3D Background — lazy-loaded, non-blocking */}
+            <Suspense fallback={null}>
+                <HeroBackground />
+            </Suspense>
 
             {/* DOM Layer */}
             <motion.div
@@ -139,11 +146,13 @@ export default function App() {
                 <main>
                     <Hero />
                     <MarqueeStrip />
-                    <About />
-                    <Projects />
-                    <MarqueeStrip />
-                    <Certificates />
-                    <Contact />
+                    <Suspense fallback={null}>
+                        <About />
+                        <Projects />
+                        <MarqueeStrip />
+                        <Certificates />
+                        <Contact />
+                    </Suspense>
                 </main>
             </motion.div>
         </>
