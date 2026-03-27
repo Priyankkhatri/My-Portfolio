@@ -103,53 +103,76 @@ function AnimatedInput({ label, name, type = 'text', textarea = false, required 
 
     return (
         <div className="relative group flex flex-col">
-            {/* Floating label */}
-            <motion.label
-                className="absolute left-0 text-[var(--text-secondary)] pointer-events-none"
-                animate={{
-                    top: focused || hasValue ? -8 : textarea ? 12 : 12,
-                    fontSize: focused || hasValue ? '10px' : '14px',
-                    letterSpacing: focused || hasValue ? '0.2em' : '0.05em',
-                    color: error ? 'rgba(248,113,113,0.8)' : focused ? 'var(--text-secondary)' : 'var(--text-muted)',
-                    opacity: error ? 1 : focused ? 0.9 : 0.7,
-                }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
+            <div 
+                className={`relative overflow-hidden transition-all duration-500 rounded-2xl border ${
+                    error 
+                        ? 'bg-red-500/5 border-red-500/20' 
+                        : focused 
+                            ? 'bg-[var(--glass-bg)] border-[var(--accent-1)]/30 shadow-[0_0_20px_rgba(96,165,250,0.08)]' 
+                            : 'bg-[var(--card-bg)] border-[var(--border-color)] group-hover:bg-[var(--bg-highlight-hover)] group-hover:border-[var(--border-color)]'
+                }`}
             >
-                {label}
-            </motion.label>
+                {/* Floating label */}
+                <motion.label
+                    className="absolute left-5 text-[var(--text-secondary)] pointer-events-none z-10"
+                    animate={{
+                        top: focused || hasValue ? 10 : textarea ? 20 : 18,
+                        fontSize: focused || hasValue ? '10px' : '14px',
+                        letterSpacing: focused || hasValue ? '0.15em' : '0.05em',
+                        color: error ? 'rgba(248,113,113,0.8)' : focused ? 'var(--accent-1)' : 'var(--text-muted)',
+                        opacity: error ? 1 : focused ? 1 : 0.6,
+                    }}
+                    transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
+                >
+                    {label.toUpperCase()}
+                </motion.label>
 
-            <InputTag
-                name={name}
-                type={type}
-                required={required}
-                rows={textarea ? 5 : undefined}
-                onFocus={() => setFocused(true)}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                className={`w-full bg-transparent border-b ${error ? 'border-red-400/[0.4]' : 'border-[var(--border-color)]'} text-[var(--text-primary)] text-sm py-3 focus:outline-none resize-none`}
-            />
-
-            {/* Animated underline */}
-            <div className="relative h-px w-full">
-                <div className="absolute inset-0 bg-[var(--bg-highlight)]" />
-                <motion.div
-                    className="absolute inset-y-0 left-0"
-                    style={{ background: error ? 'rgba(248,113,113,0.8)' : 'linear-gradient(90deg, rgba(96, 165, 250, 0.4), rgba(167, 139, 250, 0.4))' }}
-                    initial={{ width: '0%' }}
-                    animate={{ width: focused ? '100%' : '0%' }}
-                    transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                <InputTag
+                    name={name}
+                    type={type}
+                    required={required}
+                    rows={textarea ? 4 : undefined}
+                    onFocus={() => setFocused(true)}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    className="w-full bg-transparent px-5 pt-7 pb-3 text-[var(--text-primary)] text-sm focus:outline-none resize-none placeholder-transparent"
+                    placeholder={label}
                 />
+
+                {/* Subtle highlight bar on focus */}
+                <motion.div 
+                    className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)]"
+                    initial={{ scaleX: 0, opacity: 0 }}
+                    animate={{ 
+                        scaleX: focused ? 1 : 0,
+                        opacity: focused ? 0.6 : 0
+                    }}
+                    transition={{ duration: 0.4, ease: "circOut" }}
+                />
+                
+                {/* Error Pulse Effect */}
+                <AnimatePresence>
+                    {error && (
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 0.2, 0] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                            className="absolute inset-0 bg-red-500 pointer-events-none"
+                        />
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* Error Message */}
             <AnimatePresence>
                 {error && (
                     <motion.span
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -5 }}
-                        className="text-[10px] text-red-400 mt-1.5 absolute -bottom-5 left-0"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        className="text-[10px] text-red-400 mt-2 ml-2 flex items-center gap-1.5"
                     >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                         {error}
                     </motion.span>
                 )}
