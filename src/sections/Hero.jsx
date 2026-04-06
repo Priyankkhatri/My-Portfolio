@@ -1,5 +1,6 @@
 import { motion, animate, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import useStore from '../store/useStore'
 
 const container = {
@@ -91,7 +92,7 @@ export default function Hero() {
                         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#60a5fa]/20 to-[#a78bfa]/10 blur-xl" />
                         <div className="absolute inset-0 rounded-full border-2 border-[#60a5fa]/30 shadow-[0_0_20px_rgba(96,165,250,0.15)]">
                             <img
-                                src="https://res.cloudinary.com/dqvpsorso/image/upload/v1774380805/Gemini_Generated_Image_3zwevl3zwevl3zwe_1_whtbb6.png"
+                                src="https://res.cloudinary.com/dqvpsorso/image/upload/v1775455094/compressed-pfp_ibccwh.png"
                                 alt="Priyank Khatri profile photo"
                                 className="w-full h-full object-cover object-[60%_20%] rounded-full"
                                 width="176"
@@ -154,8 +155,8 @@ export default function Hero() {
 
                     {/* CTAs */}
                     <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-12 sm:mb-20">
-                        <a
-                            href="#projects"
+                        <Link
+                            to="/work"
                             onMouseEnter={() => setCursorVariant('hover')}
                             onMouseLeave={() => setCursorVariant('default')}
                             className="group btn-shine inline-flex justify-center items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#60a5fa]/15 to-[#a78bfa]/15 border border-[#60a5fa]/25 text-[var(--text-primary)] text-sm font-medium tracking-wide rounded-full hover:border-[#60a5fa]/45 active:scale-[0.97] transition-all duration-300 shadow-lg shadow-[#60a5fa]/5 w-full sm:w-auto"
@@ -164,7 +165,7 @@ export default function Hero() {
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform duration-300">
                                 <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
                             </svg>
-                        </a>
+                        </Link>
                         <button
                             onClick={() => setShowResume(true)}
                             onMouseEnter={() => setCursorVariant('hover')}
@@ -223,7 +224,7 @@ export default function Hero() {
                     <div id="heroPfpFrame" className="absolute inset-12 rounded-full bg-gradient-to-br from-[var(--bg-highlight-hover)] to-transparent border-2 border-[#60a5fa]/40 shadow-[0_0_20px_rgba(96,165,250,0.15)] backdrop-blur-md">
                         <img
                             id="heroPfp"
-                            src="https://res.cloudinary.com/dqvpsorso/image/upload/v1774380805/Gemini_Generated_Image_3zwevl3zwevl3zwe_1_whtbb6.png"
+                            src="https://res.cloudinary.com/dqvpsorso/image/upload/v1775455094/compressed-pfp_ibccwh.png"
                             alt="Priyank Khatri profile photo"
                             className="w-full h-full object-cover object-[60%_20%] rounded-full"
                             width="400"

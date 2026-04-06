@@ -684,3 +684,87 @@ h1, h2, h3, h4, h5, h6 {
   animation: none;
   box-shadow: 0 0 24px rgba(96, 165, 250, 0.3), 0 0 48px rgba(167, 139, 250, 0.15), 0 4px 16px rgba(0, 0, 0, 0.15);
 }
+
+/* ── Credential Card Glow ──────────────────────────────── */
+.credential-card-glow {
+  box-shadow:
+    0 8px 32px rgba(96, 165, 250, 0.08),
+    0 0 60px rgba(167, 139, 250, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: box-shadow 0.5s ease;
+}
+
+[data-theme="light"] .credential-card-glow {
+  box-shadow:
+    0 8px 32px rgba(37, 99, 235, 0.1),
+    0 0 60px rgba(124, 58, 237, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+@keyframes credential-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.3); }
+  70%  { box-shadow: 0 0 0 12px rgba(96, 165, 250, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0); }
+}
+
+.credential-card-pulse {
+  animation: credential-pulse 0.6s ease-out;
+}
+
+/* ── Industrial Gallery Utilities ───────────────────────── */
+
+/* Film Grain Animation */
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -5%); }
+  20% { transform: translate(-10%, 5%); }
+  30% { transform: translate(5%, -10%); }
+  40% { transform: translate(-5%, 15%); }
+  50% { transform: translate(-10%, 5%); }
+  60% { transform: translate(15%, 0); }
+  70% { transform: translate(0, 10%); }
+  80% { transform: translate(-15%, 0); }
+  90% { transform: translate(10%, 5%); }
+}
+
+.animate-grain {
+  animation: grain 8s steps(10) infinite;
+}
+
+/* Pulse Slow for Ambient Glows */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.05; transform: scale(1) translateY(0); }
+  50% { opacity: 0.1; transform: scale(1.05) translateY(-20px); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+/* High-End Brutalist Typography */
+.text-stroke {
+  -webkit-text-stroke: 1px var(--text-primary);
+  color: transparent;
+}
+
+/* Industrial Reflection Mask */
+.mask-industrial {
+  mask-image: linear-gradient(to bottom, transparent 20%, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 20%, black 100%);
+}
+
+/* Cinematic Entrance Blur */
+.entrance-blur {
+  filter: blur(20px);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: entrance-fade 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes entrance-fade {
+  to {
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

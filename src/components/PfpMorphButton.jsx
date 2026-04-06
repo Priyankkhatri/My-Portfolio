@@ -11,6 +11,7 @@
 
 import { useEffect, useRef, useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLocation } from 'react-router-dom'
 import useStore from '../store/useStore'
 
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
@@ -20,6 +21,8 @@ const prefersReducedMotion = () =>
 export default function PfpMorphButton() {
     const isLoaded = useStore((s) => s.isLoaded)
     const setCursorVariant = useStore((s) => s.setCursorVariant)
+    const { pathname } = useLocation()
+    const isHomePage = pathname === '/'
 
     const [isDesktop, setIsDesktop] = useState(
         typeof window !== 'undefined' ? window.innerWidth >= 1024 : true,
@@ -269,6 +272,13 @@ export default function PfpMorphButton() {
     useEffect(() => {
         if (!readyToMeasure) return
 
+        // Only run morph logic on home page where Hero DOM elements exist
+        if (!isHomePage) {
+            const onScroll = () => setMobileVisible(window.scrollY > 400)
+            window.addEventListener('scroll', onScroll, { passive: true })
+            return () => window.removeEventListener('scroll', onScroll)
+        }
+
         const desktop = window.innerWidth >= 1024
         setIsDesktop(desktop)
 
@@ -359,7 +369,7 @@ export default function PfpMorphButton() {
                 rings.style.opacity = '1'
             }
         }
-    }, [readyToMeasure, loop, measure])
+    }, [readyToMeasure, loop, measure, isHomePage])
 
     const scrollToTopFallback = useCallback(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -367,7 +377,7 @@ export default function PfpMorphButton() {
 
     return (
         <AnimatePresence>
-            {!isDesktop && mobileVisible && (
+            {((!isDesktop && mobileVisible) || (!isHomePage && mobileVisible)) && (
                 <motion.button
                     initial={{ opacity: 0, scale: 0.5, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}

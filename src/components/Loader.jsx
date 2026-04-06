@@ -12,7 +12,7 @@ export default function Loader() {
     useEffect(() => {
         // Preload hero image during loader
         const img = new Image()
-        img.src = 'https://res.cloudinary.com/dqvpsorso/image/upload/v1774380805/Gemini_Generated_Image_3zwevl3zwevl3zwe_1_whtbb6.png'
+        img.src = 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775455094/compressed-pfp_ibccwh.png'
 
         let currentProgress = 0
         const interval = setInterval(() => {

@@ -1,44 +1,54 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
+import { NavLink, Link } from 'react-router-dom'
 import useStore from '../store/useStore'
 
 const navItems = [
-    { label: 'Home', href: '#home', num: '01' },
-    { label: 'Tech', href: '#about', num: '02' },
-    { label: 'Work', href: '#projects', num: '03' },
-    { label: 'Credentials', href: '#certificates', num: '04' },
-    { label: 'Contact', href: '#contact', num: '05' },
+    { label: 'Home', to: '/', num: '01' },
+    { label: 'Tech', to: '/tech', num: '02' },
+    { label: 'Work', to: '/work', num: '03' },
+    { label: 'Credentials', to: '/credentials', num: '04' },
+    { label: 'Contact', to: '/contact', num: '05' },
 ]
 
-function NavLink({ item, index, active, onClick }) {
+function NavLinkItem({ item, index }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const loaderPhase = useStore((s) => s.loaderPhase)
+
     return (
-        <motion.a
-            href={item.href}
-            onClick={onClick}
+        <NavLink
+            to={item.to}
+            end={item.to === '/'}
             onMouseEnter={() => setCursorVariant('hover')}
             onMouseLeave={() => setCursorVariant('default')}
-            className={`relative text-sm tracking-wide transition-colors duration-300 link-underline py-1 group ${active ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
-            initial={{ opacity: 0, y: -10 }}
-            animate={loaderPhase >= 4 ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-            transition={{ delay: 0.8 + index * 0.08, duration: 0.5 }}
+            className={({ isActive }) =>
+                `relative text-sm tracking-wide transition-colors duration-300 link-underline py-1 group ${isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`
+            }
         >
-            {item.label}
-            {active && (
-                <motion.div
-                    layoutId="navbar-indicator"
-                    className="absolute -bottom-2 left-0 right-0 h-[2px] bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] rounded-full"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                />
+            {({ isActive }) => (
+                <>
+                    <motion.span
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={loaderPhase >= 4 ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+                        transition={{ delay: 0.8 + index * 0.08, duration: 0.5 }}
+                    >
+                        {item.label}
+                    </motion.span>
+                    {isActive && (
+                        <motion.div
+                            layoutId="navbar-indicator"
+                            className="absolute -bottom-2 left-0 right-0 h-[2px] bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] rounded-full"
+                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        />
+                    )}
+                </>
             )}
-        </motion.a>
+        </NavLink>
     )
 }
 
 export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false)
-    const [activeSection, setActiveSection] = useState('#home')
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const theme = useStore((s) => s.theme)
     const startThemeTransition = useStore((s) => s.startThemeTransition)
@@ -52,89 +62,12 @@ export default function Navbar() {
         startThemeTransition(x, y)
     }
 
-    // Scroll click state to prevent intermediate tab highlighting
-    const isClickScrolling = useRef(false)
-    const clickScrollTimeout = useRef(null)
-
-    const handleNavClick = (href, isMobile = false) => {
-        setActiveSection(href)
-        isClickScrolling.current = true
-        
-        if (clickScrollTimeout.current) clearTimeout(clickScrollTimeout.current)
-        clickScrollTimeout.current = setTimeout(() => {
-            isClickScrolling.current = false
-        }, 1000)
-
-        if (isMobile) setMobileOpen(false)
-    }
-
     const { scrollYProgress } = useScroll()
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
         damping: 30,
         restDelta: 0.001
     })
-
-    useEffect(() => {
-        let rafId = null
-
-        const detectActiveSection = () => {
-            if (isClickScrolling.current) return
-
-            const viewportHeight = window.innerHeight
-            const scrollTop = window.scrollY
-            const docHeight = document.documentElement.scrollHeight
-
-            // Edge case: near the very bottom → last section
-            if (scrollTop + viewportHeight >= docHeight - 50) {
-                setActiveSection(navItems[navItems.length - 1].href)
-                return
-            }
-
-            // Edge case: near the very top → first section
-            if (scrollTop < 100) {
-                setActiveSection('#home')
-                return
-            }
-
-            // Find the section with the most visible area in the viewport
-            let bestMatch = null
-            let bestVisibleArea = 0
-
-            navItems.forEach((item) => {
-                const el = document.getElementById(item.href.replace('#', ''))
-                if (!el) return
-
-                const rect = el.getBoundingClientRect()
-                const visibleTop = Math.max(0, rect.top)
-                const visibleBottom = Math.min(viewportHeight, rect.bottom)
-                const visibleHeight = Math.max(0, visibleBottom - visibleTop)
-
-                if (visibleHeight > bestVisibleArea) {
-                    bestVisibleArea = visibleHeight
-                    bestMatch = item.href
-                }
-            })
-
-            if (bestMatch) {
-                setActiveSection(bestMatch)
-            }
-        }
-
-        const handleScroll = () => {
-            if (rafId) cancelAnimationFrame(rafId)
-            rafId = requestAnimationFrame(detectActiveSection)
-        }
-
-        window.addEventListener('scroll', handleScroll, { passive: true })
-        // Run once on mount to set initial state
-        detectActiveSection()
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-            if (rafId) cancelAnimationFrame(rafId)
-        }
-    }, [])
 
     return (
         <>
@@ -154,8 +87,8 @@ export default function Navbar() {
                 <div className="backdrop-blur-md bg-[var(--bg-primary)]/70 border-b border-[var(--border-color)] transition-colors duration-500">
                     <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
                         {/* Logo */}
-                        <a
-                            href="#home"
+                        <Link
+                            to="/"
                             onMouseEnter={() => setCursorVariant('hover')}
                             onMouseLeave={() => setCursorVariant('default')}
                             className="flex items-center gap-3 group"
@@ -174,12 +107,12 @@ export default function Navbar() {
                             >
                                 PRIYANK
                             </span>
-                        </a>
+                        </Link>
 
                         {/* Desktop Links */}
                         <div className="hidden md:flex items-center gap-8">
                             {navItems.map((item, i) => (
-                                <NavLink key={item.label} item={item} index={i} active={activeSection === item.href} onClick={() => handleNavClick(item.href)} />
+                                <NavLinkItem key={item.label} item={item} index={i} />
                             ))}
 
                             {/* Status indicator */}
@@ -285,24 +218,31 @@ export default function Navbar() {
                                     exit={{ opacity: 0, x: 20, y: -10 }}
                                     transition={{ delay: i * 0.07 + 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                                 >
-                                    <a
-                                        href={item.href}
-                                        onClick={() => handleNavClick(item.href, true)}
+                                    <NavLink
+                                        to={item.to}
+                                        end={item.to === '/'}
+                                        onClick={() => setMobileOpen(false)}
                                         onMouseEnter={() => setCursorVariant('hover')}
                                         onMouseLeave={() => setCursorVariant('default')}
-                                        className={`flex items-center gap-4 text-3xl tracking-wide transition-colors ${activeSection === item.href ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-4 text-3xl tracking-wide transition-colors ${isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`
+                                        }
                                         style={{ fontFamily: "'Poppins', sans-serif" }}
                                     >
-                                        <span className={`text-xs ${activeSection === item.href ? 'text-[var(--accent-1)]' : 'text-[var(--text-muted)]'}`}>{item.num}</span>
-                                        {item.label}
-                                        {activeSection === item.href && (
-                                            <motion.span
-                                                layoutId="mobile-nav-indicator"
-                                                className="w-2 h-2 rounded-full bg-[#60a5fa] shadow-[0_0_8px_rgba(96,165,250,0.5)]"
-                                                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                                            />
+                                        {({ isActive }) => (
+                                            <>
+                                                <span className={`text-xs ${isActive ? 'text-[var(--accent-1)]' : 'text-[var(--text-muted)]'}`}>{item.num}</span>
+                                                {item.label}
+                                                {isActive && (
+                                                    <motion.span
+                                                        layoutId="mobile-nav-indicator"
+                                                        className="w-2 h-2 rounded-full bg-[#60a5fa] shadow-[0_0_8px_rgba(96,165,250,0.5)]"
+                                                        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                                                    />
+                                                )}
+                                            </>
                                         )}
-                                    </a>
+                                    </NavLink>
                                 </motion.div>
                             ))}
 
