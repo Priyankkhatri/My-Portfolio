@@ -30,6 +30,26 @@ export const techStack = [
 
 export const projects = [
     {
+        title: 'Vestiga',
+        tagline: 'Freemium SaaS Platform',
+        description: 'A complete SaaS platform featuring robust authentication via Supabase, synchronized local database architecture, and a fully integrated Razorpay subscription flow.',
+        tech: ['React.js', 'Node.js', 'Supabase', 'Razorpay'],
+        live: 'https://vestiga.vercel.app',
+        source: 'https://github.com/Priyankkhatri/Vestiga',
+        year: '2026',
+        role: 'MERN / Full-Stack',
+    },
+    {
+        title: 'Postcode IN',
+        tagline: 'Full-stack location engine',
+        description: 'A comprehensive pincode location search and management system. Features a React frontend deployed on Vercel and a robust Express backend hosted on Render, backed by MongoDB Atlas.',
+        tech: ['React.js', 'Node.js', 'Express', 'MongoDB'],
+        live: 'https://postcode-in.vercel.app',
+        source: 'https://github.com/Priyankkhatri/Postcode-IN',
+        year: '2026',
+        role: 'MERN / Full-Stack',
+    },
+    {
         title: 'AI-Adaptive Onboarding Engine',
         tagline: 'Resume parsing & personalized roadmaps',
         description: 'A sophisticated tool that analyzes resumes against target job descriptions to identify skill gaps. Generates dependency-aware learning roadmaps featuring dynamic visualizations, instant demo mode, and professional PDF exports.',
@@ -37,7 +57,7 @@ export const projects = [
         live: 'https://ai-onboarding-engine.netlify.app',
         source: 'https://github.com/Priyankkhatri/AI-Onboarding-Engine',
         year: '2026',
-        role: 'Full-Stack Developer',
+        role: 'MERN / Full-Stack',
     },
     {
         title: 'Movie Explorer',

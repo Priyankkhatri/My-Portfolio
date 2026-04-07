@@ -349,7 +349,7 @@ export default function Contact() {
                                         onMouseEnter={() => setCursorVariant('hover')}
                                         onMouseLeave={() => setCursorVariant('default')}
                                     >
-                                        <a href={s.href} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-0 rounded-xl" />
+                                        <a href={s.href} target="_blank" rel="me noopener noreferrer" className="absolute inset-0 z-0 rounded-xl" />
                                         <div className="relative z-10 flex items-center gap-4 w-full pointer-events-none">
                                             <span className="text-[var(--text-secondary)] group-hover:text-[var(--accent-1)] transition-colors duration-300">
                                                 {s.icon}

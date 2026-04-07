@@ -1,6 +1,7 @@
 import { useParams, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useScroll, useSpring, motion } from 'framer-motion'
+import { Helmet } from 'react-helmet-async'
 import useProjectData from '../hooks/useProjectData'
 import WorkHero from '../components/work/WorkHero'
 import WorkOverview from '../components/work/WorkOverview'
@@ -41,7 +42,13 @@ export default function WorkDetail() {
     const { prev, next } = getAdjacentProjects(id)
 
     return (
-        <article className="relative bg-[var(--bg-primary)] min-h-screen flex flex-col overflow-hidden">
+        <>
+            <Helmet>
+                <title>{project.title} | Priyank Khatri Projects</title>
+                <meta name="description" content={project.tagline || `Technical details and overview for ${project.title}.`} />
+                <link rel="canonical" href={`https://priyankkhatri.vercel.app/work/${id}`} />
+            </Helmet>
+            <article className="relative bg-[var(--bg-primary)] min-h-screen flex flex-col overflow-hidden">
             
             {/* Professional Film Grain Overlay (Page-wide) */}
             <div className="fixed inset-0 pointer-events-none z-[100] transition-opacity duration-1000 opacity-[0.03] mix-blend-overlay overflow-hidden">
@@ -177,6 +184,7 @@ export default function WorkDetail() {
                 <NextWorkNav prev={prev} next={next} />
             </div>
         </article>
+        </>
     )
 }
 

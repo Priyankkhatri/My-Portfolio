@@ -195,7 +195,7 @@ export default function About() {
                                 >
                                     Priyank
                                 </h3>
-                                <p className="text-sm text-[var(--text-secondary)] mb-6">BE/B.Tech CSE &bull; Full-Stack Developer</p>
+                                <p className="text-sm text-[var(--text-secondary)] mb-6">BE/B.Tech CSE &bull; MERN / Full-Stack</p>
                                 <p className="text-sm leading-[1.8] text-[var(--text-secondary)] mb-4">
                                     I’m a 2nd-semester Computer Science student at Coding Gita. I build small web apps (image galleries, movie explorers), REST APIs with <span className="text-[var(--text-primary)]/55">Node.js + MongoDB</span>, and browser games with <span className="text-[var(--text-primary)]/55">HTML/CSS/JS</span>.
                                 </p>

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Helmet } from 'react-helmet-async'
 import WorkGrid from '../components/work/WorkGrid'
 import useProjectData from '../hooks/useProjectData'
 
@@ -10,7 +11,13 @@ export default function Work() {
     const { projects } = useProjectData()
 
     return (
-        <section className="min-h-screen px-6 md:px-12 lg:px-24 pt-32 md:pt-48 pb-32 relative overflow-hidden bg-[var(--bg-primary)]">
+        <>
+            <Helmet>
+                <title>Selected Projects | Priyank Khatri</title>
+                <meta name="description" content="A gallery of selected web development projects by Priyank Khatri, showcasing React, Node.js, and modern UI/UX design." />
+                <link rel="canonical" href="https://priyankkhatri.vercel.app/work" />
+            </Helmet>
+            <section className="min-h-screen px-6 md:px-12 lg:px-24 pt-32 md:pt-48 pb-32 relative overflow-hidden bg-[var(--bg-primary)]">
             
             {/* Professional Film Grain Overlay (Breathing Texture) */}
             <div className="fixed inset-0 pointer-events-none z-[100] transition-opacity duration-1000 opacity-[0.03] contrast-150 brightness-100 mix-blend-overlay overflow-hidden">
@@ -81,5 +88,6 @@ export default function Work() {
                 style={{ animationDuration: '8s' }}
             />
         </section>
+        </>
     )
 }

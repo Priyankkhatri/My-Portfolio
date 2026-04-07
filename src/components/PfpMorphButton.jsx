@@ -79,9 +79,6 @@ export default function PfpMorphButton() {
         const vh = window.innerHeight
         const vw = window.innerWidth
 
-        // Calculate raw scroll progress p
-        const rangeEnd = Math.max(ho.docY + ho.size, vh * 0.85)
-
         // Also figure out what the absolute furthest we can scroll is
         const docHeight = Math.max(
             document.body.scrollHeight,
@@ -89,9 +86,14 @@ export default function PfpMorphButton() {
         )
         const maxScroll = docHeight - vh
 
-        // Let it naturally reach 1 at rangeEnd, but guarantee it is 1 if we're near maxScroll
+        // Compress the animation safely into the available scrolling space!
+        // We want the morph to complete within the first 60% of max scroll or within a fixed 400px window.
+        let targetRange = Math.min(maxScroll * 0.6, 400)
+        if (targetRange < 100) targetRange = maxScroll // fallback for ultra-short pages
+        
+        let rangeEnd = targetRange || 1
         let rawP = scrollY / rangeEnd
-        if (scrollY >= maxScroll - 10) rawP = 1
+        if (scrollY >= maxScroll - 5 && maxScroll > 50) rawP = 1
 
         rawP = Math.min(Math.max(rawP, 0), 1)
         const targetP = prefersReducedMotion() ? (rawP > 0.3 ? 1 : 0) : ease(rawP)
@@ -121,6 +123,7 @@ export default function PfpMorphButton() {
             el.style.outline = ''
             el.style.outlineOffset = ''
             el.style.cursor = ''
+            el.style.pointerEvents = 'none'
 
             if (rings) {
                 rings.style.transform = ''
@@ -190,6 +193,7 @@ export default function PfpMorphButton() {
         const haloA = 0.15 * (1 - p)
         el.style.outline = `${haloW}px solid rgba(167,139,250,${haloA})`
         el.style.outlineOffset = `${6 * (1 - p)}px`
+        el.style.pointerEvents = p > 0.1 ? 'auto' : 'none'
 
         // Reveal the arrow inside the hero frame
         const arrow = document.getElementById('heroPfpArrow')
@@ -212,7 +216,7 @@ export default function PfpMorphButton() {
             rings.style.zIndex = '9999';
         }
 
-        const isBtn = p >= 0.99
+        const isBtn = p >= 0.7
         if (isBtn !== wasBtn.current) {
             wasBtn.current = isBtn
             if (isBtn) {
@@ -235,38 +239,6 @@ export default function PfpMorphButton() {
         tick()
         rafId.current = requestAnimationFrame(loop)
     }, [tick])
-
-    // Interaction Handlers (attached natively)
-    useEffect(() => {
-        const el = document.getElementById('heroPfpFrame')
-        if (!el) return
-
-        const onClick = () => {
-            if (wasBtn.current) window.scrollTo({ top: 0, behavior: 'smooth' })
-        }
-
-        const onKeyDown = (e) => {
-            if (wasBtn.current && (e.key === 'Enter' || e.key === ' ')) {
-                e.preventDefault()
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-            }
-        }
-
-        const enterHover = () => wasBtn.current && setCursorVariant('hover')
-        const leaveHover = () => wasBtn.current && setCursorVariant('default')
-
-        el.addEventListener('click', onClick)
-        el.addEventListener('keydown', onKeyDown)
-        el.addEventListener('mouseenter', enterHover)
-        el.addEventListener('mouseleave', leaveHover)
-
-        return () => {
-            el.removeEventListener('click', onClick)
-            el.removeEventListener('keydown', onKeyDown)
-            el.removeEventListener('mouseenter', enterHover)
-            el.removeEventListener('mouseleave', leaveHover)
-        }
-    }, [setCursorVariant])
 
     // Main rAF setup
     useEffect(() => {
@@ -386,23 +358,32 @@ export default function PfpMorphButton() {
                     onClick={scrollToTopFallback}
                     onMouseEnter={() => setCursorVariant('hover')}
                     onMouseLeave={() => setCursorVariant('default')}
-                    className="!fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[10000] p-4 rounded-full glass-card glass-card-hover group border border-[#60a5fa]/20 bg-[var(--bg-primary)]/90 backdrop-blur-xl shadow-lg shadow-[#60a5fa]/10 hover:shadow-[#60a5fa]/30 hover:border-[#60a5fa]/50 transition-all duration-300 lg:hidden"
+                    className="!fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[10000] w-12 h-12 rounded-full overflow-hidden border-2 border-[#60a5fa]/40 shadow-[0_0_20px_rgba(96,165,250,0.3)] bg-[var(--bg-primary)] group active:scale-95 transition-all duration-300"
                     aria-label="Back to top"
                 >
-                    <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] relative z-10"
-                    >
-                        <line x1="12" y1="19" x2="12" y2="5" />
-                        <polyline points="5 12 12 5 19 12" />
-                    </svg>
+                    {/* The same PFP image used in the fallback button */}
+                    <img 
+                      src="https://res.cloudinary.com/dqvpsorso/image/upload/v1775455094/compressed-pfp_ibccwh.png" 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100"
+                      alt="Back to top"
+                    />
+                    
+                    {/* Overlay Arrow on hover */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <line x1="12" y1="19" x2="12" y2="5" />
+                            <polyline points="5 12 12 5 19 12" />
+                        </svg>
+                    </div>
                 </motion.button>
             )}
         </AnimatePresence>

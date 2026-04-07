@@ -1,5 +1,6 @@
 import { motion, animate, useInView, AnimatePresence } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import useStore from '../store/useStore'
 
@@ -56,15 +57,31 @@ export default function Hero() {
     const loaderPhase = useStore((s) => s.loaderPhase)
     const [showResume, setShowResume] = useState(false)
 
+    // Prevent body scroll when modal is open
     useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === 'Escape' && showResume) {
-                setShowResume(false)
-            }
+        if (showResume) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = ''
         }
-        window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
+        return () => { document.body.style.overflow = '' }
     }, [showResume])
+
+    // Detect if we are in browser to safely use createPortal
+    const [mounted, setMounted] = useState(false)
+    useEffect(() => setMounted(true), [])
+
+    const onClick = (e) => {
+        // Only scroll if the element has morphed enough to be a button OR if it's the fallback button
+        if (window.location.pathname !== '/') {
+            window.location.href = '/'
+        } else {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            })
+        }
+    }
 
     return (
         <section
@@ -133,7 +150,7 @@ export default function Hero() {
                         className="text-2xl sm:text-3xl md:text-4xl font-bold leading-[1.02] mb-10"
                         style={{ fontFamily: "'Poppins', sans-serif" }}
                     >
-                        <span className="text-gradient-silver">Aspiring Software Developer</span><span className="text-[var(--text-secondary)]">.</span>
+                        <span className="text-gradient-silver">MERN / Full-Stack</span><span className="text-[var(--text-secondary)]">.</span>
                     </motion.h2>
 
                     {/* Subtext */}
@@ -221,7 +238,12 @@ export default function Hero() {
                     </div>
 
                     {/* Image Container — PfpMorphButton transforms this on scroll */}
-                    <div id="heroPfpFrame" className="absolute inset-12 rounded-full bg-gradient-to-br from-[var(--bg-highlight-hover)] to-transparent border-2 border-[#60a5fa]/40 shadow-[0_0_20px_rgba(96,165,250,0.15)] backdrop-blur-md">
+                    <button
+                        type="button"
+                        id="heroPfpFrame"
+                        onClick={onClick}
+                        className="absolute inset-12 rounded-full bg-gradient-to-br from-[var(--bg-highlight-hover)] to-transparent border-2 border-[#60a5fa]/40 shadow-[0_0_20px_rgba(96,165,250,0.15)] backdrop-blur-md overflow-hidden"
+                    >
                         <img
                             id="heroPfp"
                             src="https://res.cloudinary.com/dqvpsorso/image/upload/v1775455094/compressed-pfp_ibccwh.png"
@@ -243,7 +265,7 @@ export default function Hero() {
                                 <polyline points="5 12 12 5 19 12" />
                             </svg>
                         </div>
-                    </div>
+                    </button>
                 </motion.div>
             </div>
 
@@ -267,109 +289,73 @@ export default function Hero() {
             </motion.div>
 
             {/* Resume Modal */}
-            <AnimatePresence>
-                {showResume && (
-                    <motion.div
-                        className="fixed inset-0 z-[100] flex items-center justify-center px-4 md:px-6"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setShowResume(false)}
-                    >
-                        {/* ── Animated Aura Backdrop ── */}
-                        <div className="absolute inset-0 bg-black/70 backdrop-blur-2xl overflow-hidden">
-                            <motion.div 
-                                animate={{ 
-                                    x: [0, 100, -50, 0],
-                                    y: [0, -50, 100, 0],
-                                    scale: [1, 1.2, 0.8, 1],
-                                    rotate: [0, 90, 180, 270, 360]
-                                }}
-                                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                                className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-violet-600/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none"
-                            />
-                            <motion.div 
-                                animate={{ 
-                                    opacity: [0.1, 0.3, 0.1],
-                                    scale: [1, 1.1, 1]
-                                }}
-                                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[150%] bg-gradient-radial from-[#60a5fa]/5 to-transparent pointer-events-none"
-                            />
-                        </div>
-
+            {mounted && createPortal(
+                <AnimatePresence>
+                    {showResume && (
                         <motion.div
-                            className="relative glass-card max-w-5xl w-full z-10 overflow-hidden shadow-2xl border-white/10"
-                            initial={{ scale: 0.9, opacity: 0, y: 40 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                            onClick={(e) => e.stopPropagation()}
+                            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-8"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                         >
-                            {/* Top bar */}
-                            <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
-
-                            <div className="flex flex-col h-[85vh]">
-                                {/* Header */}
-                                <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-color)]">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-[var(--bg-highlight)] flex items-center justify-center border border-[var(--border-color)] shadow-[0_0_10px_rgba(96,165,250,0.1)]">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)]">
-                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-                                            </svg>
-                                        </div>
-                                        <span
-                                            className="text-base font-semibold text-[var(--text-primary)] tracking-wide"
-                                            style={{ fontFamily: "'Poppins', sans-serif" }}
-                                        >
-                                            Resume Document
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-4">
+                            <div
+                                className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                                onClick={() => setShowResume(false)}
+                            />
+                            <motion.div
+                                className="relative w-full max-w-4xl h-[85vh] bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-2xl overflow-hidden glass-card flex flex-col"
+                                initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            >
+                                {/* Modal Header */}
+                                <div className="flex items-center justify-between p-4 border-b border-[var(--border-color)] bg-[var(--bg-secondary)] relative z-10">
+                                    <h3 className="text-sm font-semibold tracking-wide text-[var(--text-primary)]">Resume</h3>
+                                    <div className="flex items-center gap-2">
+                                        {/* Open in New Tab / Download Button */}
                                         <a
-                                            href="/Resume.pdf"
+                                            href="/Priyank_Resume.pdf"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="group text-[10px] tracking-[0.15em] uppercase text-[var(--text-secondary)] hover:text-[#60a5fa] transition-colors flex items-center gap-2"
+                                            download="Priyank_Khatri_Resume.pdf"
+                                            className="p-2 text-[#60a5fa] hover:text-[#3b82f6] hover:bg-[#60a5fa]/10 rounded-lg transition-colors border border-transparent flex items-center gap-2"
+                                            title="Download Resume"
+                                            onClick={(e) => e.stopPropagation()}
                                         >
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-y-0.5 transition-transform">
-                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                                            <span className="text-xs font-semibold uppercase tracking-wider hidden sm:block">Open Full / Download</span>
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                <polyline points="15 3 21 3 21 9" />
+                                                <line x1="10" y1="14" x2="21" y2="3" />
                                             </svg>
-                                            Open PDF
                                         </a>
-                                        <span className="w-px h-4 bg-[var(--border-color)]" />
+                                        <div className="w-px h-6 bg-[var(--border-color)] mx-1" />
+                                        {/* Close Button */}
                                         <button
                                             onClick={() => setShowResume(false)}
-                                            className="text-[var(--text-secondary)] hover:text-white bg-[var(--bg-highlight)] hover:bg-red-500/20 p-1.5 rounded-md transition-all border border-transparent hover:border-red-500/30"
-                                            title="Close (ESC)"
+                                            className="p-2 text-[var(--text-secondary)] hover:text-white hover:bg-red-500/20 hover:border-red-500/50 rounded-lg transition-colors border border-transparent"
+                                            title="Close Modal"
                                         >
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <line x1="18" y1="6" x2="6" y2="18" />
+                                                <line x1="6" y1="6" x2="18" y2="18" />
+                                            </svg>
                                         </button>
                                     </div>
                                 </div>
-
-                                {/* PDF Viewer */}
-                                <div className="flex-1 relative bg-black/40 overflow-hidden">
-                                    {/* Loading State Spinner */}
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                        <div className="w-8 h-8 border-2 border-[#60a5fa]/30 border-t-[#60a5fa] rounded-full animate-spin mb-4" />
-                                        <span className="text-[10px] tracking-[0.2em] text-[var(--text-secondary)] uppercase">Loading PDF...</span>
-                                    </div>
-                                    
-                                    <iframe
-                                        src="/Resume.pdf#toolbar=0"
-                                        title="Resume"
-                                        className="w-full h-full border-0 relative z-10 rounded-b-xl"
-                                    />
-                                    
-                                    {/* Glass reflection overly on edges to blend it nicely */}
-                                    <div className="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-black/20 to-transparent pointer-events-none z-20" />
+                                
+                                {/* Modal Body / PDF Viewer */}
+                                <div className="flex-1 w-full bg-[#333] relative">
+                                    <object data="/Priyank_Resume.pdf" type="application/pdf" className="w-full h-full absolute inset-0">
+                                        <iframe src="/Priyank_Resume.pdf" className="w-full h-full border-none" title="Resume" />
+                                    </object>
                                 </div>
-                            </div>
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
         </section>
     )
 }
