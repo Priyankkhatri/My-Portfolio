@@ -30,7 +30,7 @@ const certificatesData = [
         grade: '99%',
         credentialId: 'OEJDQXOP4W5Y',
         credentialUrl: 'https://coursera.org/verify/OEJDQXOP4W5Y',
-        image: '/meta-frontend-cert.jpg',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775563239/meta-frontend_b9gv9q.jpg',
         themeColor: '#60a5fa',
     },
     {
@@ -43,7 +43,7 @@ const certificatesData = [
             'Participated in the ideation phase of Hacksagon 2026, a national-level hackathon organized by ABV-IIITM IEEE. Collaborated with a team to conceptualize and pitch an innovative solution under time constraints.',
         skills: ['Problem Solving', 'Team Collaboration', 'Ideation', 'Pitching'],
         credentialUrl: '/Hacksagon.pdf',
-        image: '/hacksagon-thumb.png',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775563016/hacksagon_xugwyg.jpg',
         themeColor: '#a78bfa',
     },
     {
@@ -56,7 +56,7 @@ const certificatesData = [
             'Competed in Elite Hack 1.0, a competitive coding hackathon hosted by Elite Coders. Gained hands-on experience building rapid prototypes, debugging under pressure, and presenting technical solutions to a judging panel.',
         skills: ['Rapid Prototyping', 'Debugging', 'Competitive Programming', 'Presentation'],
         credentialUrl: '/Elite-Hack.pdf',
-        image: '/elite-hack-thumb.png',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775563067/elite-hack_esq9eu.jpg',
         themeColor: '#f59e0b',
     },
 ]

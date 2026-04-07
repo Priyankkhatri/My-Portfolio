@@ -101,7 +101,7 @@ export const certificates = [
         credentialId: 'OEJDQXOP4W5Y',
         credentialUrl: 'https://coursera.org/verify/OEJDQXOP4W5Y',
         status: 'Completed',
-        image: '/meta-frontend-cert.jpg',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775563239/meta-frontend_b9gv9q.jpg',
         hours: 'Grade: 99%',
     },
     {
@@ -111,7 +111,7 @@ export const certificates = [
         category: 'Hackathon',
         status: 'Completed',
         credentialUrl: '/Hacksagon.pdf',
-        image: '/hacksagon-thumb.png',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775563016/hacksagon_xugwyg.jpg',
     },
     {
         title: 'Elite Hack 1.0 Participation',
@@ -120,7 +120,7 @@ export const certificates = [
         category: 'Hackathon',
         status: 'Completed',
         credentialUrl: '/Elite-Hack.pdf',
-        image: '/elite-hack-thumb.png',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775563067/elite-hack_esq9eu.jpg',
     },
 ]
 
