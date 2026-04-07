@@ -152,7 +152,6 @@ export default function Hero() {
                     >
                         <span className="text-gradient-silver">MERN / Full-Stack</span><span className="text-[var(--text-secondary)]">.</span>
                     </motion.h2>
-
                     {/* Subtext */}
                     <motion.p
                         variants={fadeUp}

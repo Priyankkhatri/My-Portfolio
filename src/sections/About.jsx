@@ -176,9 +176,8 @@ export default function About() {
                 >
                     Building with <span className="text-gradient-silver">Purpose</span>
                 </h2>
-                <p className="text-sm md:text-base text-[var(--text-secondary)] max-w-lg mb-16">
-                    A passionate student discovering the intricacies of web development,
-                    from crafting pixel-perfect UIs to designing robust APIs.
+                <p className="text-sm md:text-base text-[var(--text-secondary)] max-w-xl mb-16 leading-relaxed">
+                    A dedicated explorer of the digital landscape, merging technical rigor with creative problem-solving. My work is fueled by a desire to understand 'the why' behind the code, ensuring every project is built with scalability, efficiency, and a human-centric approach at its core.
                 </p>
 
                 {/* ── Bento Grid ────────────────────────────────── */}
@@ -195,13 +194,50 @@ export default function About() {
                                 >
                                     Priyank
                                 </h3>
-                                <p className="text-sm text-[var(--text-secondary)] mb-6">BE/B.Tech CSE &bull; MERN / Full-Stack</p>
-                                <p className="text-sm leading-[1.8] text-[var(--text-secondary)] mb-4">
-                                    I’m a 2nd-semester Computer Science student at Coding Gita. I build small web apps (image galleries, movie explorers), REST APIs with <span className="text-[var(--text-primary)]/55">Node.js + MongoDB</span>, and browser games with <span className="text-[var(--text-primary)]/55">HTML/CSS/JS</span>.
-                                </p>
-                                <p className="text-sm leading-[1.8] text-[var(--text-secondary)]">
-                                    Currently learning React/Next.js, data structures, and backend architecture. I love experimenting with UI/UX, performance optimization, and system fundamentals.
-                                </p>
+                                <p className="text-sm text-[var(--text-secondary)] mb-8 font-medium tracking-wide">BE/B.Tech CSE &bull; MERN / Full-Stack</p>
+                                
+                                <div className="space-y-6">
+                                    <p className="text-sm leading-[1.8] text-[var(--text-secondary)]">
+                                        I’m a 2nd-semester Computer Science student at <span className="text-[var(--text-primary)] font-medium">Coding Gita</span>. My journey into development started with a fascination for digital systems, which has now evolved into a high-speed pursuit of mastering the <span className="text-[#60a5fa] font-medium">Full-Stack MERN ecosystem</span>.
+                                    </p>
+                                    <p className="text-sm leading-[1.8] text-[var(--text-secondary)]">
+                                        I specialize in building tools that aren't just functional, but <span className="text-[var(--text-primary)] font-medium">purpose-built</span>. I bridge the gap between elegant frontend design and robust backend logic, with a deep focus on performance, accessibility, and intuitive system architecture.
+                                    </p>
+                                    
+                                    <div className="pt-2">
+                                        <h4 className="text-[10px] tracking-[0.2em] font-bold text-[var(--text-primary)] uppercase mb-3">Technical Philosophy</h4>
+                                        <ul className="space-y-3">
+                                            <li className="flex items-start gap-3">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-[#60a5fa] mt-1.5 shrink-0" />
+                                                <p className="text-[13px] leading-relaxed text-[var(--text-secondary)]"><span className="text-[var(--text-primary)] font-medium">Efficiency First</span>: Optimizing code for speed and resource management is non-negotiable.</p>
+                                            </li>
+                                            <li className="flex items-start gap-3">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-[#a78bfa] mt-1.5 shrink-0" />
+                                                <p className="text-[13px] leading-relaxed text-[var(--text-secondary)]"><span className="text-[var(--text-primary)] font-medium">Accessibility by Design</span>: Building products that everyone can use, regardless of their hardware or ability.</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <p className="text-sm leading-[1.8] text-[var(--text-secondary)] italic border-l-2 border-[#60a5fa]/30 pl-4 py-1">
+                                        "I don't just write code; I aim to build tools that solve real-world problems and provide seamless user experiences."
+                                    </p>
+                                </div>
+
+                                {/* Quick Facts Grid */}
+                                <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-[var(--border-color)]">
+                                    <div className="flex flex-col gap-1">
+                                        <h4 className="text-[9px] tracking-[0.2em] font-bold text-[var(--accent-1)] uppercase">Current Focus</h4>
+                                        <p className="text-[11px] text-[var(--text-muted)]">Scalable & Responsive Systems</p>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <h4 className="text-[9px] tracking-[0.2em] font-bold text-[var(--accent-2)] uppercase">Goal</h4>
+                                        <p className="text-[11px] text-[var(--text-muted)]">Building a Production-Level SaaS</p>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <h4 className="text-[9px] tracking-[0.2em] font-bold text-[var(--accent-1)] uppercase">Fueled By</h4>
+                                        <p className="text-[11px] text-[var(--text-muted)]">Curiosity & Pure Black Coffee</p>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="flex items-center gap-3 mt-8 pt-6 border-t border-[var(--border-color)]">

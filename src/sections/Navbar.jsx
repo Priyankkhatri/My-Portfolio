@@ -96,9 +96,9 @@ export default function Navbar() {
                             {/* Logo mark */}
                             <div className="w-10 h-10 border border-[var(--border-color)] rounded-xl flex items-center justify-center group-hover:border-[#60a5fa]/50 transition-all duration-500 overflow-hidden group-hover:shadow-[0_0_20px_rgba(96,165,250,0.3)] bg-[var(--bg-highlight)]/30">
                                 <img 
-                                    src="https://res.cloudinary.com/dqvpsorso/image/upload/v1774376586/Gemini_Generated_Image_ijnfshijnfshijnf_1_mqpsph.png" 
-                                    alt="P" 
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                    src="https://res.cloudinary.com/dqvpsorso/image/upload/v1775552783/logo_jatani.png" 
+                                    alt="Priyank Khatri Logo" 
+                                    className="w-full h-full object-contain p-1.5 transition-transform duration-700 group-hover:scale-110" 
                                 />
                             </div>
                             <span
