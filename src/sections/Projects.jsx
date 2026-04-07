@@ -8,7 +8,7 @@ const projects = [
     {
         title: 'AI-Adaptive Onboarding Engine',
         tagline: 'Resume parsing & personalized roadmaps',
-        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1774382055/Gemini_Generated_Image_sznh8isznh8isznh_1_ktrq0n.png',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775561363/Ai-onboarding-engine_aomazq.png',
         description: 'A sophisticated tool that analyzes resumes against target job descriptions to identify skill gaps. Generates dependency-aware learning roadmaps featuring dynamic visualizations, instant demo mode, and professional PDF exports.',
         tech: ['React.js', 'Node.js', 'Express', 'MongoDB'],
         live: 'https://ai-onboarding-engine.netlify.app',
@@ -19,7 +19,7 @@ const projects = [
     {
         title: 'Movie Explorer',
         tagline: 'Cinematic details & dynamic search',
-        image: '/project-movie-explorer.jpeg',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775561697/api-movie-explorer_vjacms.jpg',
         description: 'Movie search & details explorer using the OMDb API; cinematic details hero. Built to practice dynamic search, API integration, and creating clean detail pages with React and Tailwind.',
         tech: ['React.js', 'Tailwind CSS', 'OMDb API', 'Netlify'],
         live: 'https://api-movie-explorer.netlify.app',
@@ -30,7 +30,7 @@ const projects = [
     {
         title: 'API Image Gallery',
         tagline: 'Dynamic search & lazy loading',
-        image: '/project-api-gallery.png',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775561708/api-image-gallery_epizrc.png',
         description: 'A responsive image gallery that fetches high-quality images via the Pexels API. Features dynamic keyword search, lazy loading without page reloads, and a fast frontend UI.',
         tech: ['HTML5', 'CSS3', 'JS', 'Pexels API', 'Netlify'],
         live: 'https://api-image-gallery.netlify.app',
@@ -41,7 +41,7 @@ const projects = [
     {
         title: 'Clone Websites',
         tagline: 'Pixel-perfect website recreations',
-        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1774382567/Gemini_Generated_Image_v5x5dv5x5dv5x5dv-Photoroom_1_t3ouer.png',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775561355/Cloned-website_po6rfm.png',
         description: 'Frontend clones of popular brand websites (DJI, Nothing, Prime, etc.) built to practice layout, responsiveness, and modern CSS techniques.',
         tech: ['HTML5', 'CSS3', 'JavaScript'],
         live: '#',
@@ -52,7 +52,7 @@ const projects = [
     {
         title: 'Mini Games',
         tagline: 'Interactive fun & logic challenges',
-        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1774382788/Gemini_Generated_Image_87hur187hur187hu-Photoroom_1_dakre0.png',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775561348/Mini-Games_wo2scb.png',
         description: 'A collection of small, interactive games including Tic Tac Toe, Whack A Mole, and more, built to practice game logic and UI interactions.',
         tech: ['HTML5', 'CSS3', 'JS', 'Logic'],
         live: '#',
