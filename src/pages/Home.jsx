@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import Hero from '../sections/Hero'
 import About from '../sections/About'
+import SignatureSection from '../components/signature/SignatureSection'
 import useStore from '../store/useStore'
 
 import { SiReact, SiNodedotjs, SiExpress, SiMongodb, SiJavascript, SiHtml5, SiCss, SiTailwindcss, SiVite, SiGithub } from 'react-icons/si'
@@ -60,6 +61,7 @@ export default function Home() {
             <Hero />
             <MarqueeStrip />
             <About />
+            <SignatureSection />
         </>
     )
 }
