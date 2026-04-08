@@ -95,6 +95,8 @@ export default function GithubCard() {
                 const parsed = {
                     repo: pushEvent.repo?.name?.split('/')[1] || pushEvent.repo?.name,
                     repoUrl: `https://github.com/${pushEvent.repo?.name}`,
+                    branch: pushEvent.payload?.ref?.replace('refs/heads/', '') || 'main',
+                    sha: commit?.sha?.substring(0, 7) || '',
                     message: commit?.message?.split('\n')[0] || '',
                     timestamp: pushEvent.created_at,
                 }
@@ -121,6 +123,9 @@ export default function GithubCard() {
 
     if (loading) return <CardSkeleton />
 
+    // Check if activity is "Live" (less than 1 hour ago)
+    const isLive = data && (Date.now() - new Date(data.timestamp).getTime()) < 3600000
+
     return (
         <motion.div
             className="signature-card glass-card p-6 flex flex-col min-h-[220px] group relative overflow-hidden"
@@ -128,14 +133,21 @@ export default function GithubCard() {
             transition={{ duration: 0.2, ease: 'easeOut' }}
         >
             {/* Header */}
-            <div className="flex items-center gap-2 mb-4">
-                <span
-                    className="w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: data ? getStatusColor(data.timestamp) : 'var(--text-muted)' }}
-                />
-                <span className="text-[10px] tracking-[0.2em] uppercase text-[var(--text-muted)]">
-                    Latest Push
-                </span>
+            <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                    <span
+                        className={`w-2 h-2 rounded-full shrink-0 ${isLive ? 'animate-pulse' : ''}`}
+                        style={{ backgroundColor: data ? getStatusColor(data.timestamp) : 'var(--text-muted)' }}
+                    />
+                    <span className="text-[10px] tracking-[0.2em] uppercase text-[var(--text-muted)] font-medium">
+                        {isLive ? 'Live Activity' : 'Latest Push'}
+                    </span>
+                </div>
+                {data?.sha && (
+                    <span className="text-[9px] font-mono text-[var(--text-muted)] opacity-50 bg-[var(--bg-highlight)] px-1.5 py-0.5 rounded">
+                        {data.sha}
+                    </span>
+                )}
             </div>
 
             <AnimatePresence mode="wait">
@@ -162,32 +174,43 @@ export default function GithubCard() {
                         transition={{ duration: 0.3 }}
                         className="flex-1 flex flex-col"
                     >
-                        {/* Repo link */}
-                        <a
-                            href={data.repoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent-1)] transition-colors duration-300 mb-1.5 inline-flex items-center gap-1.5 w-fit"
-                            onMouseEnter={() => setCursorVariant('hover')}
-                            onMouseLeave={() => setCursorVariant('default')}
-                        >
-                            {data.repo}
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-0 group-hover:opacity-60 transition-opacity">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                <polyline points="15 3 21 3 21 9" />
-                                <line x1="10" y1="14" x2="21" y2="3" />
-                            </svg>
-                        </a>
+                        {/* Repo & Branch */}
+                        <div className="flex flex-col gap-1 mb-2.5">
+                            <a
+                                href={data.repoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-1)] transition-colors duration-300 inline-flex items-center gap-1.5 w-fit"
+                                onMouseEnter={() => setCursorVariant('hover')}
+                                onMouseLeave={() => setCursorVariant('default')}
+                            >
+                                {data.repo}
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-0 group-hover:opacity-70 transition-all -translate-y-0.5 group-hover:translate-y-0">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                            </a>
+                            
+                            <div className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="6" y1="3" x2="6" y2="15" /><circle cx="18" cy="6" r="3" /><circle cx="6" cy="18" r="3" /><path d="M18 9a9 9 0 0 1-9 9" />
+                                </svg>
+                                <span className="font-mono">{data.branch}</span>
+                            </div>
+                        </div>
 
                         {/* Commit message */}
-                        <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-2 font-mono">
+                        <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-3 font-mono line-clamp-2">
                             {truncate(data.message, COMMIT_TRUNCATE)}
                         </p>
 
                         {/* Timestamp */}
-                        <span className="text-[10px] text-[var(--text-muted)] mt-auto">
-                            {getRelativeTime(data.timestamp)}
-                        </span>
+                        <div className="mt-auto flex items-center justify-between">
+                            <span className="text-[10px] text-[var(--text-muted)]">
+                                {getRelativeTime(data.timestamp)}
+                            </span>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -200,7 +223,7 @@ export default function GithubCard() {
                         href={s.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[var(--text-muted)] opacity-50 hover:opacity-100 hover:text-[var(--text-primary)] transition-all duration-300"
+                        className="text-[var(--text-muted)] opacity-50 hover:opacity-100 hover:text-[var(--text-primary)] transition-all duration-300 transform hover:scale-110"
                         onMouseEnter={() => setCursorVariant('hover')}
                         onMouseLeave={() => setCursorVariant('default')}
                         aria-label={s.label}
