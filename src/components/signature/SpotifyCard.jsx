@@ -58,6 +58,7 @@ export default function SpotifyCard() {
     const pointerXSpring = useSpring(pointerX, { stiffness: 300, damping: 30 })
     const pointerYSpring = useSpring(pointerY, { stiffness: 300, damping: 30 })
     const glowBackground = useMotionTemplate`radial-gradient(circle 120px at ${pointerXSpring}px ${pointerYSpring}px, rgba(29, 185, 84, 0.15), transparent 100%)`
+    const backgroundFilter = useMotionTemplate`blur(4px) brightness(${brightness})`
 
     // Parallax mapped from spring
     const parallaxX = useTransform(mouseXSpring, [-0.5, 0.5], [-8, 8])
@@ -142,7 +143,7 @@ export default function SpotifyCard() {
                                 src={track.albumArt}
                                 alt=""
                                 className="w-full h-full object-cover opacity-20 filter"
-                                style={{ scale, filter: useMotionTemplate`blur(4px) brightness(${brightness})` }}
+                                style={{ scale, filter: backgroundFilter }}
                             />
                             <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-card)] via-[var(--bg-card)]/80 to-transparent" />
                         </motion.div>
