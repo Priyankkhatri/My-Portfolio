@@ -82,32 +82,40 @@ export default function GithubCard() {
 
     const fetchData = useCallback(async (isPolling = false) => {
         try {
-            // Added cache busting so GitHub's API doesn't serve a stale 304 response
-            const res = await fetch(
-                `https://api.github.com/users/${GITHUB_USERNAME}/events?per_page=10&t=${Date.now()}`
+            // Fetch repos sorted by latest push to bypass /events endpoint caching delay
+            const repoRes = await fetch(
+                `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&direction=desc&per_page=1&t=${Date.now()}`
             )
-            if (!res.ok) throw new Error(`GitHub API ${res.status}`)
+            if (!repoRes.ok) throw new Error(`GitHub API ${repoRes.status}`)
+            
+            const repos = await repoRes.json()
+            if (!repos || repos.length === 0) throw new Error('No repos found')
+            
+            const latestRepo = repos[0]
+            const branch = latestRepo.default_branch || 'main'
 
-            const events = await res.json()
-            const pushEvent = events.find((e) => e.type === 'PushEvent')
+            // Fetch the latest commit for this globally latest repo
+            const commitRes = await fetch(
+                `https://api.github.com/repos/${GITHUB_USERNAME}/${latestRepo.name}/commits?per_page=1&t=${Date.now()}`
+            )
+            if (!commitRes.ok) throw new Error(`GitHub Commits API ${commitRes.status}`)
+            
+            const commits = await commitRes.json()
+            const latestCommit = commits[0]
 
-            if (pushEvent) {
-                const commits = pushEvent.payload?.commits || []
-                // Get the most recent commit from the push event
-                const commit = commits[commits.length - 1] || commits[0]
+            if (latestCommit) {
                 const parsed = {
-                    repo: pushEvent.repo?.name?.split('/')[1] || pushEvent.repo?.name,
-                    repoUrl: `https://github.com/${pushEvent.repo?.name}`,
-                    branch: pushEvent.payload?.ref?.replace('refs/heads/', '') || 'main',
-                    sha: commit?.sha?.substring(0, 7) || pushEvent.payload?.head?.substring(0, 7) || '',
-                    message: commit?.message?.split('\n')[0] || 'Updates pushed to repository',
-                    timestamp: pushEvent.created_at,
+                    repo: latestRepo.name,
+                    repoUrl: latestRepo.html_url,
+                    branch: branch,
+                    sha: latestCommit.sha.substring(0, 7),
+                    message: latestCommit.commit.message.split('\n')[0] || 'Updates pushed to repository',
+                    timestamp: latestRepo.pushed_at || latestCommit.commit.author.date,
                 }
                 setData(parsed)
                 lastDataRef.current = parsed
                 setError(false)
             } else {
-                // No push events found
                 if (!lastDataRef.current) setError(true)
             }
         } catch {
@@ -187,19 +195,33 @@ export default function GithubCard() {
                             "{data.message}"
                         </p>
 
-                        {/* Repo Info */}
-                        <div className="flex items-center gap-1.5 text-xs font-mono">
-                            <span className="text-[var(--text-secondary)]">Repo:</span>
-                            <a 
-                                href={data.repoUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-red-500 hover:text-red-400 transition-colors"
-                                onMouseEnter={() => setCursorVariant('hover')}
-                                onMouseLeave={() => setCursorVariant('default')}
-                            >
-                                {data.repo}
-                            </a>
+                        {/* Repo Info & Branch/SHA */}
+                        <div className="flex flex-col gap-2">
+                            <div className="flex items-center gap-1.5 text-xs font-mono">
+                                <span className="text-[var(--text-secondary)]">Repo:</span>
+                                <a 
+                                    href={data.repoUrl} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-red-500 hover:text-red-400 transition-colors"
+                                    onMouseEnter={() => setCursorVariant('hover')}
+                                    onMouseLeave={() => setCursorVariant('default')}
+                                >
+                                    {data.repo}
+                                </a>
+                            </div>
+                            
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1.5 text-[10px] text-[var(--text-secondary)] bg-[var(--bg-highlight)] w-fit px-2 py-0.5 rounded-md border border-[var(--border-color)]">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <line x1="6" y1="3" x2="6" y2="15" /><circle cx="18" cy="6" r="3" /><circle cx="6" cy="18" r="3" /><path d="M18 9a9 9 0 0 1-9 9" />
+                                    </svg>
+                                    <span className="font-mono">{data.branch}</span>
+                                </div>
+                                <span className="text-[10px] font-mono text-[var(--text-primary)] bg-[var(--bg-highlight)] border border-[var(--border-color)] px-2 py-0.5 rounded-md">
+                                    {data.sha}
+                                </span>
+                            </div>
                         </div>
                     </motion.div>
                 )}
