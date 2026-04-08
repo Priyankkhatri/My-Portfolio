@@ -7,6 +7,7 @@ import PfpMorphButton from './PfpMorphButton'
 import AiChatButton from './AiChatButton'
 import ScrollToTopOnNav from './ScrollToTopOnNav'
 import PageTransitionWrapper from './PageTransitionWrapper'
+import FooterExperience from './footer/FooterExperience'
 import useStore from '../store/useStore'
 
 /* Lazy-loaded: splits Three.js (~500KB) out of critical path */
@@ -54,6 +55,7 @@ export default function RootLayout() {
                 <main>
                     <PageTransitionWrapper />
                 </main>
+                <FooterExperience />
             </motion.div>
         </>
     )
