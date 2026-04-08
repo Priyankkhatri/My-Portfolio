@@ -7,6 +7,7 @@ import PfpMorphButton from './PfpMorphButton'
 import AiChatButton from './AiChatButton'
 import ScrollToTopOnNav from './ScrollToTopOnNav'
 import PageTransitionWrapper from './PageTransitionWrapper'
+import SignatureSection from './signature/SignatureSection'
 import useStore from '../store/useStore'
 
 /* Lazy-loaded: splits Three.js (~500KB) out of critical path */
@@ -16,6 +17,7 @@ const HeroBackground = lazy(() => import('./HeroBackground'))
  * RootLayout — persistent shell for the entire routed application.
  * Contains: Navbar, Three.js background, Cursor, Loader, and global UI.
  * Page content renders via <PageTransitionWrapper> which wraps <Outlet />.
+ * SignatureSection is mounted once here — persists across all routes.
  */
 export default function RootLayout() {
     const loaderPhase = useStore((s) => s.loaderPhase)
@@ -53,6 +55,9 @@ export default function RootLayout() {
                 <main>
                     <PageTransitionWrapper />
                 </main>
+
+                {/* Global Signature Section — persists across all routes, outside AnimatePresence */}
+                <SignatureSection />
             </motion.div>
         </>
     )
