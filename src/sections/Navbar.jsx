@@ -1,59 +1,42 @@
-import { useState } from 'react'
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { NavLink, Link } from 'react-router-dom'
 import useStore from '../store/useStore'
+import useNavbarState from '../hooks/useNavbarState'
+import { navConfig } from '../data/navConfig'
+import NavbarLogo from '../components/navbar/NavbarLogo'
+import NavbarLinks from '../components/navbar/NavbarLinks'
+import NavbarProgress from '../components/navbar/NavbarProgress'
 
-const navItems = [
-    { label: 'Home', to: '/', num: '01' },
-    { label: 'Tech', to: '/tech', num: '02' },
-    { label: 'Work', to: '/work', num: '03' },
-    { label: 'Credentials', to: '/credentials', num: '04' },
-    { label: 'Contact', to: '/contact', num: '05' },
-]
-
-function NavLinkItem({ item, index }) {
-    const setCursorVariant = useStore((s) => s.setCursorVariant)
-    const loaderPhase = useStore((s) => s.loaderPhase)
-
-    return (
-        <NavLink
-            to={item.to}
-            end={item.to === '/'}
-            onMouseEnter={() => setCursorVariant('hover')}
-            onMouseLeave={() => setCursorVariant('default')}
-            className={({ isActive }) =>
-                `relative text-sm tracking-wide transition-colors duration-300 link-underline py-1 group ${isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`
-            }
-        >
-            {({ isActive }) => (
-                <>
-                    <motion.span
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={loaderPhase >= 4 ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-                        transition={{ delay: 0.8 + index * 0.08, duration: 0.5 }}
-                    >
-                        {item.label}
-                    </motion.span>
-                    {isActive && (
-                        <motion.div
-                            layoutId="navbar-indicator"
-                            className="absolute -bottom-2 left-0 right-0 h-[2px] bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] rounded-full"
-                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                        />
-                    )}
-                </>
-            )}
-        </NavLink>
-    )
-}
-
+/**
+ * Navbar — Adaptive Navigation System
+ *
+ * Three scroll-driven states:
+ *   State 1 (Hero):    Transparent, logo only, links hidden       [scrollY < 100px]
+ *   State 2 (Active):  Glassmorphic bar, all links visible         [100px–700px]
+ *   State 3 (Pill):    Compact floating pill, short labels          [700px+]
+ *
+ * Mounted once in RootLayout. Never remounts on route changes.
+ * Mobile: never enters pill state; hamburger overlay for navigation.
+ */
 export default function Navbar() {
+    const { navState, reducedMotion, isMobile } = useNavbarState()
     const [mobileOpen, setMobileOpen] = useState(false)
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const theme = useStore((s) => s.theme)
     const startThemeTransition = useStore((s) => s.startThemeTransition)
     const loaderPhase = useStore((s) => s.loaderPhase)
 
+    const isPill = navState === 'pill'
+    const isHero = navState === 'hero'
+    const isActive = navState === 'active'
+
+    /* ── Close mobile menu on route change ─────────────────── */
+    useEffect(() => {
+        setMobileOpen(false)
+    }, [navState])
+
+    /* ── Theme toggle handler ──────────────────────────────── */
     const handleThemeToggle = (e) => {
         const btn = e.currentTarget
         const rect = btn.getBoundingClientRect()
@@ -62,100 +45,242 @@ export default function Navbar() {
         startThemeTransition(x, y)
     }
 
-    const { scrollYProgress } = useScroll()
-    const scaleX = useSpring(scrollYProgress, {
-        stiffness: 100,
-        damping: 30,
-        restDelta: 0.001
-    })
+    /* ── Pill hover state ──────────────────────────────────── */
+    const [pillHovered, setPillHovered] = useState(false)
+
+    /* ── Animation config ──────────────────────────────────── */
+    const { ease } = navConfig.timing
+    const morphDuration = 0.5
+    const transition = reducedMotion
+        ? { duration: 0 }
+        : { duration: morphDuration, ease }
+
+    /* ── Container animation variants ────────────────────── */
+    const containerAnimate = {
+        maxWidth: isPill ? navConfig.pill.maxWidth : 9999,
+        height: isPill
+            ? navConfig.pill.height
+            : isMobile
+                ? 56
+                : isActive
+                    ? 64
+                    : 72,
+        borderRadius: isPill ? 9999 : 0,
+        marginTop: isPill ? 16 : 0,
+        y: isPill ? -6 : 0,
+        backgroundColor: isHero
+            ? 'rgba(10, 14, 23, 0)'
+            : isPill
+                ? 'rgba(10, 14, 23, 0.85)'
+                : 'rgba(10, 14, 23, 0.75)',
+        backdropFilter: isHero
+            ? 'blur(0px)'
+            : isPill
+                ? 'blur(24px)'
+                : 'blur(16px)',
+        borderColor: isHero
+            ? 'rgba(255, 255, 255, 0)'
+            : isPill
+                ? 'rgba(255, 255, 255, 0.1)'
+                : 'rgba(255, 255, 255, 0.06)',
+        boxShadow: isPill
+            ? pillHovered
+                ? '0 4px 16px rgba(0,0,0,0.2), 0 8px 40px rgba(0,0,0,0.35), 0 20px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.08)'
+                : '0 4px 12px rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.25), 0 16px 64px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.06)'
+            : '0 0 0 rgba(0, 0, 0, 0)',
+        scale: isPill && pillHovered ? 1.01 : 1,
+    }
+
+    /* ── Desktop link entrance animation ───────────────────── */
+    const linkEntranceVariants = {
+        hidden: { opacity: 0, y: -8, scale: 0.97 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                duration: reducedMotion ? 0 : 0.4,
+                ease,
+                delay: 0.05,
+            },
+        },
+        exit: {
+            opacity: 0,
+            y: -8,
+            scale: 0.97,
+            transition: {
+                duration: reducedMotion ? 0 : 0.25,
+                ease,
+            },
+        },
+    }
 
     return (
         <>
-            {/* Scroll Progress Bar */}
-            <motion.div
-                className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] origin-left z-[60]"
-                style={{ scaleX }}
-            />
-
             <motion.nav
-                className="fixed top-0 left-0 right-0 z-50 pt-[2px]"
+                className="fixed top-0 left-0 right-0 z-50"
                 initial={{ y: '20vh', opacity: 0 }}
-                animate={loaderPhase >= 4 ? { y: 0, opacity: 1 } : { y: '20vh', opacity: 0 }}
-                transition={{ duration: 1.5, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                animate={
+                    loaderPhase >= 4
+                        ? { y: 0, opacity: 1 }
+                        : { y: '20vh', opacity: 0 }
+                }
+                transition={{
+                    duration: 1.5,
+                    delay: 0.2,
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                }}
             >
-                {/* Glass background with gradient border */}
-                <div className="backdrop-blur-md bg-[var(--bg-primary)]/70 border-b border-[var(--border-color)] transition-colors duration-500">
-                    <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
-                        {/* Logo */}
-                        <Link
-                            to="/"
-                            onMouseEnter={() => setCursorVariant('hover')}
-                            onMouseLeave={() => setCursorVariant('default')}
-                            className="flex items-center gap-3 group"
+                {/* ── Morphing Container ────────────────────── */}
+                <motion.div
+                    className={`mx-auto relative overflow-hidden ${isPill ? 'navbar-pill-container' : ''}`}
+                    layout
+                    animate={containerAnimate}
+                    transition={{
+                        ...transition,
+                        layout: { duration: reducedMotion ? 0 : morphDuration, ease },
+                    }}
+                    style={{
+                        borderWidth: 1,
+                        borderStyle: 'solid',
+                        WebkitBackdropFilter: isHero
+                            ? 'blur(0px)'
+                            : isPill
+                                ? 'blur(24px)'
+                                : 'blur(16px)',
+                    }}
+                    onMouseEnter={() => isPill && setPillHovered(true)}
+                    onMouseLeave={() => setPillHovered(false)}
+                >
+                    {/* ── Content Wrapper ───────────────────── */}
+                    <div
+                        className={`
+                            ${isPill ? 'px-5' : 'max-w-7xl mx-auto px-6 md:px-12'}
+                            flex items-center justify-between h-full
+                        `}
+                    >
+                        {/* ── Logo (appears first in stagger) ── */}
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={
+                                loaderPhase >= 4
+                                    ? { opacity: 1, y: 0, scale: 1 }
+                                    : { opacity: 0, y: -10, scale: 0.95 }
+                            }
+                            transition={{
+                                delay: 0.6,
+                                duration: 0.5,
+                                ease,
+                            }}
                         >
-                            {/* Logo mark */}
-                            <div className="w-10 h-10 border border-[var(--border-color)] rounded-xl flex items-center justify-center group-hover:border-[#60a5fa]/50 transition-all duration-500 overflow-hidden group-hover:shadow-[0_0_20px_rgba(96,165,250,0.3)] bg-[var(--bg-highlight)]/30">
-                                <img 
-                                    src="https://res.cloudinary.com/dqvpsorso/image/upload/v1775552783/logo_jatani.png" 
-                                    alt="Priyank Khatri Logo" 
-                                    className="w-full h-full object-contain p-1.5 transition-transform duration-700 group-hover:scale-110" 
-                                />
-                            </div>
-                            <span
-                                className="text-sm font-medium tracking-[0.15em] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors duration-500 hidden sm:block"
-                                style={{ fontFamily: "'Poppins', sans-serif" }}
-                            >
-                                PRIYANK
-                            </span>
-                        </Link>
+                            <NavbarLogo compact={isPill} />
+                        </motion.div>
 
-                        {/* Desktop Links */}
-                        <div className="hidden md:flex items-center gap-8">
-                            {navItems.map((item, i) => (
-                                <NavLinkItem key={item.label} item={item} index={i} />
-                            ))}
-
-                            {/* Status indicator */}
-                            <motion.div
-                                className="flex items-center gap-2 ml-4 pl-4 border-l border-[var(--border-color)]"
-                                initial={{ opacity: 0 }}
-                                animate={loaderPhase >= 4 ? { opacity: 1 } : { opacity: 0 }}
-                                transition={{ delay: 1.2, duration: 0.5 }}
-                            >
-                                <div className="w-1.5 h-1.5 bg-[#60a5fa]/80 rounded-full animate-pulse-glow" />
-                                <span className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Available</span>
-                            </motion.div>
-
-                            {/* Theme Toggle Button */}
-                            <motion.button
-                                onClick={handleThemeToggle}
-                                onMouseEnter={() => setCursorVariant('hover')}
-                                onMouseLeave={() => setCursorVariant('default')}
-                                className="ml-2 w-9 h-9 rounded-full flex items-center justify-center border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-[var(--glass-bg)] transition-all duration-300 group"
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                animate={loaderPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                                transition={{ delay: 1.3, duration: 0.5, type: 'spring' }}
-                                aria-label="Toggle Theme"
-                            >
-                                <div className="relative w-4 h-4 overflow-hidden">
+                        {/* ── Desktop Navigation ───────────── */}
+                        <div className="hidden md:flex items-center">
+                            {/* Nav Links — hidden in hero */}
+                            <AnimatePresence>
+                                {!isHero && (
                                     <motion.div
-                                        className="absolute inset-0 flex flex-col items-center justify-start"
-                                        animate={{ y: theme === 'dark' ? 0 : -16 }}
-                                        transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
+                                        variants={linkEntranceVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="exit"
                                     >
-                                        <svg className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--accent-1)] transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                        <svg className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--accent-2)] transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                                        </svg>
+                                        <NavbarLinks compact={isPill} isMobile={isMobile} />
                                     </motion.div>
-                                </div>
-                            </motion.button>
+                                )}
+                            </AnimatePresence>
 
+                            {/* Available Badge — Active state only */}
+                            <AnimatePresence>
+                                {isActive && (
+                                    <motion.div
+                                        className="flex items-center gap-2 ml-4 pl-4 border-l border-[var(--border-color)]"
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.8 }}
+                                        transition={{
+                                            duration: reducedMotion ? 0 : 0.25,
+                                        }}
+                                    >
+                                        <div className="w-1.5 h-1.5 bg-[#60a5fa]/80 rounded-full animate-pulse-glow" />
+                                        <span className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+                                            Available
+                                        </span>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            {/* Theme Toggle — Hero + Active only (hidden in pill) */}
+                            <AnimatePresence>
+                                {!isPill && (
+                                    <motion.button
+                                        onClick={handleThemeToggle}
+                                        onMouseEnter={() =>
+                                            setCursorVariant('hover')
+                                        }
+                                        onMouseLeave={() =>
+                                            setCursorVariant('default')
+                                        }
+                                        className="ml-3 w-9 h-9 rounded-full flex items-center justify-center border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-[var(--glass-bg)] transition-all duration-300 group"
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.5 }}
+                                        transition={{
+                                            duration: reducedMotion ? 0 : 0.3,
+                                            type: 'spring',
+                                        }}
+                                        aria-label="Toggle Theme"
+                                    >
+                                        <div className="relative w-4 h-4 overflow-hidden">
+                                            <motion.div
+                                                className="absolute inset-0 flex flex-col items-center justify-start"
+                                                animate={{
+                                                    y:
+                                                        theme === 'dark'
+                                                            ? 0
+                                                            : -16,
+                                                }}
+                                                transition={{
+                                                    duration: 0.4,
+                                                    ease: [0.25, 1, 0.5, 1],
+                                                }}
+                                            >
+                                                <svg
+                                                    className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--accent-1)] transition-colors shrink-0"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                                                    />
+                                                </svg>
+                                                <svg
+                                                    className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--accent-2)] transition-colors shrink-0"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                                                    />
+                                                </svg>
+                                            </motion.div>
+                                        </div>
+                                    </motion.button>
+                                )}
+                            </AnimatePresence>
                         </div>
 
-                        {/* Mobile Hamburger */}
+                        {/* ── Mobile Hamburger ─────────────── */}
                         <button
                             className="md:hidden flex flex-col gap-1.5 p-3"
                             onClick={() => setMobileOpen(!mobileOpen)}
@@ -165,28 +290,53 @@ export default function Navbar() {
                         >
                             <motion.span
                                 className="block w-6 h-px bg-[var(--text-secondary)]"
-                                animate={mobileOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
+                                animate={
+                                    mobileOpen
+                                        ? { rotate: 45, y: 5 }
+                                        : { rotate: 0, y: 0 }
+                                }
                                 transition={{ duration: 0.3 }}
                             />
                             <motion.span
                                 className="block w-4 h-px bg-[var(--text-secondary)] ml-auto"
-                                animate={mobileOpen ? { opacity: 0, width: 0 } : { opacity: 1, width: 16 }}
+                                animate={
+                                    mobileOpen
+                                        ? { opacity: 0, width: 0 }
+                                        : { opacity: 1, width: 16 }
+                                }
                                 transition={{ duration: 0.2 }}
                             />
                             <motion.span
                                 className="block w-6 h-px bg-[var(--text-secondary)]"
-                                animate={mobileOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
+                                animate={
+                                    mobileOpen
+                                        ? { rotate: -45, y: -5 }
+                                        : { rotate: 0, y: 0 }
+                                }
                                 transition={{ duration: 0.3 }}
                             />
                         </button>
                     </div>
-                </div>
 
-                {/* Bottom glow line */}
-                <div className="h-px glow-line" />
+                    {/* ── Progress Bar ──────────────────────── */}
+                    <NavbarProgress />
+                </motion.div>
+
+                {/* ── Glow Line — Active state only ────────── */}
+                <AnimatePresence>
+                    {isActive && (
+                        <motion.div
+                            className="h-px glow-line"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: reducedMotion ? 0 : 0.3 }}
+                        />
+                    )}
+                </AnimatePresence>
             </motion.nav>
 
-            {/* Mobile Menu */}
+            {/* ── Mobile Overlay Menu ──────────────────────── */}
             <AnimatePresence>
                 {mobileOpen && (
                     <motion.div
@@ -195,6 +345,13 @@ export default function Navbar() {
                         animate={{ opacity: 1, filter: 'blur(0px)' }}
                         exit={{ opacity: 0, filter: 'blur(10px)' }}
                         transition={{ duration: 0.4 }}
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget)
+                                setMobileOpen(false)
+                        }}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Escape') setMobileOpen(false)
+                        }}
                     >
                         {/* Decorative lines */}
                         <div className="absolute top-20 left-8 w-px h-32 bg-gradient-to-b from-[var(--bg-highlight)] to-transparent" />
@@ -210,34 +367,74 @@ export default function Navbar() {
                                 Navigation
                             </motion.p>
 
-                            {navItems.map((item, i) => (
+                            {navConfig.links.map((item, i) => (
                                 <motion.div
                                     key={item.label}
-                                    initial={{ opacity: 0, x: -30, y: 20, filter: 'blur(4px)' }}
-                                    animate={{ opacity: 1, x: 0, y: 0, filter: 'blur(0px)' }}
-                                    exit={{ opacity: 0, x: 20, y: -10 }}
-                                    transition={{ delay: i * 0.07 + 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                                    initial={{
+                                        opacity: 0,
+                                        x: -30,
+                                        y: 20,
+                                        filter: 'blur(4px)',
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        x: 0,
+                                        y: 0,
+                                        filter: 'blur(0px)',
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        x: 20,
+                                        y: -10,
+                                    }}
+                                    transition={{
+                                        delay: i * 0.07 + 0.1,
+                                        duration: 0.5,
+                                        ease: [0.25, 0.46, 0.45, 0.94],
+                                    }}
                                 >
                                     <NavLink
                                         to={item.to}
                                         end={item.to === '/'}
                                         onClick={() => setMobileOpen(false)}
-                                        onMouseEnter={() => setCursorVariant('hover')}
-                                        onMouseLeave={() => setCursorVariant('default')}
-                                        className={({ isActive }) =>
-                                            `flex items-center gap-4 text-3xl tracking-wide transition-colors ${isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`
+                                        onMouseEnter={() =>
+                                            setCursorVariant('hover')
                                         }
-                                        style={{ fontFamily: "'Poppins', sans-serif" }}
+                                        onMouseLeave={() =>
+                                            setCursorVariant('default')
+                                        }
+                                        className={({ isActive: active }) =>
+                                            `flex items-center gap-4 text-3xl tracking-wide transition-colors ${
+                                                active
+                                                    ? 'text-[var(--text-primary)]'
+                                                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                                            }`
+                                        }
+                                        style={{
+                                            fontFamily:
+                                                "'Poppins', sans-serif",
+                                        }}
                                     >
-                                        {({ isActive }) => (
+                                        {({ isActive: active }) => (
                                             <>
-                                                <span className={`text-xs ${isActive ? 'text-[var(--accent-1)]' : 'text-[var(--text-muted)]'}`}>{item.num}</span>
+                                                <span
+                                                    className={`text-xs ${active ? 'text-[var(--accent-1)]' : 'text-[var(--text-muted)]'}`}
+                                                >
+                                                    {String(i + 1).padStart(
+                                                        2,
+                                                        '0'
+                                                    )}
+                                                </span>
                                                 {item.label}
-                                                {isActive && (
+                                                {active && (
                                                     <motion.span
                                                         layoutId="mobile-nav-indicator"
                                                         className="w-2 h-2 rounded-full bg-[#60a5fa] shadow-[0_0_8px_rgba(96,165,250,0.5)]"
-                                                        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                                                        transition={{
+                                                            type: 'spring',
+                                                            stiffness: 300,
+                                                            damping: 25,
+                                                        }}
                                                     />
                                                 )}
                                             </>
@@ -257,21 +454,48 @@ export default function Navbar() {
                                 <div className="relative w-4 h-4 overflow-hidden">
                                     <motion.div
                                         className="absolute inset-0 flex flex-col items-center justify-start"
-                                        animate={{ y: theme === 'dark' ? 0 : -16 }}
-                                        transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
+                                        animate={{
+                                            y: theme === 'dark' ? 0 : -16,
+                                        }}
+                                        transition={{
+                                            duration: 0.4,
+                                            ease: [0.25, 1, 0.5, 1],
+                                        }}
                                     >
-                                        <svg className="w-4 h-4 text-[var(--text-secondary)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        <svg
+                                            className="w-4 h-4 text-[var(--text-secondary)] shrink-0"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                                            />
                                         </svg>
-                                        <svg className="w-4 h-4 text-[var(--text-secondary)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                        <svg
+                                            className="w-4 h-4 text-[var(--text-secondary)] shrink-0"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                                            />
                                         </svg>
                                     </motion.div>
                                 </div>
-                                <span className="text-sm text-[var(--text-secondary)]">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                                <span className="text-sm text-[var(--text-secondary)]">
+                                    {theme === 'dark'
+                                        ? 'Light Mode'
+                                        : 'Dark Mode'}
+                                </span>
                             </motion.button>
-
-
                         </nav>
 
                         {/* Footer info in mobile menu */}
@@ -283,7 +507,9 @@ export default function Navbar() {
                         >
                             <div className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 bg-[#60a5fa]/70 rounded-full animate-pulse-glow" />
-                                <span className="text-[10px] tracking-[0.3em] text-[var(--text-secondary)] uppercase">Available for work</span>
+                                <span className="text-[10px] tracking-[0.3em] text-[var(--text-secondary)] uppercase">
+                                    Available for work
+                                </span>
                             </div>
                             <p className="text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">
                                 Priyank &mdash; Portfolio 2026
