@@ -67,140 +67,100 @@ export default function SpotifyCard() {
 
     return (
         <motion.div
-            className="signature-card glass-card min-h-[220px] group relative overflow-hidden"
+            className="signature-card glass-card group relative overflow-hidden flex min-h-[220px]"
             whileHover={{ y: -4, boxShadow: '0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(96,165,250,0.06)' }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
         >
-            {/* Blurred album art background */}
+            {/* Background image & gradient fade */}
             <AnimatePresence mode="wait">
                 {track?.albumArt && (
                     <motion.div
                         key={track.albumArt}
-                        className="absolute inset-0 z-0"
+                        className="absolute inset-0 z-0 pointer-events-none"
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.15 }}
+                        animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
                     >
                         <img
                             src={track.albumArt}
                             alt=""
-                            className="w-full h-full object-cover"
-                            style={{ filter: 'blur(40px) saturate(1.5)' }}
+                            className="w-full h-full object-cover opacity-20 filter blur-sm"
                         />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-card)] via-[var(--bg-card)]/80 to-transparent" />
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            <div className="relative z-10 p-6 flex flex-col h-full">
+            {/* Left Content Column */}
+            <div className="relative z-10 p-6 flex flex-col h-full w-[70%]">
                 {/* Header */}
-                <div className="flex items-center gap-2 mb-4">
-                    {track?.isPlaying ? (
-                        <>
-                            <EqualizerBars animate />
-                            <span className="text-[10px] tracking-[0.2em] uppercase text-[#1DB954]">
-                                Now Playing
-                            </span>
-                        </>
-                    ) : (
-                        <>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M12 6v6l4 2" />
-                            </svg>
-                            <span className="text-[10px] tracking-[0.2em] uppercase text-[var(--text-muted)]">
-                                Recently Played
-                            </span>
-                        </>
-                    )}
+                <div className="flex items-center gap-2.5 mb-5">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#1DB954">
+                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+                    </svg>
+                    <span className="text-base font-bold text-[var(--text-primary)]">
+                        {track?.isPlaying ? 'Now Playing' : 'Last Played'}
+                    </span>
                 </div>
 
                 <AnimatePresence mode="wait">
                     {showFallback ? (
-                        /* Fallback */
                         <motion.div
                             key="fallback"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="flex-1 flex flex-col items-start justify-center gap-3"
+                            className="flex-1"
                         >
-                            <div className="w-12 h-12 rounded-lg bg-[var(--bg-highlight)] flex items-center justify-center">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
-                                    <path d="M9 18V5l12-2v13" />
-                                    <circle cx="6" cy="18" r="3" />
-                                    <circle cx="18" cy="16" r="3" />
-                                </svg>
-                            </div>
-                            <p className="text-sm text-[var(--text-secondary)] italic">
+                            <p className="text-[13px] leading-relaxed text-[var(--text-secondary)] italic">
                                 Vibing offline…
                             </p>
                         </motion.div>
                     ) : track ? (
-                        /* Track data */
                         <motion.div
-                            key={track.title + track.artist}
+                            key={track.title}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.3 }}
-                            className="flex-1 flex items-center gap-4"
+                            className="flex-1"
                         >
-                            {/* Album Art */}
-                            <div className="w-[80px] h-[80px] rounded-lg overflow-hidden shrink-0 bg-[var(--bg-highlight)]">
-                                {track.albumArt ? (
-                                    <img
-                                        src={track.albumArt}
-                                        alt={`${track.title} album art`}
-                                        className="w-full h-full object-cover"
-                                        loading="lazy"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
-                                            <path d="M9 18V5l12-2v13" />
-                                            <circle cx="6" cy="18" r="3" />
-                                            <circle cx="18" cy="16" r="3" />
-                                        </svg>
-                                    </div>
+                            <p className="text-sm leading-[1.6] text-[var(--text-secondary)]">
+                                {track.isPlaying ? 'I am currently listening to ' : 'I recently listened to '}
+                                <span className="font-bold text-[var(--text-primary)]">{track.title}</span> by <span className="font-bold text-[var(--text-primary)]">{track.artist}</span>
+                                {track.album && (
+                                    <span> from the album <span className="font-bold text-[var(--text-primary)]">{track.album}</span></span>
                                 )}
-                            </div>
-
-                            {/* Track Info */}
-                            <div className="flex flex-col gap-1 min-w-0">
-                                <span className="text-sm font-medium text-[var(--text-primary)] truncate">
-                                    {truncate(track.title, TITLE_TRUNCATE)}
-                                </span>
-                                <span className="text-xs text-[var(--text-secondary)] truncate">
-                                    {track.artist}
-                                </span>
-
-                                {/* Progress bar (estimated) */}
-                                {track.isPlaying && track.progress_ms != null && track.duration_ms ? (
-                                    <div className="w-full h-[2px] rounded-full bg-[var(--bg-highlight)] mt-2 overflow-hidden">
-                                        <motion.div
-                                            className="h-full bg-[#1DB954] rounded-full"
-                                            initial={{ width: 0 }}
-                                            animate={{
-                                                width: `${Math.min(100, (track.progress_ms / track.duration_ms) * 100)}%`,
-                                            }}
-                                            transition={{ duration: 0.5, ease: 'easeOut' }}
-                                        />
-                                    </div>
-                                ) : null}
-                            </div>
+                            </p>
                         </motion.div>
                     ) : null}
                 </AnimatePresence>
-
-                {/* Spotify attribution */}
-                <div className="flex items-center gap-1.5 mt-auto pt-3">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#1DB954">
-                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
-                    </svg>
-                    <span className="text-[9px] text-[var(--text-muted)] tracking-wider uppercase">Spotify</span>
-                </div>
             </div>
+
+            {/* Vinyl UI at right */}
+            {track?.albumArt && (
+                <div className="absolute right-0 bottom-0 pointer-events-none overflow-hidden h-[120px] w-1/2 flex items-end justify-end">
+                    <div className="relative w-full h-[100px] flex items-end justify-end pb-4 pr-6">
+                        {/* Spinning vinyl record */}
+                        <div className={`absolute right-[70px] bottom-[25px] w-[90px] h-[90px] z-0 ${track.isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
+                            <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+                                <circle cx="50" cy="50" r="48" fill="#18181b" stroke="#2a2a30" strokeWidth="1" />
+                                <circle cx="50" cy="50" r="38" fill="none" stroke="#2a2a30" strokeWidth="1.5" />
+                                <circle cx="50" cy="50" r="28" fill="none" stroke="#2a2a30" strokeWidth="1.5" />
+                                <circle cx="50" cy="50" r="16" fill="#1DB954" />
+                                <circle cx="50" cy="50" r="4" fill="#09090b" />
+                            </svg>
+                        </div>
+                        {/* Album Cover */}
+                        <img 
+                            src={track.albumArt} 
+                            alt="Album Cover"
+                            className="w-[90px] h-[90px] object-cover rounded shadow-2xl relative z-10 border border-white/10"
+                        />
+                    </div>
+                </div>
+            )}
         </motion.div>
     )
 }

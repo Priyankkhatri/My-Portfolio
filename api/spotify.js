@@ -47,6 +47,7 @@ function extractTrackData(item, isPlaying = false, progress_ms = null) {
     return {
         title: item.name || 'Unknown Track',
         artist: item.artists?.map((a) => a.name).join(', ') || 'Unknown Artist',
+        album: item.album?.name || null,
         albumArt: item.album?.images?.[0]?.url || null,
         isPlaying,
         progress_ms: progress_ms,

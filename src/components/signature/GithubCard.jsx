@@ -135,22 +135,14 @@ export default function GithubCard() {
             whileHover={{ y: -4, boxShadow: '0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(96,165,250,0.06)' }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
         >
-            {/* Header */}
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                    <span
-                        className={`w-2.5 h-2.5 rounded-full shrink-0 ${isLive ? 'animate-pulse' : ''}`}
-                        style={{ backgroundColor: data ? getStatusColor(data.timestamp) : 'var(--text-muted)' }}
-                    />
-                    <span className="text-[11px] tracking-[0.2em] uppercase text-[var(--text-secondary)] font-semibold">
-                        {isLive ? 'Live Activity' : 'Latest Push'}
-                    </span>
-                </div>
-                {data?.sha && (
-                    <span className="text-[10px] font-mono text-[var(--text-primary)] bg-[var(--bg-highlight)] border border-[var(--border-color)] px-2 py-0.5 rounded-md">
-                        {data.sha}
-                    </span>
-                )}
+            {/* Header: GitHub Logo and Name */}
+            <div className="flex items-center gap-2 mb-6">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text-primary)">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z" />
+                </svg>
+                <h3 className="text-xl tracking-wide text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 'w600' }}>
+                    Priyank&apos;s Github
+                </h3>
             </div>
 
             <AnimatePresence mode="wait">
@@ -177,58 +169,51 @@ export default function GithubCard() {
                         transition={{ duration: 0.3 }}
                         className="flex-1 flex flex-col"
                     >
-                        {/* Repo & Branch */}
-                        <div className="flex flex-col gap-1.5 mb-3">
-                            <a
-                                href={data.repoUrl}
-                                target="_blank"
+                        {/* LATEST PUSH and Timestamp Pill */}
+                        <div className="flex items-center gap-3 mb-3">
+                            <span className="text-[10px] tracking-[0.2em] font-medium text-[var(--text-secondary)]">
+                                LATEST PUSH
+                            </span>
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#052e16] border border-[#064e3b]">
+                                <span className={`w-1.5 h-1.5 rounded-full bg-[#10b981] ${isLive ? 'animate-pulse' : ''}`} />
+                                <span className="text-[9px] font-medium text-[#10b981]">
+                                    {getRelativeTime(data.timestamp)}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Commit Message */}
+                        <p className="text-lg text-[var(--text-primary)] font-bold leading-snug mb-3">
+                            "{data.message}"
+                        </p>
+
+                        {/* Repo Info */}
+                        <div className="flex items-center gap-1.5 text-xs font-mono">
+                            <span className="text-[var(--text-secondary)]">Repo:</span>
+                            <a 
+                                href={data.repoUrl} 
+                                target="_blank" 
                                 rel="noopener noreferrer"
-                                className="text-base font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-1)] transition-colors duration-300 inline-flex items-center gap-1.5 w-fit"
+                                className="text-red-500 hover:text-red-400 transition-colors"
                                 onMouseEnter={() => setCursorVariant('hover')}
                                 onMouseLeave={() => setCursorVariant('default')}
                             >
                                 {data.repo}
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-0 group-hover:opacity-100 transition-all -translate-y-0.5 group-hover:translate-y-0">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                </svg>
                             </a>
-                            
-                            <div className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)] bg-[var(--bg-highlight)] w-fit px-2 py-0.5 rounded-md border border-[var(--border-color)]">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="6" y1="3" x2="6" y2="15" /><circle cx="18" cy="6" r="3" /><circle cx="6" cy="18" r="3" /><path d="M18 9a9 9 0 0 1-9 9" />
-                                </svg>
-                                <span className="font-mono">{data.branch}</span>
-                            </div>
-                        </div>
-
-                        {/* Commit message */}
-                        <div className="bg-[var(--bg-highlight)] border-l-2 border-[var(--accent-1)] p-2.5 rounded-r-md mb-3">
-                            <p className="text-xs text-[var(--text-primary)] leading-relaxed font-mono truncate" title={data.message}>
-                                {data.message}
-                            </p>
-                        </div>
-
-                        {/* Timestamp */}
-                        <div className="mt-auto flex items-center justify-between">
-                            <span className="text-xs font-semibold text-[var(--text-secondary)]">
-                                {getRelativeTime(data.timestamp)}
-                            </span>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* Social icons row */}
-            <div className="flex items-center gap-4 mt-5 pt-4 border-t border-[var(--border-color)]">
+            {/* Social icons row (centered at bottom) */}
+            <div className="flex items-center justify-center gap-8 mt-auto pt-6 bg-gradient-to-t from-[var(--bg-highlight)]/0 to-transparent">
                 {socialLinks.map((s) => (
                     <a
                         key={s.label}
                         href={s.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[var(--text-secondary)] hover:text-[var(--accent-1)] transition-all duration-300 transform hover:scale-125"
+                        className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-300 transform hover:scale-110"
                         onMouseEnter={() => setCursorVariant('hover')}
                         onMouseLeave={() => setCursorVariant('default')}
                         aria-label={s.label}
