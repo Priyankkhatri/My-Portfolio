@@ -116,6 +116,7 @@ export default function Hero() {
                                 height="176"
                                 loading="lazy"
                             />
+
                             <div className="absolute inset-0 bg-black/10 rounded-full" />
                         </div>
                     </motion.div>
@@ -342,7 +343,7 @@ export default function Hero() {
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 {/* Modal Body / PDF Viewer */}
                                 <div className="flex-1 w-full bg-[#333] relative">
                                     <object data="/Priyank_Resume.pdf" type="application/pdf" className="w-full h-full absolute inset-0">
