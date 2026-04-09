@@ -15,14 +15,15 @@ export const navConfig = {
     ],
 
     /**
-     * Scroll thresholds with hysteresis to prevent flicker.
-     * Enter thresholds are higher than exit thresholds.
+     * Scroll thresholds with wide hysteresis to prevent flicker.
+     * Enter thresholds are significantly higher than exit thresholds.
+     * The gap between enter/exit prevents rapid toggling near boundaries.
      */
     thresholds: {
-        heroToActive: 100,    // scroll down past 100px → State 2
-        activeToHero: 80,     // scroll up past 80px → State 1
-        activeToPill: 700,    // scroll down past 700px → State 3
-        pillToActive: 660,    // scroll up past 660px → State 2
+        heroToActive: 120,    // scroll down past 120px → State 2   ┐ 60px gap
+        activeToHero: 60,     // scroll up past 60px  → State 1     ┘
+        activeToPill: 720,    // scroll down past 720px → State 3   ┐ 100px gap
+        pillToActive: 620,    // scroll up past 620px  → State 2    ┘
     },
 
     /** Animation timing */
@@ -30,6 +31,7 @@ export const navConfig = {
         duration: 0.4,
         ease: [0.22, 1, 0.36, 1],
         progressSpring: { stiffness: 100, damping: 30, restDelta: 0.001 },
+        transitionLock: 400,  // ms — freeze state after transition to prevent re-trigger
     },
 
     /** Logo config */

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { NavLink, Link } from 'react-router-dom'
 import useStore from '../store/useStore'
@@ -50,13 +50,16 @@ export default function Navbar() {
 
     /* ── Animation config ──────────────────────────────────── */
     const { ease } = navConfig.timing
-    const morphDuration = 0.5
+    const morphDuration = 0.45
     const transition = reducedMotion
         ? { duration: 0 }
         : { duration: morphDuration, ease }
 
-    /* ── Container animation variants ────────────────────── */
-    const containerAnimate = {
+    /* ── Container animation variants (memoized on state) ── */
+    // Memoize against navState / isMobile / reducedMotion so the
+    // object reference only changes on a real state transition,
+    // NOT on every render (hover, mobile-menu toggle, etc.).
+    const containerAnimate = useMemo(() => ({
         maxWidth: isPill ? navConfig.pill.maxWidth : 9999,
         height: isPill
             ? navConfig.pill.height
@@ -84,12 +87,20 @@ export default function Navbar() {
                 ? 'rgba(255, 255, 255, 0.1)'
                 : 'rgba(255, 255, 255, 0.06)',
         boxShadow: isPill
-            ? pillHovered
-                ? '0 4px 16px rgba(0,0,0,0.2), 0 8px 40px rgba(0,0,0,0.35), 0 20px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.08)'
-                : '0 4px 12px rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.25), 0 16px 64px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.06)'
+            ? '0 4px 12px rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.25), 0 16px 64px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.06)'
             : '0 0 0 rgba(0, 0, 0, 0)',
-        scale: isPill && pillHovered ? 1.01 : 1,
-    }
+        scale: 1,
+    }), [navState, isMobile])
+
+    /* ── Pill hover — separate from layout animation ──────── */
+    // Pill hover shadow/scale is applied via CSS transitions
+    // so it doesn't restart the Framer layout animation.
+    const pillHoverStyle = isPill ? {
+        boxShadow: pillHovered
+            ? '0 4px 16px rgba(0,0,0,0.2), 0 8px 40px rgba(0,0,0,0.35), 0 20px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.08)'
+            : undefined,
+        transform: pillHovered ? 'scale(1.01)' : undefined,
+    } : {}
 
     /* ── Desktop link entrance animation ───────────────────── */
     const linkEntranceVariants = {
@@ -143,11 +154,16 @@ export default function Navbar() {
                     style={{
                         borderWidth: 1,
                         borderStyle: 'solid',
+                        willChange: 'transform',
                         WebkitBackdropFilter: isHero
                             ? 'blur(0px)'
                             : isPill
                                 ? 'blur(24px)'
                                 : 'blur(16px)',
+                        // Pill hover effects via CSS transition so they
+                        // don't restart the Framer layout animation
+                        transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+                        ...pillHoverStyle,
                     }}
                     onMouseEnter={() => isPill && setPillHovered(true)}
                     onMouseLeave={() => setPillHovered(false)}

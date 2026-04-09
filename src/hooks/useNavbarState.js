@@ -10,20 +10,31 @@ import { navConfig } from '../data/navConfig'
  * - reducedMotion: boolean
  * - isMobile: boolean (< 768px — pill never triggers on mobile)
  *
- * Scroll listener is throttled via rAF. State machine uses hysteresis
- * buffers (enter/exit at different thresholds) to prevent flicker.
- * Route changes snap to 'hero' immediately.
+ * ── Scroll-glitch fixes ──────────────────────────────────────
+ * 1. Hysteresis: enter/exit thresholds have wide gaps to prevent
+ *    rapid toggling near boundary zones.
+ * 2. Transition lock: after every state change the scroll handler
+ *    is frozen for LOCK_MS to let the CSS/Framer animation settle.
+ * 3. rAF throttle: scroll events are coalesced via requestAnimationFrame
+ *    so at most one state evaluation runs per frame (~16ms).
+ * 4. Stable state machine: current state is kept in a ref; React state
+ *    only updates when the ref truly changes. No continuous re-renders.
+ * 5. Route changes snap to 'hero' immediately and reset the lock.
  */
+
 export default function useNavbarState() {
+    const LOCK_MS = navConfig.timing.transitionLock
     const [navState, setNavState] = useState('hero')
     const [reducedMotion, setReducedMotion] = useState(false)
     const [isMobile, setIsMobile] = useState(
         typeof window !== 'undefined' ? window.innerWidth < 768 : false
     )
     const location = useLocation()
+
     const rafRef = useRef(null)
     const prevStateRef = useRef('hero')
     const isMobileRef = useRef(isMobile)
+    const lockUntilRef = useRef(0) // timestamp until which state changes are blocked
 
     /* ── Reduced motion preference ─────────────────────────── */
     useEffect(() => {
@@ -47,6 +58,9 @@ export default function useNavbarState() {
 
     /* ── Scroll state machine ──────────────────────────────── */
     const handleScroll = useCallback(() => {
+        // ── Transition lock: skip evaluation while animation settles ──
+        if (performance.now() < lockUntilRef.current) return
+
         const scrollY = window.scrollY
         const {
             heroToActive,
@@ -74,6 +88,7 @@ export default function useNavbarState() {
 
         if (next !== prev) {
             prevStateRef.current = next
+            lockUntilRef.current = performance.now() + LOCK_MS
             setNavState(next)
         }
     }, [])
@@ -97,6 +112,7 @@ export default function useNavbarState() {
     /* ── Route change — snap to hero ───────────────────────── */
     useEffect(() => {
         prevStateRef.current = 'hero'
+        lockUntilRef.current = 0 // clear lock so hero applies instantly
         setNavState('hero')
     }, [location.pathname])
 
