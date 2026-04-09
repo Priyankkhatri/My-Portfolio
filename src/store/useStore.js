@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 
 const useStore = create((set, get) => ({
+    isLoading: true,
     isLoaded: false,
     loaderPhase: 0, // 0-3: Loading, 4: Warp/Split, 5: Fully loaded Hero
     cursorVariant: 'default',
@@ -10,6 +11,7 @@ const useStore = create((set, get) => ({
     // Theme transition state for the energy wave animation
     themeTransition: { active: false, origin: { x: 0, y: 0 }, oldTheme: 'dark' },
 
+    setIsLoading: (val) => set({ isLoading: val }),
     setIsLoaded: (val) => set({ isLoaded: val }),
     setLoaderPhase: (phase) => set({ loaderPhase: phase }),
     setCursorVariant: (variant) => set({ cursorVariant: variant }),

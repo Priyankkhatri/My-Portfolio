@@ -15,14 +15,14 @@ export default function NavbarLogo({ compact = false }) {
             to="/"
             onMouseEnter={() => setCursorVariant('hover')}
             onMouseLeave={() => setCursorVariant('default')}
-            className="flex items-center gap-3 group shrink-0"
+            className="flex shrink-0 items-center gap-3 self-center"
         >
             <div
                 className={`
                     ${compact ? 'w-8 h-8 rounded-lg' : 'w-10 h-10 rounded-xl'}
                     border border-[var(--border-color)] flex items-center justify-center
                     group-hover:border-[#60a5fa]/50 transition-all duration-500
-                    overflow-hidden group-hover:shadow-[0_0_20px_rgba(96,165,250,0.3)]
+                    overflow-hidden group-hover:shadow-[0_0_16px_rgba(96,165,250,0.18)]
                     bg-[var(--bg-highlight)]/30
                 `}
             >

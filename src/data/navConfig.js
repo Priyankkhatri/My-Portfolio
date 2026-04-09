@@ -1,11 +1,8 @@
 /**
- * navConfig.js — Single source of truth for the Adaptive Navigation System.
- * All nav links, scroll thresholds, timing, and logo config.
- * Update this file to change navbar behavior — no component changes needed.
+ * navConfig.js - Single source of truth for the adaptive navbar system.
  */
 
 export const navConfig = {
-    /** Navigation links — label for full bar, shortLabel for compact pill */
     links: [
         { label: 'Home', to: '/', shortLabel: 'Home' },
         { label: 'Tech', to: '/tech', shortLabel: 'Tech' },
@@ -14,36 +11,81 @@ export const navConfig = {
         { label: 'Contact', to: '/contact', shortLabel: 'Contact' },
     ],
 
-    /**
-     * Scroll thresholds with wide hysteresis to prevent flicker.
-     * Enter thresholds are significantly higher than exit thresholds.
-     * The gap between enter/exit prevents rapid toggling near boundaries.
-     */
     thresholds: {
-        heroToActive: 120,    // scroll down past 120px → State 2   ┐ 60px gap
-        activeToHero: 60,     // scroll up past 60px  → State 1     ┘
-        activeToPill: 720,    // scroll down past 720px → State 3   ┐ 100px gap
-        pillToActive: 620,    // scroll up past 620px  → State 2    ┘
+        enterCompact: 700,
+        exitCompact: 600,
+        exitCompactWhileUp: 550,
     },
 
-    /** Animation timing */
     timing: {
-        duration: 0.4,
+        activeToCompact: 0.45,
+        compactToActive: 0.3,
         ease: [0.22, 1, 0.36, 1],
-        progressSpring: { stiffness: 100, damping: 30, restDelta: 0.001 },
-        transitionLock: 400,  // ms — freeze state after transition to prevent re-trigger
+        progressSpring: { stiffness: 140, damping: 28, restDelta: 0.001 },
+        transitionLock: 400,
+        idleDelay: 1500,
+        idleDuration: 0.8,
     },
 
-    /** Logo config */
     logo: {
         src: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775552783/logo_jatani.png',
         alt: 'Priyank Khatri Logo',
         text: 'PRIYANK',
     },
 
-    /** Pill state visual config */
-    pill: {
-        maxWidth: 520,   // px — width of the floating pill
-        height: 48,      // px
+    desktop: {
+        maxWidth: 1200,
+        height: 68,
+        paddingX: 24,
+        paddingY: 14,
+        compactMaxWidth: 620,
+        compactHeight: 52,
+        compactPaddingX: 18,
+        compactPaddingY: 10,
+        compactTopOffset: 16,
+    },
+
+    mobile: {
+        breakpoint: 768,
+        height: 56,
+        paddingX: 14,
+        paddingY: 10,
+        topOffset: 12,
+    },
+
+    visuals: {
+        active: {
+            backgroundColor: 'rgba(10, 15, 30, 0.66)',
+            borderColor: 'rgba(255, 255, 255, 0.08)',
+            shadow:
+                '0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.04)',
+            idleShadow:
+                '0 6px 22px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.03)',
+            borderRadius: 18,
+            blur: 16,
+            idleBlur: 8,
+        },
+        compact: {
+            backgroundColor: 'rgba(10, 15, 30, 0.76)',
+            borderColor: 'rgba(255, 255, 255, 0.08)',
+            shadow:
+                '0 12px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.04)',
+            idleShadow:
+                '0 8px 22px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03)',
+            borderRadius: 9999,
+            blur: 14,
+            idleBlur: 8,
+        },
+        mobile: {
+            backgroundColor: 'rgba(10, 15, 30, 0.76)',
+            borderColor: 'rgba(255, 255, 255, 0.08)',
+            shadow:
+                '0 10px 28px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.04)',
+            idleShadow:
+                '0 6px 18px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.03)',
+            borderRadius: 9999,
+            blur: 14,
+            idleBlur: 8,
+        },
     },
 }

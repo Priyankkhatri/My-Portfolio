@@ -1,120 +1,241 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import {
+    startTransition,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react'
 import { useLocation } from 'react-router-dom'
 import { navConfig } from '../data/navConfig'
 
-/**
- * useNavbarState — Drives the Adaptive Navigation System.
- *
- * Returns:
- * - navState: 'hero' | 'active' | 'pill'
- * - reducedMotion: boolean
- * - isMobile: boolean (< 768px — pill never triggers on mobile)
- *
- * ── Scroll-glitch fixes ──────────────────────────────────────
- * 1. Hysteresis: enter/exit thresholds have wide gaps to prevent
- *    rapid toggling near boundary zones.
- * 2. Transition lock: after every state change the scroll handler
- *    is frozen for LOCK_MS to let the CSS/Framer animation settle.
- * 3. rAF throttle: scroll events are coalesced via requestAnimationFrame
- *    so at most one state evaluation runs per frame (~16ms).
- * 4. Stable state machine: current state is kept in a ref; React state
- *    only updates when the ref truly changes. No continuous re-renders.
- * 5. Route changes snap to 'hero' immediately and reset the lock.
- */
+const ACTIVE_STATE = 'active'
+const COMPACT_STATE = 'compact'
+const DEFAULT_DIRECTION = 'down'
+
+function getCompactExitThreshold(direction) {
+    return direction === 'up'
+        ? navConfig.thresholds.exitCompactWhileUp
+        : navConfig.thresholds.exitCompact
+}
 
 export default function useNavbarState() {
-    const LOCK_MS = navConfig.timing.transitionLock
-    const [navState, setNavState] = useState('hero')
-    const [reducedMotion, setReducedMotion] = useState(false)
-    const [isMobile, setIsMobile] = useState(
-        typeof window !== 'undefined' ? window.innerWidth < 768 : false
-    )
     const location = useLocation()
+    const lockMs = navConfig.timing.transitionLock
+    const idleDelay = navConfig.timing.idleDelay
 
-    const rafRef = useRef(null)
-    const prevStateRef = useRef('hero')
+    const [navState, setNavState] = useState(ACTIVE_STATE)
+    const [isMobile, setIsMobile] = useState(() =>
+        typeof window !== 'undefined'
+            ? window.innerWidth < navConfig.mobile.breakpoint
+            : false
+    )
+    const [scrollDirection, setScrollDirection] = useState(DEFAULT_DIRECTION)
+    const [isIdle, setIsIdle] = useState(false)
+    const [reducedMotion, setReducedMotion] = useState(false)
+    const [snapInstantly, setSnapInstantly] = useState(true)
+
+    const navStateRef = useRef(ACTIVE_STATE)
     const isMobileRef = useRef(isMobile)
-    const lockUntilRef = useRef(0) // timestamp until which state changes are blocked
+    const directionRef = useRef(DEFAULT_DIRECTION)
+    const idleRef = useRef(false)
+    const previousScrollYRef = useRef(0)
+    const lockUntilRef = useRef(0)
+    const rafRef = useRef(null)
+    const idleTimeoutRef = useRef(null)
+    const snapResetRef = useRef(null)
 
-    /* ── Reduced motion preference ─────────────────────────── */
+    const clearIdleTimer = () => {
+        if (idleTimeoutRef.current) {
+            clearTimeout(idleTimeoutRef.current)
+            idleTimeoutRef.current = null
+        }
+    }
+
+    const scheduleIdle = () => {
+        clearIdleTimer()
+        idleTimeoutRef.current = setTimeout(() => {
+            idleRef.current = true
+            setIsIdle(true)
+        }, idleDelay)
+    }
+
+    const updateDirection = (scrollY) => {
+        const previousScrollY = previousScrollYRef.current
+
+        if (scrollY === previousScrollY) {
+            return directionRef.current
+        }
+
+        const nextDirection = scrollY > previousScrollY ? 'down' : 'up'
+
+        previousScrollYRef.current = scrollY
+
+        if (nextDirection !== directionRef.current) {
+            directionRef.current = nextDirection
+            setScrollDirection(nextDirection)
+        }
+
+        return nextDirection
+    }
+
+    const evaluateScrollState = (scrollY) => {
+        const direction = updateDirection(scrollY)
+
+        if (idleRef.current) {
+            idleRef.current = false
+            setIsIdle(false)
+        }
+
+        scheduleIdle()
+
+        if (isMobileRef.current) {
+            if (navStateRef.current !== ACTIVE_STATE) {
+                navStateRef.current = ACTIVE_STATE
+                lockUntilRef.current = 0
+                startTransition(() => setNavState(ACTIVE_STATE))
+            }
+            return
+        }
+
+        if (performance.now() < lockUntilRef.current) {
+            return
+        }
+
+        const currentState = navStateRef.current
+        const nextState =
+            currentState === ACTIVE_STATE
+                ? scrollY >= navConfig.thresholds.enterCompact
+                    ? COMPACT_STATE
+                    : ACTIVE_STATE
+                : scrollY < getCompactExitThreshold(direction)
+                  ? ACTIVE_STATE
+                  : COMPACT_STATE
+
+        if (nextState !== currentState) {
+            navStateRef.current = nextState
+            lockUntilRef.current = performance.now() + lockMs
+            startTransition(() => setNavState(nextState))
+        }
+    }
+
     useEffect(() => {
-        const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-        setReducedMotion(mq.matches)
-        const handler = (e) => setReducedMotion(e.matches)
-        mq.addEventListener('change', handler)
-        return () => mq.removeEventListener('change', handler)
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+        const handleChange = (event) => setReducedMotion(event.matches)
+
+        setReducedMotion(mediaQuery.matches)
+        mediaQuery.addEventListener('change', handleChange)
+
+        return () => mediaQuery.removeEventListener('change', handleChange)
     }, [])
 
-    /* ── Responsive tracking ───────────────────────────────── */
     useEffect(() => {
-        const handler = () => {
-            const mobile = window.innerWidth < 768
+        const handleResize = () => {
+            const mobile = window.innerWidth < navConfig.mobile.breakpoint
+
             isMobileRef.current = mobile
-            setIsMobile(mobile)
-        }
-        window.addEventListener('resize', handler, { passive: true })
-        return () => window.removeEventListener('resize', handler)
-    }, [])
+            setIsMobile((currentValue) =>
+                currentValue === mobile ? currentValue : mobile
+            )
 
-    /* ── Scroll state machine ──────────────────────────────── */
-    const handleScroll = useCallback(() => {
-        // ── Transition lock: skip evaluation while animation settles ──
-        if (performance.now() < lockUntilRef.current) return
+            if (mobile && navStateRef.current !== ACTIVE_STATE) {
+                navStateRef.current = ACTIVE_STATE
+                lockUntilRef.current = 0
+                setNavState(ACTIVE_STATE)
+            }
 
-        const scrollY = window.scrollY
-        const {
-            heroToActive,
-            activeToHero,
-            activeToPill,
-            pillToActive,
-        } = navConfig.thresholds
-
-        const prev = prevStateRef.current
-        let next = prev
-
-        if (prev === 'hero') {
-            if (scrollY >= heroToActive) next = 'active'
-        } else if (prev === 'active') {
-            if (scrollY <= activeToHero) next = 'hero'
-            else if (scrollY >= activeToPill) next = 'pill'
-        } else if (prev === 'pill') {
-            if (scrollY <= pillToActive) next = 'active'
+            evaluateScrollState(window.scrollY)
         }
 
-        // Never enter pill state on mobile
-        if (isMobileRef.current && next === 'pill') {
-            next = 'active'
-        }
+        window.addEventListener('resize', handleResize, { passive: true })
 
-        if (next !== prev) {
-            prevStateRef.current = next
-            lockUntilRef.current = performance.now() + LOCK_MS
-            setNavState(next)
-        }
+        return () => window.removeEventListener('resize', handleResize)
     }, [])
 
     useEffect(() => {
-        const onScroll = () => {
-            if (rafRef.current) return
+        const handleScroll = () => {
+            if (rafRef.current !== null) {
+                return
+            }
+
             rafRef.current = requestAnimationFrame(() => {
-                handleScroll()
                 rafRef.current = null
+                evaluateScrollState(window.scrollY)
             })
         }
-        window.addEventListener('scroll', onScroll, { passive: true })
-        handleScroll() // Initial check
-        return () => {
-            window.removeEventListener('scroll', onScroll)
-            if (rafRef.current) cancelAnimationFrame(rafRef.current)
-        }
-    }, [handleScroll])
 
-    /* ── Route change — snap to hero ───────────────────────── */
-    useEffect(() => {
-        prevStateRef.current = 'hero'
-        lockUntilRef.current = 0 // clear lock so hero applies instantly
-        setNavState('hero')
+        previousScrollYRef.current = window.scrollY
+        evaluateScrollState(window.scrollY)
+
+        window.addEventListener('scroll', handleScroll, { passive: true })
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+
+            if (rafRef.current !== null) {
+                cancelAnimationFrame(rafRef.current)
+                rafRef.current = null
+            }
+        }
+    }, [])
+
+    useLayoutEffect(() => {
+        clearIdleTimer()
+
+        if (snapResetRef.current !== null) {
+            cancelAnimationFrame(snapResetRef.current)
+            snapResetRef.current = null
+        }
+
+        navStateRef.current = ACTIVE_STATE
+        directionRef.current = DEFAULT_DIRECTION
+        idleRef.current = false
+        previousScrollYRef.current = 0
+        lockUntilRef.current = 0
+
+        setScrollDirection(DEFAULT_DIRECTION)
+        setIsIdle(false)
+        setNavState(ACTIVE_STATE)
+        setSnapInstantly(true)
+
+        scheduleIdle()
+
+        let secondFrame = null
+
+        snapResetRef.current = requestAnimationFrame(() => {
+            secondFrame = requestAnimationFrame(() => {
+                setSnapInstantly(false)
+                snapResetRef.current = null
+            })
+        })
+
+        return () => {
+            if (snapResetRef.current !== null) {
+                cancelAnimationFrame(snapResetRef.current)
+                snapResetRef.current = null
+            }
+
+            if (secondFrame !== null) {
+                cancelAnimationFrame(secondFrame)
+            }
+        }
     }, [location.pathname])
 
-    return { navState, reducedMotion, isMobile }
+    useEffect(() => {
+        return () => {
+            clearIdleTimer()
+
+            if (snapResetRef.current !== null) {
+                cancelAnimationFrame(snapResetRef.current)
+            }
+        }
+    }, [])
+
+    return {
+        navState,
+        isMobile,
+        scrollDirection,
+        isIdle,
+        reducedMotion,
+        snapInstantly,
+    }
 }

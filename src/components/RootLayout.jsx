@@ -20,6 +20,7 @@ const HeroBackground = lazy(() => import('./HeroBackground'))
  * SignatureSection is mounted once here — persists across all routes.
  */
 export default function RootLayout() {
+    const isLoading = useStore((s) => s.isLoading)
     const loaderPhase = useStore((s) => s.loaderPhase)
 
     return (
@@ -44,6 +45,8 @@ export default function RootLayout() {
                 <HeroBackground />
             </Suspense>
 
+            {!isLoading && <Navbar />}
+
             {/* DOM Layer */}
             <motion.div
                 className="relative z-10"
@@ -51,7 +54,6 @@ export default function RootLayout() {
                 animate={loaderPhase >= 4 ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <Navbar />
                 <main>
                     <PageTransitionWrapper />
                 </main>

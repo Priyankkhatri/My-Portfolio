@@ -923,18 +923,18 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Active nav link persistent glow */
 .nav-link-active-glow {
-  text-shadow: 0 0 16px rgba(96, 165, 250, 0.25);
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.16);
   font-weight: 500;
 }
 
 [data-theme="light"] .nav-link-active-glow {
-  text-shadow: 0 0 16px rgba(37, 99, 235, 0.2);
+  text-shadow: 0 0 10px rgba(37, 99, 235, 0.14);
 }
 
 /* Magnetic link base — GPU acceleration */
 .nav-link-magnetic {
   will-change: transform;
-  transition: color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: color 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (hover: hover) {

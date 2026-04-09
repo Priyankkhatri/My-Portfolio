@@ -20,7 +20,9 @@ export default function NavbarLinks({ compact = false, isMobile = false }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
 
     return (
-        <div className={`flex items-center ${compact ? 'gap-3' : 'gap-8'}`}>
+        <div
+            className={`flex items-center ${compact ? 'gap-2.5' : 'gap-5 xl:gap-6'}`}
+        >
             {navConfig.links.map((item, index) => (
                 <NavLinkItem
                     key={item.label}
@@ -41,7 +43,7 @@ export default function NavbarLinks({ compact = false, isMobile = false }) {
 function NavLinkItem({ item, compact, isMobile, index, setCursorVariant }) {
     const [isHovered, setIsHovered] = useState(false)
     const { x, y, handleMouseMove, handleMouseLeave } = useMagnetic({
-        strength: 0.25,
+        strength: 0.16,
         disabled: isMobile,
     })
 
@@ -71,13 +73,15 @@ function NavLinkItem({ item, compact, isMobile, index, setCursorVariant }) {
                 damping: 20,
                 mass: 0.5,
             }}
-            className="relative"
+            className="relative overflow-hidden rounded-xl"
         >
             <NavLink
                 to={item.to}
                 end={item.to === '/'}
                 className={({ isActive }) =>
-                    `relative ${compact ? 'text-xs' : 'text-sm'} tracking-wide py-1 nav-link-magnetic ${
+                    `relative inline-flex min-h-9 items-center rounded-xl px-2 ${
+                        compact ? 'text-xs' : 'text-sm'
+                    } tracking-wide nav-link-magnetic ${
                         isActive
                             ? 'text-[var(--text-primary)] nav-link-active-glow'
                             : 'text-[var(--text-secondary)]'
@@ -88,18 +92,18 @@ function NavLinkItem({ item, compact, isMobile, index, setCursorVariant }) {
                     <>
                         {/* ── Background Glow Bubble ──────────── */}
                         <motion.div
-                            className="absolute -inset-x-3 -inset-y-2 rounded-lg pointer-events-none"
+                            className="absolute inset-0 rounded-xl pointer-events-none"
                             style={{
                                 background:
-                                    'radial-gradient(ellipse at center, rgba(96,165,250,0.08) 0%, transparent 70%)',
+                                    'radial-gradient(ellipse at center, rgba(96,165,250,0.05) 0%, transparent 72%)',
                             }}
                             initial={false}
                             animate={{
                                 opacity: isHovered ? 1 : 0,
-                                scale: isHovered ? 1 : 0.8,
+                                scale: isHovered ? 1 : 0.92,
                             }}
                             transition={{
-                                duration: 0.3,
+                                duration: 0.24,
                                 ease: [0.22, 1, 0.36, 1],
                             }}
                         />
@@ -109,7 +113,7 @@ function NavLinkItem({ item, compact, isMobile, index, setCursorVariant }) {
                             className="relative z-10 block"
                             initial={false}
                             animate={{
-                                scale: isHovered ? 1.04 : 1,
+                                scale: isHovered ? 1.02 : 1,
                                 y: isHovered ? -1 : 0,
                             }}
                             transition={{
@@ -147,7 +151,7 @@ function NavLinkItem({ item, compact, isMobile, index, setCursorVariant }) {
                                 initial={false}
                                 animate={{
                                     scaleX: isHovered ? 1 : 0,
-                                    opacity: isHovered ? 0.7 : 0,
+                                    opacity: isHovered ? 0.55 : 0,
                                 }}
                                 transition={{
                                     duration: 0.35,

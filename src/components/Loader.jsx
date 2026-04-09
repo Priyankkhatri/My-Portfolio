@@ -4,12 +4,16 @@ import useStore from '../store/useStore'
 
 export default function Loader() {
     const [progress, setProgress] = useState(0)
+    const setIsLoading = useStore((s) => s.setIsLoading)
     const setIsLoaded = useStore((s) => s.setIsLoaded)
     const loaderPhase = useStore((s) => s.loaderPhase)
     const setLoaderPhase = useStore((s) => s.setLoaderPhase)
     const [show, setShow] = useState(true)
 
     useEffect(() => {
+        setIsLoading(true)
+        setIsLoaded(false)
+
         // Preload hero image during loader
         const img = new Image()
         img.src = 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775455094/compressed-pfp_ibccwh.png'
@@ -24,7 +28,7 @@ export default function Loader() {
             setProgress(currentProgress)
         }, 120)
         return () => clearInterval(interval)
-    }, [])
+    }, [setIsLoaded, setIsLoading])
 
     useEffect(() => {
         const t1 = setTimeout(() => setLoaderPhase(1), 600)
@@ -44,12 +48,13 @@ export default function Loader() {
         if (loaderPhase === 4) {
             const t = setTimeout(() => {
                 setShow(false)
+                setIsLoading(false)
                 setIsLoaded(true)
                 setLoaderPhase(5) // Final phase: Hero settled
             }, 1500) // Cinematic duration for loading animation
             return () => clearTimeout(t)
         }
-    }, [loaderPhase, setIsLoaded, setLoaderPhase])
+    }, [loaderPhase, setIsLoaded, setIsLoading, setLoaderPhase])
 
     if (!show) return null
 

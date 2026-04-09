@@ -8,10 +8,15 @@ import { useState, useCallback, useRef, useEffect } from 'react'
  *
  * @param {Object} options
  * @param {number} options.strength - Multiplier for pull distance (default 0.3)
+ * @param {number} options.maxOffset - Maximum pixel offset in any direction
  * @param {boolean} options.disabled - Force disable (e.g. on mobile)
  * @returns {{ x: number, y: number, handleMouseMove: Function, handleMouseLeave: Function }}
  */
-export default function useMagnetic({ strength = 0.3, disabled = false } = {}) {
+export default function useMagnetic({
+    strength = 0.3,
+    maxOffset = 2,
+    disabled = false,
+} = {}) {
     const [offset, setOffset] = useState({ x: 0, y: 0 })
     const rafRef = useRef(null)
     const isTouchDevice = useRef(false)
@@ -31,14 +36,20 @@ export default function useMagnetic({ strength = 0.3, disabled = false } = {}) {
                 const rect = e.currentTarget.getBoundingClientRect()
                 const centerX = rect.left + rect.width / 2
                 const centerY = rect.top + rect.height / 2
-                const deltaX = (e.clientX - centerX) * strength
-                const deltaY = (e.clientY - centerY) * strength
+                const deltaX = Math.max(
+                    -maxOffset,
+                    Math.min(maxOffset, (e.clientX - centerX) * strength)
+                )
+                const deltaY = Math.max(
+                    -maxOffset,
+                    Math.min(maxOffset, (e.clientY - centerY) * strength)
+                )
 
                 setOffset({ x: deltaX, y: deltaY })
                 rafRef.current = null
             })
         },
-        [strength, disabled]
+        [disabled, maxOffset, strength]
     )
 
     const handleMouseLeave = useCallback(() => {
