@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function NavbarContainer({
     children,
@@ -14,12 +14,15 @@ export default function NavbarContainer({
     motion: motionTokens,
 }) {
     const [isHovered, setIsHovered] = useState(false)
+    const [breathPhase, setBreathPhase] = useState(0)
+    const breathRef = useRef(null)
 
     const tokenSet = isCompact ? tokens.compact : tokens.active
     const widthClass = isMobile ? tokens.mobile.widthClass : tokenSet.widthClass
     const isScrollActive = velocity > 0.03
     const blurBase = isIdle ? tokenSet.idleBlur : tokenSet.blur
-    const blurValue = isScrollActive && !isIdle ? blurBase + 2 : blurBase
+    const blurValue = isScrollActive && !isIdle ? blurBase + 4 : blurBase
+    const saturateValue = tokenSet.saturate || 100
     const shadowValue = isHovered && isCompact && !isMobile
         ? tokenSet.hoverShadow
         : isScrollActive && !isIdle
@@ -27,7 +30,8 @@ export default function NavbarContainer({
         : isIdle
           ? tokenSet.idleShadow
           : tokenSet.shadow
-    const visualTransition = reducedMotion
+
+    const morphTransition = reducedMotion
         ? { duration: 0 }
         : {
             duration: 0.55,
@@ -40,117 +44,114 @@ export default function NavbarContainer({
             ease: isIdle ? motionTokens.idleEase : motionTokens.entryEase,
         }
 
+    // Breathing effect — subtle opacity pulse every ~7s
+    useEffect(() => {
+        if (reducedMotion) return
+
+        const cycle = () => {
+            setBreathPhase((p) => (p === 0 ? 1 : 0))
+            breathRef.current = window.setTimeout(cycle, 7000)
+        }
+
+        breathRef.current = window.setTimeout(cycle, 7000)
+        return () => {
+            if (breathRef.current) window.clearTimeout(breathRef.current)
+        }
+    }, [reducedMotion])
+
+    const breathOpacity = reducedMotion ? 1 : (breathPhase === 0 ? 1 : 0.98)
+
+    // Compute lift via transform only — top stays 0 always
+    const liftY = isCompact && !isMobile ? -8 : 0
+    const morphScale = isHovered && isCompact && !isMobile && !reducedMotion
+        ? 1.01
+        : (isCompact && !isMobile && !reducedMotion ? 0.97 : 1)
+
     return (
         <motion.div
-            className="w-full"
-            initial={{ opacity: 0 }}
+            layout
+            onHoverStart={() => setIsHovered(true)}
+            onHoverEnd={() => setIsHovered(false)}
+            className={`pointer-events-auto relative overflow-hidden ${widthClass}`}
+            style={{
+                willChange: 'transform',
+                transformOrigin: 'center top',
+            }}
             animate={{
-                opacity: 1,
-                paddingTop: tokenSet.top,
-                y: isCompact && !isMobile ? -6 : 0,
-                scale: isHovered && isCompact && !isMobile && !reducedMotion ? 1.01 : (isCompact && !isMobile && !reducedMotion ? 0.985 : 1),
+                // Transform-only properties (no layout shift)
+                y: liftY,
+                scale: morphScale,
+                opacity: breathOpacity,
+
+                // Visual properties animated smoothly
+                borderRadius: tokenSet.radius,
+                paddingTop: tokenSet.paddingY,
+                paddingBottom: tokenSet.paddingY,
+                paddingLeft: tokenSet.paddingX,
+                paddingRight: tokenSet.paddingX,
+                backgroundColor: tokenSet.background,
+                marginTop: isCompact && !isMobile ? 16 : 0,
+                boxShadow: shadowValue,
+                backdropFilter: `blur(${blurValue}px) saturate(${saturateValue}%)`,
+                WebkitBackdropFilter: `blur(${blurValue}px) saturate(${saturateValue}%)`,
             }}
             transition={{
-                opacity: reducedMotion ? { duration: 0 } : { duration: 0.4, ease: motionTokens.entryEase },
-                paddingTop: visualTransition,
-                y: visualTransition,
-                scale: isHovered ? { duration: 0.2 } : visualTransition,
+                // Layout morph — single unified timing
+                layout: morphTransition,
+
+                // Transform properties — smooth, no layout shift
+                y: morphTransition,
+                scale: isHovered
+                    ? { duration: 0.22, ease: motionTokens.entryEase }
+                    : morphTransition,
+                opacity: reducedMotion
+                    ? { duration: 0 }
+                    : { duration: 3.5, ease: [0.4, 0, 0.2, 1] },
+
+                // Visual morph — same timing as layout
+                borderRadius: morphTransition,
+                paddingTop: morphTransition,
+                paddingBottom: morphTransition,
+                paddingLeft: morphTransition,
+                paddingRight: morphTransition,
+                backgroundColor: morphTransition,
+                marginTop: morphTransition,
+
+                // Calm properties — gradual transitions
+                boxShadow: calmTransition,
+                backdropFilter: calmTransition,
+                WebkitBackdropFilter: calmTransition,
             }}
         >
+            {/* Border — rendered as a pseudo layer to avoid animating border-width */}
+            <div
+                className="pointer-events-none absolute inset-0 rounded-[inherit]"
+                style={{
+                    border: '1px solid rgba(255, 255, 255, 0.04)',
+                }}
+            />
+
+            {/* Subtle depth gradient */}
+            <div
+                className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit]"
+                style={{
+                    background: 'linear-gradient(to bottom, rgba(12, 16, 28, 0.35), rgba(8, 12, 22, 0.2))',
+                }}
+            />
+
+            {/* Top edge micro-highlight */}
             <motion.div
-                layout
-                onHoverStart={() => setIsHovered(true)}
-                onHoverEnd={() => setIsHovered(false)}
-                    className={`pointer-events-auto relative overflow-hidden ${widthClass}`}
+                className="pointer-events-none absolute inset-x-6 top-0 h-px"
                 animate={{
-                    borderRadius: tokenSet.radius,
-                    paddingTop: tokenSet.paddingY,
-                    paddingBottom: tokenSet.paddingY,
-                    paddingLeft: tokenSet.paddingX,
-                    paddingRight: tokenSet.paddingX,
-                    backgroundColor: tokenSet.background,
-                    borderWidth: isCompact ? '1px' : '0px 0px 1px 0px',
-                    borderStyle: 'solid',
-                    borderColor: isCompact ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.06)',
-                    boxShadow: shadowValue,
-                    backdropFilter: `blur(${blurValue}px)`,
-                    WebkitBackdropFilter: `blur(${blurValue}px)`,
-                    opacity: 1,
+                    opacity: tokenSet.highlightOpacity * (isIdle ? 0.5 : 1),
                 }}
-                transition={{
-                    layout: visualTransition,
-                    borderRadius: visualTransition,
-                    paddingTop: visualTransition,
-                    paddingBottom: visualTransition,
-                    paddingLeft: visualTransition,
-                    paddingRight: visualTransition,
-                    backgroundColor: visualTransition,
-                    borderWidth: visualTransition,
-                    borderColor: calmTransition,
-                    boxShadow: calmTransition,
-                    backdropFilter: calmTransition,
-                    WebkitBackdropFilter: calmTransition,
-                    opacity: visualTransition,
+                transition={calmTransition}
+                style={{
+                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)',
                 }}
-            >
-                <div
-                    className="pointer-events-none absolute inset-0 -z-20"
-                    style={{
-                        background: 'linear-gradient(120deg, rgba(6, 12, 30, 0.88), rgba(4, 8, 22, 0.82))',
-                    }}
-                />
-                <div
-                    className="pointer-events-none absolute inset-0 -z-10"
-                    style={{
-                        background: 'linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.02))',
-                    }}
-                />
+            />
 
-                {!reducedMotion && (
-                    <motion.div
-                        className="pointer-events-none absolute inset-y-0 left-[-20%] w-[34%]"
-                        animate={{ x: ['0%', '360%'] }}
-                        transition={{
-                            duration: 12,
-                            ease: 'linear',
-                            repeat: Infinity,
-                        }}
-                        style={{
-                            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)',
-                            opacity: 0.45,
-                        }}
-                    />
-                )}
-
-                <motion.div
-                    className="pointer-events-none absolute inset-x-2 top-0 h-px"
-                    animate={{
-                        opacity: tokenSet.highlightOpacity * (isIdle ? 0.62 : 1),
-                    }}
-                    transition={calmTransition}
-                    style={{
-                        background: 'linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.1), rgba(255,255,255,0.06))',
-                    }}
-                />
-
-                <motion.div
-                    className="pointer-events-none absolute inset-[1px] rounded-[inherit]"
-                    animate={{
-                        opacity: tokenSet.borderGlowOpacity * (isIdle ? 0.55 : 1),
-                    }}
-                    transition={calmTransition}
-                    style={{
-                        border: '1px solid transparent',
-                        background: 'linear-gradient(120deg, rgba(96,165,250,0.15), rgba(96,165,250,0.02), rgba(167,139,250,0.12)) border-box',
-                        mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
-                        WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
-                        WebkitMaskComposite: 'xor',
-                        maskComposite: 'exclude',
-                    }}
-                />
-
-                {children}
-            </motion.div>
+            {children}
         </motion.div>
     )
 }

@@ -34,40 +34,42 @@ const NAVBAR_MOTION = {
 
 const NAVBAR_TOKENS = {
     active: {
-        blur: 18,
-        idleBlur: 18,
-        background: 'transparent',
+        blur: 16,
+        idleBlur: 14,
+        saturate: 140,
+        background: 'rgba(6, 10, 18, 0.6)',
         radius: 0,
-        shadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-        scrollShadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-        idleShadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-        hoverShadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        shadow: '0 8px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05)',
+        scrollShadow: '0 10px 34px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)',
+        idleShadow: '0 6px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04)',
+        hoverShadow: '0 8px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05)',
         paddingX: 32,
         paddingY: 10,
         top: 0,
         widthClass: 'w-full',
         progressOpacity: 0.74,
         progressIdleOpacity: 0.44,
-        highlightOpacity: 0.9,
-        borderGlowOpacity: 0.42,
+        highlightOpacity: 0.3,
+        borderGlowOpacity: 0,
     },
     compact: {
         blur: 20,
-        idleBlur: 20,
-        background: 'transparent',
+        idleBlur: 16,
+        saturate: 150,
+        background: 'rgba(6, 10, 18, 0.72)',
         radius: 9999,
-        shadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-        scrollShadow: '0 12px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-        idleShadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-        hoverShadow: '0 15px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-        paddingX: 24,
+        shadow: '0 8px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05)',
+        scrollShadow: '0 10px 36px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.05)',
+        idleShadow: '0 6px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04)',
+        hoverShadow: '0 12px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+        paddingX: 20,
         paddingY: 6,
         top: 16,
         widthClass: 'mx-auto w-fit max-w-[calc(100vw-2rem)] sm:max-w-[calc(100vw-3rem)]',
         progressOpacity: 0.92,
         progressIdleOpacity: 0.5,
-        highlightOpacity: 1,
-        borderGlowOpacity: 0.56,
+        highlightOpacity: 0.5,
+        borderGlowOpacity: 0,
     },
     mobile: {
         widthClass: 'w-full',
@@ -191,7 +193,7 @@ export default function Navbar() {
     return (
         <>
             <div className="fixed top-0 left-0 right-0 z-[9999] pointer-events-auto">
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-[linear-gradient(to_bottom,rgba(10,20,40,0.8),rgba(10,20,40,0.4),transparent)]" />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(to_bottom,rgba(6,10,18,0.7),rgba(6,10,18,0.3),transparent)]" />
                 <NavbarContainer
                     isCompact={navbar.isCompact}
                     isIdle={navbar.isIdle}
@@ -205,7 +207,7 @@ export default function Navbar() {
                 >
                     <div
                         className={`relative z-[2] flex items-center justify-between ${
-                            navbar.isCompact ? 'gap-3' : 'gap-6'
+                            navbar.isCompact ? 'gap-2' : 'gap-4'
                         }`}
                     >
                         <NavLink
@@ -217,25 +219,21 @@ export default function Navbar() {
                             aria-label="Go to home page"
                         >
                             <motion.span 
-                                whileHover={navbar.reducedMotion ? undefined : { scale: 1.05 }}
-                                className="pointer-events-none inline-flex items-center transition-colors duration-300 group-hover:bg-[rgba(255,255,255,0.08)]"
+                                whileHover={navbar.reducedMotion ? undefined : { scale: 1.04 }}
+                                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                                className="pointer-events-none inline-flex items-center"
                                 style={{
-                                    borderRadius: '10px',
+                                    borderRadius: '8px',
                                     overflow: 'hidden',
-                                    background: 'rgba(255,255,255,0.05)',
-                                    backdropFilter: 'blur(10px)',
-                                    WebkitBackdropFilter: 'blur(10px)',
                                     padding: '6px',
-                                    boxShadow: '0 0 12px rgba(0, 140, 255, 0.25), inset 0 1px 0 rgba(255,255,255,0.08)'
+                                    background: 'rgba(255,255,255,0.04)',
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
                                 }}
                             >
                                 <img
                                     src={NAVBAR_LOGO_SRC}
                                     alt="Priyank logo"
                                     className="h-7 w-7 object-contain"
-                                    style={{
-                                        filter: 'drop-shadow(0 0 6px rgba(0,150,255,0.4))',
-                                    }}
                                 />
                             </motion.span>
                         </NavLink>
