@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 @theme {
   --color-bg-primary: var(--bg-primary);
@@ -19,7 +19,7 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* ── Theme Definitions ──────────────────────────────────── */
+/* â”€â”€ Theme Definitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 :root {
   /* Default: Dark Theme */
   --bg-primary: #0a0e17;
@@ -82,7 +82,7 @@
   --gradient-silver-3: #1e293b;
 }
 
-/* ── Base Reset ─────────────────────────────────────────── */
+/* â”€â”€ Base Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (pointer: fine) {
   * {
     cursor: none !important;
@@ -99,7 +99,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Main Background ───────────────────────────────────── */
+/* â”€â”€ Main Background â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 body {
   margin: 0;
   padding: 0;
@@ -142,7 +142,7 @@ body {
   100% { opacity: 0.9; transform: scale(1) translateY(5px); }
 }
 
-/* ── Theme Transition Energy Wave ─────────────────────── */
+/* â”€â”€ Theme Transition Energy Wave â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* During transition, disable the normal gradual CSS transitions */
 .theme-transitioning,
@@ -211,10 +211,9 @@ body {
   }
 }
 
-/* UI Pulse — triggered on glass cards & navbar after transition */
+/* UI Pulse - triggered on glass cards after transition */
 .theme-pulse .glass-card,
-.theme-pulse .glass-card-hover,
-.theme-pulse nav {
+.theme-pulse .glass-card-hover {
   animation: uiPulse 400ms ease-out;
 }
 
@@ -235,7 +234,7 @@ body {
   }
 }
 
-/* ── Animated Floating Particles ──────────────────────── */
+/* â”€â”€ Animated Floating Particles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 body::after {
   content: '';
   position: fixed;
@@ -264,7 +263,7 @@ body::after {
   100% { transform: translateY(-5px) translateX(-8px); opacity: 0.6; }
 }
 
-/* ── Mobile performance optimizations ──────────────────── */
+/* â”€â”€ Mobile performance optimizations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 640px) {
   body::after {
     /* Reduce number of particles on mobile for performance */
@@ -288,7 +287,7 @@ body::after {
   }
 }
 
-/* ── Reduced motion preference ─────────────────────────── */
+/* â”€â”€ Reduced motion preference â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
@@ -297,17 +296,19 @@ body::after {
   }
 }
 
-/* ── Prevent mobile horizontal overflow ─────────────────── */
-#root {
+/* â”€â”€ Prevent mobile horizontal overflow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* CRITICAL: overflow-x on #root traps position:fixed hit-test rects.
+   Keep this on html instead. */
+html {
   overflow-x: hidden;
 }
 
-/* ── Noise Overlay ──────────────────────────────────────── */
+/* â”€â”€ Noise Overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 #root::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 50;
   pointer-events: none;
   opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
@@ -315,7 +316,7 @@ body::after {
   background-size: 256px 256px;
 }
 
-/* ── Scrollbar Hiding ───────────────────────────────────── */
+/* â”€â”€ Scrollbar Hiding â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent;
@@ -327,7 +328,7 @@ body,
   scrollbar-width: none;
 }
 
-/* ── Selection ──────────────────────────────────────────── */
+/* â”€â”€ Selection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 ::selection {
   background: rgba(96, 165, 250, 0.25);
   color: #e8edf5;
@@ -338,7 +339,7 @@ body,
   color: #020617;
 }
 
-/* ── Gradient Utilities ─────────────────────────────────── */
+/* â”€â”€ Gradient Utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .text-gradient-silver {
   background: linear-gradient(135deg, var(--gradient-silver-1) 0%, var(--gradient-silver-2) 40%, var(--gradient-silver-3) 70%, var(--gradient-silver-1) 100%);
   background-size: 200% 200%;
@@ -360,7 +361,7 @@ body,
   background-clip: text;
 }
 
-/* ── Glass Cards ────────────────────────────────────────── */
+/* â”€â”€ Glass Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .glass-card {
   background: var(--card-bg);
   backdrop-filter: blur(12px);
@@ -439,7 +440,7 @@ body,
   }
 }
 
-/* ── Glow Effects ───────────────────────────────────────── */
+/* â”€â”€ Glow Effects â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .glow-subtle {
   box-shadow: 0 0 60px rgba(96, 165, 250, 0.08);
 }
@@ -454,14 +455,14 @@ body,
   );
 }
 
-/* ── Typography ─────────────────────────────────────────── */
+/* â”€â”€ Typography â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', 'Inter', system-ui, sans-serif;
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
 
-/* ── Animated Underline ─────────────────────────────────── */
+/* â”€â”€ Animated Underline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .link-underline {
   position: relative;
 }
@@ -481,7 +482,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
-/* ── Section Divider ────────────────────────────────────── */
+/* â”€â”€ Section Divider â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .section-divider {
   width: 100%;
   height: 1px;
@@ -495,7 +496,7 @@ h1, h2, h3, h4, h5, h6 {
   );
 }
 
-/* ── Floating Orbs (decorative) ─────────────────────────── */
+/* â”€â”€ Floating Orbs (decorative) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .floating-orb {
   position: absolute;
   border-radius: 50%;
@@ -511,7 +512,7 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: translateY(10px) scale(0.95); }
 }
 
-/* ── Pill Badge ─────────────────────────────────────────── */
+/* â”€â”€ Pill Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .tech-pill {
   padding: 6px 14px;
   font-size: 11px;
@@ -545,13 +546,13 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
-/* ── Focus Style ────────────────────────────────────────── */
+/* â”€â”€ Focus Style â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 *:focus-visible {
   outline: 1px solid rgba(96, 165, 250, 0.4);
   outline-offset: 2px;
 }
 
-/* ── Marquee ────────────────────────────────────────────── */
+/* â”€â”€ Marquee â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -561,7 +562,7 @@ h1, h2, h3, h4, h5, h6 {
   animation: marquee 25s linear infinite;
 }
 
-/* ── Pulse glow ─────────────────────────────────────────── */
+/* â”€â”€ Pulse glow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.4; box-shadow: 0 0 4px rgba(96, 165, 250, 0.2); }
   50% { opacity: 1; box-shadow: 0 0 12px rgba(96, 165, 250, 0.4); }
@@ -571,13 +572,13 @@ h1, h2, h3, h4, h5, h6 {
   animation: pulse-glow 3s ease-in-out infinite;
 }
 
-/* ── Stat counter ───────────────────────────────────────── */
+/* â”€â”€ Stat counter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .stat-number {
   font-family: 'JetBrains Mono', monospace;
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Button Shine Hover ─────────────────────────────────── */
+/* â”€â”€ Button Shine Hover â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .btn-shine {
   position: relative;
   overflow: hidden;
@@ -603,7 +604,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateX(200%);
 }
 
-/* ── Hero PFP Button Mode (Dynamic State) ───────────────── */
+/* â”€â”€ Hero PFP Button Mode (Dynamic State) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .hero-pfp--button-mode {
   /* Box-shadow, outline, and transform are set by JS */
   transition: filter 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -632,7 +633,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
-/* ── Ethereal Ripple Animation ─────────────────────────── */
+/* â”€â”€ Ethereal Ripple Animation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes ethereal-ripple {
   0% {
     transform: scale(0.9);
@@ -663,10 +664,10 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
-/* ── Mobile back-to-top fallback ───────────────────────── */
+/* â”€â”€ Mobile back-to-top fallback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /* Handled fully by inline Framer Motion in PfpMorphButton.jsx */
 
-/* ── AI Chat Button Glow ───────────────────────────────── */
+/* â”€â”€ AI Chat Button Glow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes ai-glow-pulse {
   0%, 100% {
     box-shadow: 0 0 8px rgba(167, 139, 250, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
@@ -685,7 +686,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 24px rgba(96, 165, 250, 0.3), 0 0 48px rgba(167, 139, 250, 0.15), 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* ── Credential Card Glow ──────────────────────────────── */
+/* â”€â”€ Credential Card Glow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .credential-card-glow {
   box-shadow:
     0 8px 32px rgba(96, 165, 250, 0.08),
@@ -711,7 +712,7 @@ h1, h2, h3, h4, h5, h6 {
   animation: credential-pulse 0.6s ease-out;
 }
 
-/* ── Industrial Gallery Utilities ───────────────────────── */
+/* â”€â”€ Industrial Gallery Utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* Film Grain Animation */
 @keyframes grain {
@@ -769,7 +770,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* ── Signature Section: Equalizer Bars ─────────────────── */
+/* â”€â”€ Signature Section: Equalizer Bars â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes equalizerBounce {
   0%, 100% { height: 3px; }
   25%      { height: 10px; }
@@ -785,7 +786,7 @@ h1, h2, h3, h4, h5, h6 {
 .equalizer-bar:nth-child(2) { animation-delay: 0.15s; }
 .equalizer-bar:nth-child(3) { animation-delay: 0.3s; }
 
-/* ── Signature Section: CTA Button Glow on Card Hover ──── */
+/* â”€â”€ Signature Section: CTA Button Glow on Card Hover â”€â”€â”€â”€ */
 @media (hover: hover) {
   .signature-card:hover .signature-cta-btn {
     box-shadow:
@@ -794,17 +795,15 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* ── Signature Section: Disable hover effects on touch ─── */
+/* â”€â”€ Signature Section: Disable hover effects on touch â”€â”€â”€ */
 @media (hover: none) {
   .signature-card {
     transform: none !important;
   }
 }
 
-/* ═══════════════════════════════════════════════════════════ */
-/* ── Footer Experience System ──────────────────────────────  */
-/* ═══════════════════════════════════════════════════════════ */
-
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* â”€â”€ Footer Experience System â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€  */
 /* Gradient separator between page content and footer */
 .footer-gradient-separator {
   width: 100%;
@@ -819,7 +818,7 @@ h1, h2, h3, h4, h5, h6 {
   );
 }
 
-/* CTA Button — gradient with glow hover */
+/* CTA Button â€” gradient with glow hover */
 .footer-cta-btn {
   background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
   color: #fff;
@@ -843,7 +842,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(0);
 }
 
-/* Decorative orb — softly pulsing gradient in CTA background */
+/* Decorative orb â€” softly pulsing gradient in CTA background */
 .footer-orb {
   background: radial-gradient(
     circle,
@@ -917,34 +916,6 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════ */
-/* ── Navbar Premium Hover & Transition System ─────────────  */
-/* ═══════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* Active nav link persistent glow */
-.nav-link-active-glow {
-  text-shadow: 0 0 10px rgba(96, 165, 250, 0.16);
-  font-weight: 500;
-}
-
-[data-theme="light"] .nav-link-active-glow {
-  text-shadow: 0 0 10px rgba(37, 99, 235, 0.14);
-}
-
-/* Magnetic link base — GPU acceleration */
-.nav-link-magnetic {
-  will-change: transform;
-  transition: color 0.24s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@media (hover: hover) {
-  .nav-link-magnetic:hover {
-    color: var(--text-primary);
-  }
-}
-
-/* Pill container floating enhancement */
-.navbar-pill-container {
-  will-change: transform, box-shadow;
-}
 

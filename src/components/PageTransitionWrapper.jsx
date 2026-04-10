@@ -1,39 +1,38 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLocation, useOutlet } from 'react-router-dom'
-import { useRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
+/* Page transition variants - OPACITY ONLY.
+   CRITICAL: Do NOT use `y`, `filter`, `scale`, or any transform-based
+   property here. Framer Motion retains inline `transform: translateY(0px)`
+   and `filter: blur(0px)` even AFTER animation completes. Per CSS spec,
+   any non-none transform/filter creates a new containing-block and can
+   interfere with fixed-position UI layers. */
 const pageVariants = {
     initial: {
         opacity: 0,
-        y: 20,
-        filter: 'blur(4px)',
     },
     animate: {
         opacity: 1,
-        y: 0,
-        filter: 'blur(0px)',
     },
     exit: {
         opacity: 0,
-        y: -10,
-        filter: 'blur(2px)',
     },
 }
 
 const pageTransition = {
-    duration: 0.45,
+    duration: 0.26,
     ease: [0.22, 1, 0.36, 1],
 }
 
 /**
  * Wraps <Outlet /> in AnimatePresence for cinematic page transitions.
- * Uses useOutlet() + a frozen ref pattern so the exiting page keeps its content.
+ * Uses useOutlet() so route content can transition as the pathname changes.
  */
 export default function PageTransitionWrapper() {
     const location = useLocation()
     const currentOutlet = useOutlet()
 
-    // Check for reduced motion preference
     const [reducedMotion, setReducedMotion] = useState(false)
     useEffect(() => {
         const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -43,7 +42,6 @@ export default function PageTransitionWrapper() {
         return () => mq.removeEventListener('change', handler)
     }, [])
 
-    // Check for mobile
     const [isMobile, setIsMobile] = useState(false)
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth < 768)
@@ -71,7 +69,7 @@ export default function PageTransitionWrapper() {
           : pageTransition
 
     return (
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync" initial={false}>
             <motion.div
                 key={location.pathname}
                 variants={variants}

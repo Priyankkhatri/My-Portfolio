@@ -1,167 +1,125 @@
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { navConfig } from '../../data/navConfig'
-import useStore from '../../store/useStore'
-import useMagnetic from '../../hooks/useMagnetic'
+import { useEffect, useState } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
 
-/**
- * NavbarLinks — Navigation links with spring-animated active indicator.
- * In compact (pill) mode: shorter labels, smaller text, tighter gaps.
- *
- * Enhanced with:
- *   - Magnetic cursor pull (desktop only)
- *   - Background glow bubble on hover
- *   - Animated underline from center
- *   - Micro scale + depth on hover
- *   - Active link persistent glow
- */
-export default function NavbarLinks({ compact = false, isMobile = false }) {
-    const setCursorVariant = useStore((s) => s.setCursorVariant)
-
+function DesktopNavLink({
+    item,
+    isCompact,
+    reducedMotion,
+    setCursorVariant,
+    motion: motionTokens,
+    pulsePath,
+}) {
     return (
-        <div
-            className={`flex items-center ${compact ? 'gap-2.5' : 'gap-5 xl:gap-6'}`}
+        <NavLink
+            to={item.to}
+            end={item.exact}
+            onMouseEnter={() => setCursorVariant('hover')}
+            onMouseLeave={() => setCursorVariant('default')}
+            className="group relative inline-flex h-11 items-center rounded-full px-1"
         >
-            {navConfig.links.map((item, index) => (
-                <NavLinkItem
-                    key={item.label}
-                    item={item}
-                    compact={compact}
-                    isMobile={isMobile}
-                    index={index}
-                    setCursorVariant={setCursorVariant}
-                />
-            ))}
-        </div>
+            {({ isActive }) => (
+                <motion.span
+                    variants={{
+                        active: {
+                            opacity: 1,
+                            paddingLeft: isCompact ? 14 : 16,
+                            paddingRight: isCompact ? 14 : 16,
+                        },
+                        compact: {
+                            opacity: 1,
+                            paddingLeft: 14,
+                            paddingRight: 14,
+                        },
+                    }}
+                    whileHover={reducedMotion ? undefined : { scale: 1.015 }}
+                    transition={
+                        reducedMotion
+                            ? { duration: 0 }
+                            : {
+                                opacity: { duration: motionTokens.hoverDuration },
+                                paddingLeft: { duration: 0.18, ease: motionTokens.entryEase },
+                                paddingRight: { duration: 0.18, ease: motionTokens.entryEase },
+                                scale: { type: 'spring', stiffness: 500, damping: 35 },
+                            }
+                    }
+                    className={`inline-flex min-w-[88px] items-center justify-center rounded-full py-2.5 text-sm transition-all duration-200 ${
+                        isActive
+                            ? 'bg-[rgba(96,165,250,0.12)] font-semibold text-[rgba(232,237,245,0.98)]'
+                            : 'bg-transparent font-medium text-[var(--text-secondary)] hover:bg-[rgba(96,165,250,0.07)] hover:text-[var(--text-primary)]'
+                    }`}
+                    animate={
+                        pulsePath === item.to && isActive && !reducedMotion
+                            ? {
+                                filter: ['brightness(1)', 'brightness(1.05)', 'brightness(1)'],
+                            }
+                            : { filter: 'brightness(1)' }
+                    }
+                >
+                    <span className="pointer-events-none">{item.label}</span>
+                </motion.span>
+            )}
+        </NavLink>
     )
 }
 
-/**
- * NavLinkItem — Individual nav link with premium hover interactions.
- */
-function NavLinkItem({ item, compact, isMobile, index, setCursorVariant }) {
-    const [isHovered, setIsHovered] = useState(false)
-    const { x, y, handleMouseMove, handleMouseLeave } = useMagnetic({
-        strength: 0.16,
-        disabled: isMobile,
-    })
+export default function NavbarLinks({
+    items,
+    isCompact,
+    reducedMotion,
+    setCursorVariant,
+    statePhase,
+    transitionProfile,
+    motion: motionTokens,
+}) {
+    const location = useLocation()
+    const [pulsePath, setPulsePath] = useState(location.pathname)
 
-    const onMouseEnter = () => {
-        setIsHovered(true)
-        setCursorVariant('hover')
-    }
+    useEffect(() => {
+        setPulsePath(location.pathname)
 
-    const onMouseLeave = (e) => {
-        setIsHovered(false)
-        handleMouseLeave(e)
-        setCursorVariant('default')
-    }
+        const timeoutId = window.setTimeout(() => {
+            setPulsePath('')
+        }, 220)
+
+        return () => window.clearTimeout(timeoutId)
+    }, [location.pathname])
 
     return (
         <motion.div
-            onMouseMove={handleMouseMove}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-            animate={{
-                x: isMobile ? 0 : x,
-                y: isMobile ? 0 : y,
+            className="flex min-w-0 items-center rounded-full bg-white/[0.03] p-1"
+            initial={false}
+            animate={statePhase}
+            variants={{
+                active: {
+                    transition: reducedMotion
+                        ? { duration: 0 }
+                        : {
+                            delayChildren: transitionProfile.childDelay,
+                            staggerChildren: transitionProfile.stagger,
+                        },
+                },
+                compact: {
+                    transition: reducedMotion
+                        ? { duration: 0 }
+                        : {
+                            delayChildren: transitionProfile.childDelay,
+                            staggerChildren: transitionProfile.stagger,
+                        },
+                },
             }}
-            transition={{
-                type: 'spring',
-                stiffness: 350,
-                damping: 20,
-                mass: 0.5,
-            }}
-            className="relative overflow-hidden rounded-xl"
         >
-            <NavLink
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) =>
-                    `relative inline-flex min-h-9 items-center rounded-xl px-2 ${
-                        compact ? 'text-xs' : 'text-sm'
-                    } tracking-wide nav-link-magnetic ${
-                        isActive
-                            ? 'text-[var(--text-primary)] nav-link-active-glow'
-                            : 'text-[var(--text-secondary)]'
-                    }`
-                }
-            >
-                {({ isActive }) => (
-                    <>
-                        {/* ── Background Glow Bubble ──────────── */}
-                        <motion.div
-                            className="absolute inset-0 rounded-xl pointer-events-none"
-                            style={{
-                                background:
-                                    'radial-gradient(ellipse at center, rgba(96,165,250,0.05) 0%, transparent 72%)',
-                            }}
-                            initial={false}
-                            animate={{
-                                opacity: isHovered ? 1 : 0,
-                                scale: isHovered ? 1 : 0.92,
-                            }}
-                            transition={{
-                                duration: 0.24,
-                                ease: [0.22, 1, 0.36, 1],
-                            }}
-                        />
-
-                        {/* ── Text with Micro Scale ───────────── */}
-                        <motion.span
-                            className="relative z-10 block"
-                            initial={false}
-                            animate={{
-                                scale: isHovered ? 1.02 : 1,
-                                y: isHovered ? -1 : 0,
-                            }}
-                            transition={{
-                                duration: 0.25,
-                                ease: [0.22, 1, 0.36, 1],
-                            }}
-                        >
-                            {compact ? item.shortLabel : item.label}
-                        </motion.span>
-
-                        {/* ── Active Indicator (spring-animated) ─ */}
-                        {isActive && (
-                            <motion.div
-                                layoutId="navbar-indicator"
-                                className={`absolute -bottom-1 left-0 right-0 ${
-                                    compact ? 'h-[1.5px]' : 'h-[2px]'
-                                } bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] rounded-full`}
-                                transition={{
-                                    type: 'spring',
-                                    stiffness: 300,
-                                    damping: 30,
-                                }}
-                            />
-                        )}
-
-                        {/* ── Hover Underline (expands from center) ── */}
-                        {!isActive && (
-                            <motion.div
-                                className="absolute -bottom-1 left-0 right-0 h-[1.5px] rounded-full"
-                                style={{
-                                    background:
-                                        'linear-gradient(90deg, var(--accent-1), var(--accent-2))',
-                                    transformOrigin: 'center',
-                                }}
-                                initial={false}
-                                animate={{
-                                    scaleX: isHovered ? 1 : 0,
-                                    opacity: isHovered ? 0.55 : 0,
-                                }}
-                                transition={{
-                                    duration: 0.35,
-                                    ease: [0.22, 1, 0.36, 1],
-                                }}
-                            />
-                        )}
-                    </>
-                )}
-            </NavLink>
+            {items.map((item) => (
+                <DesktopNavLink
+                    key={item.to}
+                    item={item}
+                    isCompact={isCompact}
+                    reducedMotion={reducedMotion}
+                    setCursorVariant={setCursorVariant}
+                    motion={motionTokens}
+                    pulsePath={pulsePath}
+                />
+            ))}
         </motion.div>
     )
 }

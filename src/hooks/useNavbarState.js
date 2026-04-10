@@ -1,241 +1,196 @@
-import {
-    startTransition,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from 'react'
-import { useLocation } from 'react-router-dom'
-import { navConfig } from '../data/navConfig'
+import { startTransition, useEffect, useRef, useState } from 'react'
 
-const ACTIVE_STATE = 'active'
-const COMPACT_STATE = 'compact'
-const DEFAULT_DIRECTION = 'down'
+const MOBILE_BREAKPOINT = 768
 
-function getCompactExitThreshold(direction) {
-    return direction === 'up'
-        ? navConfig.thresholds.exitCompactWhileUp
-        : navConfig.thresholds.exitCompact
+function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value))
 }
 
-export default function useNavbarState() {
-    const location = useLocation()
-    const lockMs = navConfig.timing.transitionLock
-    const idleDelay = navConfig.timing.idleDelay
+function getScrollProgress() {
+    const root = document.documentElement
+    const maxScroll = Math.max(root.scrollHeight - window.innerHeight, 1)
+    return clamp(window.scrollY / maxScroll, 0, 1)
+}
 
-    const [navState, setNavState] = useState(ACTIVE_STATE)
-    const [isMobile, setIsMobile] = useState(() =>
-        typeof window !== 'undefined'
-            ? window.innerWidth < navConfig.mobile.breakpoint
-            : false
-    )
-    const [scrollDirection, setScrollDirection] = useState(DEFAULT_DIRECTION)
+function getInitialState(compactAt) {
+    if (typeof window === 'undefined') {
+        return {
+            isMobile: false,
+            navState: 'active',
+            progress: 0,
+        }
+    }
+
+    const isMobile = window.innerWidth < MOBILE_BREAKPOINT
+
+    return {
+        isMobile,
+        navState: isMobile || window.scrollY >= compactAt ? 'compact' : 'active',
+        progress: getScrollProgress(),
+    }
+}
+
+function getVelocityShift(velocity) {
+    if (velocity >= 1.6) return -0.05
+    if (velocity <= 0.35) return 0.03
+    return 0
+}
+
+export default function useNavbarState({
+    compactAt = 700,
+    expandBelow = 600,
+    idleDelay = 1500,
+    motion,
+}) {
+    const initial = getInitialState(compactAt)
+
+    const [isMobile, setIsMobile] = useState(initial.isMobile)
+    const [navState, setNavState] = useState(initial.navState)
+    const [progress, setProgress] = useState(initial.progress)
     const [isIdle, setIsIdle] = useState(false)
     const [reducedMotion, setReducedMotion] = useState(false)
-    const [snapInstantly, setSnapInstantly] = useState(true)
+    const [transitionProfile, setTransitionProfile] = useState({
+        duration: motion.compactDuration,
+        ease: motion.entryEase,
+        childDelay: motion.childDelay,
+        stagger: motion.linkEnterStagger,
+        progressDelay: motion.progressDelay,
+    })
 
-    const navStateRef = useRef(ACTIVE_STATE)
-    const isMobileRef = useRef(isMobile)
-    const directionRef = useRef(DEFAULT_DIRECTION)
-    const idleRef = useRef(false)
-    const previousScrollYRef = useRef(0)
-    const lockUntilRef = useRef(0)
+    const navStateRef = useRef(initial.navState)
+    const isMobileRef = useRef(initial.isMobile)
     const rafRef = useRef(null)
-    const idleTimeoutRef = useRef(null)
-    const snapResetRef = useRef(null)
+    const idleTimerRef = useRef(null)
+    const isIdleRef = useRef(false)
+    const previousScrollYRef = useRef(typeof window !== 'undefined' ? window.scrollY : 0)
+    const previousTimeRef = useRef(typeof performance !== 'undefined' ? performance.now() : 0)
+    const velocityRef = useRef(0)
 
-    const clearIdleTimer = () => {
-        if (idleTimeoutRef.current) {
-            clearTimeout(idleTimeoutRef.current)
-            idleTimeoutRef.current = null
-        }
-    }
-
-    const scheduleIdle = () => {
-        clearIdleTimer()
-        idleTimeoutRef.current = setTimeout(() => {
-            idleRef.current = true
-            setIsIdle(true)
-        }, idleDelay)
-    }
-
-    const updateDirection = (scrollY) => {
-        const previousScrollY = previousScrollYRef.current
-
-        if (scrollY === previousScrollY) {
-            return directionRef.current
-        }
-
-        const nextDirection = scrollY > previousScrollY ? 'down' : 'up'
-
-        previousScrollYRef.current = scrollY
-
-        if (nextDirection !== directionRef.current) {
-            directionRef.current = nextDirection
-            setScrollDirection(nextDirection)
-        }
-
-        return nextDirection
-    }
-
-    const evaluateScrollState = (scrollY) => {
-        const direction = updateDirection(scrollY)
-
-        if (idleRef.current) {
-            idleRef.current = false
-            setIsIdle(false)
-        }
-
-        scheduleIdle()
-
-        if (isMobileRef.current) {
-            if (navStateRef.current !== ACTIVE_STATE) {
-                navStateRef.current = ACTIVE_STATE
-                lockUntilRef.current = 0
-                startTransition(() => setNavState(ACTIVE_STATE))
-            }
-            return
-        }
-
-        if (performance.now() < lockUntilRef.current) {
-            return
-        }
-
-        const currentState = navStateRef.current
-        const nextState =
-            currentState === ACTIVE_STATE
-                ? scrollY >= navConfig.thresholds.enterCompact
-                    ? COMPACT_STATE
-                    : ACTIVE_STATE
-                : scrollY < getCompactExitThreshold(direction)
-                  ? ACTIVE_STATE
-                  : COMPACT_STATE
-
-        if (nextState !== currentState) {
-            navStateRef.current = nextState
-            lockUntilRef.current = performance.now() + lockMs
-            startTransition(() => setNavState(nextState))
-        }
-    }
+    const statePhase = navState === 'compact' ? 'compact' : 'active'
 
     useEffect(() => {
         const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-        const handleChange = (event) => setReducedMotion(event.matches)
-
         setReducedMotion(mediaQuery.matches)
-        mediaQuery.addEventListener('change', handleChange)
 
-        return () => mediaQuery.removeEventListener('change', handleChange)
+        const updateReducedMotion = (event) => setReducedMotion(event.matches)
+        mediaQuery.addEventListener('change', updateReducedMotion)
+
+        return () => mediaQuery.removeEventListener('change', updateReducedMotion)
     }, [])
 
     useEffect(() => {
-        const handleResize = () => {
-            const mobile = window.innerWidth < navConfig.mobile.breakpoint
+        const queueIdle = () => {
+            if (idleTimerRef.current !== null) clearTimeout(idleTimerRef.current)
 
-            isMobileRef.current = mobile
-            setIsMobile((currentValue) =>
-                currentValue === mobile ? currentValue : mobile
-            )
-
-            if (mobile && navStateRef.current !== ACTIVE_STATE) {
-                navStateRef.current = ACTIVE_STATE
-                lockUntilRef.current = 0
-                setNavState(ACTIVE_STATE)
-            }
-
-            evaluateScrollState(window.scrollY)
+            idleTimerRef.current = window.setTimeout(() => {
+                isIdleRef.current = true
+                setIsIdle(true)
+            }, idleDelay)
         }
 
-        window.addEventListener('resize', handleResize, { passive: true })
+        const applyState = () => {
+            const now = performance.now()
+            const currentScrollY = window.scrollY
+            const deltaY = Math.abs(currentScrollY - previousScrollYRef.current)
+            const deltaT = Math.max(now - previousTimeRef.current, 16)
+            const velocity = deltaY / deltaT
+            const mobile = window.innerWidth < MOBILE_BREAKPOINT
 
-        return () => window.removeEventListener('resize', handleResize)
-    }, [])
+            velocityRef.current = velocity
+            previousScrollYRef.current = currentScrollY
+            previousTimeRef.current = now
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (rafRef.current !== null) {
-                return
+            startTransition(() => {
+                setProgress(getScrollProgress())
+            })
+
+            if (mobile !== isMobileRef.current) {
+                isMobileRef.current = mobile
+                setIsMobile(mobile)
             }
+
+            if (isIdleRef.current) {
+                isIdleRef.current = false
+                setIsIdle(false)
+            }
+
+            queueIdle()
+
+            let nextState = navStateRef.current
+
+            if (mobile) {
+                nextState = 'compact'
+            } else if (navStateRef.current === 'active' && currentScrollY >= compactAt) {
+                nextState = 'compact'
+            } else if (navStateRef.current === 'compact' && currentScrollY < expandBelow) {
+                nextState = 'active'
+            }
+
+            if (nextState !== navStateRef.current) {
+                navStateRef.current = nextState
+
+                const shift = getVelocityShift(velocity)
+                const duration = nextState === 'compact'
+                    ? clamp(motion.compactDuration + shift, 0.42, 0.53)
+                    : clamp(motion.activeDuration + shift, 0.3, 0.39)
+
+                setTransitionProfile({
+                    duration,
+                    ease: nextState === 'compact' ? motion.entryEase : motion.exitEase,
+                    childDelay: motion.childDelay,
+                    stagger: nextState === 'compact' ? motion.linkEnterStagger : motion.linkExitStagger,
+                    progressDelay: motion.progressDelay,
+                })
+
+                startTransition(() => setNavState(nextState))
+            }
+        }
+
+        const requestUpdate = () => {
+            if (rafRef.current !== null) return
 
             rafRef.current = requestAnimationFrame(() => {
                 rafRef.current = null
-                evaluateScrollState(window.scrollY)
+                applyState()
             })
         }
 
-        previousScrollYRef.current = window.scrollY
-        evaluateScrollState(window.scrollY)
+        queueIdle()
+        applyState()
 
-        window.addEventListener('scroll', handleScroll, { passive: true })
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-
-            if (rafRef.current !== null) {
-                cancelAnimationFrame(rafRef.current)
-                rafRef.current = null
-            }
-        }
-    }, [])
-
-    useLayoutEffect(() => {
-        clearIdleTimer()
-
-        if (snapResetRef.current !== null) {
-            cancelAnimationFrame(snapResetRef.current)
-            snapResetRef.current = null
-        }
-
-        navStateRef.current = ACTIVE_STATE
-        directionRef.current = DEFAULT_DIRECTION
-        idleRef.current = false
-        previousScrollYRef.current = 0
-        lockUntilRef.current = 0
-
-        setScrollDirection(DEFAULT_DIRECTION)
-        setIsIdle(false)
-        setNavState(ACTIVE_STATE)
-        setSnapInstantly(true)
-
-        scheduleIdle()
-
-        let secondFrame = null
-
-        snapResetRef.current = requestAnimationFrame(() => {
-            secondFrame = requestAnimationFrame(() => {
-                setSnapInstantly(false)
-                snapResetRef.current = null
-            })
-        })
+        window.addEventListener('scroll', requestUpdate, { passive: true })
+        window.addEventListener('resize', requestUpdate, { passive: true })
 
         return () => {
-            if (snapResetRef.current !== null) {
-                cancelAnimationFrame(snapResetRef.current)
-                snapResetRef.current = null
-            }
+            window.removeEventListener('scroll', requestUpdate)
+            window.removeEventListener('resize', requestUpdate)
 
-            if (secondFrame !== null) {
-                cancelAnimationFrame(secondFrame)
-            }
+            if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+            if (idleTimerRef.current !== null) clearTimeout(idleTimerRef.current)
         }
-    }, [location.pathname])
-
-    useEffect(() => {
-        return () => {
-            clearIdleTimer()
-
-            if (snapResetRef.current !== null) {
-                cancelAnimationFrame(snapResetRef.current)
-            }
-        }
-    }, [])
+    }, [
+        compactAt,
+        expandBelow,
+        idleDelay,
+        motion.activeDuration,
+        motion.childDelay,
+        motion.compactDuration,
+        motion.entryEase,
+        motion.exitEase,
+        motion.linkEnterStagger,
+        motion.linkExitStagger,
+        motion.progressDelay,
+    ])
 
     return {
-        navState,
-        isMobile,
-        scrollDirection,
+        isCompact: isMobile || navState === 'compact',
         isIdle,
+        isMobile,
+        navState,
+        progress,
         reducedMotion,
-        snapInstantly,
+        statePhase,
+        transitionProfile,
+        velocity: velocityRef.current,
     }
 }

@@ -1,11 +1,11 @@
 import { lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
-import Navbar from '../sections/Navbar'
 import Cursor from './Cursor'
 import Loader from './Loader'
+import Navbar from './Navbar'
 import PfpMorphButton from './PfpMorphButton'
 import AiChatButton from './AiChatButton'
-import ScrollToTopOnNav from './ScrollToTopOnNav'
+import ScrollToRouteTop from './ScrollToRouteTop'
 import PageTransitionWrapper from './PageTransitionWrapper'
 import FooterExperience from './footer/FooterExperience'
 import useStore from '../store/useStore'
@@ -14,10 +14,8 @@ import useStore from '../store/useStore'
 const HeroBackground = lazy(() => import('./HeroBackground'))
 
 /**
- * RootLayout — persistent shell for the entire routed application.
- * Contains: Navbar, Three.js background, Cursor, Loader, and global UI.
- * Page content renders via <PageTransitionWrapper> which wraps <Outlet />.
- * SignatureSection is mounted once here — persists across all routes.
+ * RootLayout persists shared chrome across the routed application.
+ * Page content renders via <PageTransitionWrapper>.
  */
 export default function RootLayout() {
     const isLoading = useStore((s) => s.isLoading)
@@ -28,26 +26,25 @@ export default function RootLayout() {
             {/* Custom Cursor (hidden on touch devices via CSS) */}
             <Cursor />
 
-            {/* Preloader — only fires on initial visit */}
+            {!isLoading && <Navbar />}
+
+            {/* Preloader - only fires on initial visit */}
             <Loader />
 
-            {/* Scroll-driven PFP morph → back-to-top */}
+            {/* Scroll-driven PFP morph -> back-to-top */}
             <PfpMorphButton />
 
             {/* AI Chat Assistant */}
             <AiChatButton />
 
             {/* Scroll to top on route change */}
-            <ScrollToTopOnNav />
+            <ScrollToRouteTop />
 
-            {/* Global 3D Background — lazy-loaded, non-blocking, persistent */}
+            {/* Global 3D background - lazy-loaded, non-blocking, persistent */}
             <Suspense fallback={null}>
                 <HeroBackground />
             </Suspense>
 
-            {!isLoading && <Navbar />}
-
-            {/* DOM Layer */}
             <motion.div
                 className="relative z-10"
                 initial={{ opacity: 0 }}
