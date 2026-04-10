@@ -94,10 +94,10 @@ export default function Hero() {
 
             <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-8 lg:gap-24 relative z-10">
 
-                {/* Mobile Profile Picture — shown only below lg */}
+                {/* Mobile Profile Picture — shown only lg */}
                 <motion.div
                     className="flex lg:hidden items-center justify-center mt-2 sm:mt-4"
-                    initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+                    initial={loaderPhase >= 4 ? false : { opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                     animate={loaderPhase >= 4 ? { opacity: 1, scale: 1, filter: "blur(0px)" } : {}}
                     transition={{ duration: 1.2, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
@@ -125,7 +125,7 @@ export default function Hero() {
                 <motion.div
                     className="max-w-xl w-full"
                     variants={container}
-                    initial="hidden"
+                    initial={loaderPhase >= 4 ? "visible" : "hidden"}
                     animate={loaderPhase >= 4 ? "visible" : "hidden"}
                 >
                     {/* Eyebrow */}
@@ -218,7 +218,7 @@ export default function Hero() {
                 {/* Profile Image - Right Side (Desktop only) */}
                 <motion.div
                     className="relative hidden lg:flex flex-col items-center justify-center w-[400px] h-[400px] shrink-0 group/pfp"
-                    initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)", x: 100 }}
+                    initial={loaderPhase >= 4 ? false : { opacity: 0, scale: 0.5, filter: "blur(20px)", x: 100 }}
                     animate={loaderPhase >= 4 ? { opacity: 1, scale: 1, filter: "blur(0px)", x: 0 } : { opacity: 0, scale: 0.5, filter: "blur(20px)", x: 100 }}
                     transition={{ duration: 1.6, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
@@ -272,7 +272,7 @@ export default function Hero() {
             {/* Scroll indicator */}
             <motion.div
                 className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
-                initial={{ opacity: 0, y: 20 }}
+                initial={loaderPhase >= 4 ? false : { opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 4, duration: 1 }}
             >

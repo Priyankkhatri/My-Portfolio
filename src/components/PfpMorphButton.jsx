@@ -32,6 +32,40 @@ export default function PfpMorphButton() {
     const rafId = useRef(null)
     const naturalRect = useRef(null)
     const wasBtn = useRef(false)
+    const smoothed = useRef({ p: 0 })
+
+    // ── Reset all scroll-dependent state on route change to home ──
+    // Without this, stale morph progress / mobile-button visibility
+    // persists because scrollTo(0,0) doesn't fire scroll listeners.
+    useEffect(() => {
+        if (isHomePage) {
+            setMobileVisible(false)
+            smoothed.current.p = 0
+            wasBtn.current = false
+
+            // Clear any leftover morph styles on the hero frame
+            const el = document.getElementById('heroPfpFrame')
+            if (el) {
+                el.style.transform = ''
+                el.style.pointerEvents = 'none'
+                el.classList.remove('hero-pfp--button-mode')
+                el.classList.add('group')
+                el.setAttribute('tabindex', '-1')
+                el.removeAttribute('aria-label')
+                el.style.cursor = ''
+            }
+            const rings = document.getElementById('heroPfpRings')
+            if (rings) {
+                rings.style.transform = ''
+                rings.style.opacity = ''
+            }
+            const arrow = document.getElementById('heroPfpArrow')
+            if (arrow) arrow.style.opacity = '0'
+        } else {
+            // Leaving home — also reset mobile button for non-home pages
+            setMobileVisible(false)
+        }
+    }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
     // Wait for the hero entry animation to complete before grabbing bounding client rect.
     const [readyToMeasure, setReadyToMeasure] = useState(false)
@@ -62,9 +96,6 @@ export default function PfpMorphButton() {
         }
         return true
     }, [])
-
-    // Store smoothed values outside the tick to persist across frames
-    const smoothed = useRef({ p: 0 })
 
     // Linear interpolation for buttery smoothness
     const lerp = (start, end, factor) => start + (end - start) * factor
@@ -260,86 +291,95 @@ export default function PfpMorphButton() {
             return () => window.removeEventListener('scroll', onScroll)
         }
 
-        // Initialize measuring
-        if (!measure()) {
-            // retry if DOM slow
-            const t = setTimeout(measure, 500)
-            return () => clearTimeout(t)
-        }
+        // Initialize measuring and loop
+        let retryTimeout = null
+        let resizeTimeout = null
+        
+        const init = () => {
+            const success = measure()
+            // If measure fails OR the Hero section is anomalously pushed way down the page 
+            // (e.g. due to the old route still exiting above it), wait for layout to settle.
+            if (!success || (naturalRect.current && naturalRect.current.docY > window.innerHeight * 1.2)) {
+                retryTimeout = setTimeout(init, 200)
+                return
+            }
 
-        // Make sure it remains above everything during scroll morphing
-        const el = document.getElementById('heroPfpFrame')
-        if (el) el.style.zIndex = '10000'
+            // Make sure it remains above everything during scroll morphing
+            const el = document.getElementById('heroPfpFrame')
+            if (el) el.style.zIndex = '10000'
 
-        rafId.current = requestAnimationFrame(loop)
+            rafId.current = requestAnimationFrame(loop)
 
-        let rt
-        const onResize = () => {
-            clearTimeout(rt)
-            rt = setTimeout(() => {
-                const nowDesktop = window.innerWidth >= 1024
-                setIsDesktop(nowDesktop)
+            const onResize = () => {
+                clearTimeout(resizeTimeout)
+                resizeTimeout = setTimeout(() => {
+                    const nowDesktop = window.innerWidth >= 1024
+                    setIsDesktop(nowDesktop)
 
-                if (nowDesktop) {
-                    // PRE-MEASURE: We must completely strip any JS positioning 
-                    // from the elements while measuring so the tracker doesn't 
-                    // accidentally learn the "scrolled/morphed" position as home.
-                    const frame = document.getElementById('heroPfpFrame')
-                    const rings = document.getElementById('heroPfpRings')
+                    if (nowDesktop) {
+                        const frame = document.getElementById('heroPfpFrame')
+                        const rings = document.getElementById('heroPfpRings')
 
-                    if (frame) {
-                        frame.style.transform = 'none'
-                        frame.style.position = 'absolute'
-                        frame.style.top = '3rem'
-                        frame.style.left = '3rem'
-                        frame.style.bottom = '3rem'
-                        frame.style.right = '3rem'
-                        frame.style.width = 'auto'
-                        frame.style.height = 'auto'
-                        frame.classList.remove('hero-pfp--button-mode')
+                        if (frame) {
+                            frame.style.transform = 'none'
+                            frame.style.position = 'absolute'
+                            frame.style.top = '3rem'
+                            frame.style.left = '3rem'
+                            frame.style.bottom = '3rem'
+                            frame.style.right = '3rem'
+                            frame.style.width = 'auto'
+                            frame.style.height = 'auto'
+                            frame.classList.remove('hero-pfp--button-mode')
+                        }
+                        if (rings) {
+                            rings.style.transform = 'none'
+                            rings.style.opacity = '1'
+                        }
+
+                        measure()
+                    } else {
+                        if (rafId.current) cancelAnimationFrame(rafId.current)
+                        const frame = document.getElementById('heroPfpFrame')
+                        if (frame) {
+                            frame.style.transform = 'none'
+                            frame.style.position = 'absolute'
+                            frame.classList.remove('hero-pfp--button-mode')
+                        }
+                        const rings = document.getElementById('heroPfpRings')
+                        if (rings) {
+                            rings.style.transform = 'none'
+                            rings.style.opacity = '1'
+                        }
                     }
-                    if (rings) {
-                        rings.style.transform = 'none'
-                        rings.style.opacity = '1'
-                    }
+                }, 250) // slightly longer debounce for layout settling
+            }
 
-                    // Now measure the pure layout
-                    measure()
-
-                    // The rAF loop will immediately re-apply the correct 
-                    // morph transforms on the next tick based on current scroll.
-                } else {
-                    if (rafId.current) cancelAnimationFrame(rafId.current)
-                    const frame = document.getElementById('heroPfpFrame')
-                    if (frame) {
-                        frame.style.transform = 'none'
-                        frame.style.position = 'absolute'
-                        frame.classList.remove('hero-pfp--button-mode')
-                    }
-                    const rings = document.getElementById('heroPfpRings')
-                    if (rings) {
-                        rings.style.transform = 'none'
-                        rings.style.opacity = '1'
-                    }
+            window.addEventListener('resize', onResize, { passive: true })
+            
+            // Expose cleanup inside a closure or manage outside
+            cleanupFn = () => {
+                if (rafId.current) cancelAnimationFrame(rafId.current)
+                clearTimeout(resizeTimeout)
+                window.removeEventListener('resize', onResize)
+                const el = document.getElementById('heroPfpFrame')
+                if (el) {
+                    el.style.transform = 'none'
+                    el.classList.remove('hero-pfp--button-mode')
                 }
-            }, 250) // slightly longer debounce for layout settling
+                const rings = document.getElementById('heroPfpRings')
+                if (rings) {
+                    rings.style.transform = 'none'
+                    rings.style.opacity = '1'
+                }
+            }
         }
-        window.addEventListener('resize', onResize, { passive: true })
+
+        let cleanupFn = null
+        init()
 
         return () => {
-            if (rafId.current) cancelAnimationFrame(rafId.current)
-            clearTimeout(rt)
-            window.removeEventListener('resize', onResize)
-            // Cleanup visually if unmounted
-            if (el) {
-                el.style.transform = 'none'
-                el.classList.remove('hero-pfp--button-mode')
-            }
-            const rings = document.getElementById('heroPfpRings')
-            if (rings) {
-                rings.style.transform = 'none'
-                rings.style.opacity = '1'
-            }
+            clearTimeout(retryTimeout)
+            if (cleanupFn) cleanupFn()
         }
     }, [readyToMeasure, loop, measure, isHomePage])
 

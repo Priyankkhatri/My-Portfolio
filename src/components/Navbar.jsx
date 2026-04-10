@@ -166,7 +166,8 @@ export default function Navbar() {
 
     useEffect(() => {
         setMenuOpen(false)
-        window.scrollTo({ top: 0, behavior: 'instant' })
+        // ScrollToRouteTop handles scrollTo + dispatchEvent('scroll').
+        // We only need to reset navbar internal state here.
         navbar.forceReset()
     }, [location.pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 

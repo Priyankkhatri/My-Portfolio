@@ -69,7 +69,7 @@ export default function PageTransitionWrapper() {
           : pageTransition
 
     return (
-        <AnimatePresence mode="sync" initial={false}>
+        <AnimatePresence mode="wait" initial={false}>
             <motion.div
                 key={location.pathname}
                 variants={variants}
