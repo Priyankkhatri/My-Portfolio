@@ -166,7 +166,9 @@ export default function Navbar() {
 
     useEffect(() => {
         setMenuOpen(false)
-    }, [location.pathname])
+        window.scrollTo({ top: 0, behavior: 'instant' })
+        navbar.forceReset()
+    }, [location.pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (!menuOpen) return
@@ -192,7 +194,7 @@ export default function Navbar() {
 
     return (
         <>
-            <div className="fixed top-0 left-0 right-0 z-[9999] pointer-events-auto">
+            <div className="fixed top-0 left-0 right-0 z-[9999] pointer-events-auto" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(to_bottom,rgba(6,10,18,0.7),rgba(6,10,18,0.3),transparent)]" />
                 <NavbarContainer
                     isCompact={navbar.isCompact}

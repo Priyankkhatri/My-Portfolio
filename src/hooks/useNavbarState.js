@@ -68,6 +68,29 @@ export default function useNavbarState({
 
     const statePhase = navState === 'compact' ? 'compact' : 'active'
 
+    // Force reset to active state (called on route change)
+    const forceReset = () => {
+        const mobile = window.innerWidth < MOBILE_BREAKPOINT
+        previousScrollYRef.current = 0
+        previousTimeRef.current = performance.now()
+        velocityRef.current = 0
+        isIdleRef.current = false
+        setIsIdle(false)
+        setProgress(0)
+
+        if (!mobile) {
+            navStateRef.current = 'active'
+            setNavState('active')
+            setTransitionProfile({
+                duration: motion.activeDuration,
+                ease: motion.exitEase,
+                childDelay: motion.childDelay,
+                stagger: motion.linkExitStagger,
+                progressDelay: motion.progressDelay,
+            })
+        }
+    }
+
     useEffect(() => {
         const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
         setReducedMotion(mediaQuery.matches)
@@ -183,6 +206,7 @@ export default function useNavbarState({
     ])
 
     return {
+        forceReset,
         isCompact: isMobile || navState === 'compact',
         isIdle,
         isMobile,
