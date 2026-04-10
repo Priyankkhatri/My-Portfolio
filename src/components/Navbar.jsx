@@ -34,16 +34,16 @@ const NAVBAR_MOTION = {
 
 const NAVBAR_TOKENS = {
     active: {
-        blur: 12,
-        idleBlur: 12,
+        blur: 18,
+        idleBlur: 18,
         background: 'transparent',
         radius: 0,
-        shadow: 'none',
-        scrollShadow: 'none',
-        idleShadow: 'none',
-        hoverShadow: 'none',
+        shadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        scrollShadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        idleShadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        hoverShadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
         paddingX: 32,
-        paddingY: 16,
+        paddingY: 10,
         top: 0,
         widthClass: 'w-full',
         progressOpacity: 0.74,
@@ -52,16 +52,16 @@ const NAVBAR_TOKENS = {
         borderGlowOpacity: 0.42,
     },
     compact: {
-        blur: 18,
-        idleBlur: 18,
+        blur: 20,
+        idleBlur: 20,
         background: 'transparent',
         radius: 9999,
-        shadow: '0 12px 45px rgba(0, 0, 0, 0.4), 0 2px 10px rgba(0, 0, 0, 0.2)',
-        scrollShadow: '0 14px 48px rgba(0, 0, 0, 0.42), 0 4px 14px rgba(0, 0, 0, 0.22)',
-        idleShadow: '0 10px 34px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.16)',
-        hoverShadow: '0 15px 50px rgba(0, 0, 0, 0.44), 0 4px 14px rgba(0, 0, 0, 0.22)',
+        shadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        scrollShadow: '0 12px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        idleShadow: '0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        hoverShadow: '0 15px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
         paddingX: 24,
-        paddingY: 8,
+        paddingY: 6,
         top: 16,
         widthClass: 'mx-auto w-fit max-w-[calc(100vw-2rem)] sm:max-w-[calc(100vw-3rem)]',
         progressOpacity: 0.92,
@@ -213,19 +213,31 @@ export default function Navbar() {
                             end
                             onMouseEnter={() => setCursorVariant('hover')}
                             onMouseLeave={() => setCursorVariant('default')}
-                            className="group inline-flex h-11 shrink-0 items-center rounded-full"
+                            className="group inline-flex shrink-0 items-center justify-center p-[2px]"
                             aria-label="Go to home page"
                         >
-                            <span className="pointer-events-none inline-flex items-center rounded-full px-2 py-1.5 transition-colors duration-300 group-hover:bg-white/[0.05]">
+                            <motion.span 
+                                whileHover={navbar.reducedMotion ? undefined : { scale: 1.05 }}
+                                className="pointer-events-none inline-flex items-center transition-colors duration-300 group-hover:bg-[rgba(255,255,255,0.08)]"
+                                style={{
+                                    borderRadius: '10px',
+                                    overflow: 'hidden',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    backdropFilter: 'blur(10px)',
+                                    WebkitBackdropFilter: 'blur(10px)',
+                                    padding: '6px',
+                                    boxShadow: '0 0 12px rgba(0, 140, 255, 0.25), inset 0 1px 0 rgba(255,255,255,0.08)'
+                                }}
+                            >
                                 <img
                                     src={NAVBAR_LOGO_SRC}
                                     alt="Priyank logo"
-                                    className="h-8 w-8 object-contain"
+                                    className="h-7 w-7 object-contain"
                                     style={{
                                         filter: 'drop-shadow(0 0 6px rgba(0,150,255,0.4))',
                                     }}
                                 />
-                            </span>
+                            </motion.span>
                         </NavLink>
 
                         {navbar.isMobile ? (

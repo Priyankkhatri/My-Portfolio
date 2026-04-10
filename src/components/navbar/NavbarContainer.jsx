@@ -48,15 +48,13 @@ export default function NavbarContainer({
                 opacity: 1,
                 paddingTop: tokenSet.top,
                 y: isCompact && !isMobile ? -6 : 0,
-                scale: isHovered && isCompact && !isMobile && !reducedMotion ? 1.01 : 1,
+                scale: isHovered && isCompact && !isMobile && !reducedMotion ? 1.01 : (isCompact && !isMobile && !reducedMotion ? 0.985 : 1),
             }}
             transition={{
                 opacity: reducedMotion ? { duration: 0 } : { duration: 0.4, ease: motionTokens.entryEase },
                 paddingTop: visualTransition,
                 y: visualTransition,
-                scale: reducedMotion
-                    ? { duration: 0 }
-                    : { duration: 0.18, ease: motionTokens.entryEase },
+                scale: isHovered ? { duration: 0.2 } : visualTransition,
             }}
         >
             <motion.div
@@ -73,7 +71,7 @@ export default function NavbarContainer({
                     backgroundColor: tokenSet.background,
                     borderWidth: isCompact ? '1px' : '0px 0px 1px 0px',
                     borderStyle: 'solid',
-                    borderColor: isCompact ? 'rgba(0, 140, 255, 0.12)' : 'rgba(255, 255, 255, 0.06)',
+                    borderColor: isCompact ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.06)',
                     boxShadow: shadowValue,
                     backdropFilter: `blur(${blurValue}px)`,
                     WebkitBackdropFilter: `blur(${blurValue}px)`,
@@ -95,20 +93,16 @@ export default function NavbarContainer({
                     opacity: visualTransition,
                 }}
             >
-                <motion.div
-                    className="pointer-events-none absolute inset-0 -z-10"
-                    animate={{ opacity: isCompact ? 0 : 1 }}
-                    transition={visualTransition}
+                <div
+                    className="pointer-events-none absolute inset-0 -z-20"
                     style={{
-                        background: 'linear-gradient(to bottom, rgba(10, 20, 45, 0.9), rgba(10, 20, 45, 0.65))',
+                        background: 'linear-gradient(120deg, rgba(6, 12, 30, 0.88), rgba(4, 8, 22, 0.82))',
                     }}
                 />
-                <motion.div
+                <div
                     className="pointer-events-none absolute inset-0 -z-10"
-                    animate={{ opacity: isCompact ? 1 : 0 }}
-                    transition={visualTransition}
                     style={{
-                        background: 'linear-gradient(120deg, rgba(10, 20, 45, 0.85), rgba(5, 10, 30, 0.75))',
+                        background: 'linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.02))',
                     }}
                 />
 
