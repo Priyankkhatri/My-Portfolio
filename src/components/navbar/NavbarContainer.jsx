@@ -30,8 +30,8 @@ export default function NavbarContainer({
     const visualTransition = reducedMotion
         ? { duration: 0 }
         : {
-            duration: transitionProfile.duration,
-            ease: transitionProfile.ease,
+            duration: 0.55,
+            ease: [0.22, 1, 0.36, 1],
         }
     const calmTransition = reducedMotion
         ? { duration: 0 }
@@ -63,7 +63,7 @@ export default function NavbarContainer({
                 layout
                 onHoverStart={() => setIsHovered(true)}
                 onHoverEnd={() => setIsHovered(false)}
-                    className={`pointer-events-auto relative overflow-hidden border ${widthClass}`}
+                    className={`pointer-events-auto relative overflow-hidden ${widthClass}`}
                 animate={{
                     borderRadius: tokenSet.radius,
                     paddingTop: tokenSet.paddingY,
@@ -71,11 +71,13 @@ export default function NavbarContainer({
                     paddingLeft: tokenSet.paddingX,
                     paddingRight: tokenSet.paddingX,
                     backgroundColor: tokenSet.background,
-                    borderColor: `rgba(0,140,255,${isIdle ? 0.08 : 0.12})`,
+                    borderWidth: isCompact ? '1px' : '0px 0px 1px 0px',
+                    borderStyle: 'solid',
+                    borderColor: isCompact ? 'rgba(0, 140, 255, 0.12)' : 'rgba(255, 255, 255, 0.06)',
                     boxShadow: shadowValue,
                     backdropFilter: `blur(${blurValue}px)`,
                     WebkitBackdropFilter: `blur(${blurValue}px)`,
-                    opacity: statePhase === 'compact' ? 1 : 0.985,
+                    opacity: 1,
                 }}
                 transition={{
                     layout: visualTransition,
@@ -85,6 +87,7 @@ export default function NavbarContainer({
                     paddingLeft: visualTransition,
                     paddingRight: visualTransition,
                     backgroundColor: visualTransition,
+                    borderWidth: visualTransition,
                     borderColor: calmTransition,
                     boxShadow: calmTransition,
                     backdropFilter: calmTransition,
@@ -92,10 +95,20 @@ export default function NavbarContainer({
                     opacity: visualTransition,
                 }}
             >
-                <div
-                    className="pointer-events-none absolute inset-0"
+                <motion.div
+                    className="pointer-events-none absolute inset-0 -z-10"
+                    animate={{ opacity: isCompact ? 0 : 1 }}
+                    transition={visualTransition}
                     style={{
-                        background: 'linear-gradient(to right, rgba(8,15,35,0.75), rgba(5,10,25,0.65)), radial-gradient(circle at 18% 0%, rgba(96,165,250,0.08), transparent 48%), linear-gradient(180deg, rgba(255,255,255,0.03), transparent 42%)',
+                        background: 'linear-gradient(to bottom, rgba(10, 20, 45, 0.9), rgba(10, 20, 45, 0.65))',
+                    }}
+                />
+                <motion.div
+                    className="pointer-events-none absolute inset-0 -z-10"
+                    animate={{ opacity: isCompact ? 1 : 0 }}
+                    transition={visualTransition}
+                    style={{
+                        background: 'linear-gradient(120deg, rgba(10, 20, 45, 0.85), rgba(5, 10, 30, 0.75))',
                     }}
                 />
 
