@@ -76,6 +76,11 @@ export default function NavbarContainer({
             style={{
                 willChange: 'transform',
                 transformOrigin: 'center top',
+                paddingTop: tokenSet.paddingY,
+                paddingBottom: tokenSet.paddingY,
+                paddingLeft: tokenSet.paddingX,
+                paddingRight: tokenSet.paddingX,
+                marginTop: isCompact && !isMobile ? 16 : 0,
             }}
             animate={{
                 // Transform-only properties (no layout shift)
@@ -85,12 +90,7 @@ export default function NavbarContainer({
 
                 // Visual properties animated smoothly
                 borderRadius: tokenSet.radius,
-                paddingTop: tokenSet.paddingY,
-                paddingBottom: tokenSet.paddingY,
-                paddingLeft: tokenSet.paddingX,
-                paddingRight: tokenSet.paddingX,
                 backgroundColor: tokenSet.background,
-                marginTop: isCompact && !isMobile ? 16 : 0,
                 boxShadow: shadowValue,
                 backdropFilter: `blur(${blurValue}px) saturate(${saturateValue}%)`,
                 WebkitBackdropFilter: `blur(${blurValue}px) saturate(${saturateValue}%)`,
@@ -110,12 +110,7 @@ export default function NavbarContainer({
 
                 // Visual morph — same timing as layout
                 borderRadius: morphTransition,
-                paddingTop: morphTransition,
-                paddingBottom: morphTransition,
-                paddingLeft: morphTransition,
-                paddingRight: morphTransition,
                 backgroundColor: morphTransition,
-                marginTop: morphTransition,
 
                 // Calm properties — gradual transitions
                 boxShadow: calmTransition,
