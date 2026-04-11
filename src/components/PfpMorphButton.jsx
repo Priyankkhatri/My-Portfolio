@@ -32,7 +32,7 @@ export default function PfpMorphButton() {
     const rafId = useRef(null)
     const naturalRect = useRef(null)
     const wasBtn = useRef(false)
-    const smoothed = useRef({ p: 0, lastP: -1 })
+    const smoothed = useRef({ p: 0, lastP: -1, lastScrollY: -1 })
     const maxScrollRef = useRef(0)
 
     // ── Reset all scroll-dependent state on route change to home ──
@@ -146,8 +146,12 @@ export default function PfpMorphButton() {
         
         // Prevent layout thrashing if completely idle
         if (p === 0 && smoothed.current.lastP === 0) return;
-        if (p === 1 && smoothed.current.lastP === 1) return;
+        
+        // Only completely pause execution if morph is fully settled AND the user isn't actively scrolling
+        if (p === 1 && smoothed.current.lastP === 1 && smoothed.current.lastScrollY === scrollY) return;
+
         smoothed.current.lastP = p;
+        smoothed.current.lastScrollY = scrollY;
 
         // ── When at the very top, reset all inline styles so Tailwind classes apply cleanly ──
         if (p === 0) {
