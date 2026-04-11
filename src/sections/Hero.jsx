@@ -29,13 +29,12 @@ const stats = [
 function AnimatedStat({ value }) {
     const ref = useRef(null)
     const inView = useInView(ref, { once: true })
-    const [display, setDisplay] = useState("0")
 
     useEffect(() => {
-        if (!inView) return
+        if (!inView || !ref.current) return
         const match = value.match(/^(\d+)(.*)$/)
         if (!match) {
-            setDisplay(value)
+            ref.current.textContent = value
             return
         }
         const target = parseInt(match[1], 10)
@@ -44,12 +43,16 @@ function AnimatedStat({ value }) {
         const controls = animate(0, target, {
             duration: 2.5,
             ease: "easeOut",
-            onUpdate: (v) => setDisplay(Math.round(v) + suffix)
+            onUpdate: (v) => {
+                if (ref.current) {
+                    ref.current.textContent = Math.round(v) + suffix
+                }
+            }
         })
         return () => controls.stop()
     }, [inView, value])
 
-    return <span ref={ref}>{display}</span>
+    return <span ref={ref}>0</span>
 }
 
 export default function Hero() {

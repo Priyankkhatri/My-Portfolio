@@ -41,9 +41,11 @@ export default function RootLayout() {
             <ScrollToRouteTop />
 
             {/* Global 3D background - lazy-loaded, non-blocking, persistent */}
-            <Suspense fallback={null}>
-                <HeroBackground />
-            </Suspense>
+            {loaderPhase >= 3 && (
+                <Suspense fallback={null}>
+                    <HeroBackground />
+                </Suspense>
+            )}
 
             <motion.div
                 className="relative z-10"

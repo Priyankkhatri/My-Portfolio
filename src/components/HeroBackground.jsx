@@ -90,10 +90,11 @@ function GridFloor({ colors, gridSize = 50, gridDivs = 50, loaderPhase }) {
     const gridRef = useRef()
     const matRef = useRef()
     const groupRef = useRef()
+    const targetColor = useMemo(() => new THREE.Color(colors.floorColor), [colors.floorColor])
 
     useFrame(() => {
         if (matRef.current) {
-            matRef.current.color.lerp(new THREE.Color(colors.floorColor), 0.05)
+            matRef.current.color.lerp(targetColor, 0.05)
             const targetOpacity = loaderPhase >= 4 ? 0.6 : 0;
             matRef.current.opacity += (targetOpacity - matRef.current.opacity) * 0.05;
         }
@@ -125,6 +126,7 @@ function GridFloor({ colors, gridSize = 50, gridDivs = 50, loaderPhase }) {
 function Particles({ count = 150, colors, loaderPhase }) {
     const mesh = useRef()
     const matRef = useRef()
+    const targetColor = useMemo(() => new THREE.Color(colors.particleColor), [colors.particleColor])
 
     const transition = useRef({
         state: 'idle',
@@ -154,7 +156,7 @@ function Particles({ count = 150, colors, loaderPhase }) {
     useFrame((_, delta) => {
         // Smoothly transition particle color
         if (matRef.current) {
-            matRef.current.color.lerp(new THREE.Color(colors.particleColor), 0.05)
+            matRef.current.color.lerp(targetColor, 0.05)
             matRef.current.opacity += (colors.particleOpacity - matRef.current.opacity) * 0.05
         }
 

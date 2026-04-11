@@ -32,7 +32,8 @@ export default function PfpMorphButton() {
     const rafId = useRef(null)
     const naturalRect = useRef(null)
     const wasBtn = useRef(false)
-    const smoothed = useRef({ p: 0 })
+    const smoothed = useRef({ p: 0, lastP: -1 })
+    const maxScrollRef = useRef(0)
 
     // ── Reset all scroll-dependent state on route change to home ──
     // Without this, stale morph progress / mobile-button visibility
@@ -110,12 +111,17 @@ export default function PfpMorphButton() {
         const vh = window.innerHeight
         const vw = window.innerWidth
 
-        // Also figure out what the absolute furthest we can scroll is
-        const docHeight = Math.max(
-            document.body.scrollHeight,
-            document.documentElement.scrollHeight
-        )
-        const maxScroll = docHeight - vh
+        // Cache the maximal scroll height to prevent synchronous layout thrashing (forced reflow)
+        // Recalculate roughly once every few hundred frames or whenever it's 0
+        if (maxScrollRef.current === 0 || Math.random() < 0.01) {
+            maxScrollRef.current = Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight
+            ) - vh;
+        }
+        
+        // Ensure maxScroll isn't negative
+        const maxScroll = Math.max(0, maxScrollRef.current)
 
         // Compress the animation safely into the available scrolling space!
         // We want the morph to complete within the first 60% of max scroll or within a fixed 400px window.
@@ -137,6 +143,11 @@ export default function PfpMorphButton() {
         if (smoothed.current.p > 0.999) smoothed.current.p = 1
 
         const p = smoothed.current.p
+        
+        // Prevent layout thrashing if completely idle
+        if (p === 0 && smoothed.current.lastP === 0) return;
+        if (p === 1 && smoothed.current.lastP === 1) return;
+        smoothed.current.lastP = p;
 
         // ── When at the very top, reset all inline styles so Tailwind classes apply cleanly ──
         if (p === 0) {

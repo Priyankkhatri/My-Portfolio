@@ -13,7 +13,7 @@ const journeyData = [
             { label: 'Focus', value: 'Algorithms & Logic' },
             { label: 'Core', value: 'C / C++ Basics' }
         ],
-        accent: 'rgba(59, 130, 246, 0.15)' // blue
+        accent: 'rgba(100, 140, 220, 0.1)' // blue neutral
     },
     {
         id: 'build',
@@ -25,7 +25,7 @@ const journeyData = [
             { label: 'Stack', value: 'MERN & Next.js' },
             { label: 'Focus', value: 'System Architecture' }
         ],
-        accent: 'rgba(139, 92, 246, 0.15)' // violet
+        accent: 'rgba(120, 100, 200, 0.1)' // violet neutral
     },
     {
         id: 'current',
@@ -37,7 +37,7 @@ const journeyData = [
             { label: 'Current Phase', value: 'Advanced Full-Stack' },
             { label: 'Goal', value: 'Production SaaS' }
         ],
-        accent: 'rgba(16, 185, 129, 0.12)' // emerald
+        accent: 'rgba(80, 160, 130, 0.1)' // emerald neutral
     }
 ]
 
@@ -127,21 +127,20 @@ function InteractiveNode({ item, index, isActive, setActiveIndex, isLast, setCur
                 <motion.div 
                     animate={
                         isActive 
-                        ? { scale: 1.04, y: 0, boxShadow: '0 10px 30px rgba(0, 120, 255, 0.15)' }
+                        ? { y: 0, backgroundColor: 'rgba(59, 130, 246, 0.04)', borderColor: 'rgba(59, 130, 246, 0.12)' }
                         : isHovered 
-                            ? { scale: 1.02, y: -4, boxShadow: '0 10px 30px rgba(0, 120, 255, 0.15)' } 
-                            : { scale: 1, y: 0, boxShadow: '0 0px 0px rgba(0,0,0,0)' }
+                            ? { y: -2, backgroundColor: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.06)' } 
+                            : { y: 0, backgroundColor: 'rgba(255,255,255,0.01)', borderColor: 'rgba(255,255,255,0.03)' }
                     }
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className={`relative px-5 py-4 rounded-xl border overflow-hidden transition-colors duration-400
-                    ${isActive ? 'border-blue-500/20 bg-blue-500/[0.04]' : 'border-white/[0.04] bg-white/[0.01]'}
-                `}>
+                    className="relative px-5 py-4 rounded-xl border overflow-hidden"
+                >
                     {/* Hover light effect */}
                     <motion.div 
                         className="absolute inset-0 pointer-events-none transition-opacity duration-500"
                         animate={{ opacity: isHovered || isActive ? 1 : 0 }}
                         style={{
-                            background: `radial-gradient(circle at ${lightPos.x}% ${lightPos.y}%, rgba(255,255,255,0.08), transparent 40%)`
+                            background: `radial-gradient(circle at ${lightPos.x}% ${lightPos.y}%, rgba(255,255,255,0.06), transparent 40%)`
                         }}
                     />
 
@@ -203,9 +202,20 @@ export default function About() {
             >
                 {/* Dynamic Global Background Shift */}
                 <motion.div 
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[140px] pointer-events-none -z-10"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[140px] pointer-events-none -z-10 opacity-70"
                     animate={{ background: journeyData[activeIndex].accent }}
                     transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                />
+
+                {/* Soft Ambient Cinematic Light */}
+                <motion.div 
+                    className="absolute top-0 left-0 w-full h-[600px] pointer-events-none -z-10"
+                    animate={{ 
+                        opacity: [0.03, 0.06, 0.03],
+                        scale: [1, 1.05, 1],
+                    }}
+                    transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,1) 0%, transparent 80%)' }}
                 />
 
                 {/* Header */}
@@ -247,15 +257,19 @@ export default function About() {
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={activeIndex}
-                                initial={{ opacity: 0, x: 40, scale: 0.98, filter: 'blur(8px)' }}
-                                animate={{ opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' }}
-                                exit={{ opacity: 0, x: -40, scale: 0.98, filter: 'blur(8px)' }}
-                                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                                whileHover={{ rotateX: 1, rotateY: -1 }}
+                                initial={{ opacity: 0, filter: 'blur(6px)', scale: 0.99 }}
+                                animate={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
+                                exit={{ opacity: 0, filter: 'blur(4px)', scale: 0.99 }} // Exit triggers the "dim" effect via fast opacity transition
+                                transition={{ 
+                                    duration: 0.5, 
+                                    ease: [0.22, 1, 0.36, 1],
+                                    opacity: { duration: 0.3, ease: 'easeOut' } // Fast dim out
+                                }}
+                                whileHover={{ rotateX: 0.5, rotateY: -0.5 }} // Extremely subtle
                                 className="glass-card h-full p-8 md:p-12 relative overflow-hidden rounded-[2rem] flex flex-col justify-between"
                                 style={{
-                                    boxShadow: '0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)',
-                                    background: 'linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%)',
+                                    boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
+                                    background: 'linear-gradient(135deg, rgba(255,255,255,0.015) 0%, rgba(255,255,255,0.002) 100%)',
                                     transformStyle: 'preserve-3d'
                                 }}
                             >
@@ -274,11 +288,17 @@ export default function About() {
 
                                 <div className="relative z-10 flex flex-col h-full transform-gpu" style={{ transform: 'translateZ(20px)' }}>
                                     <div>
-                                        <motion.div className="relative inline-block group mb-2" whileHover="hover">
+                                        <motion.div 
+                                            className="relative inline-block group mb-2" 
+                                            whileHover="hover"
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.04 }} // micro-delay
+                                        >
                                             <motion.h3 
-                                                className="text-3xl lg:text-4xl font-bold text-white relative z-10 cursor-default" 
+                                                className="text-3xl lg:text-4xl font-bold relative z-10 cursor-default tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white/90 to-white/60" 
                                                 style={{ fontFamily: "'Poppins', sans-serif" }}
-                                                variants={{ hover: { letterSpacing: '0.5px' } }}
+                                                variants={{ hover: { letterSpacing: '-0.3px' } }}
                                                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                                             >
                                                 {journeyData[activeIndex].title}
@@ -291,7 +311,12 @@ export default function About() {
                                             />
                                         </motion.div>
                                         
-                                        <div className="flex items-center gap-3 mb-8">
+                                        <motion.div 
+                                            className="flex items-center gap-3 mb-8"
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
+                                        >
                                             <span className="text-blue-400 font-medium tracking-wide">
                                                 {journeyData[activeIndex].year}
                                             </span>
@@ -299,19 +324,33 @@ export default function About() {
                                             <span className="text-xs text-[var(--text-secondary)]">
                                                 My Timeline
                                             </span>
-                                        </div>
+                                        </motion.div>
 
-                                        <div className="w-12 h-px bg-white/20 mb-8" />
+                                        <motion.div 
+                                            className="w-12 h-px bg-white/20 mb-8" 
+                                            initial={{ opacity: 0, width: 0 }}
+                                            animate={{ opacity: 1, width: 48 }}
+                                            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.07 }}
+                                        />
 
-                                        <p className="text-[15px] text-[var(--text-secondary)] leading-[1.8] mb-8">
+                                        <motion.p 
+                                            className="text-[15px] text-[var(--text-secondary)] mb-8"
+                                            style={{ lineHeight: 1.6, opacity: 0.85 }}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.08 }} // micro-delay
+                                        >
                                             {journeyData[activeIndex].details}
-                                        </p>
+                                        </motion.p>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-6 mt-auto pt-8 border-t border-white/5">
                                         {journeyData[activeIndex].stats.map((stat, i) => (
                                             <motion.div 
                                                 key={i} 
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.12 + (i * 0.04) }} // staggering tags
                                                 className="flex flex-col p-4 rounded-xl relative overflow-hidden bg-white/[0.01] border border-white/[0.02] cursor-pointer"
                                                 whileHover={{ 
                                                     y: -2, 
@@ -319,7 +358,6 @@ export default function About() {
                                                     borderColor: 'rgba(255,255,255,0.06)'
                                                 }}
                                                 whileTap={{ scale: 0.97 }}
-                                                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                                             >
                                                 <span className="text-[10px] tracking-[0.2em] uppercase text-blue-400 mb-1.5 font-bold relative z-10 transition-colors">
                                                     {stat.label}
