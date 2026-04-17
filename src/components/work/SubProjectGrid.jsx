@@ -87,76 +87,73 @@ export default function SubProjectGrid({ type, data }) {
                             exit={{ opacity: 0 }}
                             onClick={() => setActiveItem(null)}
                         >
-                            <div className="absolute inset-0 bg-black/95 backdrop-blur-3xl" />
+                            <div className="absolute inset-0 bg-black/40 backdrop-blur-[40px] saturate-[150%]" />
                             
-                            {/* CRT HUD Overlay (Global Scanlines) */}
-                            <div className="absolute inset-0 pointer-events-none z-[1005] opacity-30 overflow-hidden">
-                                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%]" />
-                                <motion.div 
-                                    className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--accent-1)]/10 to-transparent h-40 w-full"
-                                    animate={{ top: ['-20%', '120%'] }}
-                                    transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                                />
+                            {/* Ambient liquid orbs for the modal background */}
+                            <div className="absolute inset-0 pointer-events-none opacity-50 overflow-hidden mix-blend-screen z-0">
+                                <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-[var(--accent-1)]/30 rounded-full blur-[100px]" />
+                                <div className="absolute bottom-[20%] right-[20%] w-[600px] h-[600px] bg-[var(--accent-2)]/20 rounded-full blur-[120px]" />
                             </div>
 
                             <motion.div
-                                className="relative w-full max-w-7xl h-full z-10 flex flex-col overflow-hidden border border-white/10 rounded-3xl bg-[#050505] shadow-[0_0_150px_rgba(0,0,0,0.9)]"
+                                className="relative w-full max-w-[95vw] md:max-w-[90vw] h-[90vh] z-10 flex flex-col overflow-hidden rounded-[2rem] glass-morphism-premium border border-white/20 shadow-2xl"
                                 initial={{ scale: 0.95, opacity: 0, y: 50 }}
                                 animate={{ scale: 1, opacity: 1, y: 0 }}
                                 exit={{ scale: 0.95, opacity: 0, y: 30 }}
                                 transition={{ type: 'spring', stiffness: 250, damping: 30 }}
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                {/* Simulation Control Header */}
-                                <div className="flex items-center justify-between px-10 py-8 border-b border-white/5 bg-black/40 backdrop-blur-2xl">
-                                    <div className="flex items-center gap-10">
+                                {/* Liquid Glass Thinner Control Header */}
+                                <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5 backdrop-blur-md relative z-20">
+                                    <div className="flex items-center gap-6">
                                         <button
                                             onClick={() => setActiveItem(null)}
-                                            className="group flex items-center gap-6 text-[11px] tracking-[0.5em] uppercase text-[var(--accent-1)] hover:text-white transition-all font-black"
+                                            className="group flex items-center gap-3 text-xs tracking-widest uppercase text-white hover:text-[var(--accent-1)] transition-colors font-bold"
                                         >
-                                            <div className="w-10 h-10 rounded-full border border-[var(--accent-1)]/30 flex items-center justify-center group-hover:bg-[var(--accent-1)] group-hover:text-black transition-all">
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover:-translate-x-1 transition-transform rotate-180">
-                                                    <path d="M5 12h14m-7-7l7 7-7 7" />
+                                            <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[var(--accent-1)] group-hover:border-[var(--accent-1)] group-hover:text-black transition-all shadow-[0_0_10px_rgba(255,255,255,0.1)]">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:-translate-x-0.5 transition-transform">
+                                                    <path d="M15 18l-6-6 6-6" />
                                                 </svg>
                                             </div>
-                                            Exit Archive
+                                            Exit Focus
                                         </button>
-                                        <div className="hidden sm:flex flex-col gap-1 pl-10 border-l border-white/5">
-                                            <span className="text-sm tracking-widest text-white uppercase font-bold">
+                                        <div className="hidden sm:flex flex-col border-l border-white/20 pl-6 space-y-0.5">
+                                            <span className="text-sm tracking-wide text-white font-bold drop-shadow-md line-clamp-1 max-w-[200px] md:max-w-none">
                                                 {activeItem.title}
                                             </span>
-                                            <span className="text-xs text-[var(--accent-1)] uppercase tracking-widest animate-pulse">
-                                                Active Simulation v1.0
+                                            <span className="text-[10px] text-[var(--accent-1)] uppercase tracking-widest opacity-80">
+                                                Active Session v1.0
                                             </span>
                                         </div>
                                     </div>
                                     
-                                    <div className="flex items-center gap-8">
+                                    <div className="flex items-center gap-4">
                                         <a
                                             href={activeItem.path || activeItem.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="hidden md:flex items-center gap-4 text-sm tracking-widest uppercase text-white/50 hover:text-[var(--accent-1)] transition-all px-8 py-3 rounded-full border border-white/10 hover:border-[var(--accent-1)]/50 bg-white/[0.02]"
+                                            className="hidden md:flex items-center gap-2 text-xs tracking-widest uppercase text-white/70 hover:text-white transition-all px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 hover:border-white shadow-sm"
                                         >
-                                            Open in New Node
+                                            Open in New Tab
                                         </a>
                                         <button
                                             onClick={() => setActiveItem(null)}
-                                            className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/20 hover:text-[var(--accent-1)] hover:border-[var(--accent-1)] transition-all"
+                                            className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all"
                                         >
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* Simulation Canvas */}
-                                <div className="relative flex-1 bg-white overflow-hidden">
-                                    <div className="absolute inset-0 z-20 pointer-events-none bg-black/5 mix-blend-overlay" />
+                                <div className="relative flex-1 w-full bg-[#030303] overflow-hidden" 
+                                     style={{ WebkitOverflowScrolling: 'touch' }}
+                                >
                                     <iframe
                                         src={activeItem.path || activeItem.url}
                                         title={activeItem.title}
-                                        className="w-full h-full border-0 relative z-10"
-                                        sandbox="allow-scripts allow-same-origin"
+                                        className="absolute inset-0 w-full h-full border-0 z-10 bg-white"
+                                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
                                     />
                                     
                                     {/* CINEMATIC BOOT-UP SEQUENCE */}
@@ -166,7 +163,7 @@ export default function SubProjectGrid({ type, data }) {
                                             animate={{ opacity: 0 }}
                                             exit={{ opacity: 0 }}
                                             transition={{ duration: 0.8, delay: 1.2 }}
-                                            className="absolute inset-0 bg-[#050505] z-30 flex flex-col items-center justify-center p-12 text-center"
+                                            className="absolute inset-0 bg-[#050505] z-30 flex flex-col items-center justify-center p-12 text-center pointer-events-none"
                                         >
                                             <motion.div
                                                 initial={{ width: 0 }}
@@ -206,24 +203,15 @@ export default function SubProjectGrid({ type, data }) {
                                             />
                                         </motion.div>
                                     </AnimatePresence>
-                                </div>
 
-                                {/* Data Stream Footer */}
-                                <div className="px-10 py-6 bg-black border-t border-white/5 flex items-center justify-between">
-                                    <div className="flex gap-12 text-xs text-white/50 tracking-widest uppercase">
-                                        <div className="flex items-center gap-3">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-1)] animate-pulse" />
-                                            <span>Stream / Stable</span>
+                                    {/* Floating Glass Indicator over the iframe */}
+                                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                                        <div className="glass-card px-6 py-2 rounded-full border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex items-center gap-4 text-[10px] tracking-widest text-white/70 uppercase">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-1)] animate-pulse shadow-[0_0_10px_var(--accent-1)]" />
+                                            <span>Stable Connection</span>
+                                            <span className="w-px h-4 bg-white/20 mx-2" />
+                                            <span>{isClones ? 'Clone' : 'Session'}</span>
                                         </div>
-                                        <span>Node / 4096 X</span>
-                                        <span className="hidden md:block">Time / {new Date().toLocaleTimeString()}</span>
-                                    </div>
-                                    <div className="w-48 h-[2px] bg-white/5 overflow-hidden relative rounded-full">
-                                        <motion.div 
-                                            className="absolute inset-0 bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)]"
-                                            animate={{ x: ['-100%', '100%'] }}
-                                            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                                        />
                                     </div>
                                 </div>
                             </motion.div>
@@ -319,7 +307,7 @@ function SimulationCard({ item, index, isClones, onClick }) {
 
             {/* Faint Background ID */}
             <div className="absolute -bottom-6 -right-6 p-8 pointer-events-none opacity-[0.02] group-hover:opacity-10 transition-opacity vertical-marker">
-                <div className="text-[80px] font-black leading-none uppercase select-none">NODE {index}</div>
+                <div className="text-[80px] font-black leading-none uppercase select-none">{isClones ? 'CLONE' : 'NODE'} {index + 1}</div>
             </div>
         </motion.button>
     )

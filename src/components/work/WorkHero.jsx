@@ -28,13 +28,15 @@ export default function WorkHero({ project }) {
           alt={project.title} 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)]/40 to-transparent" />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-transparent/20" />
       </motion.div>
 
       {/* Content Container */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 w-full relative z-10">
-        <motion.div style={{ opacity }}>
+        <motion.div 
+            style={{ opacity }}
+            className="glass-morphism-premium p-8 md:p-12 lg:p-16 rounded-3xl inline-block max-w-4xl"
+        >
           <div className="flex items-center gap-4 mb-6">
             <span className="text-[var(--text-secondary)] text-sm tracking-widest uppercase">
               {project.category || 'Project'} / {project.year}
@@ -42,7 +44,7 @@ export default function WorkHero({ project }) {
           </div>
 
           <h1 
-            className="text-5xl md:text-7xl lg:text-8xl font-bold text-[var(--text-primary)] leading-[1] tracking-tight mb-6"
+            className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[1] tracking-tight mb-2"
             style={{ fontFamily: 'var(--font-display)', textWrap: 'balance' }}
           >
             {project.title}
