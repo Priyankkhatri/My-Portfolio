@@ -34,8 +34,10 @@ export default function Work() {
     return (
         <>
             <Helmet>
-                <title>Project Archive | Priyank Khatri</title>
-                <meta name="description" content="A high-fidelity archive of selected technical projects by Priyank Khatri." />
+                <title>Project Archive | Priyank Khatri — Technical Portfolio</title>
+                <meta name="description" content="Explore a high-fidelity archive of technical projects by Priyank Khatri. Featuring Full-stack applications, SAAS platforms, and experimental frontend architecture." />
+                <meta name="keywords" content="Priyank Khatri, Projects, React Projects, Node.js, Full-stack developer, SAAS clone, Portfolio" />
+                <link rel="canonical" href="https://priyankkhatri.vercel.app/work" />
             </Helmet>
 
             <section className="min-h-screen px-6 md:px-12 lg:px-24 pt-32 md:pt-48 pb-32 relative overflow-hidden bg-[var(--bg-primary)]">

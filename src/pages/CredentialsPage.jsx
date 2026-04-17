@@ -8,8 +8,9 @@ export default function CredentialsPage() {
     return (
         <>
             <Helmet>
-                <title>Credentials & Certifications | Priyank Khatri</title>
-                <meta name="description" content="View the professional certifications and academic credentials of Priyank Khatri, including Meta Front-End Development and hackathon participations." />
+                <title>Credentials & Certifications | Priyank Khatri — Academic Record</title>
+                <meta name="description" content="View the professional certifications and academic credentials of Priyank Khatri. Featuring certifications from Meta and various hackathon achievements." />
+                <meta name="keywords" content="Priyank Khatri, Certifications, Meta Frontend, Resume, Credentials, BTech CSE, Coding Gita" />
                 <link rel="canonical" href="https://priyankkhatri.vercel.app/credentials" />
             </Helmet>
             <CredentialsLayout />

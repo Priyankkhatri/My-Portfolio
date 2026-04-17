@@ -29,7 +29,7 @@ export const footerConfig = {
             links: [
                 { label: 'Home', path: '/' },
                 { label: 'Work', path: '/work' },
-                { label: 'Tech', path: '/tech' },
+                { label: 'About', path: '/about' },
                 { label: 'Credentials', path: '/credentials' },
             ],
         },

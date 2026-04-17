@@ -8,8 +8,9 @@ export default function ContactPage() {
     return (
         <>
             <Helmet>
-                <title>Contact & Socials | Priyank Khatri</title>
-                <meta name="description" content="Get in touch with Priyank Khatri for collaborations, internships, or questions. Connect via LinkedIn, GitHub, or email." />
+                <title>Contact & Socials | Priyank Khatri — Get in Touch</title>
+                <meta name="description" content="Connect with Priyank Khatri for web development projects, internships, or technical collaborations. Available on LinkedIn, GitHub, X, and Instagram." />
+                <meta name="keywords" content="Priyank Khatri, Contact, Hire Developer, Web Developer India, GitHub, LinkedIn, Social Media" />
                 <link rel="canonical" href="https://priyankkhatri.vercel.app/contact" />
             </Helmet>
             <Contact />

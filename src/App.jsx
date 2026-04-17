@@ -4,7 +4,7 @@ import RootLayout from './components/RootLayout'
 
 /* Lazy-loaded page components for code splitting */
 const Home = lazy(() => import('./pages/Home'))
-const Tech = lazy(() => import('./pages/Tech'))
+const AboutPage = lazy(() => import('./pages/AboutPage'))
 const Work = lazy(() => import('./pages/Work'))
 const WorkDetail = lazy(() => import('./pages/WorkDetail'))
 const CredentialsPage = lazy(() => import('./pages/CredentialsPage'))
@@ -38,11 +38,11 @@ export default function App() {
                     }
                 />
                 <Route
-                    path="tech"
+                    path="about"
                     element={
                         <Suspense fallback={<LoadingFallback />}>
 
-                            <Tech />
+                            <AboutPage />
                         </Suspense>
                     }
                 />

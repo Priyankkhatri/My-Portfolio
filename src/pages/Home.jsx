@@ -53,9 +53,9 @@ export default function Home() {
     return (
         <>
             <Helmet>
-                <title>Priyank Khatri — Portfolio | Software Developer</title>
-                <meta name="description" content="Priyank Khatri's professional portfolio. BTech CSE student at Coding Gita, building React apps, REST APIs, and exploring modern technology." />
-                <meta name="keywords" content="Priyank Khatri, Software Developer, React Developer, Frontend Developer, Coding Gita, Portfolio" />
+                <title>Priyank Khatri | Software Developer & Frontend Architect</title>
+                <meta name="description" content="Official portfolio of Priyank Khatri. BTech CSE student at Coding Gita, specializing in high-performance React applications, REST APIs, and immersive web experiences." />
+                <meta name="keywords" content="Priyank Khatri, Priyanka Khatri, Software Developer, React Developer, Frontend Developer, Coding Gita, Full-stack Developer, Web Architecture" />
                 <link rel="canonical" href="https://priyankkhatri.vercel.app/" />
             </Helmet>
             <Hero />

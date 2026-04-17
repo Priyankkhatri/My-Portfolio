@@ -9,7 +9,7 @@ import useStore from '../store/useStore'
 
 const NAV_ITEMS = [
     { label: 'Home', to: '/', exact: true },
-    { label: 'Tech', to: '/tech' },
+    { label: 'About', to: '/about' },
     { label: 'Work', to: '/work' },
     { label: 'Credentials', to: '/credentials' },
     { label: 'Contact', to: '/contact' },

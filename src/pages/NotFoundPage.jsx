@@ -59,7 +59,7 @@ export default function NotFoundPage() {
 
                 {/* Route hint */}
                 <p className="text-[10px] text-[var(--text-muted)] mt-8 tracking-wider">
-                    Or try: <code className="text-[var(--text-secondary)]">/work</code> · <code className="text-[var(--text-secondary)]">/tech</code> · <code className="text-[var(--text-secondary)]">/credentials</code> · <code className="text-[var(--text-secondary)]">/contact</code>
+                    Or try: <code className="text-[var(--text-secondary)]">/work</code> · <code className="text-[var(--text-secondary)]">/about</code> · <code className="text-[var(--text-secondary)]">/credentials</code> · <code className="text-[var(--text-secondary)]">/contact</code>
                 </p>
             </motion.div>
         </section>
