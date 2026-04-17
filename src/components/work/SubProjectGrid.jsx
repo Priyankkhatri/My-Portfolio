@@ -1,21 +1,10 @@
-<<<<<<< HEAD
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-=======
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
 import useStore from '../../store/useStore'
 import { createPortal } from 'react-dom'
 
 /**
-<<<<<<< HEAD
- * SubProjectGrid — Reconstructed as an Immersive Simulation Collection.
- * Features: Magnetic Physics, CRT Terminal Modal, Technical Boot-up sequence.
-=======
- * SubProjectGrid — Reconstructed as an Industrial Masonry Collection.
- * Standardizes the 'Archive' aesthetic for clones and mini-games.
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+ * SubProjectGrid — Merged Immersive Simulation (Liquid Glass) & Industrial Masonry Collection.
  */
 export default function SubProjectGrid({ type, data }) {
     const isClones = type === 'clones'
@@ -50,121 +39,99 @@ export default function SubProjectGrid({ type, data }) {
     if (!data || data.length === 0) return null
 
     return (
-<<<<<<< HEAD
-        <section className="relative py-24 overflow-visible">
-            {/* Background Narrative Marker */}
-            <div className="absolute -right-12 top-0 pointer-events-none select-none opacity-[0.03] vertical-marker text-[12rem] font-black uppercase text-white hidden lg:block">
-                Blueprints
-            </div>
-
-            <div className="max-w-6xl relative z-10">
-                {/* Section Header HUD */}
-                <div className="flex items-center gap-6 mb-20">
-                    <div className="flex flex-col">
-                        <span className="text-sm tracking-widest uppercase text-[var(--accent-1)] font-bold mb-2">
-                           03 / Simulation Matrix
-                        </span>
-                        <span className="text-xs text-white/50 uppercase tracking-widest">Module Library</span>
-                    </div>
-                    <div className="h-[1px] flex-1 bg-gradient-to-r from-[var(--accent-1)]/30 to-transparent" />
+        <section className={`relative overflow-visible ${isClones ? 'py-24' : 'py-12 md:py-16'}`}>
+            {isClones && (
+                <div className="absolute -right-12 top-0 pointer-events-none select-none opacity-[0.03] vertical-marker text-[12rem] font-black uppercase text-white hidden lg:block">
+                    Blueprints
                 </div>
+            )}
 
-                {/* Organic Simulation Matrix (Grid) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24">
-                    {data.map((item, index) => (
-                        <div 
-                            key={item.id || item.title}
-                            className={`${index % 2 !== 0 ? 'md:translate-y-24' : ''}`}
-                        >
-                            <SimulationCard 
-                                item={item} 
-                                index={index} 
-                                isClones={isClones} 
-                                onClick={() => handleItemClick(item)} 
-                            />
+            <div className={`relative z-10 ${isClones ? 'max-w-6xl' : 'max-w-5xl'}`}>
+                {/* Combined Section Header */}
+                <div className="flex items-center gap-6 mb-12 lg:mb-20">
+                    {isClones ? (
+                        <div className="flex flex-col">
+                            <span className="text-sm tracking-widest uppercase text-[var(--accent-1)] font-bold mb-2">
+                               03 / Simulation Matrix
+                            </span>
+                            <span className="text-xs text-white/50 uppercase tracking-widest">Module Library</span>
                         </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Simulation Interface (Modal) */}
-=======
-        <section className="py-4 md:py-6">
-            <div className="max-w-5xl">
-                {/* Industrial Header */}
-                <div className="flex items-center gap-6 mb-8">
-                    <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[var(--accent-1)]">
-                        Collection // 03
-                    </span>
-                    <div className="h-px flex-1 bg-gradient-to-r from-[var(--border-color)] to-transparent" />
+                    ) : (
+                        <span className="font-mono text-sm tracking-[0.4em] uppercase text-[var(--accent-1)]">
+                            Collection // 03
+                        </span>
+                    )}
+                    <div className="h-px flex-1 bg-gradient-to-r from-[var(--accent-1)]/30 to-transparent" />
                 </div>
 
-                {/* Asymmetric Masonry Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Grid Container */}
+                <div className={`grid grid-cols-1 md:grid-cols-2 ${isClones ? 'gap-12 lg:gap-24' : 'gap-8'}`}>
                     {data.map((item, index) => {
-                        // Offset every second item for masonry feel
-                        const isOffset = index % 2 === 1
-                        
-                        return (
-                            <motion.button
-                                key={item.id || item.title}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: index * 0.1 }}
-                                onClick={() => handleItemClick(item)}
-                                onMouseEnter={() => setCursorVariant('hover')}
-                                onMouseLeave={() => setCursorVariant('default')}
-                                className={`group relative p-8 rounded-2xl bg-[var(--bg-highlight)]/20 border border-[var(--border-color)] hover:border-[var(--accent-1)]/40 transition-all duration-500 text-left overflow-hidden min-h-[220px] flex flex-col justify-between ${isOffset ? 'md:mt-8' : ''}`}
-                            >
-
-                                {/* Technical Background ID */}
-                                <div className="absolute top-4 right-6 font-mono text-[8px] tracking-[0.4em] uppercase text-[var(--text-muted)] opacity-20 group-hover:opacity-100 transition-opacity">
-                                    {isClones ? 'CLONE' : 'GAME'}_ID_{index + 1}
+                        if (isClones) {
+                            return (
+                                <div key={item.id || item.title} className={`${index % 2 !== 0 ? 'md:translate-y-24' : ''}`}>
+                                    <SimulationCard 
+                                        item={item} 
+                                        index={index} 
+                                        isClones={isClones} 
+                                        onClick={() => handleItemClick(item)} 
+                                    />
                                 </div>
-
-                                <div className="relative z-10 space-y-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent-1)]" />
-                                        <h4 className="text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-1)] transition-colors tracking-tight">
-                                            {item.title}
-                                        </h4>
+                            )
+                        } else {
+                            const isOffset = index % 2 === 1
+                            return (
+                                <motion.button
+                                    key={item.id || item.title}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.8, delay: index * 0.1 }}
+                                    onClick={() => handleItemClick(item)}
+                                    onMouseEnter={() => setCursorVariant('hover')}
+                                    onMouseLeave={() => setCursorVariant('default')}
+                                    className={`group relative p-8 rounded-2xl bg-[var(--bg-highlight)]/10 border border-[var(--border-color)] hover:border-[var(--accent-1)]/40 hover:bg-[var(--bg-highlight)]/20 transition-all duration-500 text-left overflow-hidden min-h-[220px] flex flex-col justify-between ${isOffset ? 'md:mt-8' : ''}`}
+                                >
+                                    <div className="absolute top-4 right-6 font-mono text-[8px] tracking-[0.4em] uppercase text-[var(--text-muted)] opacity-20 group-hover:opacity-100 transition-opacity">
+                                        GAME_ID_{index + 1}
                                     </div>
-                                    <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-2 pr-4 font-light">
-                                        {item.description || 'Interactive technical demonstration'}
-                                    </p>
-                                </div>
-
-                                <div className="flex items-center gap-4 text-[9px] tracking-[0.3em] uppercase text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors mt-8">
-                                    <span className="w-6 h-px bg-[var(--border-color)] group-hover:w-10 group-hover:bg-[var(--accent-1)] transition-all duration-500" />
-                                    <span>Execute_Process</span>
-                                </div>
-                            </motion.button>
-                        )
+                                    <div className="relative z-10 space-y-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent-1)]" />
+                                            <h4 className="text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-1)] transition-colors tracking-tight">
+                                                {item.title}
+                                            </h4>
+                                        </div>
+                                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-2 pr-4 font-light">
+                                            {item.description || 'Interactive technical demonstration'}
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-4 text-[9px] tracking-[0.3em] uppercase text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors mt-8">
+                                        <span className="w-6 h-px bg-[var(--border-color)] group-hover:w-10 group-hover:bg-[var(--accent-1)] transition-all duration-500" />
+                                        <span>Execute_Process</span>
+                                    </div>
+                                </motion.button>
+                            )
+                        }
                     })}
                 </div>
             </div>
 
-            {/* Re-Styled Technical Modal */}
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+            {/* Modal Portal (Liquid Glass style prioritizing Clones) */}
             {typeof document !== 'undefined' && createPortal(
                 <AnimatePresence>
                     {activeItem && isClones && (
                         <motion.div
-<<<<<<< HEAD
                             className="fixed inset-0 z-[1000] flex items-center justify-center px-4 md:px-12 py-12"
-=======
-                            className="fixed inset-0 z-[1000] flex items-center justify-center px-4 sm:px-8 py-8 md:py-12"
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setActiveItem(null)}
                         >
-<<<<<<< HEAD
-                            <div className="absolute inset-0 bg-black/40 backdrop-blur-[40px] saturate-[150%]" />
+                            {/* Backdrop: Mixing Liquid Glass blurs and Industrial opacity */}
+                            <div className="absolute inset-0 bg-black/50 backdrop-blur-[40px] saturate-[150%]" />
                             
-                            {/* Ambient liquid orbs for the modal background */}
+                            {/* Ambient liquid orbs */}
                             <div className="absolute inset-0 pointer-events-none opacity-50 overflow-hidden mix-blend-screen z-0">
                                 <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-[var(--accent-1)]/30 rounded-full blur-[100px]" />
                                 <div className="absolute bottom-[20%] right-[20%] w-[600px] h-[600px] bg-[var(--accent-2)]/20 rounded-full blur-[120px]" />
@@ -178,7 +145,7 @@ export default function SubProjectGrid({ type, data }) {
                                 transition={{ type: 'spring', stiffness: 250, damping: 30 }}
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                {/* Liquid Glass Thinner Control Header */}
+                                {/* Thinner Liquid Glass Header */}
                                 <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5 backdrop-blur-md relative z-20">
                                     <div className="flex items-center gap-6">
                                         <button
@@ -203,41 +170,10 @@ export default function SubProjectGrid({ type, data }) {
                                     </div>
                                     
                                     <div className="flex items-center gap-4">
-=======
-                            <div className="absolute inset-0 bg-[var(--bg-primary)]/90 backdrop-blur-2xl" />
-
-                            <motion.div
-                                className="relative w-full max-w-7xl h-[90vh] z-10 flex flex-col overflow-hidden border border-[var(--border-color)] rounded-2xl bg-[var(--bg-primary)] shadow-[0_0_80px_rgba(0,0,0,0.5)]"
-                                initial={{ scale: 0.98, opacity: 0, y: 40 }}
-                                animate={{ scale: 1, opacity: 1, y: 0 }}
-                                exit={{ scale: 0.98, opacity: 0, y: 20 }}
-                                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                {/* Industrial Modal Header */}
-                                <div className="flex items-center justify-between px-8 py-5 border-b border-[var(--border-color)] bg-[var(--bg-highlight)]/50 backdrop-blur-md">
-                                    <div className="flex items-center gap-6">
-                                        <button
-                                            onClick={() => setActiveItem(null)}
-                                            className="group flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                                        >
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover:-translate-x-1 transition-transform">
-                                                <polyline points="15 18 9 12 15 6" />
-                                            </svg>
-                                            Terminate
-                                        </button>
-                                        <div className="h-4 w-px bg-[var(--border-color)] hidden sm:block" />
-                                        <span className="text-xs font-mono tracking-[0.2em] text-[var(--accent-1)] hidden sm:block uppercase">
-                                            Simulation_Active: {activeItem.title}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-6">
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
                                         <a
                                             href={activeItem.path || activeItem.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-<<<<<<< HEAD
                                             className="hidden md:flex items-center gap-2 text-xs tracking-widest uppercase text-white/70 hover:text-white transition-all px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 hover:border-white shadow-sm"
                                         >
                                             Open in New Tab
@@ -247,31 +183,17 @@ export default function SubProjectGrid({ type, data }) {
                                             className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all"
                                         >
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
-=======
-                                            className="text-[10px] tracking-[0.2em] uppercase text-[var(--text-primary)] hover:text-[var(--accent-1)] transition-colors flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--border-color)] hover:border-[var(--accent-1)]/40 bg-[var(--bg-primary)]"
-                                        >
-                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                                <polyline points="15 3 21 3 21 9" />
-                                                <line x1="10" y1="14" x2="21" y2="3" />
-                                            </svg>
-                                            External_Link
-                                        </a>
-                                        <button
-                                            onClick={() => setActiveItem(null)}
-                                            className="text-[var(--text-muted)] hover:text-[var(--accent-1)] transition-colors"
-                                        >
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
                                         </button>
                                     </div>
                                 </div>
 
-<<<<<<< HEAD
-                                {/* Simulation Canvas */}
-                                <div className="relative flex-1 w-full bg-[#030303] overflow-hidden" 
-                                     style={{ WebkitOverflowScrolling: 'touch' }}
-                                >
+                                {/* Simulation Canvas Layout Base */}
+                                <div className="relative flex-1 w-full bg-[#030303] overflow-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
+                                    {/* Adding Industrial Grain feature to Liquid Glass layout */}
+                                    <div className="absolute inset-0 pointer-events-none z-20 opacity-[0.04] mix-blend-overlay">
+                                        <div className="absolute inset-[-200%] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] animate-grain" />
+                                    </div>
+                                    
                                     <iframe
                                         src={activeItem.path || activeItem.url}
                                         title={activeItem.title}
@@ -295,26 +217,13 @@ export default function SubProjectGrid({ type, data }) {
                                                 className="h-px bg-[var(--accent-1)] mb-8"
                                             />
                                             <div className="text-sm text-[var(--accent-1)] tracking-widest space-y-4 uppercase">
-                                                <motion.div 
-                                                    initial={{ opacity: 0 }} 
-                                                    animate={{ opacity: 1 }} 
-                                                    transition={{ delay: 0.1 }}
-                                                >
+                                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
                                                     Injecting Assets... [DONE]
                                                 </motion.div>
-                                                <motion.div 
-                                                    initial={{ opacity: 0 }} 
-                                                    animate={{ opacity: 1 }} 
-                                                    transition={{ delay: 0.3 }}
-                                                >
+                                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
                                                     Compiling Shaders... [DONE]
                                                 </motion.div>
-                                                <motion.div 
-                                                    initial={{ opacity: 0 }} 
-                                                    animate={{ opacity: 1 }} 
-                                                    transition={{ delay: 0.5 }}
-                                                    className="font-bold text-white"
-                                                >
+                                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="font-bold text-white">
                                                     INITIALIZING SIMULATION CORE
                                                 </motion.div>
                                             </div>
@@ -327,7 +236,7 @@ export default function SubProjectGrid({ type, data }) {
                                         </motion.div>
                                     </AnimatePresence>
 
-                                    {/* Floating Glass Indicator over the iframe */}
+                                    {/* Floating Glass Indicator */}
                                     <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
                                         <div className="glass-card px-6 py-2 rounded-full border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex items-center gap-4 text-[10px] tracking-widest text-white/70 uppercase">
                                             <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-1)] animate-pulse shadow-[0_0_10px_var(--accent-1)]" />
@@ -336,19 +245,6 @@ export default function SubProjectGrid({ type, data }) {
                                             <span>{isClones ? 'Clone' : 'Session'}</span>
                                         </div>
                                     </div>
-=======
-                                {/* Iframe with Film Grain Overlay */}
-                                <div className="relative flex-1 bg-white overflow-hidden">
-                                    <div className="absolute inset-0 pointer-events-none z-20 opacity-[0.04] mix-blend-overlay">
-                                        <div className="absolute inset-[-200%] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] animate-grain" />
-                                    </div>
-                                    <iframe
-                                        src={activeItem.path || activeItem.url}
-                                        title={activeItem.title}
-                                        className="w-full h-full border-0 relative z-10"
-                                        sandbox="allow-scripts allow-same-origin"
-                                    />
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
                                 </div>
                             </motion.div>
                         </motion.div>
@@ -359,16 +255,11 @@ export default function SubProjectGrid({ type, data }) {
         </section>
     )
 }
-<<<<<<< HEAD
 
-/**
- * SimulationCard — Magnetic card with high-fidelity technical ornaments.
- */
 function SimulationCard({ item, index, isClones, onClick }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const cardRef = useRef(null)
     
-    // Magnetic Physics
     const mouseX = useMotionValue(0)
     const mouseY = useMotionValue(0)
     const xSpring = useSpring(mouseX, { stiffness: 150, damping: 15 })
@@ -406,10 +297,8 @@ function SimulationCard({ item, index, isClones, onClick }) {
             className="group relative w-full p-12 rounded-3xl bg-white/[0.01] border border-white/5 hover:border-[var(--accent-1)]/40 transition-all duration-700 text-left overflow-hidden min-h-[380px] flex flex-col justify-between"
             style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
         >
-            {/* Blueprint Grid Overlay */}
             <div className="absolute inset-0 grid-blueprint opacity-[0.05] pointer-events-none group-hover:opacity-10 transition-opacity" />
             
-            {/* Technical HUD Corner */}
             <div className="absolute top-8 right-10 text-xs tracking-widest uppercase text-white/20 group-hover:text-[var(--accent-1)] transition-colors">
                 REC {index + 1}
             </div>
@@ -442,12 +331,9 @@ function SimulationCard({ item, index, isClones, onClick }) {
                 </span>
             </div>
 
-            {/* Faint Background ID */}
             <div className="absolute -bottom-6 -right-6 p-8 pointer-events-none opacity-[0.02] group-hover:opacity-10 transition-opacity vertical-marker">
                 <div className="text-[80px] font-black leading-none uppercase select-none">{isClones ? 'CLONE' : 'NODE'} {index + 1}</div>
             </div>
         </motion.button>
     )
 }
-=======
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa

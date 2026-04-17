@@ -11,7 +11,6 @@ const CredentialsPage = lazy(() => import('./pages/CredentialsPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 
-<<<<<<< HEAD
 const LoadingFallback = () => (
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] z-[9999]">
         <div className="flex flex-col items-center gap-6">
@@ -24,8 +23,7 @@ const LoadingFallback = () => (
     </div>
 )
 
-=======
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
 export default function App() {
     return (
         <Routes>
@@ -33,11 +31,8 @@ export default function App() {
                 <Route
                     index
                     element={
-<<<<<<< HEAD
                         <Suspense fallback={<LoadingFallback />}>
-=======
-                        <Suspense fallback={null}>
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
                             <Home />
                         </Suspense>
                     }
@@ -45,11 +40,8 @@ export default function App() {
                 <Route
                     path="tech"
                     element={
-<<<<<<< HEAD
                         <Suspense fallback={<LoadingFallback />}>
-=======
-                        <Suspense fallback={null}>
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
                             <Tech />
                         </Suspense>
                     }
@@ -57,11 +49,8 @@ export default function App() {
                 <Route
                     path="work"
                     element={
-<<<<<<< HEAD
                         <Suspense fallback={<LoadingFallback />}>
-=======
-                        <Suspense fallback={null}>
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
                             <Work />
                         </Suspense>
                     }
@@ -69,11 +58,8 @@ export default function App() {
                 <Route
                     path="work/:id"
                     element={
-<<<<<<< HEAD
                         <Suspense fallback={<LoadingFallback />}>
-=======
-                        <Suspense fallback={null}>
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
                             <WorkDetail />
                         </Suspense>
                     }
@@ -81,11 +67,8 @@ export default function App() {
                 <Route
                     path="credentials"
                     element={
-<<<<<<< HEAD
                         <Suspense fallback={<LoadingFallback />}>
-=======
-                        <Suspense fallback={null}>
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
                             <CredentialsPage />
                         </Suspense>
                     }
@@ -93,11 +76,8 @@ export default function App() {
                 <Route
                     path="contact"
                     element={
-<<<<<<< HEAD
                         <Suspense fallback={<LoadingFallback />}>
-=======
-                        <Suspense fallback={null}>
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
                             <ContactPage />
                         </Suspense>
                     }
@@ -105,11 +85,8 @@ export default function App() {
                 <Route
                     path="*"
                     element={
-<<<<<<< HEAD
                         <Suspense fallback={<LoadingFallback />}>
-=======
-                        <Suspense fallback={null}>
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
                             <NotFoundPage />
                         </Suspense>
                     }

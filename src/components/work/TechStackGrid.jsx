@@ -26,11 +26,8 @@ export default function TechStackGrid({ techStack }) {
                 <ScrollRevealWrapper>
                     <div className="flex items-center gap-4 mb-10">
                         <div className="w-12 h-px bg-gradient-to-r from-[#60a5fa] to-transparent" />
-<<<<<<< HEAD
                         <p className="text-xs tracking-widest uppercase text-[var(--text-secondary)]">
-=======
-                        <p className="text-[11px] tracking-[0.4em] uppercase text-[var(--text-secondary)]">
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
                             Tech Stack
                         </p>
                     </div>
@@ -48,11 +45,8 @@ export default function TechStackGrid({ techStack }) {
                                 ease: [0.25, 0.46, 0.45, 0.94],
                             }}
                         >
-<<<<<<< HEAD
                             <p className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-4">
-=======
-                            <p className="text-[10px] tracking-[0.3em] uppercase text-[var(--text-muted)] mb-4">
->>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
+
                                 {category}
                             </p>
                             <div className="flex flex-wrap gap-3">
