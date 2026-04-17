@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@100;200;300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 @import "tailwindcss";
+=======
+﻿@import "tailwindcss";
+>>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
 
 @theme {
   --color-bg-primary: var(--bg-primary);
@@ -16,6 +20,7 @@
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
 
+<<<<<<< HEAD
   --font-sans: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Syne', 'Poppins', system-ui, sans-serif;
   --font-mono: 'Space Mono', 'JetBrains Mono', monospace;
@@ -68,6 +73,11 @@
     margin-left: 0;
     margin-right: 0;
   }
+=======
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Poppins', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+>>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
 }
 
 /* â”€â”€ Theme Definitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -508,6 +518,7 @@ body,
 
 /* â”€â”€ Typography â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 h1, h2, h3, h4, h5, h6 {
+<<<<<<< HEAD
   font-family: var(--font-display);
   letter-spacing: -0.04em;
   line-height: 1;
@@ -526,6 +537,11 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
   font-weight: 400;
   line-height: 1.6;
+=======
+  font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+>>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
 }
 
 /* â”€â”€ Animated Underline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -730,10 +746,17 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
+<<<<<<< HEAD
 /* ── Mobile back-to-top fallback ───────────────────────────────────── */
 /* Handled fully by inline Framer Motion in PfpMorphButton.jsx */
 
 /* ── AI Chat Button Glow ───────────────────────────────────────────── */
+=======
+/* â”€â”€ Mobile back-to-top fallback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* Handled fully by inline Framer Motion in PfpMorphButton.jsx */
+
+/* â”€â”€ AI Chat Button Glow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+>>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
 @keyframes ai-glow-pulse {
   0%, 100% {
     box-shadow: 0 0 8px rgba(167, 139, 250, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
@@ -984,3 +1007,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c4b6c7b8407dc03d55306bd76767749aacc265fa
