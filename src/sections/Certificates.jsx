@@ -1,0 +1,316 @@
+import { useRef, useState, useEffect } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
+import useStore from '../store/useStore'
+import { certificates } from '../data/portfolioData'
+
+function CertCard({ cert, index, onClick }) {
+    const setCursorVariant = useStore((s) => s.setCursorVariant)
+    const ref = useRef(null)
+    const inView = useInView(ref, { once: true, margin: '-40px' })
+
+    return (
+        <motion.div
+            ref={ref}
+            onClick={onClick}
+            onMouseEnter={() => setCursorVariant('hover')}
+            onMouseLeave={() => setCursorVariant('default')}
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.6, delay: index * 0.08 }}
+            whileHover={{ y: -4, transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } }}
+            whileTap={{ scale: 0.97, transition: { duration: 0.15 } }}
+            className="glass-card glass-card-hover w-[240px] min-w-[240px] max-w-[240px] sm:w-[300px] sm:min-w-[300px] sm:max-w-[300px] md:w-[340px] md:min-w-[340px] md:max-w-[340px] flex-shrink-0 select-none group"
+        >
+            {/* Top gradient bar */}
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
+
+            <div className="p-6 md:p-8">
+                {/* Header */}
+                <div className="flex items-start justify-between mb-6">
+                    <span className="text-[10px] tracking-[0.25em] uppercase text-[var(--text-secondary)]">{cert.category}</span>
+                    <span className="text-[10px] text-[var(--text-secondary)]">{cert.date}</span>
+                </div>
+
+                {/* Certificate visual */}
+                <div className="w-full aspect-video rounded-lg bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-6 flex items-center justify-center relative overflow-hidden group-hover:from-[var(--bg-highlight-hover)] transition-colors duration-500">
+                    {cert.image ? (
+                        <img
+                            src={cert.image}
+                            alt={`${cert.title} Certificate`}
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <>
+                            <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
+                                style={{
+                                    backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
+                                    backgroundSize: '16px 16px',
+                                }}
+                            />
+                            {/* Certificate icon */}
+                            <div className="relative">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)] group-hover:text-[var(--accent-1)] transition-colors duration-500">
+                                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                                    <path d="M7 8h10M7 12h6M7 16h3" />
+                                    <circle cx="17" cy="15" r="2" />
+                                </svg>
+                            </div>
+                        </>
+                    )}
+                </div>
+
+                {/* Info */}
+                <h4
+                    className="text-sm font-semibold text-[var(--text-primary)]/75 mb-1.5 group-hover:text-[var(--text-primary)] transition-colors duration-300"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
+                >
+                    {cert.title}
+                </h4>
+                <div className="flex items-center justify-between">
+                    <p className="text-xs text-[var(--text-secondary)]">{cert.issuer}</p>
+                    <span className="text-[10px] text-[var(--text-secondary)]">{cert.hours}</span>
+                </div>
+
+                {/* Bottom action hint */}
+                <div className="mt-5 pt-4 border-t border-[var(--border-color)] flex items-center gap-2">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)]">
+                        <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                    <span className="text-[10px] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">Click to view</span>
+                </div>
+            </div>
+        </motion.div>
+    )
+}
+
+export default function Certificates() {
+    const sectionRef = useRef(null)
+    const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
+    const [selected, setSelected] = useState(null)
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                setSelected(null)
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [])
+
+    return (
+        <section id="certificates" ref={sectionRef} className="py-16 sm:py-32 px-6 md:px-12 lg:px-24 relative">
+            <div className="section-divider mb-16 sm:mb-32" />
+
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8 }}
+                className="max-w-7xl mx-auto"
+            >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-px bg-[var(--bg-highlight-hover)]" />
+                    <p className="text-[11px] tracking-[0.4em] uppercase text-[var(--text-secondary)]">004 &mdash; Credentials</p>
+                </div>
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
+                    <div>
+                        <h2
+                            className="text-3xl md:text-5xl font-bold mb-3 text-[var(--text-primary)]"
+                            style={{ fontFamily: "'Poppins', sans-serif" }}
+                        >
+                            Certificates & <span className="text-gradient-silver">Awards</span>
+                        </h2>
+                        <p className="text-sm text-[var(--text-secondary)] max-w-md">
+                            Continuous learning is at the heart of what I do. Here are some highlights from my journey.
+                        </p>
+                    </div>
+                    <span className="text-xs text-[var(--text-secondary)] mt-4 md:mt-0">{certificates.length} credentials</span>
+                </div>
+
+                {/* Horizontal scroll */}
+                <div className="relative -mx-4 sm:-mx-0">
+                    <div 
+                        className="flex gap-5 overflow-x-auto pb-4 px-4 sm:px-8 no-scrollbar scroll-smooth" 
+                        style={{ 
+                            scrollbarWidth: 'none',
+                            maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+                            WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
+                        }}
+                    >
+                        {certificates.map((cert, i) => (
+                            <CertCard key={i} cert={cert} index={i} onClick={() => setSelected(cert)} />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Scroll hint */}
+                <motion.div
+                    className="flex items-center justify-center gap-3 mt-8"
+                    initial={{ opacity: 0 }}
+                    animate={isInView ? { opacity: 1 } : {}}
+                    transition={{ delay: 0.8 }}
+                >
+                    <div className="w-8 h-px bg-[var(--bg-highlight-hover)]" />
+                    <span className="text-[10px] tracking-[0.3em] text-[var(--text-secondary)] uppercase">
+                        Swipe to explore
+                    </span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[var(--text-secondary)]">
+                        <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </motion.div>
+            </motion.div>
+
+            {/* Modal */}
+            <AnimatePresence>
+                {selected && (
+                    <motion.div
+                        className="fixed inset-0 z-[80] flex items-center justify-center px-4 md:px-6"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelected(null)}
+                    >
+                        {/* ── Animated Aura Backdrop ── */}
+                        <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl overflow-hidden">
+                            <motion.div 
+                                animate={{ 
+                                    x: [0, 100, -50, 0],
+                                    y: [0, -50, 100, 0],
+                                    scale: [1, 1.2, 0.8, 1],
+                                    rotate: [0, 90, 180, 270, 360]
+                                }}
+                                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                                className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-violet-600/20 rounded-full blur-[120px] mix-blend-screen"
+                            />
+                            <motion.div 
+                                animate={{ 
+                                    x: [0, -120, 80, 0],
+                                    y: [0, 100, -80, 0],
+                                    scale: [1, 0.9, 1.1, 1],
+                                    rotate: [360, 270, 180, 90, 0]
+                                }}
+                                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                className="absolute -bottom-[10%] -right-[15%] w-[70%] h-[70%] bg-blue-600/20 rounded-full blur-[140px] mix-blend-screen"
+                            />
+                        </div>
+
+                        <motion.div
+                            className="relative glass-card max-w-lg w-full z-10 overflow-hidden shadow-2xl border-white/10"
+                            initial={{ scale: 0.9, opacity: 0, y: 40 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                            onClick={(e) => e.stopPropagation()}
+                            layout
+                        >
+                            {/* Top bar accent */}
+                            <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
+
+                            <div className="p-6 md:p-8">
+                                {/* Header with category and close */}
+                                <div className="flex items-center justify-between mb-6">
+                                    <span className="px-3 py-1 text-[9px] tracking-[0.2em] font-medium uppercase bg-[var(--bg-highlight)] border border-[var(--border-color)] rounded-full text-[var(--accent-1)]">
+                                        {selected.category}
+                                    </span>
+                                    <button
+                                        onClick={() => setSelected(null)}
+                                        className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-1"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                    </button>
+                                </div>
+
+                                {/* Certificate visual */}
+                                <div className="w-full aspect-video rounded-xl bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-6 flex items-center justify-center relative shadow-inner-glow overflow-hidden group">
+                                    {selected.image ? (
+                                        <img
+                                            src={selected.image}
+                                            alt={`${selected.title} Certificate`}
+                                            className="w-full h-full object-contain p-1"
+                                        />
+                                    ) : (
+                                        <>
+                                            <div className="absolute inset-0 opacity-[0.05]"
+                                                style={{
+                                                    backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
+                                                    backgroundSize: '20px 20px',
+                                                }}
+                                            />
+                                            <div className="relative group-hover:scale-110 transition-transform duration-700">
+                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)]">
+                                                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                                                    <path d="M7 8h10M7 12h6M7 16h3" />
+                                                    <circle cx="17" cy="15" r="2" /><path d="M17 17v2" />
+                                                </svg>
+                                            </div>
+                                        </>
+                                    )}
+                                    {/* Glass reflection overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
+                                </div>
+
+                                <div className="space-y-5">
+                                    <div>
+                                        <h3
+                                            className="text-lg md:text-xl font-bold text-[var(--text-primary)] mb-2"
+                                            style={{ fontFamily: "'Poppins', sans-serif" }}
+                                        >
+                                            {selected.title}
+                                        </h3>
+
+                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-[var(--text-secondary)]">
+                                            <div className="flex items-center gap-1.5">
+                                                <div className="w-1 h-1 rounded-full bg-[var(--accent-1)]" />
+                                                <span className="font-medium text-[var(--text-primary)]/80">{selected.issuer}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5 text-[10px]">
+                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                                                <span>{selected.date}</span>
+                                            </div>
+                                            {selected.credentialId && (
+                                                <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md bg-[var(--bg-highlight)] border border-[var(--border-color)]">
+                                                    <span className="text-[8px] uppercase tracking-widest font-mono text-[var(--text-muted)]">ID: {selected.credentialId}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {selected.hours && (
+                                        <div className="p-3 rounded-lg bg-[var(--bg-highlight)]/50 border border-[var(--border-color)]">
+                                            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{selected.hours}</p>
+                                        </div>
+                                    )}
+
+                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[var(--border-color)]">
+                                        <div className="flex items-center gap-6">
+                                            <button
+                                                onClick={() => setSelected(null)}
+                                                className="text-[10px] tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2 group"
+                                            >
+                                                <svg className="group-hover:-translate-x-1 transition-transform" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                                Dismiss
+                                            </button>
+
+                                            {selected.credentialUrl && (
+                                                <a
+                                                    href={selected.credentialUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-[10px] tracking-[0.2em] uppercase text-[var(--accent-1)] hover:text-[var(--accent-2)] transition-all flex items-center gap-2 group"
+                                                >
+                                                    Verify Online
+                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                                </a>
+                                            )}
+                                        </div>
+                                        <span className="text-[9px] tracking-wider text-[var(--text-muted)] hidden sm:block uppercase">ESC TO CLOSE</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </section>
+    )
+}
