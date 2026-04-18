@@ -1,16 +1,18 @@
 import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import useStore from '../../store/useStore'
 
 const ease = [0.22, 1, 0.36, 1]
 
 const traits = ['Secure', 'Scalable', 'Production-Ready']
+const VESTIGA_LOGO = 'https://res.cloudinary.com/dqvpsorso/image/upload/v1776503687/logo192_ux0ww9.png'
 
 export default function ProjectHighlight() {
     const ref = useRef(null)
     const inView = useInView(ref, { once: true, margin: '-60px' })
     const setCursorVariant = useStore((s) => s.setCursorVariant)
+    const [logoFailed, setLogoFailed] = useState(false)
 
     return (
         <section ref={ref} className="py-12 sm:py-16 px-6 md:px-12 lg:px-24">
@@ -61,49 +63,74 @@ export default function ProjectHighlight() {
                             style={{ boxShadow: '0 8px 50px rgba(96,165,250,0.08), 0 0 80px rgba(167,139,250,0.04)' }}
                         />
 
-                        <div className="relative z-10 p-8 sm:p-12 md:p-16">
+                        <div className="relative z-10 grid gap-10 p-8 sm:p-12 md:grid-cols-[minmax(0,1fr)_220px] md:items-center md:gap-8 md:p-16 lg:grid-cols-[minmax(0,1fr)_260px]">
                             {/* Badge */}
-                            <div className="flex items-center justify-between mb-10">
-                                <span className="inline-flex items-center gap-2 px-4 py-2 text-[10px] tracking-[0.25em] uppercase font-bold rounded-full border border-[var(--accent-1)]/15 text-[var(--accent-1)] bg-[var(--accent-1)]/5">
-                                    <motion.span
-                                        className="w-1.5 h-1.5 rounded-full bg-[var(--accent-1)]"
-                                        animate={{ opacity: [1, 0.3, 1] }}
-                                        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                                    />
-                                    Current Best Work
-                                </span>
-
-                                <svg
-                                    width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-                                    className="text-[var(--text-muted)] group-hover:text-[var(--text-primary)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300"
-                                >
-                                    <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
-                                </svg>
-                            </div>
-
-                            {/* Title */}
-                            <h3
-                                className="text-4xl sm:text-6xl md:text-7xl font-bold text-[var(--text-primary)] tracking-tighter mb-4"
-                                style={{ fontFamily: "var(--font-display)" }}
-                            >
-                                Vestiga
-                            </h3>
-                            <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-2 font-medium">Password Manager SaaS</p>
-                            <p className="text-[16px] sm:text-[17px] text-[var(--text-muted)] leading-relaxed max-w-xl mb-10">
-                                A production-level password management platform with secure encryption, scalable architecture, and a premium user experience.
-                            </p>
-
-                            {/* Trait pills */}
-                            <div className="flex flex-wrap gap-3">
-                                {traits.map((t) => (
-                                    <span
-                                        key={t}
-                                        className="px-4 py-2 text-[11px] tracking-[0.2em] uppercase rounded-full border border-[var(--border-color)] text-[var(--text-secondary)] bg-[var(--bg-highlight)] transition-colors duration-300 group-hover:border-white/[0.08]"
-                                    >
-                                        {t}
+                            <div className="min-w-0">
+                                <div className="mb-10 flex items-center justify-between gap-4">
+                                    <span className="inline-flex items-center gap-2 px-4 py-2 text-[10px] tracking-[0.25em] uppercase font-bold rounded-full border border-[var(--accent-1)]/15 text-[var(--accent-1)] bg-[var(--accent-1)]/5">
+                                        <motion.span
+                                            className="w-1.5 h-1.5 rounded-full bg-[var(--accent-1)]"
+                                            animate={{ opacity: [1, 0.3, 1] }}
+                                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                        />
+                                        Current Best Work
                                     </span>
-                                ))}
+
+                                    <svg
+                                        width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                                        className="shrink-0 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300"
+                                    >
+                                        <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
+                                    </svg>
+                                </div>
+
+                                <h3
+                                    className="text-4xl sm:text-6xl md:text-7xl font-bold text-[var(--text-primary)] tracking-tighter mb-4"
+                                    style={{ fontFamily: "var(--font-display)" }}
+                                >
+                                    Vestiga
+                                </h3>
+                                <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-2 font-medium">Password Manager SaaS</p>
+                                <p className="text-[16px] sm:text-[17px] text-[var(--text-muted)] leading-relaxed max-w-xl mb-10">
+                                    A production-level password management platform with secure encryption, scalable architecture, and a premium user experience.
+                                </p>
+
+                                <div className="flex flex-wrap gap-3">
+                                    {traits.map((t) => (
+                                        <span
+                                            key={t}
+                                            className="px-4 py-2 text-[11px] tracking-[0.2em] uppercase rounded-full border border-[var(--border-color)] text-[var(--text-secondary)] bg-[var(--bg-highlight)] transition-colors duration-300 group-hover:border-white/[0.08]"
+                                        >
+                                            {t}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
+
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.94, x: 18 }}
+                                animate={inView ? { opacity: 1, scale: 1, x: 0 } : {}}
+                                transition={{ duration: 0.75, ease, delay: 0.2 }}
+                                className="relative mx-auto flex w-full max-w-[220px] items-center justify-center self-stretch md:max-w-[260px]"
+                            >
+                                <div className="absolute inset-6 rounded-[2rem] bg-[radial-gradient(circle,rgba(96,165,250,0.16),transparent_72%)] blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+                                <div className="relative w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(12,18,34,0.82),rgba(8,13,25,0.94))] p-4 shadow-[0_22px_55px_rgba(0,0,0,0.38)]">
+                                    <div className="absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                                    {logoFailed ? (
+                                        <div className="flex aspect-square items-center justify-center rounded-[1.4rem] bg-white/[0.03] text-[11px] font-semibold uppercase tracking-[0.28em] text-white/55">
+                                            Vestiga
+                                        </div>
+                                    ) : (
+                                        <img
+                                            src={VESTIGA_LOGO}
+                                            alt="Vestiga logo"
+                                            loading="lazy"
+                                            onError={() => setLogoFailed(true)}
+                                            className="aspect-square w-full rounded-[1.4rem] object-cover"
+                                        />
+                                    )}
+                                </div>
+                            </motion.div>
                         </div>
                     </Link>
                 </motion.div>
