@@ -4,7 +4,6 @@ import { NavLink, useLocation } from 'react-router-dom'
 
 function DesktopNavLink({
     item,
-    isCompact,
     reducedMotion,
     setCursorVariant,
     motion: motionTokens,
@@ -36,7 +35,7 @@ function DesktopNavLink({
                 setIsLinkHovered(false)
             }}
             onMouseMove={handleMouseMove}
-            className="group relative inline-flex h-10 items-center rounded-full px-0.5"
+            className="group relative inline-flex h-10 shrink-0 items-center rounded-full px-1"
         >
             {({ isActive }) => (
                 <>
@@ -76,13 +75,9 @@ function DesktopNavLink({
                         variants={{
                             active: {
                                 opacity: 1,
-                                paddingLeft: isCompact ? 12 : 14,
-                                paddingRight: isCompact ? 12 : 14,
                             },
                             compact: {
                                 opacity: 1,
-                                paddingLeft: 12,
-                                paddingRight: 12,
                             },
                         }}
                         transition={
@@ -90,11 +85,9 @@ function DesktopNavLink({
                                 ? { duration: 0 }
                                 : {
                                     opacity: { duration: motionTokens.hoverDuration },
-                                    paddingLeft: { duration: 0.18, ease: motionTokens.entryEase },
-                                    paddingRight: { duration: 0.18, ease: motionTokens.entryEase },
                                 }
                         }
-                        className={`relative z-[1] inline-flex items-center justify-center text-[13px] tracking-wide transition-all duration-200 ${
+                        className={`relative z-[1] inline-flex min-w-max items-center justify-center whitespace-nowrap px-3.5 text-[13px] tracking-wide transition-all duration-200 ${
                             isActive
                                 ? 'font-semibold text-[rgba(232,237,245,0.98)]'
                                 : 'font-medium text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]'
@@ -121,7 +114,6 @@ function DesktopNavLink({
 
 export default function NavbarLinks({
     items,
-    isCompact,
     reducedMotion,
     setCursorVariant,
     statePhase,
@@ -143,7 +135,7 @@ export default function NavbarLinks({
 
     return (
         <motion.div
-            className="flex min-w-0 items-center rounded-full bg-white/[0.02] p-0.5"
+            className="flex shrink-0 items-center gap-0.5 rounded-full bg-white/[0.02] p-0.5"
             initial={false}
             animate={statePhase}
             variants={{
@@ -169,7 +161,6 @@ export default function NavbarLinks({
                 <DesktopNavLink
                     key={item.to}
                     item={item}
-                    isCompact={isCompact}
                     reducedMotion={reducedMotion}
                     setCursorVariant={setCursorVariant}
                     motion={motionTokens}

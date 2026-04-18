@@ -1,18 +1,33 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLocation } from 'react-router-dom'
 import useStore from '../store/useStore'
 
 export default function Loader() {
+    const location = useLocation()
     const [progress, setProgress] = useState(0)
     const setIsLoading = useStore((s) => s.setIsLoading)
     const setIsLoaded = useStore((s) => s.setIsLoaded)
     const loaderPhase = useStore((s) => s.loaderPhase)
     const setLoaderPhase = useStore((s) => s.setLoaderPhase)
-    const [show, setShow] = useState(true)
+    const [show, setShow] = useState(() => location.pathname === '/')
+    const shouldSkipLoader = location.pathname !== '/'
 
     useEffect(() => {
+        if (shouldSkipLoader) {
+            setShow(false)
+            setProgress(100)
+            setIsLoading(false)
+            setIsLoaded(true)
+            setLoaderPhase(5)
+            return
+        }
+
+        setShow(true)
         setIsLoading(true)
         setIsLoaded(false)
+        setLoaderPhase(0)
+        setProgress(0)
 
         // Preload hero image during loader
         const img = new Image()
@@ -28,23 +43,29 @@ export default function Loader() {
             setProgress(currentProgress)
         }, 120)
         return () => clearInterval(interval)
-    }, [setIsLoaded, setIsLoading])
+    }, [setIsLoaded, setIsLoading, setLoaderPhase, shouldSkipLoader])
 
     useEffect(() => {
+        if (shouldSkipLoader) return
+
         const t1 = setTimeout(() => setLoaderPhase(1), 600)
         const t2 = setTimeout(() => setLoaderPhase(2), 1200)
         const t3 = setTimeout(() => setLoaderPhase(3), 1800)
         return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
-    }, [setLoaderPhase])
+    }, [setLoaderPhase, shouldSkipLoader])
 
     useEffect(() => {
+        if (shouldSkipLoader) return
+
         if (progress >= 100 && loaderPhase >= 3) {
             const t = setTimeout(() => setLoaderPhase(4), 600)
             return () => clearTimeout(t)
         }
-    }, [progress, loaderPhase, setLoaderPhase])
+    }, [progress, loaderPhase, setLoaderPhase, shouldSkipLoader])
 
     useEffect(() => {
+        if (shouldSkipLoader) return
+
         if (loaderPhase === 4) {
             const t = setTimeout(() => {
                 setShow(false)
@@ -54,7 +75,7 @@ export default function Loader() {
             }, 1500) // Cinematic duration for loading animation
             return () => clearTimeout(t)
         }
-    }, [loaderPhase, setIsLoaded, setIsLoading, setLoaderPhase])
+    }, [loaderPhase, setIsLoaded, setIsLoading, setLoaderPhase, shouldSkipLoader])
 
     if (!show) return null
 

@@ -1,4 +1,4 @@
-import { motion, useInView } from 'framer-motion'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import useStore from '../../store/useStore'
 
