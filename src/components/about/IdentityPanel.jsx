@@ -201,7 +201,7 @@ export default function IdentityPanel() {
                 </div>
 
                 {/* Right Side: 3D Fanned Image Stack System */}
-                <div className="flex-1 min-h-[400px] relative flex items-center justify-center p-12 overflow-hidden bg-white/[0.01]">
+                <div className="flex-1 min-h-[400px] relative flex items-center justify-center p-12 bg-white/[0.01]">
                     <div className="relative w-full max-w-[340px] aspect-[4/5] transform-gpu" style={{ perspective: '2000px' }}>
                         <AnimatePresence mode="popLayout">
                             {visualStack.map((visual, i) => {
@@ -211,9 +211,9 @@ export default function IdentityPanel() {
                                 // Mapping relative position to 3D fanned coordinates
                                 // 0: Center (Front), 1: Right-Peeking (Behind), 2: Left-Peeking (Behind)
                                 const config = {
-                                    0: { x: 0, y: 0, z: 240, rotateY: 0, scale: 1, opacity: 1, blur: 0, zIndex: 30 },
-                                    1: { x: 120, y: 20, z: 0, rotateY: -45, scale: 0.82, opacity: 0.3, blur: 8, zIndex: 10 },
-                                    2: { x: -120, y: 20, z: 0, rotateY: 45, scale: 0.82, opacity: 0.3, blur: 8, zIndex: 20 },
+                                    0: { x: 0, y: 0, z: 120, rotateY: 0, scale: 1, opacity: 1, blur: 0, zIndex: 30 },
+                                    1: { x: 70, y: 15, z: 0, rotateY: -25, scale: 0.85, opacity: 0.5, blur: 4, zIndex: 10 },
+                                    2: { x: -70, y: 15, z: 0, rotateY: 25, scale: 0.85, opacity: 0.5, blur: 4, zIndex: 20 },
                                 }[relativePos] || { x: 0, y: 0, z: -100, rotateY: 0, scale: 0.7, opacity: 0, blur: 10, zIndex: 0 }
 
                                 return (
@@ -248,10 +248,10 @@ export default function IdentityPanel() {
                                             <img 
                                                 src={visual.image}
                                                 alt={visual.label}
-                                                className={`w-full h-full object-cover transition-opacity duration-700 ${relativePos === 0 ? 'opacity-100' : 'opacity-70'}`}
+                                                className={`w-full h-full object-cover transition-opacity duration-700 ${relativePos === 0 ? 'opacity-100' : 'opacity-80'}`}
                                             />
-                                            {/* Refined overlays for better image pop */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-white/5 opacity-40" />
+                                            {/* Refined overlays for better clarity */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40" />
                                         </div>
 
                                         {/* Label overlay (Only for active) */}
