@@ -1,8 +1,13 @@
 import { Helmet } from 'react-helmet-async'
-import About from '../sections/About'
+import CinematicHero from '../components/about/CinematicHero'
+import IdentityPanel from '../components/about/IdentityPanel'
+import ProjectHighlight from '../components/about/ProjectHighlight'
+import Philosophy from '../components/about/Philosophy'
+import ConnectPanel from '../components/about/ConnectPanel'
 
 /**
- * About page — renders the existing About section as a standalone route.
+ * About page — Immersive cinematic storytelling experience.
+ * 7 progressive sections that reveal identity, mindset, and journey.
  */
 export default function AboutPage() {
     return (
@@ -13,7 +18,13 @@ export default function AboutPage() {
                 <meta name="keywords" content="Priyank Khatri, Priyanka Khatri, About, Profile, Frontend Developer, Coding Gita, Technology Stack" />
                 <link rel="canonical" href="https://priyankkhatri.vercel.app/about" />
             </Helmet>
-            <About />
+
+            <CinematicHero />
+
+            <IdentityPanel />
+            <ProjectHighlight />
+            <Philosophy />
+            <ConnectPanel />
         </>
     )
 }
