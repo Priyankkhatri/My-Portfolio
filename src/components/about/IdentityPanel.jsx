@@ -1,5 +1,5 @@
-import { motion, useInView, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useRef, useState, useEffect } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { useRef, useState } from 'react'
 import useStore from '../../store/useStore'
 
 const ease = [0.22, 1, 0.36, 1]
@@ -15,17 +15,17 @@ const fragments = [
 const visualStack = [
     { 
         id: 1, 
-        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1776485115/WhatsApp_Image_2026-04-18_at_09.32.00_fudfnq.jpg', 
+        image: '/about-photos/about-photo-1.jpg',
         label: 'Architecture' 
     },
     { 
         id: 2, 
-        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1776485115/WhatsApp_Image_2026-04-18_at_09.26.47_1_fhl7hh.jpg', 
+        image: '/about-photos/about-photo-2.jpg',
         label: 'Interface' 
     },
     { 
         id: 3, 
-        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1776485114/WhatsApp_Image_2026-04-18_at_09.26.47_fnlkub.jpg', 
+        image: '/about-photos/about-photo-3.jpg',
         label: 'Logic' 
     },
 ]
@@ -76,57 +76,16 @@ function Pill({ item, index }) {
 
 export default function IdentityPanel() {
     const sectionRef = useRef(null)
-    const containerRef = useRef(null)
     const inView = useInView(sectionRef, { once: true, margin: '-10%' })
     const setCursorVariant = useStore((s) => s.setCursorVariant)
 
-    // Image stack state
-    const [activeIndex, setActiveIndex] = useState(0)
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setActiveIndex((prev) => (prev + 1) % visualStack.length)
-        }, 3000)
-        return () => clearInterval(timer)
-    }, [])
-
-    // Parallax logic
-    const mouseX = useMotionValue(0)
-    const mouseY = useMotionValue(0)
-    const springX = useSpring(mouseX, { damping: 30, stiffness: 200 })
-    const springY = useSpring(mouseY, { damping: 30, stiffness: 200 })
-
-    const rotateX = useTransform(springY, [-300, 300], [5, -5])
-    const rotateY = useTransform(springX, [-300, 300], [-5, 5])
-
-    const handleMouseMove = (e) => {
-        if (!containerRef.current) return
-        const rect = containerRef.current.getBoundingClientRect()
-        const centerX = rect.left + rect.width / 2
-        const centerY = rect.top + rect.height / 2
-        mouseX.set(e.clientX - centerX)
-        mouseY.set(e.clientY - centerY)
-    }
-
-    const handleMouseLeave = () => {
-        mouseX.set(0)
-        mouseY.set(0)
-        setCursorVariant('default')
-    }
+    const [failedImages, setFailedImages] = useState({})
 
     return (
         <section ref={sectionRef} className="py-24 px-6 md:px-12 lg:px-24 overflow-hidden">
             <motion.div
-                ref={containerRef}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
                 onMouseEnter={() => setCursorVariant('hover')}
-                style={{
-                    rotateX,
-                    rotateY,
-                    perspective: 1200,
-                    transformStyle: 'preserve-3d',
-                }}
+                onMouseLeave={() => setCursorVariant('default')}
                 initial={{ opacity: 0, y: 40 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 1.2, ease }}
@@ -200,97 +159,55 @@ export default function IdentityPanel() {
                     </motion.div>
                 </div>
 
-                {/* Right Side: 3D Fanned Image Stack System */}
-                <div className="flex-1 min-h-[400px] relative flex items-center justify-center p-12 bg-white/[0.01]">
-                    <div className="relative w-full max-w-[340px] aspect-[4/5] transform-gpu" style={{ perspective: '2000px' }}>
-                        <AnimatePresence mode="popLayout">
-                            {visualStack.map((visual, i) => {
-                                // Calculate relative position in the 3-card cycle
-                                const relativePos = (i - activeIndex + visualStack.length) % visualStack.length
-                                
-                                // Mapping relative position to 3D fanned coordinates
-                                // 0: Center (Front), 1: Right-Peeking (Behind), 2: Left-Peeking (Behind)
-                                const config = {
-                                    0: { x: 0, y: 0, z: 120, rotateY: 0, scale: 1, opacity: 1, blur: 0, zIndex: 30 },
-                                    1: { x: 70, y: 15, z: 0, rotateY: -25, scale: 0.85, opacity: 0.5, blur: 4, zIndex: 10 },
-                                    2: { x: -70, y: 15, z: 0, rotateY: 25, scale: 0.85, opacity: 0.5, blur: 4, zIndex: 20 },
-                                }[relativePos] || { x: 0, y: 0, z: -100, rotateY: 0, scale: 0.7, opacity: 0, blur: 10, zIndex: 0 }
+                {/* Right Side: Static Photo Layout */}
+                <div className="flex-1 min-h-[400px] relative p-8 sm:p-12 bg-white/[0.01] z-10">
+                    <div className="mx-auto grid max-w-[420px] grid-cols-2 gap-5">
+                        {visualStack.map((visual, index) => {
+                            const isPrimary = index === 0
 
-                                return (
-                                    <motion.div
-                                        key={visual.id}
-                                        layout
-                                        initial={{ opacity: 0, scale: 0.8, x: 0, z: -200 }}
-                                        animate={{
-                                            opacity: config.opacity,
-                                            scale: config.scale,
-                                            x: config.x,
-                                            y: config.y,
-                                            z: config.z,
-                                            rotateY: config.rotateY,
-                                            filter: `blur(${config.blur}px)`,
+                            return (
+                                <motion.div
+                                    key={visual.id}
+                                    initial={{ opacity: 0, y: 24 }}
+                                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                                    transition={{ duration: 0.7, delay: 0.25 + index * 0.12, ease }}
+                                    className={`${isPrimary ? 'col-span-2 h-[320px] sm:h-[360px]' : 'h-[180px] sm:h-[210px]'} relative overflow-hidden rounded-[2rem] border border-white/10 bg-[rgba(7,11,21,0.55)] shadow-[0_25px_60px_rgba(0,0,0,0.45)]`}
+                                >
+                                    <img
+                                        src={visual.image}
+                                        alt={visual.label}
+                                        loading={isPrimary ? 'eager' : 'lazy'}
+                                        onError={() => {
+                                            setFailedImages((prev) => ({ ...prev, [visual.id]: true }))
                                         }}
-                                        exit={{ opacity: 0, scale: 0.5, z: -300 }}
-                                        transition={{ 
-                                            type: 'spring',
-                                            damping: 25,
-                                            stiffness: 120,
-                                            mass: 1
-                                        }}
-                                        className="absolute inset-0 rounded-[2.5rem] overflow-hidden glass-card border-white/10 shadow-2xl"
-                                        style={{
-                                            zIndex: config.zIndex,
-                                            boxShadow: relativePos === 0 ? '0 30px 60px rgba(0,0,0,0.6)' : 'none',
-                                            transformStyle: 'preserve-3d'
-                                        }}
-                                    >
-                                        <div className="absolute inset-0">
-                                            <img 
-                                                src={visual.image}
-                                                alt={visual.label}
-                                                className={`w-full h-full object-cover transition-opacity duration-700 ${relativePos === 0 ? 'opacity-100' : 'opacity-80'}`}
-                                            />
-                                            {/* Refined overlays for better clarity */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40" />
+                                        className="block h-full w-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                                    <div className="absolute bottom-5 left-5 z-10">
+                                        <span className="mb-2 block text-[10px] tracking-[0.38em] uppercase text-white/55" style={{ fontFamily: 'var(--font-mono)' }}>
+                                            VISUAL 0{visual.id}
+                                        </span>
+                                        <p className="text-xl font-bold tracking-tight text-white" style={{ fontFamily: 'var(--font-display)' }}>
+                                            {visual.label}
+                                        </p>
+                                    </div>
+                                    {failedImages[visual.id] && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(180deg,rgba(13,19,35,0.95),rgba(9,14,27,0.98))] text-white/70 text-xs tracking-[0.3em] uppercase">
+                                            Visual Offline
                                         </div>
-
-                                        {/* Label overlay (Only for active) */}
-                                        <motion.div 
-                                            className="absolute bottom-8 left-8 z-20"
-                                            animate={{ opacity: relativePos === 0 ? 1 : 0, y: relativePos === 0 ? 0 : 20 }}
-                                            transition={{ duration: 0.5 }}
-                                        >
-                                            <span className="text-[10px] tracking-[0.4em] uppercase text-white/50 font-black mb-2 block" style={{ fontFamily: 'var(--font-mono)' }}>
-                                                VISUAL 0{visual.id}
-                                            </span>
-                                            <p className="text-2xl font-bold text-white tracking-tighter leading-none" style={{ fontFamily: 'var(--font-display)' }}>
-                                                {visual.label}
-                                            </p>
-                                        </motion.div>
-                                    </motion.div>
-                                )
-                            })}
-                        </AnimatePresence>
+                                    )}
+                                </motion.div>
+                            )
+                        })}
                     </div>
 
-                    {/* Deep ambient glow behind the fanned assembly */}
+                    {/* Ambient glow */}
                     <motion.div 
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[var(--accent-1)] opacity-[0.03] rounded-full blur-[120px]" 
                         animate={{ scale: [1, 1.1, 1], opacity: [0.03, 0.05, 0.03] }}
                         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
                     />
                 </div>
-
-                {/* Dynamic Cursor Highlight Glow inside card */}
-                <motion.div
-                    className="absolute inset-0 pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-300"
-                    style={{
-                        background: useTransform(
-                            [springX, springY],
-                            ([x, y]) => `radial-gradient(circle at calc(50% + ${x}px) calc(50% + ${y}px), rgba(96,165,250,0.06) 0%, transparent 60%)`
-                        )
-                    }}
-                />
             </motion.div>
         </section>
     )
