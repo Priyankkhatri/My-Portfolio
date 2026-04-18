@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useStore from '../../store/useStore'
 
 const ease = [0.22, 1, 0.36, 1]
@@ -74,12 +74,54 @@ function Pill({ item, index }) {
     )
 }
 
+function getVisualState(relativeIndex) {
+    if (relativeIndex === 0) {
+        return {
+            x: 0,
+            y: -8,
+            rotate: 0,
+            scale: 1,
+            opacity: 1,
+            zIndex: 30,
+        }
+    }
+
+    if (relativeIndex === 1) {
+        return {
+            x: 102,
+            y: 24,
+            rotate: 7,
+            scale: 0.82,
+            opacity: 0.62,
+            zIndex: 20,
+        }
+    }
+
+    return {
+        x: -102,
+        y: 24,
+        rotate: -7,
+        scale: 0.82,
+        opacity: 0.48,
+        zIndex: 10,
+    }
+}
+
 export default function IdentityPanel() {
     const sectionRef = useRef(null)
     const inView = useInView(sectionRef, { once: true, margin: '-10%' })
     const setCursorVariant = useStore((s) => s.setCursorVariant)
 
     const [failedImages, setFailedImages] = useState({})
+    const [activeVisual, setActiveVisual] = useState(0)
+
+    useEffect(() => {
+        const intervalId = window.setInterval(() => {
+            setActiveVisual((current) => (current + 1) % visualStack.length)
+        }, 2600)
+
+        return () => window.clearInterval(intervalId)
+    }, [])
 
     return (
         <section ref={sectionRef} className="py-24 px-6 md:px-12 lg:px-24 overflow-hidden">
@@ -159,43 +201,65 @@ export default function IdentityPanel() {
                     </motion.div>
                 </div>
 
-                {/* Right Side: Static Photo Layout */}
+                {/* Right Side: Rotating Photo Stack */}
                 <div className="flex-1 min-h-[400px] relative p-8 sm:p-12 bg-white/[0.01] z-10">
-                    <div className="mx-auto grid max-w-[420px] grid-cols-2 gap-5">
+                    <div className="relative mx-auto flex h-[360px] w-full max-w-[430px] items-center justify-center sm:h-[400px]">
                         {visualStack.map((visual, index) => {
-                            const isPrimary = index === 0
+                            const relativeIndex = (index - activeVisual + visualStack.length) % visualStack.length
+                            const visualState = getVisualState(relativeIndex)
+                            const isActive = relativeIndex === 0
 
                             return (
                                 <motion.div
                                     key={visual.id}
-                                    initial={{ opacity: 0, y: 24 }}
-                                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                                    transition={{ duration: 0.7, delay: 0.25 + index * 0.12, ease }}
-                                    className={`${isPrimary ? 'col-span-2 h-[320px] sm:h-[360px]' : 'h-[180px] sm:h-[210px]'} relative overflow-hidden rounded-[2rem] border border-white/10 bg-[rgba(7,11,21,0.55)] shadow-[0_25px_60px_rgba(0,0,0,0.45)]`}
+                                    initial={{ opacity: 0, scale: 0.92, y: 24 }}
+                                    animate={
+                                        inView
+                                            ? {
+                                                x: visualState.x,
+                                                y: visualState.y,
+                                                rotate: visualState.rotate,
+                                                scale: visualState.scale,
+                                                opacity: visualState.opacity,
+                                            }
+                                            : {}
+                                    }
+                                    transition={{ duration: 0.85, ease }}
+                                    className="absolute left-1/2 top-1/2 h-[250px] w-[190px] -translate-x-1/2 -translate-y-1/2 sm:h-[290px] sm:w-[220px] md:h-[310px] md:w-[235px]"
+                                    style={{ zIndex: visualState.zIndex }}
                                 >
-                                    <img
-                                        src={visual.image}
-                                        alt={visual.label}
-                                        loading={isPrimary ? 'eager' : 'lazy'}
-                                        onError={() => {
-                                            setFailedImages((prev) => ({ ...prev, [visual.id]: true }))
-                                        }}
-                                        className="block h-full w-full object-cover"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-                                    <div className="absolute bottom-5 left-5 z-10">
-                                        <span className="mb-2 block text-[10px] tracking-[0.38em] uppercase text-white/55" style={{ fontFamily: 'var(--font-mono)' }}>
-                                            VISUAL 0{visual.id}
-                                        </span>
-                                        <p className="text-xl font-bold tracking-tight text-white" style={{ fontFamily: 'var(--font-display)' }}>
-                                            {visual.label}
-                                        </p>
-                                    </div>
-                                    {failedImages[visual.id] && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(180deg,rgba(13,19,35,0.95),rgba(9,14,27,0.98))] text-white/70 text-xs tracking-[0.3em] uppercase">
-                                            Visual Offline
+                                    <div className={`relative h-full w-full overflow-hidden border border-white/10 bg-[rgba(7,11,21,0.55)] shadow-[0_25px_60px_rgba(0,0,0,0.45)] transition-all duration-700 ${
+                                        isActive ? 'rounded-[2rem]' : 'rounded-[1.5rem]'
+                                    }`}>
+                                        <img
+                                            src={visual.image}
+                                            alt={visual.label}
+                                            loading={isActive ? 'eager' : 'lazy'}
+                                            onError={() => {
+                                                setFailedImages((prev) => ({ ...prev, [visual.id]: true }))
+                                            }}
+                                            className="block h-full w-full object-cover"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                                        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[rgba(5,8,16,0.9)] to-transparent" />
+
+                                        <div className="absolute bottom-5 left-5 z-10">
+                                            <span className="mb-2 block text-[10px] tracking-[0.38em] uppercase text-white/55" style={{ fontFamily: 'var(--font-mono)' }}>
+                                                VISUAL 0{visual.id}
+                                            </span>
+                                            <p className={`font-bold tracking-tight text-white transition-all duration-500 ${
+                                                isActive ? 'text-[1.9rem]' : 'text-xl'
+                                            }`} style={{ fontFamily: 'var(--font-display)' }}>
+                                                {visual.label}
+                                            </p>
                                         </div>
-                                    )}
+
+                                        {failedImages[visual.id] && (
+                                            <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(180deg,rgba(13,19,35,0.95),rgba(9,14,27,0.98))] text-white/70 text-xs tracking-[0.3em] uppercase">
+                                                Visual Offline
+                                            </div>
+                                        )}
+                                    </div>
                                 </motion.div>
                             )
                         })}
