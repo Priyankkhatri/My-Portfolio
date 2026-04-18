@@ -78,9 +78,9 @@ function getVisualState(relativeIndex) {
     if (relativeIndex === 0) {
         return {
             x: 0,
-            y: -8,
+            y: 0,
             rotate: 0,
-            scale: 1,
+            scale: 1.16,
             opacity: 1,
             zIndex: 30,
         }
@@ -88,21 +88,21 @@ function getVisualState(relativeIndex) {
 
     if (relativeIndex === 1) {
         return {
-            x: 102,
-            y: 24,
+            x: 132,
+            y: 18,
             rotate: 7,
-            scale: 0.82,
-            opacity: 0.62,
+            scale: 0.92,
+            opacity: 0.58,
             zIndex: 20,
         }
     }
 
     return {
-        x: -102,
-        y: 24,
+        x: -132,
+        y: 18,
         rotate: -7,
-        scale: 0.82,
-        opacity: 0.48,
+        scale: 0.92,
+        opacity: 0.44,
         zIndex: 10,
     }
 }
@@ -202,8 +202,8 @@ export default function IdentityPanel() {
                 </div>
 
                 {/* Right Side: Rotating Photo Stack */}
-                <div className="flex-1 min-h-[400px] relative p-8 sm:p-12 bg-white/[0.01] z-10">
-                    <div className="relative mx-auto flex h-[360px] w-full max-w-[430px] items-center justify-center sm:h-[400px]">
+                <div className="flex flex-1 items-center justify-center min-h-[500px] relative p-8 sm:p-12 bg-white/[0.01] z-10">
+                    <div className="relative mx-auto flex h-[430px] w-full max-w-[580px] items-center justify-center sm:h-[490px] md:h-[540px]">
                         {visualStack.map((visual, index) => {
                             const relativeIndex = (index - activeVisual + visualStack.length) % visualStack.length
                             const visualState = getVisualState(relativeIndex)
@@ -225,33 +225,34 @@ export default function IdentityPanel() {
                                             : {}
                                     }
                                     transition={{ duration: 0.85, ease }}
-                                    className="absolute left-1/2 top-1/2 h-[250px] w-[190px] -translate-x-1/2 -translate-y-1/2 sm:h-[290px] sm:w-[220px] md:h-[310px] md:w-[235px]"
+                                    className="group absolute left-1/2 top-1/2 h-[320px] w-[235px] -translate-x-1/2 -translate-y-1/2 sm:h-[390px] sm:w-[285px] md:h-[430px] md:w-[320px]"
                                     style={{ zIndex: visualState.zIndex }}
                                 >
-                                    <div className={`relative h-full w-full overflow-hidden border border-white/10 bg-[rgba(7,11,21,0.55)] shadow-[0_25px_60px_rgba(0,0,0,0.45)] transition-all duration-700 ${
-                                        isActive ? 'rounded-[2rem]' : 'rounded-[1.5rem]'
-                                    }`}>
-                                        <img
-                                            src={visual.image}
-                                            alt={visual.label}
-                                            loading={isActive ? 'eager' : 'lazy'}
-                                            onError={() => {
-                                                setFailedImages((prev) => ({ ...prev, [visual.id]: true }))
-                                            }}
-                                            className="block h-full w-full object-cover"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                                        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[rgba(5,8,16,0.9)] to-transparent" />
-
-                                        <div className="absolute bottom-5 left-5 z-10">
-                                            <span className="mb-2 block text-[10px] tracking-[0.38em] uppercase text-white/55" style={{ fontFamily: 'var(--font-mono)' }}>
-                                                VISUAL 0{visual.id}
-                                            </span>
-                                            <p className={`font-bold tracking-tight text-white transition-all duration-500 ${
-                                                isActive ? 'text-[1.9rem]' : 'text-xl'
-                                            }`} style={{ fontFamily: 'var(--font-display)' }}>
-                                                {visual.label}
-                                            </p>
+                                    <div className="relative h-full w-full overflow-hidden rounded-[2.1rem] border border-white/10 bg-[rgba(16,22,36,0.28)] shadow-[0_28px_80px_rgba(0,0,0,0.42)] transition-[border-color,box-shadow,background-color] duration-500 group-hover:border-white/20 group-hover:bg-[rgba(24,34,52,0.34)] group-hover:shadow-[0_32px_90px_rgba(0,0,0,0.48),0_0_0_1px_rgba(255,255,255,0.05)]">
+                                        <div className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                                            <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_20%_16%,rgba(255,255,255,0.34),transparent_24%),radial-gradient(circle_at_82%_86%,rgba(147,197,253,0.16),transparent_26%)] backdrop-blur-[14px]" />
+                                            <div className="absolute inset-[1.5px] rounded-[2rem] border border-white/16" />
+                                            <div className="absolute inset-x-5 top-[1px] h-12 rounded-b-[2rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08)_44%,transparent)] blur-[1px]" />
+                                            <div className="absolute bottom-0 left-[10%] right-[10%] h-16 rounded-t-[2rem] bg-[linear-gradient(0deg,rgba(255,255,255,0.14),transparent_70%)]" />
+                                            <div className="absolute inset-y-8 left-0 w-10 bg-[linear-gradient(90deg,rgba(255,255,255,0.16),transparent)]" />
+                                            <div className="absolute inset-y-8 right-0 w-10 bg-[linear-gradient(270deg,rgba(255,255,255,0.12),transparent)]" />
+                                        </div>
+                                        <div className="absolute inset-[12px] overflow-hidden rounded-[1.65rem] border border-white/8 bg-[rgba(5,8,16,0.08)]">
+                                            <img
+                                                src={visual.image}
+                                                alt={visual.label}
+                                                loading={relativeIndex === 0 ? 'eager' : 'lazy'}
+                                                onError={() => {
+                                                    setFailedImages((prev) => ({ ...prev, [visual.id]: true }))
+                                                }}
+                                                className={`block h-full w-full object-cover transition-[filter] duration-700 ${
+                                                    isActive
+                                                        ? 'grayscale-0 saturate-100'
+                                                        : 'grayscale saturate-0'
+                                                }`}
+                                            />
+                                            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent_22%,transparent_78%,rgba(255,255,255,0.06))]" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/28 via-transparent to-white/8" />
                                         </div>
 
                                         {failedImages[visual.id] && (
