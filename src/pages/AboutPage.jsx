@@ -3,6 +3,7 @@ import CinematicHero from '../components/about/CinematicHero'
 import IdentityPanel from '../components/about/IdentityPanel'
 import ProjectHighlight from '../components/about/ProjectHighlight'
 import Philosophy from '../components/about/Philosophy'
+import { TechStackSection } from '../sections/TechStack/index'
 import ConnectPanel from '../components/about/ConnectPanel'
 
 /**
@@ -24,6 +25,7 @@ export default function AboutPage() {
             <IdentityPanel />
             <ProjectHighlight />
             <Philosophy />
+            <TechStackSection />
             <ConnectPanel />
         </>
     )
