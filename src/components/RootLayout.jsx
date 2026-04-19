@@ -6,6 +6,7 @@ import Navbar from './Navbar'
 import PfpMorphButton from './PfpMorphButton'
 import AiChatButton from './AiChatButton'
 import ScrollToRouteTop from './ScrollToRouteTop'
+import RouteTransition from './RouteTransition'
 import PageTransitionWrapper from './PageTransitionWrapper'
 import FooterExperience from './footer/FooterExperience'
 import useStore from '../store/useStore'
@@ -27,6 +28,7 @@ export default function RootLayout() {
             <Cursor />
 
             {!isLoading && <Navbar />}
+            <RouteTransition />
 
             {/* Preloader - only fires on initial visit */}
             <Loader />
@@ -49,9 +51,10 @@ export default function RootLayout() {
 
             <motion.div
                 className="relative z-10"
+                style={{ willChange: 'opacity' }}
                 initial={{ opacity: 0 }}
                 animate={loaderPhase >= 4 ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
             >
                 <main>
                     <PageTransitionWrapper />

@@ -35,58 +35,84 @@ export default function PfpMorphButton() {
     const smoothed = useRef({ p: 0, lastP: -1, lastScrollY: -1 })
     const maxScrollRef = useRef(0)
 
-    // ── Reset all scroll-dependent state on route change to home ──
-    // Without this, stale morph progress / mobile-button visibility
-    // persists because scrollTo(0,0) doesn't fire scroll listeners.
+    // ── Reset all scroll-dependent state on route change ──
     useEffect(() => {
-        if (isHomePage) {
-            setMobileVisible(false)
-            smoothed.current.p = 0
-            wasBtn.current = false
+        // Always reset morph state on any route change
+        setMobileVisible(false)
+        smoothed.current = { p: 0, lastP: -1, lastScrollY: -1 }
+        wasBtn.current = false
+        naturalRect.current = null
+        maxScrollRef.current = 0
 
-            // Clear any leftover morph styles on the hero frame
+        // Helper: nuke every inline style the morph could have set
+        const resetEl = () => {
             const el = document.getElementById('heroPfpFrame')
             if (el) {
-                el.style.transform = ''
+                // Completely clear and restore initial state
+                el.style.cssText = '' 
                 el.style.pointerEvents = 'none'
                 el.classList.remove('hero-pfp--button-mode')
                 el.classList.add('group')
                 el.setAttribute('tabindex', '-1')
                 el.removeAttribute('aria-label')
-                el.style.cursor = ''
+                
+                // Allow CSS to reclaim control of positioning and sizing
+                el.style.position = ''
+                el.style.top = ''
+                el.style.left = ''
+                el.style.width = ''
+                el.style.height = ''
             }
             const rings = document.getElementById('heroPfpRings')
             if (rings) {
                 rings.style.transform = ''
                 rings.style.opacity = ''
+                rings.style.zIndex = ''
             }
             const arrow = document.getElementById('heroPfpArrow')
             if (arrow) arrow.style.opacity = '0'
-        } else {
-            // Leaving home — also reset mobile button for non-home pages
-            setMobileVisible(false)
         }
-    }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
+
+        // Try immediately, then multiple times during the route transition period
+        resetEl()
+        const t1 = setTimeout(resetEl, 400)
+        const t2 = setTimeout(resetEl, 1200)
+        const t3 = setTimeout(resetEl, 2400)
+
+        return () => {
+            clearTimeout(t1)
+            clearTimeout(t2)
+            clearTimeout(t3)
+        }
+    }, [pathname])
 
     // Wait for the hero entry animation to complete before grabbing bounding client rect.
     const [readyToMeasure, setReadyToMeasure] = useState(false)
 
     useEffect(() => {
-        if (!isLoaded) return
-        const t = setTimeout(() => setReadyToMeasure(true), 1800)
+        if (!isLoaded || !isHomePage) {
+            setReadyToMeasure(false)
+            return
+        }
+        // Wait for Cyber Shutter + Hero entrance animations to fully complete
+        const t = setTimeout(() => setReadyToMeasure(true), 2500)
         return () => clearTimeout(t)
-    }, [isLoaded])
+    }, [isLoaded, isHomePage])
 
     const measure = useCallback(() => {
         const el = document.getElementById('heroPfpFrame')
         if (!el) return false
 
-        // Temporarily clear any transform so it reports its standard DOM position
-        const oldTrans = el.style.transform
-        el.style.transform = 'none'
+        // CRITICAL: Clear ALL inline styles before measuring.
+        // If we measure while it has inline 'width: 48px' from a previous 
+        // morphed state, we will permanently lock it to that tiny size.
+        const oldStyle = el.style.cssText
+        el.style.cssText = ''
 
         const r = el.getBoundingClientRect()
-        el.style.transform = oldTrans
+        
+        // Restore old style so we don't cause a flicker before the loop takes over
+        el.style.cssText = oldStyle
 
         if (r.width === 0) return false
 
@@ -288,14 +314,21 @@ export default function PfpMorphButton() {
 
     // Main rAF setup
     useEffect(() => {
-        if (!readyToMeasure) return
+        if (!isLoaded) return
 
-        // Only run morph logic on home page where Hero DOM elements exist
+        // ── Case 1: Not on Home Page ──
+        // On other routes (About, Work), we just show a simple static scroll-to-top button.
         if (!isHomePage) {
             const onScroll = () => setMobileVisible(window.scrollY > 400)
             window.addEventListener('scroll', onScroll, { passive: true })
+            // Initialize state immediately in case we're already scrolled
+            onScroll()
             return () => window.removeEventListener('scroll', onScroll)
         }
+
+        // ── Case 2: On Home Page ──
+        // Complex morphing logic depends on the Hero section being ready to measure.
+        if (!readyToMeasure) return
 
         const desktop = window.innerWidth >= 1024
         setIsDesktop(desktop)
@@ -303,10 +336,11 @@ export default function PfpMorphButton() {
         if (!desktop) {
             const onScroll = () => setMobileVisible(window.scrollY > 400)
             window.addEventListener('scroll', onScroll, { passive: true })
+            onScroll()
             return () => window.removeEventListener('scroll', onScroll)
         }
 
-        // Initialize measuring and loop
+        // Initialize measuring and loop for Desktop Home
         let retryTimeout = null
         let resizeTimeout = null
         

@@ -66,7 +66,10 @@ export default function SpotifyCard() {
 
     const fetchData = useCallback(async (isPolling = false) => {
         try {
-            const res = await fetch('/api/spotify')
+            const controller = new AbortController()
+            const timeout = setTimeout(() => controller.abort(), 5000)
+            const res = await fetch('/api/spotify', { signal: controller.signal })
+            clearTimeout(timeout)
             if (!res.ok) throw new Error(`Spotify API ${res.status}`)
 
             const json = await res.json()
@@ -74,6 +77,7 @@ export default function SpotifyCard() {
             lastDataRef.current = json
             setError(false)
         } catch {
+            // Silently handle — backend may not be running locally
             if (!isPolling && !lastDataRef.current) setError(true)
         } finally {
             if (!isPolling) setLoading(false)

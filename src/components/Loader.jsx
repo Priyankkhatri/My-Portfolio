@@ -10,6 +10,7 @@ export default function Loader() {
     const setIsLoaded = useStore((s) => s.setIsLoaded)
     const loaderPhase = useStore((s) => s.loaderPhase)
     const setLoaderPhase = useStore((s) => s.setLoaderPhase)
+    
     const [show, setShow] = useState(() => location.pathname === '/')
     const shouldSkipLoader = location.pathname !== '/'
 
@@ -35,13 +36,13 @@ export default function Loader() {
 
         let currentProgress = 0
         const interval = setInterval(() => {
-            currentProgress += Math.random() * 15
+            currentProgress += Math.random() * 25
             if (currentProgress >= 100) {
                 currentProgress = 100
                 clearInterval(interval)
             }
             setProgress(currentProgress)
-        }, 120)
+        }, 80)
         return () => clearInterval(interval)
     }, [setIsLoaded, setIsLoading, setLoaderPhase, shouldSkipLoader])
 
@@ -58,7 +59,7 @@ export default function Loader() {
         if (shouldSkipLoader) return
 
         if (progress >= 100 && loaderPhase >= 3) {
-            const t = setTimeout(() => setLoaderPhase(4), 600)
+            const t = setTimeout(() => setLoaderPhase(4), 200)
             return () => clearTimeout(t)
         }
     }, [progress, loaderPhase, setLoaderPhase, shouldSkipLoader])
@@ -72,7 +73,7 @@ export default function Loader() {
                 setIsLoading(false)
                 setIsLoaded(true)
                 setLoaderPhase(5) // Final phase: Hero settled
-            }, 1500) // Cinematic duration for loading animation
+            }, 800) // Cinematic duration for loading animation
             return () => clearTimeout(t)
         }
     }, [loaderPhase, setIsLoaded, setIsLoading, setLoaderPhase, shouldSkipLoader])
@@ -82,12 +83,16 @@ export default function Loader() {
     return (
         <AnimatePresence>
             {show && (
-                <div className="fixed inset-0 z-[100] flex">
+                <motion.div
+                    className="fixed inset-0 z-[100] flex"
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                >
                     {/* Central Cinematic Beam (Activates at Phase 4) */}
                     <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 pointer-events-none z-50 flex justify-center">
                         <motion.div
                             className="w-[2px] h-full bg-[#60a5fa] shadow-[0_0_20px_4px_rgba(96,165,250,0.8)]"
-                            initial={{ scaleY: 0, opacity: 0, scaleX: 1 }}
+                            style={{ willChange: 'transform, opacity' }}
                             animate={
                                 loaderPhase === 4
                                     ? { 
@@ -108,8 +113,9 @@ export default function Loader() {
                     {/* Left curtain */}
                     <motion.div
                         className="w-1/2 h-full bg-[#0a0f1b] relative overflow-hidden"
+                        style={{ willChange: 'transform' }}
                         animate={loaderPhase >= 4 ? { x: '-100%' } : { x: 0 }}
-                        transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 0.3 }}
+                        transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
                     >
                         {/* Decorative diagonal line */}
                         <motion.div
@@ -123,8 +129,9 @@ export default function Loader() {
                     {/* Right curtain */}
                     <motion.div
                         className="w-1/2 h-full bg-[#0a0f1b] relative overflow-hidden"
+                        style={{ willChange: 'transform' }}
                         animate={loaderPhase >= 4 ? { x: '100%' } : { x: 0 }}
-                        transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 0.3 }}
+                        transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
                     >
                         <motion.div
                             className="absolute top-0 left-0 w-px h-full bg-gradient-to-b from-transparent via-[#60a5fa]/30 to-transparent shadow-[0_0_15px_rgba(96,165,250,0.2)]"
@@ -242,7 +249,7 @@ export default function Loader() {
                             </div>
                         </motion.div>
                     </motion.div>
-                </div>
+                </motion.div>
             )}
         </AnimatePresence>
     )

@@ -126,6 +126,11 @@ function ProjectCard({ project, index, onClick }) {
                             <img
                                 src={project.image}
                                 alt={project.title}
+                                loading="lazy"
+                                onError={(e) => {
+                                    // Hide broken image and show the fallback pattern
+                                    e.target.style.display = 'none'
+                                }}
                                 className="w-full h-full object-cover select-none opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
                             />
                             <div className="absolute inset-0 bg-gradient-to-tr from-[var(--bg-highlight)] to-transparent opacity-20 mix-blend-overlay" />

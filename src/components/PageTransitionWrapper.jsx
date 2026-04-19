@@ -2,32 +2,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useLocation, useOutlet } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-/* Page transition variants - OPACITY ONLY.
-   CRITICAL: Do NOT use `y`, `filter`, `scale`, or any transform-based
-   property here. Framer Motion retains inline `transform: translateY(0px)`
-   and `filter: blur(0px)` even AFTER animation completes. Per CSS spec,
-   any non-none transform/filter creates a new containing-block and can
-   interfere with fixed-position UI layers. */
-const pageVariants = {
-    initial: {
-        opacity: 0,
-    },
-    animate: {
-        opacity: 1,
-    },
-    exit: {
-        opacity: 0,
-    },
-}
-
-const pageTransition = {
-    duration: 0.26,
-    ease: [0.22, 1, 0.36, 1],
-}
-
 /**
  * Wraps <Outlet /> in AnimatePresence for cinematic page transitions.
- * Uses useOutlet() so route content can transition as the pathname changes.
+ * Since we have the Cyber Shutter route transition as well, we keep this fast.
  */
 export default function PageTransitionWrapper() {
     const location = useLocation()
@@ -42,42 +19,18 @@ export default function PageTransitionWrapper() {
         return () => mq.removeEventListener('change', handler)
     }, [])
 
-    const [isMobile, setIsMobile] = useState(false)
-    useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth < 768)
-        check()
-        window.addEventListener('resize', check)
-        return () => window.removeEventListener('resize', check)
-    }, [])
-
-    const mobileVariants = {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
-    }
-
-    const variants = reducedMotion
-        ? { initial: {}, animate: {}, exit: {} }
-        : isMobile
-          ? mobileVariants
-          : pageVariants
-
-    const transition = reducedMotion
-        ? { duration: 0 }
-        : isMobile
-          ? { duration: 0.3, ease: 'easeOut' }
-          : pageTransition
-
     return (
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="wait">
             <motion.div
                 key={location.pathname}
-                variants={variants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                transition={transition}
-                className="min-h-screen"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{
+                    duration: reducedMotion ? 0 : 0.2, 
+                    ease: 'easeInOut',
+                }}
+                className="min-h-screen relative"
             >
                 {currentOutlet}
             </motion.div>

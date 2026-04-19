@@ -1,10 +1,20 @@
 import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import useStore from '../store/useStore'
 
 export default function Cursor() {
     const cursorVariant = useStore((s) => s.cursorVariant)
     const isHover = cursorVariant === 'hover'
+
+    // Hide custom cursor entirely on touch-only devices
+    const [isTouchOnly, setIsTouchOnly] = useState(false)
+    useEffect(() => {
+        const mq = window.matchMedia('(pointer: coarse)')
+        setIsTouchOnly(mq.matches && !window.matchMedia('(pointer: fine)').matches)
+        const handler = () => setIsTouchOnly(mq.matches && !window.matchMedia('(pointer: fine)').matches)
+        mq.addEventListener('change', handler)
+        return () => mq.removeEventListener('change', handler)
+    }, [])
 
     const mouseX = useMotionValue(0)
     const mouseY = useMotionValue(0)
@@ -22,6 +32,8 @@ export default function Cursor() {
         return () => window.removeEventListener('mousemove', handler)
     }, [mouseX, mouseY])
 
+    if (isTouchOnly) return null
+
     return (
         <>
             {/* Inner dot — instant */}
@@ -32,13 +44,14 @@ export default function Cursor() {
                     y: mouseY,
                     translateX: '-50%',
                     translateY: '-50%',
+                    willChange: 'transform',
                 }}
                 animate={{
                     width: isHover ? 6 : 8,
                     height: isHover ? 6 : 8,
                     backgroundColor: isHover ? 'rgba(96, 165, 250, 0.6)' : 'rgba(232, 237, 245, 0.9)',
                 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.15 }}
             />
 
             {/* Outer ring — spring lag */}
@@ -49,6 +62,7 @@ export default function Cursor() {
                     y: springY,
                     translateX: '-50%',
                     translateY: '-50%',
+                    willChange: 'transform',
                 }}
                 animate={{
                     width: isHover ? 64 : 44,
@@ -56,7 +70,7 @@ export default function Cursor() {
                     borderColor: isHover ? 'rgba(96, 165, 250, 0.25)' : 'rgba(232, 237, 245, 0.2)',
                     opacity: isHover ? 0.6 : 0.8,
                 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
             />
 
             {/* Glow trail — very subtle */}
@@ -67,6 +81,7 @@ export default function Cursor() {
                     y: springY,
                     translateX: '-50%',
                     translateY: '-50%',
+                    willChange: 'transform',
                     width: 100,
                     height: 100,
                     background: 'radial-gradient(circle, rgba(96, 165, 250, 0.04) 0%, transparent 70%)',

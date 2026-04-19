@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@100;200;300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@100;200;300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;700&display=swap');
 
 @import "tailwindcss";
 
@@ -176,6 +176,8 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
   background-image:
     /* Attractive side gradients */
     radial-gradient(ellipse 60% 120% at -10% 50%, rgba(59, 130, 246, 0.25) 0%, transparent 70%),
@@ -311,9 +313,9 @@ body::after {
 }
 
 @keyframes particleDrift {
-  0% { transform: translateY(0) translateX(0); opacity: 0.6; }
-  50% { transform: translateY(-15px) translateX(10px); opacity: 0.8; }
-  100% { transform: translateY(-5px) translateX(-8px); opacity: 0.6; }
+  0% { transform: translate3d(0, 0, 0); opacity: 0.6; }
+  50% { transform: translate3d(10px, -15px, 0); opacity: 0.8; }
+  100% { transform: translate3d(-8px, -5px, 0); opacity: 0.6; }
 }
 
 /* â”€â”€ Mobile performance optimizations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -426,11 +428,10 @@ body,
   will-change: transform;
   transition: background 0.5s ease, border-color 0.5s ease;
   
-  /* Fix antialiasing blur during 3D transforms */
+  /* GPU layer promotion + antialiasing fix during 3D transforms */
   -webkit-font-smoothing: subpixel-antialiased;
-  transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
-  perspective: 1000px;
 }
 
 .glass-card::before {
@@ -576,9 +577,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes orbFloat {
-  0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-20px) scale(1.05); }
-  100% { transform: translateY(10px) scale(0.95); }
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -20px, 0) scale(1.05); }
+  100% { transform: translate3d(0, 10px, 0) scale(0.95); }
 }
 
 /* â”€â”€ Pill Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
