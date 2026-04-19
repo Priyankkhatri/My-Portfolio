@@ -9,18 +9,19 @@ export function TechStackSection() {
             style={{
                 position: 'relative',
                 width: '100%',
-                height: '80vh',
-                minHeight: '700px',
+                height: '70vh',
+                minHeight: '600px',
                 overflow: 'hidden',
                 background: 'transparent',
+                // Smoothly fade the section at top and bottom
+                maskImage: 'linear-gradient(to bottom, transparent, black 150px, black calc(100% - 150px), transparent)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 150px, black calc(100% - 150px), transparent)',
             }}
         >
             {/* 3D Scene */}
             <Suspense fallback={null}>
                 <TechOrbitCanvas />
             </Suspense>
-
-            {/* Top/bottom fades removed to ensure the global background is fully visible */}
 
             {/* Text overlay — centered horizontally, upper third of screen */}
             <div style={{

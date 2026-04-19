@@ -9,6 +9,7 @@ const Work = lazy(() => import('./pages/Work'))
 const WorkDetail = lazy(() => import('./pages/WorkDetail'))
 const CredentialsPage = lazy(() => import('./pages/CredentialsPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
+const BeyondCode = lazy(() => import('./pages/BeyondCode'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 
 const LoadingFallback = () => (
@@ -79,6 +80,14 @@ export default function App() {
                         <Suspense fallback={<LoadingFallback />}>
 
                             <ContactPage />
+                        </Suspense>
+                    }
+                />
+                <Route
+                    path="beyond-code"
+                    element={
+                        <Suspense fallback={<LoadingFallback />}>
+                            <BeyondCode />
                         </Suspense>
                     }
                 />
