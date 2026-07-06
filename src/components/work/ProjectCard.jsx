@@ -1,26 +1,25 @@
 import { Link } from 'react-router-dom'
-import { motion, useInView, useSpring, useMotionValue, useTransform, AnimatePresence } from 'framer-motion'
-import { useRef, useState, useCallback, useMemo, useEffect } from 'react'
-
+import { motion, useInView, useSpring, useMotionValue, useTransform } from 'framer-motion'
+import { useRef, useState, useCallback } from 'react'
 import useStore from '../../store/useStore'
 import useIsMobile from '../../hooks/useIsMobile'
 
 /**
- * ProjectCard — a single project in the Work Grid.
- * Reconstructed with 'Antigravity Creative' aesthetic.
- * Features: Magnetic Physics, Multi-layer Glass Glint, Quick Peek Metadata.
-
+ * ProjectCard — Cinematic editorial project card.
+ * Features: Magnetic 3D tilt, parallax image, desaturation hover,
+ * staggered content reveals, and clean typography.
  */
 export default function ProjectCard({ project, index = 0, variant = 'normal' }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const isMobile = useIsMobile()
     const cardRef = useRef(null)
-    const isInView = useInView(cardRef, { once: true, margin: '-100px' })
+    const isInView = useInView(cardRef, { once: true, margin: '-80px' })
 
     const [isHovered, setIsHovered] = useState(false)
     const isFeatured = variant === 'featured'
+    const displayIndex = String(index + 1).padStart(2, '0')
 
-    // --- Magnetic Physics ---
+    // ── Magnetic 3D Tilt Physics ──
     const mouseX = useMotionValue(0)
     const mouseY = useMotionValue(0)
 
@@ -28,31 +27,13 @@ export default function ProjectCard({ project, index = 0, variant = 'normal' }) 
     const xSpring = useSpring(mouseX, springConfig)
     const ySpring = useSpring(mouseY, springConfig)
 
-    // Tilt transforms
-    const rotateX = useTransform(ySpring, [-0.5, 0.5], [isFeatured ? 5 : 8, isFeatured ? -5 : -8])
-    const rotateY = useTransform(xSpring, [-0.5, 0.5], [isFeatured ? -5 : -8, isFeatured ? 5 : 8])
-    
-    // Parallax for inner content
-    const contentX = useTransform(xSpring, [-0.5, 0.5], [-15, 15])
-    const contentY = useTransform(ySpring, [-0.5, 0.5], [-15, 15])
-    
-    // Sub-parallax for text layers
-    const textParallaxX = useTransform(contentX, x => x * 0.5)
-    const textParallaxY = useTransform(contentY, y => y * 0.5)
-    
-    // Glint transforms
-    const glintX = useTransform(xSpring, [-0.5, 0.5], [0, 100])
-    const glintY = useTransform(ySpring, [-0.5, 0.5], [0, 100])
+    const tiltAmount = isFeatured ? 4 : 6
+    const rotateX = useTransform(ySpring, [-0.5, 0.5], [tiltAmount, -tiltAmount])
+    const rotateY = useTransform(xSpring, [-0.5, 0.5], [-tiltAmount, tiltAmount])
 
-    const glintBg1 = useTransform(
-        [glintX, glintY],
-        ([gx, gy]) => `radial-gradient(circle at ${gx}% ${gy}%, rgba(255,255,255,0.15) 0%, transparent 60%)`
-    )
-
-    const glintBg2 = useTransform(
-        [glintX, glintY],
-        ([gx, gy]) => `radial-gradient(circle at ${100 - gx}% ${100 - gy}%, rgba(96, 165, 250, 0.2) 0%, transparent 40%)`
-    )
+    // Parallax for image layer
+    const imgX = useTransform(xSpring, [-0.5, 0.5], [-12, 12])
+    const imgY = useTransform(ySpring, [-0.5, 0.5], [-12, 12])
 
     const handleMouseMove = useCallback((e) => {
         if (isMobile || !cardRef.current) return
@@ -77,167 +58,159 @@ export default function ProjectCard({ project, index = 0, variant = 'normal' }) 
         }
     }, [isMobile, setCursorVariant])
 
+    // ── Staggered child animation variants ──
+    const contentVariants = {
+        hidden: {},
+        visible: {
+            transition: { staggerChildren: 0.08, delayChildren: 0.15 }
+        }
+    }
+    const childFade = {
+        hidden: { opacity: 0, y: 16 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+    }
+
     return (
         <motion.div
             ref={cardRef}
-            initial={{ opacity: 0, y: 60, scale: 0.95, filter: 'blur(20px)' }}
-            animate={isInView ? { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' } : {}}
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{
-                duration: 1.4,
-                delay: index * 0.1,
+                duration: 1,
+                delay: Math.min(index * 0.12, 0.5),
                 ease: [0.22, 1, 0.36, 1],
-
             }}
             className={isFeatured ? 'col-span-full' : ''}
         >
             <Link
                 to={`/work/${project.id}`}
-                aria-label={`View case study: ${project.title}`}
+                aria-label={`View project: ${project.title}`}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onMouseMove={handleMouseMove}
                 className="block group relative rounded-2xl focus-visible:outline-none focus:ring-2 focus:ring-[var(--accent-1)] focus:ring-offset-4 focus:ring-offset-[var(--bg-primary)]"
-                style={{
-                    perspective: 1200,
-                    transformStyle: 'preserve-3d',
-                }}
+                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
             >
                 <motion.div
                     style={{
-                        rotateX,
-                        rotateY,
-                        scale: isHovered ? (isFeatured ? 1.01 : 1.03) : 1,
+                        rotateX: isMobile ? 0 : rotateX,
+                        rotateY: isMobile ? 0 : rotateY,
                         transformStyle: 'preserve-3d',
                     }}
-                    transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                    className={`relative overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] transition-colors duration-500 group-hover:border-[var(--accent-1)]/30 ${isFeatured ? 'min-h-[450px] md:min-h-[600px]' : 'min-h-[380px] md:min-h-[480px]'}`}
+                    className={`relative overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] transition-colors duration-500 group-hover:border-[var(--accent-1)]/25 ${
+                        isFeatured
+                            ? 'min-h-[420px] md:min-h-[550px]'
+                            : 'min-h-[360px] md:min-h-[440px]'
+                    }`}
                 >
-                    {/* 1. Multi-layered Glint Layer */}
-                    <AnimatePresence>
-                        {isHovered && !isMobile && (
-                            <>
-                                <motion.div 
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="absolute inset-0 z-30 pointer-events-none mix-blend-overlay"
-                                    style={{ background: glintBg1 }}
-                                />
-                                <motion.div 
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 0.3 }}
-                                    exit={{ opacity: 0 }}
-                                    className="absolute inset-0 z-30 pointer-events-none mix-blend-soft-light"
-                                    style={{ background: glintBg2 }}
-                                />
-                            </>
-                        )}
-                    </AnimatePresence>
-
-                    {/* 2. Background Media with Magnetic Parallax */}
+                    {/* ── Background Image with Parallax ── */}
                     <div className="absolute inset-0 overflow-hidden">
                         <motion.div
-                            style={{
-                                x: contentX,
-                                y: contentY,
-                                scale: 1.1, // Zoom for parallax room
-                            }}
+                            style={{ x: isMobile ? 0 : imgX, y: isMobile ? 0 : imgY }}
                             className="w-full h-full"
                         >
                             <img
                                 src={project.previewImage}
                                 alt={project.title}
-                                className="w-full h-full object-cover grayscale-[0.4] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
+                                className="w-full h-full object-cover work-card-image"
                                 loading={index < 3 ? "eager" : "lazy"}
                             />
                         </motion.div>
-                        
-                        {/* High-Concept Overlays */}
-                        <div className={`absolute inset-0 transition-opacity duration-700 ${isFeatured
-                            ? 'bg-gradient-to-r from-[var(--bg-primary)] via-[var(--bg-primary)]/40 to-transparent opacity-80 group-hover:opacity-100'
-                            : 'bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)]/60 to-transparent opacity-90 group-hover:opacity-100'
+
+                        {/* Gradient overlay */}
+                        <div className={`absolute inset-0 transition-opacity duration-700 ${
+                            isFeatured
+                                ? 'bg-gradient-to-r from-[var(--bg-primary)]/95 via-[var(--bg-primary)]/50 to-transparent'
+                                : 'bg-gradient-to-t from-[var(--bg-primary)]/95 via-[var(--bg-primary)]/40 to-transparent'
                         }`} />
-                        
-                        {/* Scanline Overlay for Technical Feel */}
-                        <div className="absolute inset-0 bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVQImWNgYGD4z0AEMDAAAAY9AgP6B74GAAAAAElFTkSuQmCC')] opacity-[0.03] pointer-events-none bg-repeat" />
                     </div>
 
-                    {/* 3. High-Fidelity Content Layer */}
-                    <div className={`relative z-10 flex h-full ${isFeatured
-                        ? 'flex-col md:flex-row items-end md:items-end p-8 md:p-14 lg:p-20'
-                        : 'flex-col justify-end p-8 md:p-10'
+                    {/* ── Large Index Watermark ── */}
+                    <div className={`absolute z-10 work-card-index pointer-events-none ${
+                        isFeatured
+                            ? 'top-6 right-8 md:right-14 text-[8rem] md:text-[12rem]'
+                            : 'top-4 right-6 text-[6rem] md:text-[8rem]'
                     }`}>
-                        <motion.div 
-                            className={isFeatured ? 'max-w-2xl' : 'w-full'}
-                            style={{ 
-                                x: isHovered ? textParallaxX : 0, 
-                                y: isHovered ? textParallaxY : 0 
-                            }}
-                        >
-                            {/* Year / Archive Status */}
-                            <div className="flex items-center gap-4 mb-6">
-                                <span className="px-2 py-0.5 rounded border border-[var(--border-color)] text-xs tracking-widest text-[var(--accent-1)] bg-[var(--bg-primary)]/50 uppercase">
-                                    Release {project.year}
-                                </span>
-                                {project.featured && (
-                                    <span className="flex items-center gap-2">
-                                        <span className="w-1 h-1 rounded-full bg-[var(--accent-1)] animate-pulse" />
-                                        <span className="text-xs tracking-widest uppercase text-[var(--text-muted)]">Verified Project</span>
-                                    </span>
-                                )}
-                            </div>
+                        {displayIndex}
+                    </div>
 
-                            {/* Project Title with Separation Effect */}
-                            <h3
-                                className={`font-bold text-[var(--text-primary)] mb-4 leading-[1.1] tracking-tighter ${isFeatured ? 'text-5xl md:text-7xl lg:text-8xl' : 'text-3xl md:text-4xl'}`}
-                                style={{ 
-                                    fontFamily: "var(--font-display)",
-
-                                    textWrap: 'balance'
-                                }}
-                            >
-                                {project.title}
-                            </h3>
-
-                            {/* Description with reveal effect */}
-                            <p className={`text-[var(--text-secondary)] mb-8 leading-relaxed opacity-70 group-hover:opacity-100 transition-all duration-500 line-clamp-2 md:line-clamp-none ${isFeatured ? 'text-lg md:text-xl max-w-xl' : 'text-sm md:text-base'}`}>
-                                {project.shortDescription}
-                            </p>
-
-                            {/* --- Quick Peek: Tech Stack Overlay --- */}
-                            <div className="flex flex-wrap gap-2 mb-8 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
-                                {project.techStack.map((tech, i) => (
-                                    <span 
-                                        key={tech.name} 
-                                        className="px-2 py-1 text-[8px] tracking-widest uppercase rounded bg-white/5 border border-white/10 text-white/50"
-                                        style={{ transitionDelay: `${i * 30}ms` }}
-                                    >
-                                        {tech.name}
-                                    </span>
-                                ))}
-                            </div>
-
-                            {/* Enhanced Navigation Hint */}
-                            <div className="flex items-center gap-4 group/hint">
-                                <div className="relative flex items-center">
-                                    <span className="w-8 h-px bg-[var(--border-color)] group-hover:w-16 group-hover:bg-[var(--accent-1)] transition-all duration-500" />
-                                    <motion.span 
-                                        className="absolute left-full ml-4 text-xs tracking-widest uppercase text-[var(--text-muted)] whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all duration-500"
-                                    >
-                                        View Case Study
-                                    </motion.span>
-                                </div>
-                            </div>
+                    {/* ── Content Layer ── */}
+                    <motion.div
+                        className={`relative z-10 flex h-full ${
+                            isFeatured
+                                ? 'flex-col justify-end p-8 md:p-12 lg:p-16'
+                                : 'flex-col justify-end p-6 md:p-8'
+                        }`}
+                        variants={contentVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                    >
+                        {/* Year + Role */}
+                        <motion.div variants={childFade} className="flex items-center gap-3 mb-4">
+                            <span className="text-xs tracking-[0.15em] uppercase text-[var(--text-muted)]">
+                                {project.year}
+                            </span>
+                            <span className="w-1 h-1 rounded-full bg-[var(--text-muted)]/50" />
+                            <span className="text-xs tracking-[0.1em] uppercase text-[var(--text-muted)]">
+                                {project.role}
+                            </span>
                         </motion.div>
-                    </div>
 
-                    {/* Industrial Corner ID Ornament */}
-                    <div className="absolute top-10 left-10 z-10 opacity-30 group-hover:opacity-100 group-hover:text-[var(--accent-1)] transition-all duration-700 text-xs tracking-widest [writing-mode:vertical-rl] text-[var(--text-muted)] pointer-events-none uppercase">
-                        Archive / {project.id.toUpperCase().slice(0, 4)}
-                    </div>
+                        {/* Title */}
+                        <motion.h3
+                            variants={childFade}
+                            className={`font-bold text-[var(--text-primary)] mb-3 leading-[1.05] tracking-tight ${
+                                isFeatured
+                                    ? 'text-4xl md:text-5xl lg:text-6xl'
+                                    : 'text-2xl md:text-3xl'
+                            }`}
+                            style={{ fontFamily: "var(--font-display)", textWrap: 'balance' }}
+                        >
+                            {project.title}
+                        </motion.h3>
 
-                    {/* Reactive Border Glow */}
-                    <div className="absolute inset-0 border border-[var(--accent-1)]/0 group-hover:border-[var(--accent-1)]/40 transition-colors duration-700 rounded-2xl pointer-events-none" />
+                        {/* Description */}
+                        <motion.p
+                            variants={childFade}
+                            className={`text-[var(--text-secondary)] mb-6 leading-relaxed line-clamp-2 ${
+                                isFeatured
+                                    ? 'text-base md:text-lg max-w-lg'
+                                    : 'text-sm'
+                            }`}
+                        >
+                            {project.shortDescription}
+                        </motion.p>
+
+                        {/* Tech Tags — reveal on hover */}
+                        <div className="flex flex-wrap gap-1.5 mb-6 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-500">
+                            {project.techStack.slice(0, 5).map((tech, i) => (
+                                <span
+                                    key={tech.name}
+                                    className="px-2.5 py-1 text-[10px] tracking-[0.1em] uppercase rounded-full bg-[var(--bg-highlight)] border border-[var(--border-color)] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-all duration-300"
+                                    style={{ transitionDelay: `${i * 40}ms` }}
+                                >
+                                    {tech.name}
+                                </span>
+                            ))}
+                        </div>
+
+                        {/* View Arrow */}
+                        <motion.div variants={childFade} className="flex items-center gap-3">
+                            <span className="w-8 h-px bg-[var(--border-color)] group-hover:w-12 group-hover:bg-[var(--accent-1)] transition-all duration-500" />
+                            <svg
+                                width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                                className="text-[var(--text-muted)] group-hover:text-[var(--accent-1)] work-arrow transition-colors duration-300"
+                            >
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </motion.div>
+                    </motion.div>
+
+                    {/* ── Edge Glow ── */}
+                    <div className="work-card-glow" />
 
                 </motion.div>
             </Link>

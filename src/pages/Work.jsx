@@ -1,13 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useMemo } from 'react'
-
+import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import WorkGrid from '../components/work/WorkGrid'
 import useProjectData from '../hooks/useProjectData'
 
 /**
- * Work page — Reconstructed as an Immersive Technical Archive.
- * Incorporates 'Antigravity' HUD design and dynamic interaction patterns.
+ * Work page — Editorial showcase of selected projects.
+ * Studio-quality design with cinematic typography and organic motion.
  */
 export default function Work() {
     const { projects } = useProjectData()
@@ -23,139 +23,154 @@ export default function Work() {
         })
     }, [projects, activeFilter])
 
-    const stats = [
-        { label: 'Total Projects', value: projects.length, unit: 'Units' },
-        { label: 'Archive Status', value: 'Stable', unit: '' },
-        { label: 'Render Latency', value: '14', unit: 'ms' },
-        { label: 'System Uptime', value: '99.9%', unit: '' },
-    ]
-
-
     return (
         <>
             <Helmet>
-                <title>Project Archive | Priyank Khatri — Technical Portfolio</title>
-                <meta name="description" content="Explore a high-fidelity archive of technical projects by Priyank Khatri. Featuring Full-stack applications, SAAS platforms, and experimental frontend architecture." />
-                <meta name="keywords" content="Priyank Khatri, Projects, React Projects, Node.js, Full-stack developer, SAAS clone, Portfolio" />
+                <title>Selected Works | Priyank Khatri — Developer Portfolio</title>
+                <meta name="description" content="Explore selected projects by Priyank Khatri — full-stack applications, SaaS platforms, and creative frontend experiments built with React, Node.js, and modern web technologies." />
+                <meta name="keywords" content="Priyank Khatri, Projects, React, Node.js, Full-stack developer, SaaS, Portfolio, Web Development" />
                 <link rel="canonical" href="https://priyankkhatri.vercel.app/work" />
             </Helmet>
 
-            <section className="min-h-screen px-6 md:px-12 lg:px-24 pt-32 md:pt-48 pb-32 relative overflow-hidden bg-[var(--bg-primary)]">
+            <section className="min-h-screen px-6 md:px-12 lg:px-24 pt-32 md:pt-44 pb-32 relative overflow-hidden bg-[var(--bg-primary)]">
 
-                {/* 1. Technical Ambient Layer (Interactive Glyphs) */}
-                <div className="absolute inset-0 pointer-events-none opacity-[0.05] z-0 overflow-hidden">
-                    <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[var(--accent-1)]/20 blur-[150px] rounded-full animate-pulse-slow" />
-                    <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[var(--accent-2)]/10 blur-[120px] rounded-full animate-pulse-slow" style={{ animationDelay: '2s' }} />
+                {/* Ambient background glow — subtle, not overwhelming */}
+                <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                    <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-[0.04]"
+                        style={{ background: 'radial-gradient(circle, var(--accent-1), transparent 70%)' }} />
+                    <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full opacity-[0.03]"
+                        style={{ background: 'radial-gradient(circle, var(--accent-2), transparent 70%)' }} />
                 </div>
 
                 <div className="max-w-7xl mx-auto relative z-10">
 
-                    {/* 2. Technical HUD Hero */}
-                    <div className="mb-24 lg:mb-32">
-                        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 border-b border-[var(--border-color)] pb-12">
+                    {/* ── Hero Section ── */}
+                    <div className="mb-20 lg:mb-28">
 
-                            {/* Heading Group */}
-                            <div className="space-y-6">
-                                <motion.div
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    className="flex items-center gap-4 text-[var(--accent-1)] text-sm tracking-widest uppercase font-bold"
-                                >
-                                    <span className="w-2 h-2 rounded-full bg-[var(--accent-1)] shadow-[0_0_10px_var(--accent-1)]" />
-                                    Technical Archive / Core Index
-                                </motion.div>
+                        {/* Eyebrow */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                            className="flex items-center gap-3 mb-8"
+                        >
+                            <span className="w-2 h-2 rounded-full bg-[var(--accent-1)]" />
+                            <span className="text-xs tracking-[0.2em] uppercase text-[var(--text-muted)] font-medium">
+                                Portfolio — {projects.length} Projects
+                            </span>
+                        </motion.div>
 
-                                <motion.h1
-                                    initial={{ opacity: 0, scale: 0.95, filter: 'blur(20px)' }}
-                                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                                    transition={{ duration: 1 }}
-                                    className="text-7xl md:text-9xl font-bold text-[var(--text-primary)] leading-[0.8] tracking-tighter"
-                                    style={{ fontFamily: "'Poppins', sans-serif" }}
-                                >
-                                    WORKS <br />
-                                    <span className="text-stroke tracking-normal opacity-10">ARCHIVE</span>
-                                </motion.h1>
-                            </div>
+                        {/* Main Heading */}
+                        <div className="relative mb-6">
+                            <motion.h1
+                                initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+                                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                                transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-[var(--text-primary)] leading-[0.95] tracking-tight"
+                                style={{ fontFamily: "var(--font-display)" }}
+                            >
+                                Selected
+                                <br />
+                                <span className="text-gradient-silver">Works</span>
+                            </motion.h1>
 
-                            {/* HUD Stats Grid */}
-                            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-8 lg:w-80">
-                                {stats.map((stat, i) => (
-                                    <motion.div
-                                        key={stat.label}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.4 + (i * 0.1) }}
-                                        className="group"
-                                    >
-                                        <div className="text-xs uppercase text-[var(--accent-1)] mb-2 group-hover:text-white transition-colors">
-                                            {stat.label}
-                                        </div>
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-2xl font-bold text-[var(--text-primary)]">
-                                                {stat.value}
-                                            </span>
-                                            {stat.unit && <span className="text-xs text-[var(--text-muted)]">{stat.unit}</span>}
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
+                            {/* Animated underline */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.5 }}
+                                className="mt-4 max-w-xs"
+                            >
+                                <span className="work-heading-line" />
+                            </motion.div>
                         </div>
 
-                        {/* 3. Filter Navigation */}
-                        <motion.div
+                        {/* Subtitle */}
+                        <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.8 }}
-                            className="flex flex-wrap items-center gap-4 md:gap-8 mt-12 overflow-x-auto no-scrollbar pb-4"
+                            transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                            className="text-base md:text-lg text-[var(--text-secondary)] max-w-lg leading-relaxed"
                         >
-                            <span className="text-sm tracking-widest text-[var(--text-muted)] uppercase hidden md:inline">Sort Gallery:</span>
-                            {categories.map((cat) => (
-                                <button
-                                    key={cat}
-                                    onClick={() => setActiveFilter(cat)}
-                                    className={`relative px-4 py-2 text-sm tracking-wider uppercase transition-all duration-500 ${activeFilter === cat ? 'text-[var(--accent-1)]' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'}`}
-                                >
-                                    {cat}
-                                    {activeFilter === cat && (
-                                        <motion.div
-                                            layoutId="activeFilter"
-                                            className="absolute inset-0 border border-[var(--accent-1)]/30 bg-[var(--accent-1)]/5 rounded-md -z-10"
-                                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                        />
-                                    )}
-                                </button>
-                            ))}
-                        </motion.div>
+                            A collection of projects that reflect my journey — from full-stack platforms to creative experiments. Each one taught me something new.
+                        </motion.p>
                     </div>
 
-                    {/* 4. Project Grid with Layout Animation */}
+                    {/* ── Filter Navigation ── */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                        className="flex flex-wrap items-center gap-2 md:gap-3 mb-16 md:mb-24"
+                    >
+                        {categories.map((cat) => (
+                            <button
+                                key={cat}
+                                onClick={() => setActiveFilter(cat)}
+                                className={`relative px-4 py-2 text-xs tracking-[0.15em] uppercase rounded-full border transition-all duration-400 ${
+                                    activeFilter === cat
+                                        ? 'work-filter-active border-[var(--accent-1)]/30 text-[var(--accent-1)]'
+                                        : 'border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--text-muted)]/30 hover:bg-[var(--bg-highlight)]'
+                                }`}
+                            >
+                                {cat.replace('-', ' ')}
+                                {activeFilter === cat && (
+                                    <motion.div
+                                        layoutId="workFilter"
+                                        className="absolute inset-0 rounded-full border border-[var(--accent-1)]/20 -z-10"
+                                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                                    />
+                                )}
+                            </button>
+                        ))}
+                    </motion.div>
+
+                    {/* ── Project Grid ── */}
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeFilter}
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.5 }}
+                            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                         >
                             <WorkGrid projects={filteredProjects} />
                         </motion.div>
                     </AnimatePresence>
 
-                    {/* 5. Terminal Breadcrumb / Footer */}
+                    {/* ── CTA Footer ── */}
                     <motion.div
-                        className="flex items-center justify-between mt-32 pt-8 border-t border-[var(--border-color)] text-sm tracking-widest uppercase text-[var(--text-muted)]"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
+                        className="mt-32 md:mt-44 text-center"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-50px' }}
+                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     >
-                        <span>Archive Protocol / End Transmission</span>
-                        <div className="flex gap-4">
-                            <span className="animate-pulse">●</span>
-                            <span>PAGE 01 OF 01</span>
-                        </div>
+                        <div className="work-cta-divider mb-16 max-w-md mx-auto" />
+
+                        <p className="text-sm tracking-[0.15em] uppercase text-[var(--text-muted)] mb-4">
+                            Like what you see?
+                        </p>
+                        <h2
+                            className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-8"
+                            style={{ fontFamily: "var(--font-display)" }}
+                        >
+                            Let's build something<br />
+                            <span className="text-gradient-silver">together</span>.
+                        </h2>
+
+                        <Link
+                            to="/contact"
+                            className="group inline-flex items-center gap-3 px-8 py-4 rounded-full border border-[var(--accent-1)]/25 bg-[var(--accent-1)]/5 text-[var(--text-primary)] text-sm font-medium tracking-wide hover:bg-[var(--accent-1)]/10 hover:border-[var(--accent-1)]/40 transition-all duration-300"
+                        >
+                            Get in Touch
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="work-arrow">
+                                <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </Link>
                     </motion.div>
                 </div>
             </section>
-
         </>
     )
 }

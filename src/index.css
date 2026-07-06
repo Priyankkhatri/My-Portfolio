@@ -26,6 +26,111 @@
   --glass-blur: blur(40px) saturate(180%);
 }
 
+/* ── Work Page: Editorial Redesign ──────────────────────── */
+
+/* Heading underline draw-on animation */
+@keyframes drawLine {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.work-heading-line {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2), transparent);
+  transform-origin: left center;
+  animation: drawLine 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 0.6s;
+  transform: scaleX(0);
+  border-radius: 2px;
+}
+
+/* Project card cinematic image layer */
+.work-card-image {
+  filter: saturate(0.3) brightness(0.9);
+  transition: filter 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: filter, transform;
+  transform: scale(1.05);
+}
+
+.group:hover .work-card-image,
+.group:focus-within .work-card-image {
+  filter: saturate(1) brightness(1);
+  transform: scale(1.1);
+}
+
+/* Project number large watermark */
+.work-card-index {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.06);
+  transition: -webkit-text-stroke-color 0.6s ease;
+  user-select: none;
+  pointer-events: none;
+}
+
+.group:hover .work-card-index {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="light"] .work-card-index {
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .group:hover .work-card-index {
+  -webkit-text-stroke-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Card edge-light glow on hover */
+.work-card-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 0 40px -10px var(--accent-1);
+}
+
+.group:hover .work-card-glow {
+  opacity: 1;
+}
+
+/* Filter pill active glow */
+.work-filter-active {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.12), rgba(167, 139, 250, 0.08));
+  border-color: var(--accent-1) !important;
+  color: var(--accent-1) !important;
+  box-shadow: 0 0 20px -5px rgba(96, 165, 250, 0.3);
+}
+
+/* Light mode filter active */
+[data-theme="light"] .work-filter-active {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.06));
+  box-shadow: 0 0 20px -5px rgba(37, 99, 235, 0.2);
+}
+
+/* CTA section gradient divider */
+.work-cta-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-1), var(--accent-2), transparent);
+  opacity: 0.3;
+}
+
+/* Smooth arrow translate on hover */
+.work-arrow {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .work-arrow {
+  transform: translateX(6px);
+}
+
 /* â”€â”€ High-Fidelity Creative Utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .text-depth {
