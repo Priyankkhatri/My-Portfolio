@@ -30,6 +30,26 @@ export const techStack = [
 
 export const projects = [
     {
+        title: 'Stockply',
+        tagline: 'The Digital Atelier for Supply Chain Excellence',
+        description: 'A high-fidelity, full-stack SaaS ecosystem bridging the gap between retail shops and suppliers. Features real-time inventory sync, smart procurement, and data-driven analytics.',
+        tech: ['React.js', 'Node.js', 'Express', 'MongoDB'],
+        live: 'https://stockply.vercel.app',
+        source: 'https://github.com/Priyankkhatri/stockply',
+        year: '2026',
+        role: 'MERN / Full-Stack',
+    },
+    {
+        title: 'Steam Games Platform',
+        tagline: 'Full-stack Steam games explorer',
+        description: 'A modern, highly scalable full-stack application featuring a React frontend with beautiful animations and a robust Node.js/Express REST API backend designed for game datasets.',
+        tech: ['React.js', 'Node.js', 'Express', 'MongoDB'],
+        live: 'https://steam-games-live.vercel.app',
+        source: 'https://github.com/Priyankkhatri/national_vulnerability_database_priyank_khatri',
+        year: '2026',
+        role: 'MERN / Full-Stack',
+    },
+    {
         title: 'Vestiga',
         tagline: 'Freemium SaaS Platform',
         description: 'A complete SaaS platform featuring robust authentication via Supabase, synchronized local database architecture, and a fully integrated Razorpay subscription flow.',
