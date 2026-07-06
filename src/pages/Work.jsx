@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import WorkGrid from '../components/work/WorkGrid'
 import useProjectData from '../hooks/useProjectData'
@@ -138,37 +137,7 @@ export default function Work() {
                         </motion.div>
                     </AnimatePresence>
 
-                    {/* ── CTA Footer ── */}
-                    <motion.div
-                        className="mt-32 md:mt-44 text-center"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: '-50px' }}
-                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                        <div className="work-cta-divider mb-16 max-w-md mx-auto" />
 
-                        <p className="text-sm tracking-[0.15em] uppercase text-[var(--text-muted)] mb-4">
-                            Like what you see?
-                        </p>
-                        <h2
-                            className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-8"
-                            style={{ fontFamily: "var(--font-display)" }}
-                        >
-                            Let's build something<br />
-                            <span className="text-gradient-silver">together</span>.
-                        </h2>
-
-                        <Link
-                            to="/contact"
-                            className="group inline-flex items-center gap-3 px-8 py-4 rounded-full border border-[var(--accent-1)]/25 bg-[var(--accent-1)]/5 text-[var(--text-primary)] text-sm font-medium tracking-wide hover:bg-[var(--accent-1)]/10 hover:border-[var(--accent-1)]/40 transition-all duration-300"
-                        >
-                            Get in Touch
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="work-arrow">
-                                <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-                            </svg>
-                        </Link>
-                    </motion.div>
                 </div>
             </section>
         </>
