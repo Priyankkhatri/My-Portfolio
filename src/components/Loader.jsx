@@ -11,8 +11,9 @@ export default function Loader() {
     const loaderPhase = useStore((s) => s.loaderPhase)
     const setLoaderPhase = useStore((s) => s.setLoaderPhase)
     
-    const [show, setShow] = useState(() => location.pathname === '/')
-    const shouldSkipLoader = location.pathname !== '/'
+    const hasLoadedBefore = sessionStorage.getItem('appLoaded') === 'true'
+    const [show, setShow] = useState(() => location.pathname === '/' && !hasLoadedBefore)
+    const shouldSkipLoader = location.pathname !== '/' || hasLoadedBefore
 
     useEffect(() => {
         if (shouldSkipLoader) {
@@ -73,6 +74,7 @@ export default function Loader() {
                 setIsLoading(false)
                 setIsLoaded(true)
                 setLoaderPhase(5) // Final phase: Hero settled
+                sessionStorage.setItem('appLoaded', 'true')
             }, 800) // Cinematic duration for loading animation
             return () => clearTimeout(t)
         }
