@@ -142,6 +142,24 @@ export const certificates = [
         credentialUrl: '/Elite-Hack.pdf',
         image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775563067/elite-hack_esq9eu.jpg',
     },
+    {
+        title: 'Dhirubhai Ambani Hackathon — Participation',
+        issuer: 'DA-IICT',
+        date: '2026',
+        category: 'Hackathon',
+        status: 'Completed',
+        credentialUrl: '/dhirubhai%20ambani%20hackathon.pdf',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1783413552/dhirubhai_ambani_hackathon_page-0001_onvqtf.jpg',
+    },
+    {
+        title: 'Inspiron 5.O — Participation',
+        issuer: 'Inspiron Committee',
+        date: '2026',
+        category: 'Hackathon',
+        status: 'Completed',
+        credentialUrl: '/inspiron%205.O.pdf',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1783413547/inspiron_5.O_page-0001_fzifkf.jpg',
+    },
 ]
 
 export const experience = [

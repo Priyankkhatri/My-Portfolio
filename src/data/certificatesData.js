@@ -59,6 +59,32 @@ const certificatesData = [
         image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1775563067/elite-hack_esq9eu.jpg',
         themeColor: '#f59e0b',
     },
+    {
+        id: 'dhirubhai-ambani-hackathon',
+        title: 'Dhirubhai Ambani Hackathon — Participation',
+        issuer: 'DA-IICT',
+        date: '2026',
+        category: 'Hackathon',
+        description:
+            'Participated in the Dhirubhai Ambani Hackathon, collaborating with a team to design, prototype, and present software solutions addressing real-world problem statements under an intense hacking window.',
+        skills: ['Hackathon', 'Team Collaboration', 'Rapid Prototyping', 'Full-Stack Development'],
+        credentialUrl: '/dhirubhai%20ambani%20hackathon.pdf',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1783413552/dhirubhai_ambani_hackathon_page-0001_onvqtf.jpg',
+        themeColor: '#3b82f6',
+    },
+    {
+        id: 'inspiron-5-o',
+        title: 'Inspiron 5.O — Participation',
+        issuer: 'Inspiron Committee',
+        date: '2026',
+        category: 'Hackathon',
+        description:
+            'Competed in the Inspiron 5.O Hackathon, developing and pitching web prototypes under rapid development constraints.',
+        skills: ['Hackathon', 'Problem Solving', 'Pitching', 'Frontend Development'],
+        credentialUrl: '/inspiron%205.O.pdf',
+        image: 'https://res.cloudinary.com/dqvpsorso/image/upload/v1783413547/inspiron_5.O_page-0001_fzifkf.jpg',
+        themeColor: '#a78bfa',
+    },
 ]
 
 export default certificatesData
