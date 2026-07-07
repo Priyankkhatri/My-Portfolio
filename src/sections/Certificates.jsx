@@ -3,82 +3,150 @@ import { motion, AnimatePresence, useInView } from 'framer-motion'
 import useStore from '../store/useStore'
 import certificates from '../data/certificatesData'
 
+/**
+ * CertCard — 3D Tilt Card with custom theme glow and shared layout id.
+ */
 function CertCard({ cert, index, onClick }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
-    const ref = useRef(null)
-    const inView = useInView(ref, { once: true, margin: '-40px' })
+    const cardRef = useRef(null)
+
+    const handleMouseMove = (e) => {
+        const card = cardRef.current
+        if (!card) return
+        const rect = card.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        const centerX = rect.width / 2
+        const centerY = rect.height / 2
+        
+        // Subtle tilt: max 6 degrees rotation
+        const rotateX = ((centerY - y) / centerY) * 6
+        const rotateY = ((x - centerX) / centerX) * 6
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`
+    }
+
+    const handleMouseLeave = () => {
+        const card = cardRef.current
+        if (!card) return
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
+        setCursorVariant('default')
+    }
+
+    // First card (Meta Frontend) is wide on desktop/tablets (Bento Layout)
+    const gridSpan = cert.id === 'meta-frontend' 
+        ? "md:col-span-2 col-span-1" 
+        : "col-span-1"
+
+    const themeColor = cert.themeColor || '#60a5fa'
 
     return (
         <motion.div
-            ref={ref}
+            ref={cardRef}
+            layoutId={`cert-card-container-${cert.id}`}
+            layout="position"
             onClick={onClick}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
             onMouseEnter={() => setCursorVariant('hover')}
-            onMouseLeave={() => setCursorVariant('default')}
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 0.6, delay: index * 0.08 }}
-            whileHover={{ y: -4, transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } }}
-            whileTap={{ scale: 0.97, transition: { duration: 0.15 } }}
-            className="glass-card glass-card-hover w-[240px] min-w-[240px] max-w-[240px] sm:w-[300px] sm:min-w-[300px] sm:max-w-[300px] md:w-[340px] md:min-w-[340px] md:max-w-[340px] flex-shrink-0 select-none group"
+            initial={{ opacity: 0, y: 40, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+                transition: 'transform 0.15s ease-out, border-color 0.4s ease, box-shadow 0.4s ease',
+                transformStyle: 'preserve-3d',
+            }}
+            className={`glass-card glass-card-hover ${gridSpan} cursor-pointer group select-none relative overflow-hidden`}
         >
-            {/* Top gradient bar */}
+            {/* Top accent border line */}
             <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
 
-            <div className="p-6 md:p-8">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-6">
-                    <span className="text-[10px] tracking-[0.25em] uppercase text-[var(--text-secondary)]">{cert.category}</span>
-                    <span className="text-[10px] text-[var(--text-secondary)]">{cert.date}</span>
+            {/* Glowing background blob matching certificate theme color */}
+            <div 
+                className="absolute -inset-[100px] opacity-0 group-hover:opacity-10 pointer-events-none rounded-full blur-[80px] transition-opacity duration-700"
+                style={{
+                    background: `radial-gradient(circle, ${themeColor} 0%, transparent 70%)`
+                }}
+            />
+
+            <div className="p-6 md:p-8 flex flex-col justify-between h-full min-h-[340px] relative z-10" style={{ transformStyle: 'preserve-3d' }}>
+                <div>
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-6" style={{ transform: 'translateZ(15px)' }}>
+                        <span className="text-[9px] tracking-[0.2em] uppercase font-mono px-2.5 py-0.5 rounded bg-white/5 border border-white/5 text-[var(--text-secondary)]">
+                            {cert.category}
+                        </span>
+                        <span className="text-[10px] text-[var(--text-secondary)]">{cert.date}</span>
+                    </div>
+
+                    {/* Title */}
+                    <motion.h4
+                        layoutId={`cert-card-title-${cert.id}`}
+                        className="text-lg md:text-xl font-bold text-white mb-2 leading-snug transition-colors duration-300"
+                        style={{ fontFamily: "'Poppins', sans-serif", transform: 'translateZ(25px)' }}
+                    >
+                        {cert.title}
+                    </motion.h4>
+                    
+                    <p className="text-xs text-[var(--text-secondary)] mb-6" style={{ transform: 'translateZ(10px)' }}>
+                        {cert.issuer}
+                    </p>
                 </div>
 
-                {/* Certificate visual */}
-                <div className="w-full aspect-video rounded-lg bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-6 flex items-center justify-center relative overflow-hidden group-hover:from-[var(--bg-highlight-hover)] transition-colors duration-500">
-                    {cert.image ? (
-                        <img
-                            src={cert.image}
-                            alt={`${cert.title} Certificate`}
-                            className="w-full h-full object-cover"
-                        />
-                    ) : (
-                        <>
-                            <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
-                                style={{
-                                    backgroundImage: 'linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px)',
-                                    backgroundSize: '16px 16px',
-                                }}
+                <div>
+                    {/* Certificate preview thumbnail if available */}
+                    {cert.image && (
+                        <motion.div 
+                            layoutId={`cert-card-image-wrap-${cert.id}`}
+                            className="w-full aspect-video rounded-lg overflow-hidden mb-6 relative border border-white/5 group-hover:border-white/10 transition-colors shadow-lg" 
+                            style={{ transform: 'translateZ(20px)' }}
+                        >
+                            <img
+                                src={cert.image}
+                                alt={`${cert.title} Thumbnail`}
+                                className="w-full h-full object-cover saturate-[0.6] group-hover:saturate-[1.1] group-hover:scale-[1.03] transition-all duration-700"
+                                loading="lazy"
                             />
-                            {/* Certificate icon */}
-                            <div className="relative">
-                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-secondary)] group-hover:text-[var(--accent-1)] transition-colors duration-500">
-                                    <rect x="3" y="4" width="18" height="16" rx="2" />
-                                    <path d="M7 8h10M7 12h6M7 16h3" />
-                                    <circle cx="17" cy="15" r="2" />
-                                </svg>
-                            </div>
-                        </>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-500" />
+                        </motion.div>
                     )}
-                </div>
 
-                {/* Info */}
-                <h4
-                    className="text-sm font-semibold text-[var(--text-primary)]/75 mb-1.5 group-hover:text-[var(--text-primary)] transition-colors duration-300"
-                    style={{ fontFamily: "'Poppins', sans-serif" }}
-                >
-                    {cert.title}
-                </h4>
-                <div className="flex items-center justify-between">
-                    <p className="text-xs text-[var(--text-secondary)]">{cert.issuer}</p>
-                    <span className="text-[10px] text-[var(--text-secondary)]">{cert.grade ? `Grade: ${cert.grade}` : cert.hours}</span>
-                </div>
+                    {/* Lower Info & Skills Badge Summary */}
+                    <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[var(--border-color)]" style={{ transform: 'translateZ(15px)' }}>
+                        {/* Skills preview tags */}
+                        {cert.skills && cert.skills.length > 0 ? (
+                            <div className="flex flex-wrap gap-1.5 max-w-[70%]">
+                                {cert.skills.slice(0, 3).map((skill, idx) => (
+                                    <span key={idx} className="px-2 py-0.5 text-[8px] font-mono tracking-wider uppercase bg-white/5 border border-white/5 text-[var(--text-muted)] rounded-md">
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        ) : (
+                            <span className="text-[10px] text-[var(--text-secondary)] group-hover:text-white transition-colors">Click to view</span>
+                        )}
 
-                {/* Bottom action hint */}
-                <div className="mt-5 pt-4 border-t border-[var(--border-color)] flex items-center gap-2">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)]">
-                        <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
-                    </svg>
-                    <span className="text-[10px] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">Click to view</span>
+                        {/* Grade Badge */}
+                        {cert.grade ? (
+                            <span className="px-2 py-0.5 text-[9px] font-mono font-semibold rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                                {cert.grade}
+                            </span>
+                        ) : (
+                            <span className="text-[9px] tracking-wider text-[var(--text-muted)] uppercase">Verified</span>
+                        )}
+                    </div>
                 </div>
             </div>
+            
+            {/* Custom glowing card border on hover */}
+            <div 
+                className="absolute inset-0 border border-transparent rounded-2xl pointer-events-none group-hover:border-white/10 transition-colors duration-500" 
+                style={{
+                    borderColor: 'transparent',
+                    boxShadow: `inset 0 0 12px ${themeColor}10`
+                }}
+            />
         </motion.div>
     )
 }
@@ -87,6 +155,13 @@ export default function Certificates() {
     const sectionRef = useRef(null)
     const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
     const [selected, setSelected] = useState(null)
+    const [activeCategory, setActiveCategory] = useState('All')
+
+    const categories = ['All', 'Frontend', 'Hackathon']
+
+    const filteredCerts = certificates.filter(
+        (c) => activeCategory === 'All' || c.category === activeCategory
+    )
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -108,11 +183,13 @@ export default function Certificates() {
                 transition={{ duration: 0.8 }}
                 className="max-w-7xl mx-auto"
             >
+                {/* Section Header */}
                 <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-px bg-[var(--bg-highlight-hover)]" />
                     <p className="text-[11px] tracking-[0.4em] uppercase text-[var(--text-secondary)]">004 &mdash; Credentials</p>
                 </div>
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
+                
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
                     <div>
                         <h2
                             className="text-3xl md:text-5xl font-bold mb-3 text-[var(--text-primary)]"
@@ -124,43 +201,63 @@ export default function Certificates() {
                             Continuous learning is at the heart of what I do. Here are some highlights from my journey.
                         </p>
                     </div>
-                    <span className="text-xs text-[var(--text-secondary)] mt-4 md:mt-0">{certificates.length} credentials</span>
-                </div>
 
-                {/* Horizontal scroll */}
-                <div className="relative -mx-4 sm:-mx-0">
-                    <div 
-                        className="flex gap-5 overflow-x-auto pb-4 px-4 sm:px-8 no-scrollbar scroll-smooth" 
-                        style={{ 
-                            scrollbarWidth: 'none',
-                            maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
-                            WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
-                        }}
-                    >
-                        {certificates.map((cert, i) => (
-                            <CertCard key={i} cert={cert} index={i} onClick={() => setSelected(cert)} />
+                    {/* Category Filter Switcher */}
+                    <div className="flex items-center gap-2 bg-white/5 border border-white/10 p-1 rounded-full backdrop-blur-sm self-start md:self-auto">
+                        {categories.map((cat) => (
+                            <button
+                                key={cat}
+                                onClick={() => setActiveCategory(cat)}
+                                className={`relative px-4 py-1.5 rounded-full text-xs tracking-wider uppercase transition-colors duration-300 font-medium ${
+                                    activeCategory === cat ? 'text-white' : 'text-[var(--text-secondary)] hover:text-white'
+                                }`}
+                            >
+                                {activeCategory === cat && (
+                                    <motion.div
+                                        layoutId="activeCertFilter"
+                                        className="absolute inset-0 bg-white/10 rounded-full border border-white/15"
+                                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                    />
+                                )}
+                                <span className="relative z-10">{cat === 'All' ? 'All' : cat + 's'}</span>
+                            </button>
                         ))}
                     </div>
                 </div>
 
-                {/* Scroll hint */}
+                {/* Asymmetric Bento Grid Showcase with fluid Framer Motion animations */}
+                <motion.div 
+                    layout
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+                >
+                    <AnimatePresence mode="popLayout">
+                        {filteredCerts.map((cert, i) => (
+                            <CertCard 
+                                key={cert.id} 
+                                cert={cert} 
+                                index={i} 
+                                onClick={() => setSelected(cert)} 
+                            />
+                        ))}
+                    </AnimatePresence>
+                </motion.div>
+
+                {/* Interactive hint */}
                 <motion.div
-                    className="flex items-center justify-center gap-3 mt-8"
+                    className="flex items-center justify-center gap-3 mt-16"
                     initial={{ opacity: 0 }}
                     animate={isInView ? { opacity: 1 } : {}}
                     transition={{ delay: 0.8 }}
                 >
                     <div className="w-8 h-px bg-[var(--bg-highlight-hover)]" />
                     <span className="text-[10px] tracking-[0.3em] text-[var(--text-secondary)] uppercase">
-                        Swipe to explore
+                        Click cards to verify credentials
                     </span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[var(--text-secondary)]">
-                        <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-                    </svg>
+                    <div className="w-8 h-px bg-[var(--bg-highlight-hover)]" />
                 </motion.div>
             </motion.div>
 
-            {/* Modal */}
+            {/* Modal - Shared Layout Morphing */}
             <AnimatePresence>
                 {selected && (
                     <motion.div
@@ -170,7 +267,7 @@ export default function Certificates() {
                         exit={{ opacity: 0 }}
                         onClick={() => setSelected(null)}
                     >
-                        {/* ── Animated Aura Backdrop ── */}
+                        {/* Animated Aura Backdrop */}
                         <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl overflow-hidden">
                             <motion.div 
                                 animate={{ 
@@ -180,7 +277,8 @@ export default function Certificates() {
                                     rotate: [0, 90, 180, 270, 360]
                                 }}
                                 transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                                className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-violet-600/20 rounded-full blur-[120px] mix-blend-screen"
+                                className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full blur-[120px] mix-blend-screen"
+                                style={{ backgroundColor: `${selected.themeColor || '#60a5fa'}15` }}
                             />
                             <motion.div 
                                 animate={{ 
@@ -190,18 +288,16 @@ export default function Certificates() {
                                     rotate: [360, 270, 180, 90, 0]
                                 }}
                                 transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                                className="absolute -bottom-[10%] -right-[15%] w-[70%] h-[70%] bg-blue-600/20 rounded-full blur-[140px] mix-blend-screen"
+                                className="absolute -bottom-[10%] -right-[15%] w-[70%] h-[70%] rounded-full blur-[140px] mix-blend-screen"
+                                style={{ backgroundColor: `${selected.themeColor || '#a78bfa'}15` }}
                             />
                         </div>
 
+                        {/* Shared Layout Morph Target */}
                         <motion.div
+                            layoutId={`cert-card-container-${selected.id}`}
                             className="relative glass-card max-w-lg w-full z-10 overflow-hidden shadow-2xl border-white/10"
-                            initial={{ scale: 0.9, opacity: 0, y: 40 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                             onClick={(e) => e.stopPropagation()}
-                            layout
                         >
                             {/* Top bar accent */}
                             <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--bg-highlight-hover)] to-transparent" />
@@ -209,19 +305,22 @@ export default function Certificates() {
                             <div className="p-6 md:p-8">
                                 {/* Header with category and close */}
                                 <div className="flex items-center justify-between mb-6">
-                                    <span className="px-3 py-1 text-[9px] tracking-[0.2em] font-medium uppercase bg-[var(--bg-highlight)] border border-[var(--border-color)] rounded-full text-[var(--accent-1)]">
+                                    <span className="px-3 py-1 text-[9px] tracking-[0.2em] font-medium uppercase bg-[var(--bg-highlight)] border border-[var(--border-color)] rounded-full" style={{ color: selected.themeColor || '#60a5fa' }}>
                                         {selected.category}
                                     </span>
                                     <button
                                         onClick={() => setSelected(null)}
-                                        className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-1"
+                                        className="text-[var(--text-secondary)] hover:text-white transition-colors p-1"
                                     >
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                                     </button>
                                 </div>
 
-                                {/* Certificate visual */}
-                                <div className="w-full aspect-video rounded-xl bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-6 flex items-center justify-center relative shadow-inner-glow overflow-hidden group">
+                                {/* Certificate Image Container - Shared Layout */}
+                                <motion.div 
+                                    layoutId={`cert-card-image-wrap-${selected.id}`}
+                                    className="w-full aspect-video rounded-xl bg-gradient-to-br from-[var(--bg-highlight)] to-transparent mb-6 flex items-center justify-center relative shadow-inner-glow overflow-hidden group"
+                                >
                                     {selected.image ? (
                                         <img
                                             src={selected.image}
@@ -245,22 +344,22 @@ export default function Certificates() {
                                             </div>
                                         </>
                                     )}
-                                    {/* Glass reflection overlay */}
                                     <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
-                                </div>
+                                </motion.div>
 
                                 <div className="space-y-5">
                                     <div>
-                                        <h3
-                                            className="text-lg md:text-xl font-bold text-[var(--text-primary)] mb-2"
+                                        <motion.h3
+                                            layoutId={`cert-card-title-${selected.id}`}
+                                            className="text-lg md:text-xl font-bold text-white mb-2"
                                             style={{ fontFamily: "'Poppins', sans-serif" }}
                                         >
                                             {selected.title}
-                                        </h3>
+                                        </motion.h3>
 
                                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-[var(--text-secondary)]">
                                             <div className="flex items-center gap-1.5">
-                                                <div className="w-1 h-1 rounded-full bg-[var(--accent-1)]" />
+                                                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: selected.themeColor || '#60a5fa' }} />
                                                 <span className="font-medium text-[var(--text-primary)]/80">{selected.issuer}</span>
                                             </div>
                                             <div className="flex items-center gap-1.5 text-[10px]">
@@ -268,12 +367,12 @@ export default function Certificates() {
                                                 <span>{selected.date}</span>
                                             </div>
                                             {selected.grade && (
-                                                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                                                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
                                                     <span className="text-[9px] font-mono font-semibold">GRADE: {selected.grade}</span>
                                                 </div>
                                             )}
                                             {selected.credentialId && (
-                                                <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md bg-[var(--bg-highlight)] border border-[var(--border-color)]">
+                                                <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-[var(--bg-highlight)] border border-[var(--border-color)]">
                                                     <span className="text-[8px] uppercase tracking-widest font-mono text-[var(--text-muted)]">ID: {selected.credentialId}</span>
                                                 </div>
                                             )}
@@ -299,17 +398,11 @@ export default function Certificates() {
                                         </div>
                                     )}
 
-                                    {selected.hours && (
-                                        <div className="p-3 rounded-lg bg-[var(--bg-highlight)]/50 border border-[var(--border-color)]">
-                                            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{selected.hours}</p>
-                                        </div>
-                                    )}
-
                                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[var(--border-color)]">
                                         <div className="flex items-center gap-6">
                                             <button
                                                 onClick={() => setSelected(null)}
-                                                className="text-[10px] tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2 group"
+                                                className="text-[10px] tracking-[0.2em] uppercase text-[var(--text-secondary)] hover:text-white transition-colors flex items-center gap-2 group"
                                             >
                                                 <svg className="group-hover:-translate-x-1 transition-transform" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                                                 Dismiss
@@ -320,7 +413,8 @@ export default function Certificates() {
                                                     href={selected.credentialUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-[10px] tracking-[0.2em] uppercase text-[var(--accent-1)] hover:text-[var(--accent-2)] transition-all flex items-center gap-2 group"
+                                                    className="text-[10px] tracking-[0.2em] uppercase transition-all flex items-center gap-2 group"
+                                                    style={{ color: selected.themeColor || '#60a5fa' }}
                                                 >
                                                     Verify Online
                                                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
