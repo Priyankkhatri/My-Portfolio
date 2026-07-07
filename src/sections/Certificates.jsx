@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import useStore from '../store/useStore'
-import { certificates } from '../data/portfolioData'
+import certificates from '../data/certificatesData'
 
 function CertCard({ cert, index, onClick }) {
     const setCursorVariant = useStore((s) => s.setCursorVariant)
@@ -68,7 +68,7 @@ function CertCard({ cert, index, onClick }) {
                 </h4>
                 <div className="flex items-center justify-between">
                     <p className="text-xs text-[var(--text-secondary)]">{cert.issuer}</p>
-                    <span className="text-[10px] text-[var(--text-secondary)]">{cert.hours}</span>
+                    <span className="text-[10px] text-[var(--text-secondary)]">{cert.grade ? `Grade: ${cert.grade}` : cert.hours}</span>
                 </div>
 
                 {/* Bottom action hint */}
@@ -267,6 +267,11 @@ export default function Certificates() {
                                                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
                                                 <span>{selected.date}</span>
                                             </div>
+                                            {selected.grade && (
+                                                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                                                    <span className="text-[9px] font-mono font-semibold">GRADE: {selected.grade}</span>
+                                                </div>
+                                            )}
                                             {selected.credentialId && (
                                                 <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md bg-[var(--bg-highlight)] border border-[var(--border-color)]">
                                                     <span className="text-[8px] uppercase tracking-widest font-mono text-[var(--text-muted)]">ID: {selected.credentialId}</span>
@@ -274,6 +279,25 @@ export default function Certificates() {
                                             )}
                                         </div>
                                     </div>
+
+                                    {selected.description && (
+                                        <div className="p-4 rounded-xl bg-[var(--bg-highlight)]/30 border border-[var(--border-color)]">
+                                            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{selected.description}</p>
+                                        </div>
+                                    )}
+
+                                    {selected.skills && selected.skills.length > 0 && (
+                                        <div className="space-y-2">
+                                            <span className="text-[9px] tracking-wider text-[var(--text-muted)] uppercase">Skills Earned</span>
+                                            <div className="flex flex-wrap gap-2">
+                                                {selected.skills.map((skill, idx) => (
+                                                    <span key={idx} className="px-2.5 py-1 text-[10px] bg-[var(--bg-highlight)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-secondary)] hover:text-white rounded-md border border-[var(--border-color)] transition-colors">
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {selected.hours && (
                                         <div className="p-3 rounded-lg bg-[var(--bg-highlight)]/50 border border-[var(--border-color)]">

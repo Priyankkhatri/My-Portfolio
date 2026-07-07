@@ -106,79 +106,7 @@ export function TechStackSection() {
                 </motion.p>
             </div>
 
-            {/* Left Floating Cards */}
-            <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                viewport={{ once: true }}
-                className="hidden lg:flex absolute top-[35%] left-[5%] z-20 pointer-events-none flex-col"
-            >
-                <motion.div
-                    animate={{ y: [-10, 10, -10] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                    className="glass-morphism-premium px-6 py-4 rounded-2xl flex flex-col gap-2"
-                    style={{
-                        background: 'rgba(255, 255, 255, 0.02)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.05)',
-                    }}
-                >
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-blue-400">Frontend Architecture</span>
-                    <span className="text-[14px] text-slate-100 font-semibold">React & Three.js</span>
-                </motion.div>
-                
-                <motion.div
-                    animate={{ y: [10, -10, 10] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                    className="glass-morphism-premium px-6 py-4 rounded-2xl flex flex-col gap-2 mt-6 ml-8"
-                    style={{
-                        background: 'rgba(255, 255, 255, 0.02)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.05)',
-                    }}
-                >
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-purple-400">Styling Systems</span>
-                    <span className="text-[14px] text-slate-100 font-semibold">TailwindCSS & Framer</span>
-                </motion.div>
-            </motion.div>
 
-            {/* Right Floating Cards */}
-            <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                viewport={{ once: true }}
-                className="hidden lg:flex absolute top-[30%] right-[5%] z-20 pointer-events-none flex-col items-end text-right"
-            >
-                <motion.div
-                    animate={{ y: [-15, 15, -15] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-                    className="glass-morphism-premium px-6 py-4 rounded-2xl flex flex-col items-end gap-2"
-                    style={{
-                        background: 'rgba(255, 255, 255, 0.02)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.05)',
-                    }}
-                >
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-blue-400">Backend Systems</span>
-                    <span className="text-[14px] text-slate-100 font-semibold">Node.js & Postgres</span>
-                </motion.div>
-
-                <motion.div
-                    animate={{ y: [15, -15, 15] }}
-                    transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-                    className="glass-morphism-premium px-6 py-4 rounded-2xl flex flex-col items-end gap-2 mt-6 mr-8"
-                    style={{
-                        background: 'rgba(255, 255, 255, 0.02)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.05)',
-                    }}
-                >
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-purple-400">Architecture</span>
-                    <span className="text-[14px] text-slate-100 font-semibold">System Design & CI/CD</span>
-                </motion.div>
-            </motion.div>
         </section>
     )
 }

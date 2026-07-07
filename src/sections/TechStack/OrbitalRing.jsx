@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { TechIcon } from './TechIcon'
 
-export function OrbitalRing({ radius, speed, tilt, items }) {
+export function OrbitalRing({ radius, speed, tilt, items, planetRadius = 7.5, planetCenter = [0, -1.5, 0] }) {
     const groupRef = useRef()
 
     useFrame((_, delta) => {
@@ -44,6 +44,8 @@ export function OrbitalRing({ radius, speed, tilt, items }) {
                             key={item.id}
                             item={item}
                             position={[x, 0, z]}
+                            planetRadius={planetRadius}
+                            planetCenter={planetCenter}
                         />
                     )
                 })}

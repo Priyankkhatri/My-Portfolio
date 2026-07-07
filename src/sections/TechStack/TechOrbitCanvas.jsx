@@ -75,8 +75,8 @@ export function TechOrbitCanvas() {
       {/* POST PROCESSING: Bloom only, no vignette which caused the sharp line */}
       <EffectComposer disableNormalPass multisampling={0}>
         <Bloom 
-          intensity={1.8} 
-          luminanceThreshold={0.2} 
+          intensity={1.7} 
+          luminanceThreshold={0.25} 
           luminanceSmoothing={0.9} 
           mipmapBlur 
         />

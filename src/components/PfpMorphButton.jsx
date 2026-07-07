@@ -35,9 +35,25 @@ export default function PfpMorphButton() {
     const smoothed = useRef({ p: 0, lastP: -1, lastScrollY: -1 })
     const maxScrollRef = useRef(0)
 
+    // Caching DOM references in refs to prevent layout thrashing and continuous DOM querying
+    const elRef = useRef(null)
+    const ringsRef = useRef(null)
+    const arrowRef = useRef(null)
+
+    const getElements = useCallback(() => {
+        if (!elRef.current) elRef.current = document.getElementById('heroPfpFrame')
+        if (!ringsRef.current) ringsRef.current = document.getElementById('heroPfpRings')
+        if (!arrowRef.current) arrowRef.current = document.getElementById('heroPfpArrow')
+        return { el: elRef.current, rings: ringsRef.current, arrow: arrowRef.current }
+    }, [])
+
     // ── Reset all scroll-dependent state on route change ──
     useEffect(() => {
-        // Always reset morph state on any route change
+        // Clear cached DOM nodes on route changes since DOM tree gets re-rendered
+        elRef.current = null
+        ringsRef.current = null
+        arrowRef.current = null
+
         setMobileVisible(false)
         smoothed.current = { p: 0, lastP: -1, lastScrollY: -1 }
         wasBtn.current = false
@@ -46,7 +62,7 @@ export default function PfpMorphButton() {
 
         // Helper: nuke every inline style the morph could have set
         const resetEl = () => {
-            const el = document.getElementById('heroPfpFrame')
+            const { el, rings, arrow } = getElements()
             if (el) {
                 // Completely clear and restore initial state
                 el.style.cssText = '' 
@@ -63,13 +79,11 @@ export default function PfpMorphButton() {
                 el.style.width = ''
                 el.style.height = ''
             }
-            const rings = document.getElementById('heroPfpRings')
             if (rings) {
                 rings.style.transform = ''
                 rings.style.opacity = ''
                 rings.style.zIndex = ''
             }
-            const arrow = document.getElementById('heroPfpArrow')
             if (arrow) arrow.style.opacity = '0'
         }
 
@@ -84,7 +98,7 @@ export default function PfpMorphButton() {
             clearTimeout(t2)
             clearTimeout(t3)
         }
-    }, [pathname])
+    }, [pathname, getElements])
 
     // Wait for the hero entry animation to complete before grabbing bounding client rect.
     const [readyToMeasure, setReadyToMeasure] = useState(false)
@@ -100,12 +114,10 @@ export default function PfpMorphButton() {
     }, [isLoaded, isHomePage])
 
     const measure = useCallback(() => {
-        const el = document.getElementById('heroPfpFrame')
+        const { el } = getElements()
         if (!el) return false
 
         // CRITICAL: Clear ALL inline styles before measuring.
-        // If we measure while it has inline 'width: 48px' from a previous 
-        // morphed state, we will permanently lock it to that tiny size.
         const oldStyle = el.style.cssText
         el.style.cssText = ''
 
@@ -121,36 +133,33 @@ export default function PfpMorphButton() {
             docY: r.top + window.scrollY,
             size: r.width,
         }
+
+        // Cache the maximal scroll height to prevent synchronous layout thrashing (forced reflow) in tick()
+        const vh = window.innerHeight
+        maxScrollRef.current = Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight
+        ) - vh
+
         return true
-    }, [])
+    }, [getElements])
 
     // Linear interpolation for buttery smoothness
     const lerp = (start, end, factor) => start + (end - start) * factor
 
     const tick = useCallback(() => {
-        const el = document.getElementById('heroPfpFrame')
-        const rings = document.getElementById('heroPfpRings')
+        const { el, rings, arrow } = getElements()
         if (!el || !naturalRect.current) return
 
         const ho = naturalRect.current
         const scrollY = window.scrollY
         const vh = window.innerHeight
         const vw = window.innerWidth
-
-        // Cache the maximal scroll height to prevent synchronous layout thrashing (forced reflow)
-        // Recalculate roughly once every few hundred frames or whenever it's 0
-        if (maxScrollRef.current === 0 || Math.random() < 0.01) {
-            maxScrollRef.current = Math.max(
-                document.body.scrollHeight,
-                document.documentElement.scrollHeight
-            ) - vh;
-        }
         
         // Ensure maxScroll isn't negative
         const maxScroll = Math.max(0, maxScrollRef.current)
 
         // Compress the animation safely into the available scrolling space!
-        // We want the morph to complete within the first 60% of max scroll or within a fixed 400px window.
         let targetRange = Math.min(maxScroll * 0.6, 400)
         if (targetRange < 100) targetRange = maxScroll // fallback for ultra-short pages
         
@@ -202,7 +211,6 @@ export default function PfpMorphButton() {
                 rings.style.opacity = ''
             }
 
-            const arrow = document.getElementById('heroPfpArrow')
             if (arrow) arrow.style.opacity = '0'
 
             if (wasBtn.current) {
@@ -268,7 +276,6 @@ export default function PfpMorphButton() {
         el.style.pointerEvents = p > 0.1 ? 'auto' : 'none'
 
         // Reveal the arrow inside the hero frame
-        const arrow = document.getElementById('heroPfpArrow')
         if (arrow) {
             arrow.style.opacity = p > 0.8 ? (p - 0.8) / 0.2 : 0
         }
@@ -305,7 +312,7 @@ export default function PfpMorphButton() {
                 el.style.cursor = 'default'
             }
         }
-    }, [])
+    }, [getElements])
 
     const loop = useCallback(() => {
         tick()
@@ -317,17 +324,14 @@ export default function PfpMorphButton() {
         if (!isLoaded) return
 
         // ── Case 1: Not on Home Page ──
-        // On other routes (About, Work), we just show a simple static scroll-to-top button.
         if (!isHomePage) {
             const onScroll = () => setMobileVisible(window.scrollY > 400)
             window.addEventListener('scroll', onScroll, { passive: true })
-            // Initialize state immediately in case we're already scrolled
             onScroll()
             return () => window.removeEventListener('scroll', onScroll)
         }
 
         // ── Case 2: On Home Page ──
-        // Complex morphing logic depends on the Hero section being ready to measure.
         if (!readyToMeasure) return
 
         const desktop = window.innerWidth >= 1024
@@ -346,15 +350,12 @@ export default function PfpMorphButton() {
         
         const init = () => {
             const success = measure()
-            // If measure fails OR the Hero section is anomalously pushed way down the page 
-            // (e.g. due to the old route still exiting above it), wait for layout to settle.
             if (!success || (naturalRect.current && naturalRect.current.docY > window.innerHeight * 1.2)) {
                 retryTimeout = setTimeout(init, 200)
                 return
             }
 
-            // Make sure it remains above everything during scroll morphing
-            const el = document.getElementById('heroPfpFrame')
+            const { el, rings } = getElements()
             if (el) el.style.zIndex = '10000'
 
             rafId.current = requestAnimationFrame(loop)
@@ -366,8 +367,7 @@ export default function PfpMorphButton() {
                     setIsDesktop(nowDesktop)
 
                     if (nowDesktop) {
-                        const frame = document.getElementById('heroPfpFrame')
-                        const rings = document.getElementById('heroPfpRings')
+                        const { el: frame, rings } = getElements()
 
                         if (frame) {
                             frame.style.transform = 'none'
@@ -388,34 +388,31 @@ export default function PfpMorphButton() {
                         measure()
                     } else {
                         if (rafId.current) cancelAnimationFrame(rafId.current)
-                        const frame = document.getElementById('heroPfpFrame')
+                        const { el: frame, rings } = getElements()
                         if (frame) {
                             frame.style.transform = 'none'
                             frame.style.position = 'absolute'
                             frame.classList.remove('hero-pfp--button-mode')
                         }
-                        const rings = document.getElementById('heroPfpRings')
                         if (rings) {
                             rings.style.transform = 'none'
                             rings.style.opacity = '1'
                         }
                     }
-                }, 250) // slightly longer debounce for layout settling
+                }, 250)
             }
 
             window.addEventListener('resize', onResize, { passive: true })
             
-            // Expose cleanup inside a closure or manage outside
             cleanupFn = () => {
                 if (rafId.current) cancelAnimationFrame(rafId.current)
                 clearTimeout(resizeTimeout)
                 window.removeEventListener('resize', onResize)
-                const el = document.getElementById('heroPfpFrame')
+                const { el, rings } = getElements()
                 if (el) {
                     el.style.transform = 'none'
                     el.classList.remove('hero-pfp--button-mode')
                 }
-                const rings = document.getElementById('heroPfpRings')
                 if (rings) {
                     rings.style.transform = 'none'
                     rings.style.opacity = '1'
@@ -430,7 +427,7 @@ export default function PfpMorphButton() {
             clearTimeout(retryTimeout)
             if (cleanupFn) cleanupFn()
         }
-    }, [readyToMeasure, loop, measure, isHomePage])
+    }, [readyToMeasure, loop, measure, isHomePage, getElements])
 
     const scrollToTopFallback = useCallback(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -450,14 +447,12 @@ export default function PfpMorphButton() {
                     className="!fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[10000] w-12 h-12 rounded-full overflow-hidden border-2 border-[#60a5fa]/40 shadow-[0_0_20px_rgba(96,165,250,0.3)] bg-[var(--bg-primary)] group active:scale-95 transition-all duration-300"
                     aria-label="Back to top"
                 >
-                    {/* The same PFP image used in the fallback button */}
                     <img 
                       src="https://res.cloudinary.com/dqvpsorso/image/upload/v1775455094/compressed-pfp_ibccwh.png" 
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100"
                       alt="Back to top"
                     />
                     
-                    {/* Overlay Arrow on hover */}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <svg
                             width="20"
