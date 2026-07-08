@@ -30,9 +30,7 @@ export default function Work() {
                 <meta name="keywords" content="Priyank Khatri, Projects, React, Node.js, Full-stack developer, SaaS, Portfolio, Web Development" />
                 <link rel="canonical" href="https://priyankkhatri.vercel.app/work" />
             </Helmet>
-
-            <section className="min-h-screen px-6 md:px-12 lg:px-24 pt-32 md:pt-44 pb-32 relative overflow-hidden bg-[var(--bg-primary)]">
-
+            <section className="min-h-screen px-6 md:px-12 lg:px-24 pt-32 md:pt-44 pb-32 relative bg-[var(--bg-primary)]">
                 {/* Ambient background glow — subtle, not overwhelming */}
                 <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
                     <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-[0.04]"
