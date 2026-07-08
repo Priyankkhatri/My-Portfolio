@@ -83,7 +83,7 @@ function ThemeToggle({ compact = false, onToggle, reducedMotion, theme, setCurso
             onClick={onToggle}
             onMouseEnter={() => setCursorVariant('hover')}
             onMouseLeave={() => setCursorVariant('default')}
-            className={`group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/[0.04] text-[var(--text-secondary)] transition-colors duration-300 hover:bg-[rgba(96,165,250,0.08)] hover:text-[var(--text-primary)] ${
+            className={`group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-[var(--border-color)] bg-[var(--bg-highlight)] text-[var(--text-secondary)] transition-colors duration-300 hover:bg-[var(--bg-highlight-hover)] hover:text-[var(--text-primary)] ${
                 compact ? 'h-10 w-10' : 'h-11 w-11'
             }`}
             aria-label="Toggle theme"
@@ -255,7 +255,7 @@ export default function Navbar() {
                                     onClick={() => setMenuOpen((current) => !current)}
                                     onMouseEnter={() => setCursorVariant('hover')}
                                     onMouseLeave={() => setCursorVariant('default')}
-                                    className="group inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-[var(--text-primary)] transition-colors duration-300 hover:bg-[rgba(96,165,250,0.08)]"
+                                    className="group inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-color)] bg-[var(--bg-highlight)] text-[var(--text-primary)] transition-colors duration-300 hover:bg-[var(--bg-highlight-hover)]"
                                     aria-expanded={menuOpen}
                                     aria-controls="mobile-navigation"
                                     aria-label="Toggle navigation menu"
@@ -330,7 +330,7 @@ export default function Navbar() {
                     >
                         <motion.div
                             id="mobile-navigation"
-                            className="mx-auto max-w-md rounded-[28px] border border-white/10 bg-[linear-gradient(to_right,rgba(10,20,40,0.78),rgba(5,10,25,0.68))] p-4 shadow-[0_10px_34px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.05)]"
+                            className="mx-auto max-w-md rounded-[28px] border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 shadow-[0_10px_34px_rgba(0,0,0,0.15)]"
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -8 }}

@@ -135,10 +135,10 @@ export default function WorkGrid({ projects }) {
                                 >
                                     <div className="flex items-center gap-3 text-xs text-[var(--accent-1)] font-mono mb-2">
                                         <span>{activeProject.year}</span>
-                                        <span className="w-1 h-1 rounded-full bg-white/20" />
+                                        <span className="w-1 h-1 rounded-full bg-[var(--text-muted)]/30" />
                                         <span>{activeProject.status}</span>
                                     </div>
-                                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3" style={{ fontFamily: "var(--font-display)" }}>
+                                    <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3" style={{ fontFamily: "var(--font-display)" }}>
                                         {activeProject.title}
                                     </h2>
                                     <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-3">
@@ -154,10 +154,10 @@ export default function WorkGrid({ projects }) {
                                 to={`/work/${activeProject.id}`}
                                 onMouseEnter={() => setCursorVariant('hover')}
                                 onMouseLeave={() => setCursorVariant('default')}
-                                className="inline-flex items-center gap-3 text-xs tracking-[0.15em] font-semibold uppercase text-white hover:text-[var(--accent-1)] transition-colors group/cta"
+                                className="inline-flex items-center gap-3 text-xs tracking-[0.15em] font-semibold uppercase text-[var(--text-primary)] hover:text-[var(--accent-1)] transition-colors group/cta"
                             >
                                 <span>Explore Case Study</span>
-                                <span className="w-8 h-px bg-white/20 group-hover/cta:w-12 group-hover/cta:bg-[var(--accent-1)] transition-all duration-300" />
+                                <span className="w-8 h-px bg-[var(--border-color)] group-hover/cta:w-12 group-hover/cta:bg-[var(--accent-1)] transition-all duration-300" />
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover/cta:translate-x-1 transition-transform">
                                     <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
                                 </svg>
