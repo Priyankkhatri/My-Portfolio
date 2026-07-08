@@ -4,6 +4,230 @@ import { Link } from 'react-router-dom'
 import useStore from '../../store/useStore'
 import useIsMobile from '../../hooks/useIsMobile'
 
+// Static arrays cached globally to prevent garbage collection and recalculations during renders
+const PREFIX_DOTS = [
+    { cx: 10, cy: 12, r: 2.3, delay: 0 },
+    { cx: 5, cy: 9, r: 1.2, delay: 0.2 },
+    { cx: 6, cy: 15, r: 1.5, delay: 0.4 },
+    { cx: 14, cy: 9, r: 1.0, delay: 0.6 },
+    { cx: 15, cy: 14, r: 1.3, delay: 0.8 },
+    { cx: 10, cy: 6, r: 1.0, delay: 0.1 },
+    { cx: 10, cy: 18, r: 0.8, delay: 0.5 }
+]
+
+const WATERMARK_SPARKLES = [
+    { x: 160, y: 32, scale: 0.75, delay: 0 },
+    { x: 210, y: 70, scale: 0.55, delay: 0.6 },
+    { x: 260, y: 45, scale: 0.45, delay: 1.2 },
+    { x: 110, y: 60, scale: 0.4, delay: 0.3 },
+    { x: 230, y: 25, scale: 0.4, delay: 0.9 }
+]
+
+const WATERMARK_DUST = [
+    { cx: 130, cy: 40, r: 1.2, delay: 0.1 },
+    { cx: 150, cy: 65, r: 0.9, delay: 0.7 },
+    { cx: 170, cy: 30, r: 1.5, delay: 1.3 },
+    { cx: 195, cy: 78, r: 0.8, delay: 0.4 },
+    { cx: 220, cy: 35, r: 1.2, delay: 1.0 },
+    { cx: 240, cy: 55, r: 1.0, delay: 1.6 },
+    { cx: 265, cy: 30, r: 0.7, delay: 0.2 }
+]
+
+// Mini shiny dot constellation prefix for all projects in the right-side list
+function ProjectRowPrefix({ id, isActive }) {
+    const color = isActive ? 'var(--accent-1)' : 'var(--text-muted)'
+    
+    // Performance optimization: Inactive rows render standard lightweight static circles.
+    // This avoids overhead of Framer Motion layers for inactive rows completely.
+    if (!isActive) {
+        return (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-[0.35]">
+                {PREFIX_DOTS.map((dot, idx) => (
+                    <circle
+                        key={idx}
+                        cx={dot.cx}
+                        cy={dot.cy}
+                        r={dot.r}
+                        fill="var(--text-muted)"
+                    />
+                ))}
+            </svg>
+        )
+    }
+
+    return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0">
+            {PREFIX_DOTS.map((dot, idx) => (
+                <motion.circle
+                    key={idx}
+                    cx={dot.cx}
+                    cy={dot.cy}
+                    r={dot.r}
+                    fill={color}
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.65, 1, 0.65]
+                    }}
+                    transition={{
+                        repeat: Infinity,
+                        duration: 2,
+                        delay: dot.delay,
+                        ease: "easeInOut"
+                    }}
+                />
+            ))}
+        </svg>
+    )
+}
+
+// Large detailed ambient dynamic dot matrix and sparkling orbit watermark
+function ProjectWatermarkArt({ id, isActive }) {
+    const ringColor = isActive ? 'var(--accent-1)' : 'var(--border-color)'
+    const opacityClass = isActive ? 'opacity-100' : 'opacity-[0.25]'
+
+    // Performance optimization: Inactive rows render simple static elements.
+    // No animations, no filters, and no Framer Motion wrappers. 
+    // This saves CPU cycles on layout repaints, particularly on mobile devices.
+    if (!isActive) {
+        return (
+            <svg width="280" height="100" viewBox="0 0 280 100" fill="none" className="transition-all duration-700 opacity-[0.25] pointer-events-none">
+                <ellipse cx="180" cy="50" rx="90" ry="20" transform="rotate(-15 180 50)" stroke="var(--border-color)" strokeWidth="0.8" opacity="0.6" />
+                <ellipse cx="190" cy="55" rx="115" ry="25" transform="rotate(-12 190 55)" stroke="var(--border-color)" strokeWidth="0.6" opacity="0.4" />
+                {WATERMARK_SPARKLES.map((sparkle, idx) => (
+                    <g key={idx} transform={`translate(${sparkle.x}, ${sparkle.y}) scale(${sparkle.scale})`}>
+                        <path d="M 0,-15 Q 0,0 15,0 Q 0,0 0,15 Q 0,0 -15,0 Q 0,0 0,-15 Z" fill="var(--text-muted)" opacity="0.7" />
+                    </g>
+                ))}
+                {WATERMARK_DUST.map((d, idx) => (
+                    <circle key={idx} cx={d.cx} cy={d.cy} r={d.r} fill="var(--text-muted)" opacity="0.5" />
+                ))}
+            </svg>
+        )
+    }
+
+    // Active/hover state with rich gradient, filters, and dynamic motion animations
+    return (
+        <svg width="280" height="100" viewBox="0 0 280 100" fill="none" className={`transition-all duration-700 ${opacityClass}`}>
+            <defs>
+                <linearGradient id="orbit-grad-1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="transparent" />
+                    <stop offset="50%" stopColor="var(--accent-1)" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="var(--accent-2)" stopOpacity="0.15" />
+                </linearGradient>
+                <linearGradient id="orbit-grad-2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="transparent" />
+                    <stop offset="60%" stopColor="var(--accent-2)" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="transparent" />
+                </linearGradient>
+                <linearGradient id="orbit-grad-3" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="10%" stopColor="transparent" />
+                    <stop offset="70%" stopColor="var(--accent-1)" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="transparent" />
+                </linearGradient>
+                <radialGradient id="nebula-bg" cx="70%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="var(--accent-1)" stopOpacity="0.12" />
+                    <stop offset="60%" stopColor="var(--accent-2)" stopOpacity="0.04" />
+                    <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                </radialGradient>
+                <filter id="sparkle-glow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="2.5" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+
+            {/* Glowing cosmic background cloud */}
+            <ellipse cx="190" cy="50" rx="95" ry="35" fill="url(#nebula-bg)" />
+
+            {/* Orbiting rings (with a 3rd dashed tech ring added for style) */}
+            <ellipse 
+                cx="180" cy="50" rx="90" ry="20" 
+                transform="rotate(-15 180 50)" 
+                stroke="url(#orbit-grad-1)" 
+                strokeWidth="0.8" 
+            />
+            <ellipse 
+                cx="190" cy="55" rx="115" ry="25" 
+                transform="rotate(-12 190 55)" 
+                stroke="url(#orbit-grad-2)" 
+                strokeWidth="0.6" 
+            />
+            <ellipse 
+                cx="200" cy="45" rx="130" ry="28" 
+                transform="rotate(-10 200 45)" 
+                stroke="url(#orbit-grad-3)" 
+                strokeWidth="0.4" 
+                strokeDasharray="3 5"
+            />
+
+            {/* Floating dust particles */}
+            {WATERMARK_DUST.map((particle, idx) => (
+                <motion.circle
+                    key={`dust-${idx}`}
+                    cx={particle.cx}
+                    cy={particle.cy}
+                    r={particle.r}
+                    fill="var(--accent-1)"
+                    opacity={0.8}
+                    animate={{
+                        scale: [1, 1.3, 1],
+                        opacity: [0.4, 0.8, 0.4]
+                    }}
+                    transition={{
+                        repeat: Infinity,
+                        duration: 3,
+                        delay: particle.delay,
+                        ease: "easeInOut"
+                    }}
+                />
+            ))}
+
+            {/* Four-pointed stars (Sparkles) with dual-layer lens flare twinkling */}
+            {WATERMARK_SPARKLES.map((sparkle, idx) => (
+                <g key={`sparkle-group-${idx}`} transform={`translate(${sparkle.x}, ${sparkle.y})`}>
+                    {/* Outer glow flare backing */}
+                    <motion.path 
+                        d="M 0,-15 Q 0,0 15,0 Q 0,0 0,15 Q 0,0 -15,0 Q 0,0 0,-15 Z" 
+                        fill="var(--accent-2)"
+                        opacity="0.3"
+                        filter="url(#sparkle-glow)"
+                        scale={sparkle.scale * 1.5}
+                        animate={{
+                            scale: [sparkle.scale * 1.2, sparkle.scale * 1.7, sparkle.scale * 1.2],
+                            opacity: [0.15, 0.35, 0.15]
+                        }}
+                        transition={{
+                            repeat: Infinity,
+                            duration: 3,
+                            delay: sparkle.delay,
+                            ease: "easeInOut"
+                        }}
+                    />
+                    {/* Sharp inner white core */}
+                    <motion.path 
+                        d="M 0,-10 Q 0,0 10,0 Q 0,0 0,10 Q 0,0 -10,0 Q 0,0 0,-10 Z" 
+                        fill="white"
+                        filter="url(#sparkle-glow)"
+                        scale={sparkle.scale}
+                        animate={{
+                            scale: [sparkle.scale * 0.9, sparkle.scale * 1.25, sparkle.scale * 0.9],
+                            opacity: [0.8, 1, 0.8]
+                        }}
+                        transition={{
+                            repeat: Infinity,
+                            duration: 2.2,
+                            delay: sparkle.delay,
+                            ease: "easeInOut"
+                        }}
+                    />
+                </g>
+            ))}
+        </svg>
+    )
+}
+
 /**
  * WorkGrid — Awwwards-style Split-Screen Showcase.
  *
@@ -124,7 +348,7 @@ export default function WorkGrid({ projects }) {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)]/90 via-[var(--bg-primary)]/20 to-transparent" />
                                 <span className="absolute top-4 right-4 text-[10px] font-mono tracking-widest px-2.5 py-1 bg-[var(--bg-primary)]/80 backdrop-blur-md rounded-full border border-white/5 text-[var(--text-secondary)]">
-                                    {String(idx + 1).padStart(2, '0')}
+                                    {project.year}
                                 </span>
                             </div>
                             <div className="p-6">
@@ -307,33 +531,25 @@ export default function WorkGrid({ projects }) {
                                 key={project.id}
                                 onMouseEnter={() => handleProjectHover(idx)}
                                 onMouseLeave={handleProjectLeave}
-                                className="relative border-b border-[var(--border-color)] py-10 md:py-12 px-4 transition-colors duration-300 overflow-hidden"
+                                className="relative border-b border-[var(--border-color)] py-7 md:py-8 px-4 transition-colors duration-300 overflow-hidden"
                             >
                                 <Link
                                     to={`/work/${project.id}`}
                                     className="block group/row"
                                 >
                                     {/* Ambient background watermark (The "static art" for empty space) */}
-                                    <div className={`absolute right-4 md:right-12 top-1/2 -translate-y-1/2 text-[6rem] md:text-[10rem] font-black leading-none text-white/[0.02] pointer-events-none select-none transition-all duration-700 font-display z-0 ${isActive ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0 group-hover/row:translate-x-4 group-hover/row:opacity-50'}`}>
-                                        {displayIdx}
+                                    <div className={`absolute right-4 md:right-12 top-1/2 -translate-y-1/2 pointer-events-none select-none transition-all duration-700 z-0 ${isActive ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0 group-hover/row:translate-x-4 group-hover/row:opacity-50'}`}>
+                                        <ProjectWatermarkArt id={project.id} isActive={isActive} />
                                     </div>
 
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-8 relative z-10">
                                         <div className="flex items-center gap-6 md:gap-10 flex-1">
-                                            {/* Project Number */}
-                                            <span
-                                                className={`font-mono text-sm md:text-base tracking-widest transition-colors duration-300 ${
-                                                    isActive
-                                                        ? 'text-[var(--accent-1)] font-semibold'
-                                                        : 'text-[var(--text-muted)] group-hover/row:text-[var(--text-secondary)]'
-                                                }`}
-                                            >
-                                                {displayIdx}
-                                            </span>
+                                            {/* Project Icon/Art */}
+                                            <ProjectRowPrefix id={project.id} isActive={isActive} />
 
                                             {/* Project Title */}
                                             <h3
-                                                className={`text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight transition-all duration-500 ${
+                                                className={`text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight transition-all duration-500 ${
                                                     isActive
                                                         ? 'text-white translate-x-4'
                                                         : 'text-[var(--text-secondary)] group-hover/row:text-white group-hover/row:translate-x-2'
