@@ -1181,6 +1181,180 @@ h1, h2, h3, h4, h5, h6 {
   .ts-planet-sweep { animation: none !important; }
 }
 
+/* ───────────────────────────────────────────────────────────────────────────────────────── */
+
+/* ── Holographic Aurora Deck Renovation ── */
+.aurora-deck {
+  position: relative;
+  overflow: hidden;
+  border: 1.5px solid rgba(255, 255, 255, 0.07);
+  background: rgba(10, 15, 30, 0.45);
+  backdrop-filter: blur(35px) saturate(190%);
+  -webkit-backdrop-filter: blur(35px) saturate(190%);
+  border-radius: 28px;
+  transition: border-color 0.6s ease, box-shadow 0.6s ease, transform 0.15s ease-out;
+  box-shadow: 
+    0 30px 70px -10px rgba(0, 0, 0, 0.6), 
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.08);
+  transform-style: preserve-3d;
+}
+
+[data-theme="light"] .aurora-deck {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1.5px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 
+    0 30px 70px -10px rgba(15, 23, 42, 0.05), 
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Interactive Cursor Aura Glow */
+.aurora-glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.22) 0%, rgba(167, 139, 250, 0.15) 35%, transparent 70%);
+  pointer-events: none;
+  filter: blur(55px);
+  transform: translate(-50%, -50%);
+  will-change: left, top;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+}
+
+[data-theme="light"] .aurora-glow {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(124, 58, 237, 0.08) 35%, transparent 70%);
+  filter: blur(65px);
+}
+
+/* Subtle vector grid blueprint overlay */
+.aurora-blueprint {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+[data-theme="light"] .aurora-blueprint {
+  background-image: radial-gradient(circle, rgba(15, 23, 42, 0.012) 1px, transparent 1px);
+}
+
+/* Minimalist Underline Input Deck */
+.aurora-input-wrapper {
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+  transition: border-color 0.4s ease;
+}
+
+.aurora-input-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1), left 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+[data-theme="light"] .aurora-input-wrapper::after {
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+}
+
+.aurora-input-wrapper:focus-within::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Cosmic Pulsing Energy Core */
+.energy-core-pulse {
+  filter: drop-shadow(0 0 25px rgba(96, 165, 250, 0.45));
+  animation: coreGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes coreGlow {
+  0% { filter: drop-shadow(0 0 15px rgba(96, 165, 250, 0.3)) drop-shadow(0 0 5px rgba(167, 139, 250, 0.1)); }
+  100% { filter: drop-shadow(0 0 35px rgba(96, 165, 250, 0.65)) drop-shadow(0 0 15px rgba(167, 139, 250, 0.35)); }
+}
+
+/* Tech LED indicators */
+.cyber-led {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  position: relative;
+}
+.cyber-led::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  opacity: 0.4;
+}
+
+.cyber-led-green { background: #10b981; }
+.cyber-led-green::after { background: #10b981; animation: ledPulse 1.5s ease-in-out infinite; }
+
+.cyber-led-blue { background: #3b82f6; }
+.cyber-led-blue::after { background: #3b82f6; animation: ledPulse 2s ease-in-out infinite; }
+
+.cyber-led-red { background: #ef4444; }
+.cyber-led-red::after { background: #ef4444; animation: ledPulse 1s ease-in-out infinite; }
+
+@keyframes ledPulse {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50% { transform: scale(2.2); opacity: 0.6; }
+}
+
+/* Hologram text shadow */
+.text-hologram {
+  text-shadow: 0 0 8px rgba(96, 165, 250, 0.25);
+}
+
+/* Nuke default focus outline & webkit autofill solid backgrounds */
+.aurora-deck input,
+.aurora-deck textarea,
+.aurora-deck input:focus,
+.aurora-deck textarea:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+/* webkit autofill override */
+.aurora-deck input:-webkit-autofill,
+.aurora-deck input:-webkit-autofill:hover, 
+.aurora-deck input:-webkit-autofill:focus, 
+.aurora-deck input:-webkit-autofill:active,
+.aurora-deck textarea:-webkit-autofill,
+.aurora-deck textarea:-webkit-autofill:hover, 
+.aurora-deck textarea:-webkit-autofill:focus, 
+.aurora-deck textarea:-webkit-autofill:active {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  box-shadow: inset 0 0 20px 20px transparent !important;
+}
+
+/* GPU Accelerated CSS Rotations for Energy Core Rings */
+.rotate-clockwise {
+  animation: rotateCW 12s linear infinite;
+  transform-origin: center;
+}
+.rotate-counter-clockwise {
+  animation: rotateCCW 18s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes rotateCW {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes rotateCCW {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+
+
 /* ── AI Chat Button Glow ───────────────────────────────────────────── */
 
 @keyframes ai-glow-pulse {

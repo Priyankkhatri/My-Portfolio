@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import useStore from '../store/useStore'
 import emailjs from '@emailjs/browser'
@@ -80,24 +80,21 @@ const socials = [
 
 const slideVariants = {
     initial: (direction) => ({
-        x: direction > 0 ? 120 : -120,
+        x: direction > 0 ? 50 : -50,
         opacity: 0,
-        scale: 0.97,
         filter: 'blur(3px)'
     }),
     animate: {
         x: 0,
         opacity: 1,
-        scale: 1,
         filter: 'blur(0px)',
-        transition: { type: 'spring', stiffness: 400, damping: 25 }
+        transition: { type: 'spring', stiffness: 400, damping: 28 }
     },
     exit: (direction) => ({
-        x: direction < 0 ? 120 : -120,
+        x: direction < 0 ? 50 : -50,
         opacity: 0,
-        scale: 0.97,
         filter: 'blur(3px)',
-        transition: { type: 'spring', stiffness: 400, damping: 25 }
+        transition: { type: 'spring', stiffness: 400, damping: 28 }
     })
 }
 
@@ -145,12 +142,11 @@ function TerminalLoader({ onComplete }) {
     const [currentIndex, setCurrentIndex] = useState(0)
 
     const sequence = [
-        'Connecting to mail server...',
-        'Preparing message payload...',
-        'Signing secure transmission...',
-        'Sending message...',
-        'Delivery logs updated.',
-        'Message sent successfully!'
+        'Establishing connection node...',
+        'Creating message tunnel...',
+        'Applying secure transmission encryption...',
+        'Delivering datagram packets...',
+        'Broadcasting stream successful.'
     ]
 
     useEffect(() => {
@@ -195,7 +191,7 @@ function SocialCard({ social, onLeetCodeClick }) {
         const x = e.clientX - rect.left - rect.width / 2
         const y = e.clientY - rect.top - rect.height / 2
         
-        el.style.transform = `translate3d(${x * 0.12}px, ${y * 0.12}px, 0) scale3d(1.02, 1.02, 1.02)`
+        el.style.transform = `translate3d(${x * 0.1}px, ${y * 0.1}px, 0) scale3d(1.01, 1.01, 1.01)`
     }
 
     const handleMouseLeave = () => {
@@ -207,7 +203,6 @@ function SocialCard({ social, onLeetCodeClick }) {
 
     const themeColor = social.themeColor || '#60a5fa'
     
-    // Modern Capsule Handle Mapping
     const handleDisplay = social.label === 'GitHub' ? '@Priyankkhatri'
         : social.label === 'LinkedIn' ? 'in/priyankkhatrii'
         : social.label === 'YouTube' ? '@PriyankCreates'
@@ -219,17 +214,16 @@ function SocialCard({ social, onLeetCodeClick }) {
     return (
         <motion.div
             ref={cardRef}
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-20px' }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onMouseEnter={() => setCursorVariant('hover')}
             className="glass-card px-5 py-4 flex items-center justify-between cursor-pointer relative overflow-hidden group select-none transition-all duration-300 rounded-2xl border border-[var(--border-color)] hover:border-white/10"
             style={{ transformStyle: 'preserve-3d', transition: 'transform 0.15s ease-out, border-color 0.4s ease, box-shadow 0.4s ease' }}
         >
-            {/* Click action links */}
             {social.label === 'LeetCode' ? (
                 <button 
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onLeetCodeClick(); }} 
@@ -240,7 +234,6 @@ function SocialCard({ social, onLeetCodeClick }) {
                 <a href={social.href} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10" />
             )}
 
-            {/* Gradient Glow backdrop */}
             <div 
                 className="absolute -inset-16 opacity-0 group-hover:opacity-10 pointer-events-none rounded-full blur-[30px] transition-opacity duration-500"
                 style={{ background: `radial-gradient(circle, ${themeColor} 0%, transparent 70%)` }}
@@ -249,13 +242,13 @@ function SocialCard({ social, onLeetCodeClick }) {
             <div className="flex items-center gap-4 relative z-10" style={{ transform: 'translateZ(10px)' }}>
                 <div 
                     style={{ color: themeColor }} 
-                    className="w-10 h-10 rounded-xl bg-white/[0.03] border border-[var(--border-color)] flex items-center justify-center group-hover:bg-white/[0.08] transition-colors duration-300"
+                    className="w-10 h-10 rounded-xl bg-white/[0.02] border border-[var(--border-color)] flex items-center justify-center group-hover:bg-white/[0.06] transition-colors duration-300"
                 >
                     {social.icon}
                 </div>
                 
                 <div className="flex flex-col">
-                    <span className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-medium">
+                    <span className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-medium font-mono">
                         {social.label}
                     </span>
                     <span className="text-xs font-mono font-semibold text-[var(--text-primary)] mt-0.5">
@@ -278,9 +271,36 @@ function SocialCard({ social, onLeetCodeClick }) {
     )
 }
 
+function DecryptText({ text }) {
+    const [display, setDisplay] = useState('')
+    
+    useEffect(() => {
+        if (!text) return
+        let iterations = 0
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$#@%&'
+        const interval = setInterval(() => {
+            const resolved = text.split('').map((char, index) => {
+                if (char === ' ' || char === '\n') return char
+                if (index < iterations) return text[index]
+                return chars[Math.floor(Math.random() * chars.length)]
+            }).join('')
+            
+            setDisplay(resolved)
+            if (iterations >= text.length) {
+                clearInterval(interval)
+            }
+            iterations += 0.45
+        }, 35) // Optimized to 35ms interval to minimize layout calculations
+        return () => clearInterval(interval)
+    }, [text])
+
+    return <span>{display}</span>
+}
+
 export default function Contact() {
     const sectionRef = useRef(null)
-    const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
+    const cardRef = useRef(null)
+    const glowRef = useRef(null)
     const setCursorVariant = useStore((s) => s.setCursorVariant)
 
     const [step, setStep] = useState(0)
@@ -290,6 +310,17 @@ export default function Contact() {
     const [showLeetCodeModal, setShowLeetCodeModal] = useState(false)
     const [isSending, setIsSending] = useState(false)
     const [sentSuccessfully, setSentSuccessfully] = useState(false)
+    const [currentTime, setCurrentTime] = useState('')
+
+    useEffect(() => {
+        const updateClock = () => {
+            const now = new Date()
+            setCurrentTime(now.toLocaleTimeString('en-US', { hour12: false }))
+        }
+        updateClock()
+        const interval = setInterval(updateClock, 1000)
+        return () => clearInterval(interval)
+    }, [])
 
     // Interactive coordinate grid background effect
     const bgRef = useRef(null)
@@ -297,13 +328,47 @@ export default function Contact() {
         const handleMove = (e) => {
             const bg = bgRef.current
             if (!bg) return
-            const x = (e.clientX / window.innerWidth - 0.5) * 15
-            const y = (e.clientY / window.innerHeight - 0.5) * 15
+            const x = (e.clientX / window.innerWidth - 0.5) * 8
+            const y = (e.clientY / window.innerHeight - 0.5) * 8
             bg.style.transform = `translate3d(${x}px, ${y}px, 0)`
         }
         window.addEventListener('mousemove', handleMove, { passive: true })
         return () => window.removeEventListener('mousemove', handleMove)
     }, [])
+
+    // HIGH PERFORMANCE: Manipulate DOM styles directly on mousemove to avoid React re-renders (at 60fps)
+    const handleCardMouseMove = (e) => {
+        const card = cardRef.current
+        const glow = glowRef.current
+        if (!card) return
+        const rect = card.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        
+        const centerX = rect.width / 2
+        const centerY = rect.height / 2
+        const rotateX = ((centerY - y) / centerY) * 3 // Max 3 degree 3D rotation
+        const rotateY = ((x - centerX) / centerX) * 3
+        
+        card.style.transform = `perspective(1200px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`
+        if (glow) {
+            glow.style.left = `${x}px`
+            glow.style.top = `${y}px`
+            glow.style.opacity = '1'
+        }
+    }
+
+    const handleCardMouseLeave = () => {
+        const card = cardRef.current
+        const glow = glowRef.current
+        if (card) {
+            card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)'
+        }
+        if (glow) {
+            glow.style.opacity = '0'
+        }
+        setCursorVariant('default')
+    }
 
     const handleNext = () => {
         if (step === 1 && !formData.name.trim()) return
@@ -329,7 +394,7 @@ export default function Contact() {
 
     const transmitPayload = async () => {
         setIsSending(true)
-        setStep(6) // Set to loader screen
+        setStep(6)
 
         try {
             await emailjs.send(
@@ -361,16 +426,6 @@ export default function Contact() {
         setSentSuccessfully(false)
     }
 
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === 'Escape') {
-                setShowLeetCodeModal(false)
-            }
-        }
-        window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [])
-
     const progress = (step / 5) * 100
 
     return (
@@ -388,7 +443,7 @@ export default function Contact() {
             
             <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-[140px] opacity-10 bg-gradient-to-tr from-[#60a5fa] to-[#a78bfa] pointer-events-none" />
 
-            <div className="max-w-4xl w-full flex flex-col items-center gap-16 md:gap-24 relative z-10">
+            <div className="max-w-5xl w-full flex flex-col items-center gap-16 md:gap-24 relative z-10">
                 
                 {/* Header */}
                 <div className="w-full text-center max-w-xl">
@@ -405,341 +460,491 @@ export default function Contact() {
                     </h2>
                 </div>
 
-                {/* macOS Terminal Form Card */}
-                <div className="w-full max-w-xl relative">
-                    <div className="glass-card relative overflow-hidden flex flex-col min-h-[380px] shadow-2xl border-[var(--border-color)] hover:border-white/10 transition-colors">
-                        
-                        {/* Progress Bar at the very top edge */}
-                        <div className="absolute top-0 left-0 w-full h-1 bg-white/5 overflow-hidden z-20">
-                            <motion.div 
-                                animate={{ width: `${progress}%` }}
-                                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                className="h-full bg-gradient-to-r from-[#60a5fa] to-[#a78bfa]" 
-                            />
-                        </div>
+                {/* Holographic Aurora Deck */}
+                <div className="w-full relative">
+                    <div 
+                        ref={cardRef}
+                        onMouseMove={handleCardMouseMove}
+                        onMouseLeave={handleCardMouseLeave}
+                        className="aurora-deck w-full relative"
+                    >
+                        {/* Interactive glow mesh spot */}
+                        <div 
+                            ref={glowRef}
+                            className="aurora-glow opacity-0"
+                            style={{ transition: 'opacity 0.4s ease' }}
+                        />
 
-                        {/* macOS Header Bar */}
-                        <div className="flex items-center justify-between px-6 py-4 bg-white/[0.02] border-b border-[var(--border-color)] relative z-10">
-                            {/* Window Circles */}
-                            <div className="flex items-center gap-2 select-none">
-                                <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]/80" />
-                                <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]/80" />
-                                <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]/80" />
+                        {/* Subtle blueprint grid overlay */}
+                        <div className="aurora-blueprint absolute inset-0 opacity-40 pointer-events-none" />
+
+                        {/* Header telemetry details */}
+                        <div className="flex items-center justify-between px-8 py-5 border-b border-[var(--border-color)] relative z-10">
+                            <div className="flex items-center gap-2">
+                                <div className="cyber-led cyber-led-blue" />
+                                <span className="text-[10px] font-mono tracking-widest text-[var(--text-primary)] uppercase font-semibold">
+                                    Transmission Portal
+                                </span>
                             </div>
-                            <span className="text-[10px] font-mono tracking-widest text-[var(--text-secondary)] uppercase">Direct Message Terminal</span>
-                            <div className="w-12" /> {/* Spacer */}
+                            <div className="flex items-center gap-4 font-mono text-[9px] text-[var(--text-secondary)] font-semibold">
+                                <div>
+                                    <span className="text-[var(--text-muted)]">Secure Gateway</span>
+                                </div>
+                                <div className="w-px h-3 bg-white/10" />
+                                <div>
+                                    <span>{currentTime || '00:00:00'}</span>
+                                </div>
+                            </div>
                         </div>
 
-                        {/* Content Area */}
-                        <div className="p-8 flex-1 flex flex-col justify-between relative z-10">
-                            <AnimatePresence mode="wait" custom={direction}>
+                        {/* Split Grid */}
+                        <div className="grid grid-cols-1 lg:grid-cols-12 relative z-10 min-h-[440px]">
+                            
+                            {/* Left Pane - Evolving Energy Core (5 columns) */}
+                            <div className="lg:col-span-5 p-8 border-b lg:border-b-0 lg:border-r border-[var(--border-color)] flex flex-col justify-center items-center relative overflow-hidden bg-black/[0.04]">
                                 
-                                {/* STEP 0: Welcome Compose screen */}
-                                {step === 0 && (
+                                <div className="relative w-56 h-56 flex items-center justify-center">
+                                    
+                                    {/* Central glowing dynamic orb */}
                                     <motion.div
-                                        key="step0"
-                                        custom={direction}
-                                        variants={slideVariants}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        className="flex-1 flex flex-col items-center justify-center text-center gap-6"
-                                    >
-                                        <div className="flex items-center justify-center gap-2">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                                            <span className="text-[9px] font-mono tracking-[0.3em] text-[#60a5fa] uppercase font-bold">Connection Stable</span>
-                                        </div>
-                                        
-                                        <div className="space-y-2">
-                                            <h3 className="text-xl sm:text-2xl font-extrabold text-[var(--text-primary)] leading-snug" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                                                Direct Message
-                                            </h3>
-                                            <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-sm mx-auto">
-                                                Start a conversation by typing a direct message below. I'm always open to discussing new projects, internships, or technical collaborations.
-                                            </p>
-                                        </div>
+                                        className="absolute rounded-full"
+                                        animate={{
+                                            width: step === 0 ? 50 : step === 1 ? 70 : step === 2 ? 90 : step === 3 ? 110 : step === 4 ? 130 : 100,
+                                            height: step === 0 ? 50 : step === 1 ? 70 : step === 2 ? 90 : step === 3 ? 110 : step === 4 ? 130 : 100,
+                                            background: step <= 1 
+                                                ? 'radial-gradient(circle, rgba(96,165,250,0.3) 0%, transparent 70%)'
+                                                : step <= 3
+                                                ? 'radial-gradient(circle, rgba(167,139,250,0.35) 0%, rgba(96,165,250,0.1) 50%, transparent 70%)'
+                                                : 'radial-gradient(circle, rgba(245,158,11,0.25) 0%, rgba(167,139,250,0.15) 45%, transparent 70%)',
+                                        }}
+                                        transition={{ type: 'spring', stiffness: 220, damping: 25 }}
+                                    />
 
-                                        <button
-                                            onClick={handleNext}
-                                            onMouseEnter={() => setCursorVariant('hover')}
-                                            onMouseLeave={() => setCursorVariant('default')}
-                                            className="mt-4 px-8 py-3.5 bg-gradient-to-r from-[#60a5fa]/15 to-[#a78bfa]/15 border border-[#60a5fa]/30 text-[var(--text-primary)] font-mono text-[10px] tracking-widest uppercase rounded-full hover:border-[#60a5fa]/60 transition-all duration-300 btn-shine"
+                                    {/* Core sphere element */}
+                                    <motion.div
+                                        className="w-14 h-14 rounded-full border border-white/20 relative z-10 flex items-center justify-center energy-core-pulse"
+                                        animate={{
+                                            scale: step === 6 ? 0 : [1, 1.06, 1],
+                                            borderColor: step <= 2 ? 'rgba(96,165,250,0.4)' : step <= 4 ? 'rgba(167,139,250,0.5)' : 'rgba(16,185,129,0.6)',
+                                        }}
+                                        transition={{
+                                            scale: step === 6 ? { duration: 0.5, ease: 'easeIn' } : { duration: step === 4 ? 1.4 : 3, repeat: Infinity, ease: 'easeInOut' }
+                                        }}
+                                        style={{
+                                            background: 'radial-gradient(circle at 35% 35%, var(--accent-1) 0%, var(--accent-2) 65%, rgba(0,0,0,0.7) 100%)',
+                                            boxShadow: '0 0 25px rgba(96,165,250,0.25)',
+                                        }}
+                                    >
+                                        <span className="text-[10px] font-mono font-bold text-white tracking-widest">{step <= 5 ? `0${step}` : 'TX'}</span>
+                                    </motion.div>
+
+                                    {/* Ring 1 (Active from Step 1 onwards) — HIGH PERFORMANCE NATIVE CSS ANIMATION */}
+                                    {step >= 1 && (
+                                        <svg
+                                            className="absolute w-28 h-28 text-[#60a5fa]/30 rotate-clockwise"
+                                            viewBox="0 0 100 100"
                                         >
-                                            Compose Message
-                                        </button>
-                                    </motion.div>
-                                )}
+                                            <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="6 12" />
+                                        </svg>
+                                    )}
 
-                                {/* STEP 1: Name Input */}
-                                {step === 1 && (
-                                    <motion.div
-                                        key="step1"
-                                        custom={direction}
-                                        variants={slideVariants}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        className="flex-1 flex flex-col justify-between"
-                                    >
-                                        <div>
-                                            <span className="text-[9px] font-mono tracking-[0.2em] text-[#60a5fa] block mb-2 font-semibold">Step 1 of 4 — Identification</span>
-                                            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-6" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                                                Please enter your name:
-                                            </h3>
+                                    {/* Ring 2 (Active from Step 2 onwards) — HIGH PERFORMANCE NATIVE CSS ANIMATION */}
+                                    {step >= 2 && (
+                                        <svg
+                                            className="absolute w-36 h-36 text-[#a78bfa]/40 rotate-counter-clockwise"
+                                            viewBox="0 0 100 100"
+                                        >
+                                            <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="0.8" strokeDasharray="30 10 5 10" />
+                                        </svg>
+                                    )}
 
-                                            <div className="flex items-center gap-3 p-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl font-mono text-sm focus-within:border-[#60a5fa]/40 focus-within:bg-[var(--bg-secondary)] transition-all duration-300">
-                                                <span className="text-[#60a5fa] select-none font-bold">Name:</span>
-                                                <input
-                                                    type="text"
-                                                    value={formData.name}
-                                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                                    className="bg-transparent border-none outline-none flex-1 text-[var(--text-primary)] placeholder-[var(--text-muted)]/50 text-base"
-                                                    placeholder="type your name..."
-                                                    onKeyDown={(e) => e.key === 'Enter' && handleNext()}
-                                                    autoFocus
-                                                />
-                                                <span className="inline-block w-2 h-4 bg-[var(--text-primary)]/80 animate-pulse" />
-                                            </div>
-                                        </div>
+                                    {/* Constellation nodes (Active from Step 3 onwards) */}
+                                    {step >= 3 && (
+                                        <motion.div
+                                            className="absolute w-44 h-44 rotate-clockwise"
+                                            style={{ animationDuration: '24s' }}
+                                        >
+                                            {[...Array(6)].map((_, i) => {
+                                                const angle = (i * 360) / 6
+                                                const rad = (angle * Math.PI) / 180
+                                                const radius = 76 
+                                                const x = Math.cos(rad) * radius + 85 
+                                                const y = Math.sin(rad) * radius + 85
+                                                return (
+                                                    <motion.div
+                                                        key={i}
+                                                        className="absolute w-1.5 h-1.5 rounded-full bg-[#f59e0b] shadow-[0_0_6px_#f59e0b]"
+                                                        style={{ left: x, top: y }}
+                                                        animate={{ scale: [0.6, 1.2, 0.6] }}
+                                                        transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+                                                    />
+                                                )
+                                            })}
+                                        </motion.div>
+                                    )}
 
-                                        <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
-                                            <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[10px] tracking-wider uppercase transition-colors">BACK</button>
-                                            <button 
-                                                onClick={handleNext} 
-                                                disabled={!formData.name.trim()}
-                                                className={`px-6 py-2.5 bg-gradient-to-r from-[#60a5fa]/20 to-[#a78bfa]/20 border border-[#60a5fa]/30 hover:border-[#60a5fa]/60 rounded-xl text-[var(--text-primary)] font-mono text-[10px] tracking-wider uppercase transition-all ${!formData.name.trim() ? 'opacity-40 cursor-not-allowed' : 'btn-shine'}`}
-                                            >
-                                                NEXT &gt;
-                                            </button>
-                                        </div>
-                                    </motion.div>
-                                )}
-
-                                {/* STEP 2: Email Input */}
-                                {step === 2 && (
-                                    <motion.div
-                                        key="step2"
-                                        custom={direction}
-                                        variants={slideVariants}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        className="flex-1 flex flex-col justify-between"
-                                    >
-                                        <div>
-                                            <span className="text-[9px] font-mono tracking-[0.2em] text-[#60a5fa] block mb-2 font-semibold">Step 2 of 4 — Reply Address</span>
-                                            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-6" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                                                Where can I reply back to you, {formData.name}?
-                                            </h3>
-
-                                            <div className="flex items-center gap-3 p-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl font-mono text-sm focus-within:border-[#60a5fa]/40 focus-within:bg-[var(--bg-secondary)] transition-all duration-300">
-                                                <span className="text-[#60a5fa] select-none font-bold">Email:</span>
-                                                <input
-                                                    type="email"
-                                                    value={formData.email}
-                                                    onChange={(e) => {
-                                                        setFormData({ ...formData, email: e.target.value })
-                                                        if (emailError) setEmailError('')
-                                                    }}
-                                                    className="bg-transparent border-none outline-none flex-1 text-[var(--text-primary)] placeholder-[var(--text-muted)]/50 text-base"
-                                                    placeholder="type your email address..."
-                                                    onKeyDown={(e) => e.key === 'Enter' && handleNext()}
-                                                    autoFocus
-                                                />
-                                                <span className="inline-block w-2 h-4 bg-[var(--text-primary)]/80 animate-pulse" />
-                                            </div>
-                                            {emailError && <span className="text-[9px] font-mono text-red-400 mt-2 block">&gt; {emailError}</span>}
-                                        </div>
-
-                                        <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
-                                            <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[10px] tracking-wider uppercase transition-colors">BACK</button>
-                                            <button 
-                                                onClick={handleNext}
-                                                disabled={!formData.email.trim()}
-                                                className={`px-6 py-2.5 bg-gradient-to-r from-[#60a5fa]/20 to-[#a78bfa]/20 border border-[#60a5fa]/30 hover:border-[#60a5fa]/60 rounded-xl text-[var(--text-primary)] font-mono text-[10px] tracking-wider uppercase transition-all ${!formData.email.trim() ? 'opacity-40 cursor-not-allowed' : 'btn-shine'}`}
-                                            >
-                                                NEXT &gt;
-                                            </button>
-                                        </div>
-                                    </motion.div>
-                                )}
-
-                                {/* STEP 3: Subject Input */}
-                                {step === 3 && (
-                                    <motion.div
-                                        key="step3"
-                                        custom={direction}
-                                        variants={slideVariants}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        className="flex-1 flex flex-col justify-between"
-                                    >
-                                        <div>
-                                            <span className="text-[9px] font-mono tracking-[0.2em] text-[#60a5fa] block mb-2 font-semibold">Step 3 of 4 — Subject</span>
-                                            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-6" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                                                What is the subject of your message?
-                                            </h3>
-
-                                            <div className="flex items-center gap-3 p-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl font-mono text-sm focus-within:border-[#60a5fa]/40 focus-within:bg-[var(--bg-secondary)] transition-all duration-300">
-                                                <span className="text-[#60a5fa] select-none font-bold">Subject:</span>
-                                                <input
-                                                    type="text"
-                                                    value={formData.subject}
-                                                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                                    className="bg-transparent border-none outline-none flex-1 text-[var(--text-primary)] placeholder-[var(--text-muted)]/50 text-base"
-                                                    placeholder="type subject..."
-                                                    onKeyDown={(e) => e.key === 'Enter' && handleNext()}
-                                                    autoFocus
-                                                />
-                                                <span className="inline-block w-2 h-4 bg-[var(--text-primary)]/80 animate-pulse" />
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
-                                            <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[10px] tracking-wider uppercase transition-colors">BACK</button>
-                                            <button 
-                                                onClick={handleNext}
-                                                disabled={!formData.subject.trim()}
-                                                className={`px-6 py-2.5 bg-gradient-to-r from-[#60a5fa]/20 to-[#a78bfa]/20 border border-[#60a5fa]/30 hover:border-[#60a5fa]/60 rounded-xl text-[var(--text-primary)] font-mono text-[10px] tracking-wider uppercase transition-all ${!formData.subject.trim() ? 'opacity-40 cursor-not-allowed' : 'btn-shine'}`}
-                                            >
-                                                NEXT &gt;
-                                            </button>
-                                        </div>
-                                    </motion.div>
-                                )}
-
-                                {/* STEP 4: Message Content */}
-                                {step === 4 && (
-                                    <motion.div
-                                        key="step4"
-                                        custom={direction}
-                                        variants={slideVariants}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        className="flex-1 flex flex-col justify-between"
-                                    >
-                                        <div>
-                                            <span className="text-[9px] font-mono tracking-[0.2em] text-[#60a5fa] block mb-2 font-semibold">Step 4 of 4 — Compose</span>
-                                            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                                                Write your message:
-                                            </h3>
-
-                                            <div className="flex flex-col gap-2 p-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl font-mono text-sm focus-within:border-[#60a5fa]/40 focus-within:bg-[var(--bg-secondary)] transition-all duration-300">
-                                                <span className="text-[#60a5fa] select-none font-bold">Message:</span>
-                                                <textarea
-                                                    value={formData.message}
-                                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                                    className="bg-transparent border-none outline-none w-full min-h-[100px] text-[var(--text-primary)] placeholder-[var(--text-muted)]/50 resize-none pt-2 text-sm"
-                                                    placeholder="type your message here..."
-                                                    autoFocus
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
-                                            <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[10px] tracking-wider uppercase transition-colors">BACK</button>
-                                            <button 
-                                                onClick={handleNext}
-                                                disabled={!formData.message.trim()}
-                                                className={`px-6 py-2.5 bg-gradient-to-r from-[#60a5fa]/20 to-[#a78bfa]/20 border border-[#60a5fa]/30 hover:border-[#60a5fa]/60 rounded-xl text-[var(--text-primary)] font-mono text-[10px] tracking-wider uppercase transition-all ${!formData.message.trim() ? 'opacity-40 cursor-not-allowed' : 'btn-shine'}`}
-                                            >
-                                                REVIEW &gt;
-                                            </button>
-                                        </div>
-                                    </motion.div>
-                                )}
-
-                                {/* STEP 5: Review */}
-                                {step === 5 && (
-                                    <motion.div
-                                        key="step5"
-                                        custom={direction}
-                                        variants={slideVariants}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        className="flex-1 flex flex-col justify-between"
-                                    >
-                                        <div>
-                                            <span className="text-[9px] font-mono tracking-[0.2em] text-[#a78bfa] block mb-4 font-semibold">Summary — Verification</span>
-                                            
-                                            <div className="p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] font-mono text-[11px] leading-relaxed text-[var(--text-primary)]/90 overflow-y-auto max-h-[180px] select-text">
-                                                <div className="text-[var(--text-muted)] border-b border-[var(--border-color)] pb-2 mb-2 uppercase tracking-wider">Direct Message Summary</div>
-                                                <div><span className="text-[#60a5fa]">Name   :</span> {formData.name}</div>
-                                                <div><span className="text-[#60a5fa]">Email  :</span> {formData.email}</div>
-                                                <div><span className="text-[#60a5fa]">Subject:</span> {formData.subject}</div>
-                                                <div className="border-t border-[var(--border-color)] mt-2 pt-2"><span className="text-[#a78bfa]">Message:</span></div>
-                                                <div className="whitespace-pre-wrap pl-2 italic mt-1 text-[var(--text-primary)]">{formData.message}</div>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
-                                            <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[10px] tracking-wider uppercase transition-colors">EDIT</button>
-                                            <button
-                                                onClick={transmitPayload}
-                                                className="px-8 py-3 bg-gradient-to-r from-[#60a5fa]/20 to-[#a78bfa]/20 border border-[#60a5fa]/30 hover:border-[#60a5fa]/60 rounded-xl text-[var(--text-primary)] font-mono text-[10px] tracking-widest uppercase transition-all duration-300 btn-shine"
-                                            >
-                                                SEND MESSAGE
-                                            </button>
-                                        </div>
-                                    </motion.div>
-                                )}
-
-                                {/* STEP 6: Sending Loader / Successful Delivery */}
-                                {step === 6 && (
-                                    <motion.div
-                                        key="step6"
-                                        custom={direction}
-                                        variants={slideVariants}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        className="flex-1 flex flex-col justify-between text-center min-h-[260px]"
-                                    >
-                                        {isSending ? (
-                                            <div className="my-auto flex flex-col justify-center">
-                                                <div className="flex items-center justify-center gap-2 mb-6">
-                                                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
-                                                    <span className="text-[10px] font-mono tracking-[0.3em] text-[#60a5fa] uppercase font-bold">Transmitting...</span>
-                                                </div>
-                                                <TerminalLoader onComplete={() => {}} />
-                                            </div>
-                                        ) : (
-                                            <div className="my-auto flex flex-col justify-center items-center gap-4">
+                                    {/* Orbiting particles (Active from Step 4 onwards) */}
+                                    {step >= 4 && (
+                                        <div className="absolute inset-0 pointer-events-none">
+                                            {[...Array(8)].map((_, i) => (
                                                 <motion.div
-                                                    initial={{ scale: 0.8, opacity: 0 }}
-                                                    animate={{ scale: 1, opacity: 1 }}
-                                                    transition={{ type: 'spring', delay: 0.2 }}
-                                                    className="w-12 h-12 rounded-full border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-2 animate-bounce"
-                                                >
-                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                                </motion.div>
-                                                <span className="text-[9px] font-mono tracking-[0.2em] text-emerald-400 uppercase font-semibold">Message Delivered</span>
-                                                <h3 className="text-xl font-bold text-[var(--text-primary)] leading-snug" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                                                    Message Sent!
+                                                    key={i}
+                                                    className="absolute w-1 h-1 rounded-full bg-[#60a5fa] shadow-[0_0_8px_#60a5fa]"
+                                                    initial={{ x: 108, y: 108 }}
+                                                    animate={{
+                                                        x: [108, 108 + Math.cos(i) * 65, 108 + Math.cos(i + 1.2) * 55, 108],
+                                                        y: [108, 108 + Math.sin(i) * 65, 108 + Math.sin(i + 1.2) * 55, 108],
+                                                        scale: [0.3, 1.1, 0.3],
+                                                        opacity: [0, 0.85, 0],
+                                                    }}
+                                                    transition={{ duration: 3, repeat: Infinity, delay: i * 0.25, ease: 'easeInOut' }}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Sending Beam Laser (Step 6) */}
+                                    {step === 6 && (
+                                        <motion.div
+                                            className="absolute w-[2px] bg-gradient-to-t from-transparent via-[#60a5fa] to-white"
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 260, opacity: [0, 1, 1, 0] }}
+                                            transition={{ duration: 1.5, ease: 'easeOut' }}
+                                        />
+                                    )}
+
+                                </div>
+
+                                {/* Dynamic labels matching current step */}
+                                <div className="mt-6 text-center font-mono text-[9px] text-[var(--text-secondary)] tracking-widest h-4">
+                                    {step === 0 && 'INITIALIZING SIGNAL DECK'}
+                                    {step === 1 && 'ESTABLISHING SENDER KEY'}
+                                    {step === 2 && 'CONFIGURING REPLY NODE'}
+                                    {step === 3 && 'COMPILING TRANSMIT TITLE'}
+                                    {step === 4 && 'GENERATING PAYLOAD PACKET'}
+                                    {step === 5 && 'SECURITY HANDSHAKE'}
+                                    {step === 6 && 'BROADCASTING DATAGRAM'}
+                                </div>
+                            </div>
+
+                            {/* Right Pane - Form Compiler Console (7 columns) */}
+                            <div className="lg:col-span-7 p-8 flex flex-col justify-between relative min-h-[380px]">
+                                
+                                <AnimatePresence mode="wait" custom={direction}>
+                                    
+                                    {/* STEP 0: Welcome */}
+                                    {step === 0 && (
+                                        <motion.div
+                                            key="step0"
+                                            custom={direction}
+                                            variants={slideVariants}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            className="flex-1 flex flex-col justify-center items-start text-left gap-6 max-w-md"
+                                        >
+                                            <div className="space-y-3">
+                                                <h3 className="text-2xl font-bold text-[var(--text-primary)] leading-snug font-display">
+                                                    Establish Connection
                                                 </h3>
-                                                <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-xs mx-auto">
-                                                    Thank you, {formData.name}. Your message has been successfully sent. I will get back to you shortly.
+                                                <p className="text-sm text-[var(--text-secondary)] leading-relaxed font-sans">
+                                                    Initialize a secure portal to send details on custom web dev projects, technical contracts, or collaborations.
                                                 </p>
                                             </div>
-                                        )}
 
-                                        {!isSending && (
-                                            <div className="flex justify-center mt-6 border-t border-white/5 pt-4">
-                                                <button
-                                                    onClick={resetTerminal}
-                                                    className="px-6 py-2.5 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-lg font-mono text-[10px] tracking-wider uppercase transition-all"
+                                            <button
+                                                onClick={handleNext}
+                                                onMouseEnter={() => setCursorVariant('hover')}
+                                                onMouseLeave={() => setCursorVariant('default')}
+                                                className="px-7 py-3 bg-gradient-to-r from-[#60a5fa]/10 to-[#a78bfa]/10 border border-[#60a5fa]/20 text-[var(--text-primary)] font-mono text-[9px] tracking-widest uppercase rounded-xl hover:border-[#60a5fa]/50 hover:bg-[#60a5fa]/15 transition-all duration-300 btn-shine"
+                                            >
+                                                Begin Setup
+                                            </button>
+                                        </motion.div>
+                                    )}
+
+                                    {/* STEP 1: Name Input */}
+                                    {step === 1 && (
+                                        <motion.div
+                                            key="step1"
+                                            custom={direction}
+                                            variants={slideVariants}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            className="flex-1 flex flex-col justify-between"
+                                        >
+                                            <div className="max-w-md space-y-8">
+                                                <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] uppercase">01 / Identify Designation</span>
+                                                
+                                                <div className="aurora-input-wrapper flex flex-col gap-2 group/input">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <span className="w-1 h-1 rounded-full bg-[#60a5fa] scale-0 group-focus-within/input:scale-100 transition-transform duration-300" />
+                                                        <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] group-focus-within/input:text-[#60a5fa] uppercase font-bold transition-colors duration-300">Your Name</span>
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        value={formData.name}
+                                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                                        className="bg-transparent text-[var(--text-primary)] text-sm tracking-wide py-1 font-sans border-none outline-none focus:outline-none focus:ring-0 focus:border-none"
+                                                        placeholder="Name..."
+                                                        onKeyDown={(e) => e.key === 'Enter' && handleNext()}
+                                                        autoFocus
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
+                                                <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[9px] tracking-wider uppercase transition-colors">Back</button>
+                                                <button 
+                                                    onClick={handleNext} 
+                                                    disabled={!formData.name.trim()}
+                                                    className={`px-6 py-2.5 bg-gradient-to-r from-[#60a5fa]/10 to-[#a78bfa]/10 border border-[#60a5fa]/25 hover:border-[#60a5fa]/50 rounded-xl text-[var(--text-primary)] font-mono text-[9px] tracking-wider uppercase transition-all ${!formData.name.trim() ? 'opacity-40 cursor-not-allowed' : 'btn-shine'}`}
                                                 >
-                                                    Close Link
+                                                    Continue &gt;
                                                 </button>
                                             </div>
-                                        )}
-                                    </motion.div>
-                                )}
+                                        </motion.div>
+                                    )}
 
-                            </AnimatePresence>
+                                    {/* STEP 2: Email Input */}
+                                    {step === 2 && (
+                                        <motion.div
+                                            key="step2"
+                                            custom={direction}
+                                            variants={slideVariants}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            className="flex-1 flex flex-col justify-between"
+                                        >
+                                            <div className="max-w-md space-y-8">
+                                                <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] uppercase">02 / Reply Node Configuration</span>
+                                                
+                                                <div className="aurora-input-wrapper flex flex-col gap-2 group/input">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <span className="w-1 h-1 rounded-full bg-[#60a5fa] scale-0 group-focus-within/input:scale-100 transition-transform duration-300" />
+                                                        <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] group-focus-within/input:text-[#60a5fa] uppercase font-bold transition-colors duration-300">Your Email Address</span>
+                                                    </div>
+                                                    <input
+                                                        type="email"
+                                                        value={formData.email}
+                                                        onChange={(e) => {
+                                                            setFormData({ ...formData, email: e.target.value })
+                                                            if (emailError) setEmailError('')
+                                                        }}
+                                                        className="bg-transparent text-[var(--text-primary)] text-sm tracking-wide py-1 font-sans border-none outline-none focus:outline-none focus:ring-0 focus:border-none"
+                                                        placeholder="Email Address..."
+                                                        onKeyDown={(e) => e.key === 'Enter' && handleNext()}
+                                                        autoFocus
+                                                    />
+                                                </div>
+                                                {emailError && <span className="text-[9px] font-mono text-red-400 mt-2 block">&gt; {emailError}</span>}
+                                            </div>
+
+                                            <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
+                                                <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[9px] tracking-wider uppercase transition-colors">Back</button>
+                                                <button 
+                                                    onClick={handleNext}
+                                                    disabled={!formData.email.trim()}
+                                                    className={`px-6 py-2.5 bg-gradient-to-r from-[#60a5fa]/10 to-[#a78bfa]/10 border border-[#60a5fa]/25 hover:border-[#60a5fa]/50 rounded-xl text-[var(--text-primary)] font-mono text-[9px] tracking-wider uppercase transition-all ${!formData.email.trim() ? 'opacity-40 cursor-not-allowed' : 'btn-shine'}`}
+                                                >
+                                                    Continue &gt;
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+
+                                    {/* STEP 3: Subject Input */}
+                                    {step === 3 && (
+                                        <motion.div
+                                            key="step3"
+                                            custom={direction}
+                                            variants={slideVariants}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            className="flex-1 flex flex-col justify-between"
+                                        >
+                                            <div className="max-w-md space-y-8">
+                                                <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] uppercase">03 / Subject Header</span>
+                                                
+                                                <div className="aurora-input-wrapper flex flex-col gap-2 group/input">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <span className="w-1 h-1 rounded-full bg-[#60a5fa] scale-0 group-focus-within/input:scale-100 transition-transform duration-300" />
+                                                        <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] group-focus-within/input:text-[#60a5fa] uppercase font-bold transition-colors duration-300">Message Subject</span>
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        value={formData.subject}
+                                                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                                                        className="bg-transparent text-[var(--text-primary)] text-sm tracking-wide py-1 font-sans border-none outline-none focus:outline-none focus:ring-0 focus:border-none"
+                                                        placeholder="Subject..."
+                                                        onKeyDown={(e) => e.key === 'Enter' && handleNext()}
+                                                        autoFocus
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
+                                                <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[9px] tracking-wider uppercase transition-colors">Back</button>
+                                                <button 
+                                                    onClick={handleNext}
+                                                    disabled={!formData.subject.trim()}
+                                                    className={`px-6 py-2.5 bg-gradient-to-r from-[#60a5fa]/10 to-[#a78bfa]/10 border border-[#60a5fa]/25 hover:border-[#60a5fa]/50 rounded-xl text-[var(--text-primary)] font-mono text-[9px] tracking-wider uppercase transition-all ${!formData.subject.trim() ? 'opacity-40 cursor-not-allowed' : 'btn-shine'}`}
+                                                >
+                                                    Continue &gt;
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+
+                                    {/* STEP 4: Message Content */}
+                                    {step === 4 && (
+                                        <motion.div
+                                            key="step4"
+                                            custom={direction}
+                                            variants={slideVariants}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            className="flex-1 flex flex-col justify-between"
+                                        >
+                                            <div className="max-w-md space-y-8">
+                                                <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] uppercase">04 / Datagram Compiler</span>
+                                                
+                                                <div className="aurora-input-wrapper flex flex-col gap-2 group/input">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <span className="w-1 h-1 rounded-full bg-[#60a5fa] scale-0 group-focus-within/input:scale-100 transition-transform duration-300" />
+                                                        <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] group-focus-within/input:text-[#60a5fa] uppercase font-bold transition-colors duration-300">Write Message</span>
+                                                    </div>
+                                                    <textarea
+                                                        value={formData.message}
+                                                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                                        className="bg-transparent w-full min-h-[110px] text-[var(--text-primary)] text-sm tracking-wide resize-none pt-2 font-sans border-none outline-none focus:outline-none focus:ring-0 focus:border-none"
+                                                        placeholder="Type message content here..."
+                                                        autoFocus
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
+                                                <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[9px] tracking-wider uppercase transition-colors">Back</button>
+                                                <button 
+                                                    onClick={handleNext}
+                                                    disabled={!formData.message.trim()}
+                                                    className={`px-6 py-2.5 bg-gradient-to-r from-[#60a5fa]/10 to-[#a78bfa]/10 border border-[#60a5fa]/25 hover:border-[#60a5fa]/50 rounded-xl text-[var(--text-primary)] font-mono text-[9px] tracking-wider uppercase transition-all ${!formData.message.trim() ? 'opacity-40 cursor-not-allowed' : 'btn-shine'}`}
+                                                >
+                                                    Compile &gt;
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+
+                                    {/* STEP 5: Review */}
+                                    {step === 5 && (
+                                        <motion.div
+                                            key="step5"
+                                            custom={direction}
+                                            variants={slideVariants}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            className="flex-1 flex flex-col justify-between"
+                                        >
+                                            <div>
+                                                <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] uppercase block mb-4">05 / Security Verification</span>
+                                                
+                                                <div className="p-5 rounded-2xl bg-white/[0.02] border border-[var(--border-color)] font-mono text-[11px] leading-relaxed text-[var(--text-primary)]/90 overflow-y-auto max-h-[180px] select-text">
+                                                    <div className="text-[var(--text-muted)] border-b border-white/5 pb-2 mb-2 uppercase tracking-wider text-[9px] flex items-center justify-between">
+                                                        <span>encrypted package data</span>
+                                                        <span className="text-emerald-400">ready</span>
+                                                    </div>
+                                                    
+                                                    <div>
+                                                        <span className="text-[#60a5fa]">Sender  :</span> <DecryptText text={formData.name} />
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-[#60a5fa]">Gateway :</span> <DecryptText text={formData.email} />
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-[#60a5fa]">Subject :</span> <DecryptText text={formData.subject} />
+                                                    </div>
+                                                    <div className="border-t border-white/5 mt-2 pt-2">
+                                                        <span className="text-[#a78bfa]">Message Content:</span>
+                                                    </div>
+                                                    <div className="whitespace-pre-wrap pl-2 italic mt-1 text-[var(--text-primary)] border-l border-[#a78bfa]/30">
+                                                        <DecryptText text={formData.message} />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-end gap-3 mt-6 border-t border-white/5 pt-4">
+                                                <button onClick={handleBack} className="px-5 py-2 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-xl font-mono text-[9px] tracking-wider uppercase transition-colors">Edit</button>
+                                                <button
+                                                    onClick={transmitPayload}
+                                                    className="px-8 py-3 bg-gradient-to-r from-[#60a5fa]/15 to-[#a78bfa]/15 border border-[#60a5fa]/30 hover:border-[#60a5fa]/60 rounded-xl text-[var(--text-primary)] font-mono text-[9px] tracking-widest uppercase transition-all duration-300 btn-shine"
+                                                >
+                                                    Transmit Stream
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+
+                                    {/* STEP 6: Sending Loader / Successful Delivery */}
+                                    {step === 6 && (
+                                        <motion.div
+                                            key="step6"
+                                            custom={direction}
+                                            variants={slideVariants}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            className="flex-1 flex flex-col justify-between text-center min-h-[260px]"
+                                        >
+                                            {isSending ? (
+                                                <div className="my-auto flex flex-col justify-center">
+                                                    <div className="flex items-center justify-center gap-2 mb-6">
+                                                        <div className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
+                                                        <span className="text-[10px] font-mono tracking-[0.3em] text-[#60a5fa] uppercase font-bold">Broadcasting message...</span>
+                                                    </div>
+                                                    <TerminalLoader onComplete={() => {}} />
+                                                </div>
+                                            ) : (
+                                                <div className="my-auto flex flex-col justify-center items-center gap-4 py-6">
+                                                    <motion.div
+                                                        initial={{ scale: 0.8, opacity: 0 }}
+                                                        animate={{ scale: 1, opacity: 1 }}
+                                                        transition={{ type: 'spring', delay: 0.2 }}
+                                                        className="w-12 h-12 rounded-full border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-2 animate-bounce"
+                                                    >
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                                    </motion.div>
+                                                    <span className="text-[9px] font-mono tracking-[0.2em] text-emerald-400 uppercase font-semibold">Broadcast Confirmed</span>
+                                                    <h3 className="text-xl font-bold text-[var(--text-primary)] leading-snug" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                                                        Message Transmitted!
+                                                    </h3>
+                                                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-xs mx-auto font-sans">
+                                                        Your message has been delivered securely. I will get back to you shortly, {formData.name}.
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            {!isSending && (
+                                                <div className="flex justify-center mt-6 border-t border-white/5 pt-4">
+                                                    <button
+                                                        onClick={resetTerminal}
+                                                        className="px-6 py-2.5 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-lg font-mono text-[9px] tracking-wider uppercase transition-all"
+                                                    >
+                                                        Reset Terminal
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    )}
+
+                                </AnimatePresence>
+                            </div>
                         </div>
                     </div>
                 </div>
