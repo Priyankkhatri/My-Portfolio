@@ -12,6 +12,7 @@ const NAV_ITEMS = [
     { label: 'About', to: '/about' },
     { label: 'Work', to: '/work' },
     { label: 'Credentials', to: '/credentials' },
+    { label: 'Links', to: '/links' },
     { label: 'Contact', to: '/contact' },
 ]
 

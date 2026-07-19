@@ -9,6 +9,7 @@ import ScrollToRouteTop from './ScrollToRouteTop'
 import RouteTransition from './RouteTransition'
 import PageTransitionWrapper from './PageTransitionWrapper'
 import FooterExperience from './footer/FooterExperience'
+import { useLocation } from 'react-router-dom'
 import useStore from '../store/useStore'
 
 /* Lazy-loaded: splits Three.js (~500KB) out of critical path */
@@ -21,6 +22,8 @@ const HeroBackground = lazy(() => import('./HeroBackground'))
 export default function RootLayout() {
     const isLoading = useStore((s) => s.isLoading)
     const loaderPhase = useStore((s) => s.loaderPhase)
+    const location = useLocation()
+    const isLinksRoute = location.pathname === '/links'
 
     return (
         <>
@@ -43,7 +46,7 @@ export default function RootLayout() {
             <ScrollToRouteTop />
 
             {/* Global 3D background - lazy-loaded, non-blocking, persistent */}
-            {loaderPhase >= 3 && (
+            {loaderPhase >= 3 && !isLinksRoute && (
                 <Suspense fallback={null}>
                     <HeroBackground />
                 </Suspense>
