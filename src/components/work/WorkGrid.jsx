@@ -535,6 +535,7 @@ export default function WorkGrid({ projects }) {
                             >
                                 <Link
                                     to={`/work/${project.id}`}
+                                    onFocus={() => handleProjectHover(idx)}
                                     className="block group/row"
                                 >
                                     {/* Ambient background watermark (The "static art" for empty space) */}

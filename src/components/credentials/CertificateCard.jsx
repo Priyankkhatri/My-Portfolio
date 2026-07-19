@@ -42,7 +42,8 @@ export default function CertificateCard({
 
     const handleMouseLeave = useCallback(() => {
         setTilt({ rotateX: 0, rotateY: 0, glintX: 50, glintY: 50 })
-    }, [])
+        setCursorVariant('default')
+    }, [setCursorVariant])
 
     const [isClicked, setIsClicked] = useState(false)
 
@@ -52,6 +53,13 @@ export default function CertificateCard({
         } else {
             setIsClicked(true)
             setTimeout(() => setIsClicked(false), 300)
+        }
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            handleClick()
         }
     }
 
@@ -158,11 +166,11 @@ export default function CertificateCard({
                     ref={cardRef}
                     id={`cert-card-${index}`}
                     onClick={handleClick}
+                    onKeyDown={handleKeyDown}
                     onMouseMove={handleMouseMove}
                     onMouseLeave={handleMouseLeave}
                     onMouseEnter={() => isVisible && setCursorVariant('hover')}
-                    onMouseOut={() => setCursorVariant('default')}
-                    className={`w-full max-w-[420px] aspect-[4/3] rounded-xl overflow-hidden bg-[var(--bg-highlight)] shadow-[0_20px_40px_-5px_rgba(0,0,0,0.4)] relative select-none ${isVisible ? 'pointer-events-auto' : ''}`}
+                    className={`group w-full max-w-[420px] aspect-[4/3] rounded-xl overflow-hidden bg-[var(--bg-highlight)] shadow-[0_20px_40px_-5px_rgba(0,0,0,0.4)] relative select-none ${isVisible ? 'pointer-events-auto' : ''}`}
                     style={{
                         cursor: isActive ? 'default' : 'pointer',
                         transformStyle: 'preserve-3d',

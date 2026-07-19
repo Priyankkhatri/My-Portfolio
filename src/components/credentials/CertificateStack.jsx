@@ -1,5 +1,4 @@
 import { useRef, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import CertificateCard from './CertificateCard'
 import useIsMobile from '../../hooks/useIsMobile'
 
@@ -64,9 +63,8 @@ export default function CertificateStack({
             tabIndex={0}
             onKeyDown={handleKeyDown}
             className="relative w-full h-full flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-1)]/30 rounded-3xl"
-            role="listbox"
+            role="group"
             aria-label="Certificate stack — use arrow keys or scroll to navigate"
-            aria-activedescendant={`cert-card-${activeIndex}`}
         >
             {/* Dramatically enhanced vertical light beam (Spotlight) */}
             <div

@@ -36,7 +36,7 @@ export default function ContactCard() {
             </p>
 
             <Link to={CTA_ROUTE}>
-                <motion.button
+                <motion.span
                     className="signature-cta-btn btn-shine inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--accent-1)]/15 to-[var(--accent-2)]/15 border border-[var(--accent-1)]/25 text-[var(--text-primary)] text-sm font-medium tracking-wide rounded-full transition-all duration-300"
                     whileTap={{ scale: 0.97 }}
                     onMouseEnter={() => setCursorVariant('hover')}
@@ -57,7 +57,7 @@ export default function ContactCard() {
                         <path d="M5 12h14" />
                         <path d="m12 5 7 7-7 7" />
                     </svg>
-                </motion.button>
+                </motion.span>
             </Link>
         </motion.div>
     )
