@@ -24,6 +24,12 @@ function TypingIndicator() {
 }
 
 /* ── Simple markdown-like renderer for bold text ──────────── */
+/* Only http(s) and mailto links are rendered as anchors — the AI response
+   is untrusted, so javascript:/data: schemes must not reach href. */
+function safeHref(url) {
+    return /^(https?:\/\/|mailto:)/i.test(url.trim()) ? url.trim() : null
+}
+
 function renderMessage(text) {
     // Split by newlines and render
     return text.split('\n').map((line, i) => {
@@ -77,17 +83,22 @@ function renderMessage(text) {
                 if (linkIdx > 0) {
                     parts.push(<span key={partKey++}>{remaining.slice(0, linkIdx)}</span>)
                 }
-                parts.push(
-                    <a
-                        key={partKey++}
-                        href={linkMatch[2]}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[var(--accent-1)] hover:text-[var(--accent-2)] underline underline-offset-2 transition-colors"
-                    >
-                        {linkMatch[1]}
-                    </a>
-                )
+                const href = safeHref(linkMatch[2])
+                if (href) {
+                    parts.push(
+                        <a
+                            key={partKey++}
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[var(--accent-1)] hover:text-[var(--accent-2)] underline underline-offset-2 transition-colors"
+                        >
+                            {linkMatch[1]}
+                        </a>
+                    )
+                } else {
+                    parts.push(<span key={partKey++}>{linkMatch[1]}</span>)
+                }
                 remaining = remaining.slice(linkIdx + linkMatch[0].length)
             }
         }
@@ -212,6 +223,9 @@ export default function AiChatPanel({ isOpen, onClose }) {
 
                     {/* Chat Panel */}
                     <motion.div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="AI chat assistant"
                         className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-10 md:right-10 z-[9999] w-[calc(100%-2rem)] sm:w-[380px] h-[520px] max-h-[80vh] flex flex-col rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(0,255,200,0.05)] border border-[#00ffc8]/15"
                         style={{
                             background: 'rgba(10, 15, 30, 0.85)',
@@ -278,7 +292,7 @@ export default function AiChatPanel({ isOpen, onClose }) {
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 chat-scrollbar">
+                        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 chat-scrollbar" aria-live="polite">
                             {messages.map((msg, i) => (
                                 <motion.div
                                     key={i}

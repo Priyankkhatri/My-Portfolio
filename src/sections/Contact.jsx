@@ -310,6 +310,7 @@ export default function Contact() {
     const [showLeetCodeModal, setShowLeetCodeModal] = useState(false)
     const [isSending, setIsSending] = useState(false)
     const [sentSuccessfully, setSentSuccessfully] = useState(false)
+    const [sendFailed, setSendFailed] = useState(false)
     const [currentTime, setCurrentTime] = useState('')
 
     useEffect(() => {
@@ -394,6 +395,7 @@ export default function Contact() {
 
     const transmitPayload = async () => {
         setIsSending(true)
+        setSendFailed(false)
         setStep(6)
 
         try {
@@ -410,20 +412,20 @@ export default function Contact() {
             )
             setSentSuccessfully(true)
         } catch (error) {
-            console.error("EmailJS SMTP blocked. Opening fallback client...", error)
-            const mailtoBody = `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
-            const mailtoLink = `mailto:priyank.khatri.cg@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(mailtoBody)}`
-            window.open(mailtoLink, '_blank')
-            setSentSuccessfully(true)
+            console.error('EmailJS send failed:', error)
+            setSendFailed(true)
         } finally {
             setIsSending(false)
         }
     }
 
+    const mailtoFallback = `mailto:priyank.khatri.cg@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)}`
+
     const resetTerminal = () => {
         setFormData({ name: '', email: '', subject: '', message: '' })
         setStep(0)
         setSentSuccessfully(false)
+        setSendFailed(false)
     }
 
     const progress = (step / 5) * 100
@@ -909,6 +911,38 @@ export default function Contact() {
                                                         <span className="text-[10px] font-mono tracking-[0.3em] text-[#60a5fa] uppercase font-bold">Broadcasting message...</span>
                                                     </div>
                                                     <TerminalLoader onComplete={() => {}} />
+                                                </div>
+                                            ) : sendFailed ? (
+                                                <div className="my-auto flex flex-col justify-center items-center gap-4 py-6">
+                                                    <motion.div
+                                                        initial={{ scale: 0.8, opacity: 0 }}
+                                                        animate={{ scale: 1, opacity: 1 }}
+                                                        transition={{ type: 'spring', delay: 0.2 }}
+                                                        className="w-12 h-12 rounded-full border border-red-500/30 bg-red-500/10 flex items-center justify-center text-red-400 mb-2"
+                                                    >
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                                    </motion.div>
+                                                    <span className="text-[9px] font-mono tracking-[0.2em] text-red-400 uppercase font-semibold">Transmission Failed</span>
+                                                    <h3 className="text-xl font-bold text-[var(--text-primary)] leading-snug" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                                                        Message Not Sent
+                                                    </h3>
+                                                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-xs mx-auto font-sans">
+                                                        Something went wrong on the mail relay. You can retry, or email me directly instead.
+                                                    </p>
+                                                    <div className="flex items-center gap-3 mt-2">
+                                                        <button
+                                                            onClick={transmitPayload}
+                                                            className="px-5 py-2.5 bg-[var(--bg-highlight)] border border-[var(--border-color)] hover:bg-[var(--bg-highlight-hover)] text-[var(--text-primary)] rounded-lg font-mono text-[9px] tracking-wider uppercase transition-all"
+                                                        >
+                                                            Retry
+                                                        </button>
+                                                        <a
+                                                            href={mailtoFallback}
+                                                            className="px-5 py-2.5 border border-red-500/30 hover:bg-red-500/10 text-red-400 rounded-lg font-mono text-[9px] tracking-wider uppercase transition-all"
+                                                        >
+                                                            Email Directly
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             ) : (
                                                 <div className="my-auto flex flex-col justify-center items-center gap-4 py-6">

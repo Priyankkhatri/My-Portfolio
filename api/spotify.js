@@ -120,7 +120,6 @@ export default async function handler(req) {
         console.error('Spotify API error:', error.message || error)
         return new Response(JSON.stringify({
             error: 'Spotify API error',
-            details: error.message,
         }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' },

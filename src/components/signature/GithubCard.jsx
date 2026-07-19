@@ -4,8 +4,8 @@ import useStore from '../../store/useStore'
 import CardSkeleton from './CardSkeleton'
 
 const GITHUB_USERNAME = 'Priyankkhatri'
-const POLL_INTERVAL = 90_000 // 90 seconds
-const COMMIT_TRUNCATE = 72
+// Unauthenticated GitHub API allows 60 req/hr per IP; each poll costs 2 requests.
+const POLL_INTERVAL = 600_000 // 10 minutes
 
 /* ── Social icon links ─────────────────────────────────── */
 const socialLinks = [
@@ -57,19 +57,6 @@ function getRelativeTime(dateString) {
     return `${Math.floor(days / 30)}mo ago`
 }
 
-function getStatusColor(dateString) {
-    const diff = Date.now() - new Date(dateString).getTime()
-    const hours = diff / (1000 * 60 * 60)
-    if (hours < 24) return '#22c55e'   // green
-    if (hours < 168) return '#f59e0b'  // amber (7 days)
-    return '#ef4444'                    // red
-}
-
-function truncate(str, max) {
-    if (!str) return ''
-    return str.length > max ? str.slice(0, max) + '…' : str
-}
-
 /**
  * GithubCard — displays the latest PushEvent from GitHub public API.
  */
@@ -82,21 +69,23 @@ export default function GithubCard() {
 
     const fetchData = useCallback(async (isPolling = false) => {
         try {
-            // Fetch repos sorted by latest push to bypass /events endpoint caching delay
+            // Fetch repos sorted by latest push to bypass /events endpoint caching delay.
+            // No cache-buster param: let GitHub serve conditional 304s, which don't
+            // count against the unauthenticated rate limit.
             const repoRes = await fetch(
-                `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&direction=desc&per_page=1&t=${Date.now()}`
+                `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&direction=desc&per_page=1`
             )
             if (!repoRes.ok) throw new Error(`GitHub API ${repoRes.status}`)
-            
+
             const repos = await repoRes.json()
             if (!repos || repos.length === 0) throw new Error('No repos found')
-            
+
             const latestRepo = repos[0]
             const branch = latestRepo.default_branch || 'main'
 
             // Fetch the latest commit for this globally latest repo
             const commitRes = await fetch(
-                `https://api.github.com/repos/${GITHUB_USERNAME}/${latestRepo.name}/commits?per_page=1&t=${Date.now()}`
+                `https://api.github.com/repos/${GITHUB_USERNAME}/${latestRepo.name}/commits?per_page=1`
             )
             if (!commitRes.ok) throw new Error(`GitHub Commits API ${commitRes.status}`)
             
@@ -128,7 +117,9 @@ export default function GithubCard() {
 
     useEffect(() => {
         fetchData(false)
-        const id = setInterval(() => fetchData(true), POLL_INTERVAL)
+        const id = setInterval(() => {
+            if (document.visibilityState === 'visible') fetchData(true)
+        }, POLL_INTERVAL)
         return () => clearInterval(id)
     }, [fetchData])
 
@@ -148,7 +139,7 @@ export default function GithubCard() {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text-primary)">
                     <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z" />
                 </svg>
-                <h3 className="text-xl tracking-wide text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 'w600' }}>
+                <h3 className="text-xl tracking-wide text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontWeight: 600 }}>
                     Priyank&apos;s Github
                 </h3>
             </div>
@@ -203,7 +194,7 @@ export default function GithubCard() {
                                     href={data.repoUrl} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="text-red-500 hover:text-red-400 transition-colors"
+                                    className="text-[#60a5fa] hover:text-[#93c5fd] transition-colors"
                                     onMouseEnter={() => setCursorVariant('hover')}
                                     onMouseLeave={() => setCursorVariant('default')}
                                 >

@@ -63,6 +63,13 @@ export default async function handler(req) {
             })
         }
 
+        if (message.length > 1000) {
+            return new Response(JSON.stringify({ error: 'Message too long (max 1000 characters)' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+            })
+        }
+
         // Call the free text.pollinations.ai endpoint
         const fetchResponse = await fetch('https://text.pollinations.ai/', {
             method: 'POST',
@@ -91,7 +98,6 @@ export default async function handler(req) {
         console.error('AI API error:', error.message || error)
         return new Response(JSON.stringify({
             error: 'Failed to generate response',
-            details: error.message,
         }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' },

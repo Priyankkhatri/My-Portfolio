@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
@@ -34,6 +34,9 @@ function FresnelGlow({ radius }) {
     side: THREE.BackSide,
     depthWrite: false,
   }), [])
+
+  // R3F does not auto-dispose materials attached via <primitive>
+  useEffect(() => () => material.dispose(), [material])
 
   return (
     <mesh>
@@ -163,6 +166,9 @@ function PlanetSurface({ radius, meshRef }) {
       }
     `,
   }), [])
+
+  // R3F does not auto-dispose materials attached via <primitive>
+  useEffect(() => () => material.dispose(), [material])
 
   useFrame((_, delta) => {
     material.uniforms.time.value += delta

@@ -95,6 +95,10 @@ app.post('/api/chat', async (req, res) => {
             return res.status(400).json({ error: 'Message is required' })
         }
 
+        if (message.length > 1000) {
+            return res.status(400).json({ error: 'Message too long (max 1000 characters)' })
+        }
+
         // Call the free text.pollinations.ai endpoint
         // This accepts OpenAI-style message payloads directly
         const fetchResponse = await fetch('https://text.pollinations.ai/', {

@@ -7,10 +7,10 @@ import ScrollRevealWrapper from '../ScrollRevealWrapper'
  * Staggered animation on reveal. Groups by category.
  */
 export default function TechStackGrid({ techStack }) {
-    if (!techStack || techStack.length === 0) return null
-
     const ref = useRef(null)
     const isInView = useInView(ref, { once: true, margin: '-60px' })
+
+    if (!techStack || techStack.length === 0) return null
 
     // Group by category
     const grouped = techStack.reduce((acc, tech) => {
