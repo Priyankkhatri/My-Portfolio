@@ -6,7 +6,7 @@
     <title>Priyank Khatri - Resume</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -21,16 +21,21 @@
             margin: 0;
         }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #ffffff;
-            color: #1e293b;
-            font-size: 8.9pt;
-            line-height: 1.34;
-            padding: 22px 26px;
+        html, body {
             width: 210mm;
             height: 297mm;
+            max-height: 297mm;
+            background-color: #ffffff;
             margin: 0 auto;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #1e293b;
+            font-size: 9.2pt;
+            line-height: 1.42;
+            padding: 26px 30px 24px 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -50,61 +55,62 @@
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 2px solid #0f172a;
-            padding-bottom: 10px;
-            margin-bottom: 12px;
+            align-items: center;
+            border-bottom: 2.5px solid #0f172a;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .header-left h1 {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 21pt;
+            font-size: 24pt;
             font-weight: 800;
             color: #0f172a;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
+            letter-spacing: -0.035em;
+            line-height: 1.05;
         }
 
         .header-left .title-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 9.2pt;
-            font-weight: 600;
+            font-size: 9.8pt;
+            font-weight: 700;
             color: #2563eb;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-top: 3px;
+            margin-top: 5px;
         }
 
         .header-left .location {
-            font-size: 8.2pt;
+            font-size: 8.6pt;
             color: #64748b;
-            font-weight: 400;
-            margin-left: 6px;
+            font-weight: 500;
+            margin-left: 4px;
         }
 
         .header-right {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 2.5px;
-            font-size: 8.2pt;
+            gap: 3.5px;
+            font-size: 8.6pt;
         }
 
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             color: #334155;
+            font-weight: 500;
         }
 
         .contact-item svg {
-            width: 11px;
-            height: 11px;
+            width: 12px;
+            height: 12px;
             stroke: #2563eb;
             fill: none;
-            stroke-width: 2;
+            stroke-width: 2.2;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
@@ -112,163 +118,209 @@
         /* ── Layout Grid ── */
         .resume-body {
             display: grid;
-            grid-template-columns: 198px 1fr;
-            gap: 18px;
+            grid-template-columns: 205px 1fr;
+            gap: 22px;
             flex: 1;
+            align-content: space-between;
         }
 
         /* ── Sidebar Column ── */
         .sidebar {
             display: flex;
             flex-direction: column;
-            gap: 11px;
-            border-right: 1px solid #e2e8f0;
-            padding-right: 14px;
+            justify-content: space-between;
+            border-right: 1.5px solid #e2e8f0;
+            padding-right: 18px;
+            height: 100%;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2px;
         }
 
         .main-content {
             display: flex;
             flex-direction: column;
-            gap: 11px;
+            justify-content: space-between;
+            height: 100%;
         }
 
         .section-title {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 8.8pt;
+            font-size: 9.2pt;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.09em;
             color: #0f172a;
-            border-bottom: 1.5px solid #e2e8f0;
-            padding-bottom: 2.5px;
-            margin-bottom: 5px;
+            border-bottom: 1.5px solid #cbd5e1;
+            padding-bottom: 3.5px;
+            margin-bottom: 7px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         .section-title::before {
             content: '';
             display: inline-block;
-            width: 3.5px;
-            height: 10px;
+            width: 4px;
+            height: 11px;
             background-color: #2563eb;
-            border-radius: 1px;
+            border-radius: 1.5px;
         }
 
         /* Skills */
         .skill-group {
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .skill-group-title {
-            font-size: 7.6pt;
+            font-size: 7.8pt;
             font-weight: 700;
             text-transform: uppercase;
             color: #475569;
-            letter-spacing: 0.04em;
-            margin-bottom: 1.5px;
+            letter-spacing: 0.05em;
+            margin-bottom: 2px;
         }
 
         .skill-tags {
-            font-size: 8pt;
+            font-size: 8.3pt;
             color: #1e293b;
-            line-height: 1.32;
+            line-height: 1.36;
         }
 
         /* Education */
         .edu-card {
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         .edu-degree {
             font-weight: 700;
             color: #0f172a;
-            font-size: 8.4pt;
-            line-height: 1.22;
+            font-size: 8.7pt;
+            line-height: 1.25;
         }
 
         .edu-inst {
             color: #2563eb;
-            font-size: 8pt;
+            font-size: 8.3pt;
             font-weight: 600;
+            margin-top: 1px;
         }
 
         .edu-date {
-            font-size: 7.6pt;
+            font-size: 7.8pt;
             color: #64748b;
             font-family: 'JetBrains Mono', monospace;
+            margin-top: 1px;
         }
 
         /* Certifications */
         .cert-card {
-            margin-bottom: 4.5px;
+            margin-bottom: 6px;
+        }
+
+        .cert-card:last-child {
+            margin-bottom: 0;
         }
 
         .cert-title {
             font-weight: 600;
             color: #0f172a;
-            font-size: 8pt;
-            line-height: 1.2;
+            font-size: 8.3pt;
+            line-height: 1.25;
         }
 
         .cert-issuer {
-            font-size: 7.6pt;
+            font-size: 7.8pt;
             color: #64748b;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin-top: 1px;
         }
 
         .cert-grade {
             color: #16a34a;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 7.8pt;
+        }
+
+        /* Strengths */
+        .strengths-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .strengths-list li {
+            position: relative;
+            padding-left: 12px;
+            font-size: 8.3pt;
+            color: #334155;
+            margin-bottom: 3.5px;
+            line-height: 1.34;
+            font-weight: 500;
+        }
+
+        .strengths-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #2563eb;
+            font-size: 8.5pt;
+            font-weight: 800;
+            top: -0.5px;
         }
 
         /* ── Main Content Column ── */
         .summary-text {
-            font-size: 8.6pt;
+            font-size: 8.9pt;
             color: #334155;
-            line-height: 1.42;
+            line-height: 1.48;
             text-align: justify;
         }
 
         /* Projects */
         .project-card {
-            margin-bottom: 7px;
+            margin-bottom: 11px;
+        }
+
+        .project-card:last-child {
+            margin-bottom: 0;
         }
 
         .project-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 1.5px;
+            margin-bottom: 2px;
         }
 
         .project-title-area {
             display: flex;
             align-items: baseline;
-            gap: 5px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
         .project-title {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 9.3pt;
-            font-weight: 700;
+            font-size: 9.8pt;
+            font-weight: 800;
             color: #0f172a;
         }
 
         .project-role {
-            font-size: 7.8pt;
+            font-size: 8.2pt;
             color: #64748b;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .project-links {
-            font-size: 7.6pt;
-            font-weight: 600;
+            font-size: 8pt;
+            font-weight: 700;
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         .project-links a {
@@ -280,30 +332,30 @@
 
         .project-tech {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 7.2pt;
-            color: #0284c7;
+            font-size: 7.5pt;
+            color: #0369a1;
             background: #f0f9ff;
-            padding: 1px 5px;
-            border-radius: 3px;
+            padding: 1.5px 7px;
+            border-radius: 3.5px;
             border: 1px solid #bae6fd;
             display: inline-block;
-            margin-bottom: 2.5px;
-            font-weight: 500;
+            margin-bottom: 3.5px;
+            font-weight: 600;
         }
 
         .bullet-list {
             list-style: none;
             padding-left: 0;
-            margin-top: 1.5px;
+            margin-top: 2px;
         }
 
         .bullet-list li {
             position: relative;
-            padding-left: 11px;
-            font-size: 8.2pt;
+            padding-left: 13px;
+            font-size: 8.5pt;
             color: #334155;
-            margin-bottom: 2px;
-            line-height: 1.32;
+            margin-bottom: 3px;
+            line-height: 1.38;
         }
 
         .bullet-list li::before {
@@ -311,13 +363,17 @@
             position: absolute;
             left: 0;
             color: #2563eb;
-            font-size: 8.5pt;
-            top: -1px;
+            font-size: 9pt;
+            top: -0.5px;
         }
 
         .bullet-list li strong {
             color: #0f172a;
             font-weight: 600;
+        }
+
+        .bullet-list li:last-child {
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -367,7 +423,7 @@
         <aside class="sidebar">
             
             <!-- Technical Skills -->
-            <section>
+            <div class="sidebar-section">
                 <h2 class="section-title">Technical Skills</h2>
                 
                 <div class="skill-group">
@@ -377,7 +433,7 @@
 
                 <div class="skill-group">
                     <div class="skill-group-title">Backend & Database</div>
-                    <div class="skill-tags">Node.js, Express.js, MongoDB Atlas, Supabase, RESTful APIs</div>
+                    <div class="skill-tags">Node.js, Express.js, MongoDB Atlas, Supabase, REST APIs</div>
                 </div>
 
                 <div class="skill-group">
@@ -386,23 +442,23 @@
                 </div>
 
                 <div class="skill-group">
-                    <div class="skill-group-title">Tools & Deployment</div>
+                    <div class="skill-group-title">Tools & Cloud</div>
                     <div class="skill-tags">Git, GitHub, Vercel, Netlify, Render, Postman, Razorpay, Chrome DevTools</div>
                 </div>
-            </section>
+            </div>
 
             <!-- Education -->
-            <section>
+            <div class="sidebar-section">
                 <h2 class="section-title">Education</h2>
                 <div class="edu-card">
-                    <div class="edu-degree">B.Tech — Computer Science & Engineering</div>
+                    <div class="edu-degree">B.Tech — CSE</div>
                     <div class="edu-inst">Coding Gita (Offline Institute)</div>
                     <div class="edu-date">2nd Sem · 2025 – Present</div>
                 </div>
-            </section>
+            </div>
 
             <!-- Certifications & Awards -->
-            <section>
+            <div class="sidebar-section">
                 <h2 class="section-title">Certifications & Awards</h2>
                 
                 <div class="cert-card">
@@ -444,19 +500,19 @@
                         <span>2026</span>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Key Strengths -->
-            <section>
+            <!-- Core Strengths -->
+            <div class="sidebar-section">
                 <h2 class="section-title">Core Strengths</h2>
-                <div class="skill-tags">
-                    • Rapid Prototyping & Shipping<br>
-                    • Full-Stack Architecture<br>
-                    • Clean Component Design<br>
-                    • API & Webhook Integration<br>
-                    • Performance & SEO Optimization
-                </div>
-            </section>
+                <ul class="strengths-list">
+                    <li>Rapid Prototyping & Shipping</li>
+                    <li>Full-Stack System Architecture</li>
+                    <li>Clean Component Design & UI/UX</li>
+                    <li>API & Webhook Integrations</li>
+                    <li>Performance & SEO Optimization</li>
+                </ul>
+            </div>
 
         </aside>
 
