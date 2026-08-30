@@ -13,3 +13,6 @@ vercel_output.txt
 v-proj.txt
 server/out*.txt
 server/test.js
+as.json
+cimd.json
+resp.html
