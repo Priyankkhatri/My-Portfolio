@@ -31,7 +31,7 @@ const journeyData = [
         id: 'current',
         title: 'Currently Learning',
         year: 'Present',
-        summary: '2nd-Semester BE/B.Tech CSE at Coding Gita',
+        summary: '3rd-Semester BE/B.Tech CSE at Coding Gita',
         details: 'Currently honing my skills in an intense offline environment. I am pushing the boundaries of frontend performance, exploring advanced state management, and learning to write production-grade, highly scalable backend services. The goal is to build tools that are not only functional but feel premium and alive.',
         stats: [
             { label: 'Current Phase', value: 'Advanced Full-Stack' },

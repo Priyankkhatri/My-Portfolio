@@ -7,12 +7,12 @@ export const owner = {
     name: 'Priyank Khatri',
     title: 'Aspiring Software Developer',
     degree: 'B.Tech CSE',
-    semester: '2nd Semester',
+    semester: '3rd Semester',
     institute: 'Coding Gita (Offline Institute)',
     location: 'India',
     availability: 'Open to internships',
     email: 'priyank.khatri.cg@gmail.com',
-    bio: `I'm a 2nd-semester Computer Science student at Coding Gita. I build small web apps (image galleries, movie explorers), REST APIs with Node.js + MongoDB, and browser games with HTML/CSS/JS. Currently learning React/Next.js, data structures, and backend architecture. I love experimenting with UI/UX, performance optimization, and system fundamentals.`,
+    bio: `I'm a 3rd-semester Computer Science student at Coding Gita. I build small web apps (image galleries, movie explorers), REST APIs with Node.js + MongoDB, and browser games with HTML/CSS/JS. Currently learning React/Next.js, data structures, and backend architecture. I love experimenting with UI/UX, performance optimization, and system fundamentals.`,
 }
 
 export const techStack = [
@@ -163,7 +163,7 @@ export const certificates = [
 ]
 
 export const experience = [
-    { year: 'Currently', title: '2nd-Semester B.Tech CSE', desc: 'Coding Gita (Offline Institute)' },
+    { year: 'Currently', title: '3rd-Semester B.Tech CSE', desc: 'Coding Gita (Offline Institute)' },
     { year: '2026', title: 'Building Projects', desc: 'Creating APIs, and React apps to learn' },
     { year: '2025', title: 'Started Journey', desc: 'Exploring fundamentals of computer science' },
 ]
