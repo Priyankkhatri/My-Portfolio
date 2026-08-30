@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priyank Khatri - Resume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            font-size: 9.2pt;
+            line-height: 1.38;
+            padding: 24px 28px;
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+        }
+
+        .header-left h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22pt;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .header-left .title-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 9.5pt;
+            font-weight: 600;
+            color: #2563eb;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 4px;
+        }
+
+        .header-left .location {
+            font-size: 8.5pt;
+            color: #64748b;
+            font-weight: 400;
+            margin-left: 6px;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 3px;
+            font-size: 8.5pt;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #334155;
+        }
+
+        .contact-item svg {
+            width: 12px;
+            height: 12px;
+            stroke: #2563eb;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ── Layout Grid ── */
+        .resume-body {
+            display: grid;
+            grid-template-columns: 205px 1fr;
+            gap: 20px;
+            flex: 1;
+        }
+
+        /* ── Sidebar Column ── */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            border-right: 1px solid #e2e8f0;
+            padding-right: 16px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+        }
+
+        .section-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 9pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #0f172a;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 3px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 11px;
+            background-color: #2563eb;
+            border-radius: 1px;
+        }
+
+        /* Skills */
+        .skill-group {
+            margin-bottom: 6px;
+        }
+
+        .skill-group-title {
+            font-size: 7.8pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #475569;
+            letter-spacing: 0.04em;
+            margin-bottom: 2px;
+        }
+
+        .skill-tags {
+            font-size: 8.2pt;
+            color: #1e293b;
+            line-height: 1.35;
+        }
+
+        /* Education */
+        .edu-card {
+            margin-bottom: 4px;
+        }
+
+        .edu-degree {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 8.6pt;
+            line-height: 1.25;
+        }
+
+        .edu-inst {
+            color: #2563eb;
+            font-size: 8.2pt;
+            font-weight: 600;
+        }
+
+        .edu-date {
+            font-size: 7.8pt;
+            color: #64748b;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Certifications */
+        .cert-card {
+            margin-bottom: 6px;
+        }
+
+        .cert-title {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 8.2pt;
+            line-height: 1.25;
+        }
+
+        .cert-issuer {
+            font-size: 7.8pt;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cert-grade {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        /* ── Main Content Column ── */
+        .summary-text {
+            font-size: 8.8pt;
+            color: #334155;
+            line-height: 1.45;
+            text-align: justify;
+        }
+
+        /* Projects */
+        .project-card {
+            margin-bottom: 8px;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+
+        .project-title-area {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .project-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 9.5pt;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .project-role {
+            font-size: 8pt;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .project-links {
+            font-size: 7.8pt;
+            font-weight: 600;
+            display: flex;
+            gap: 8px;
+        }
+
+        .project-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            color: #2563eb;
+        }
+
+        .project-tech {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 7.4pt;
+            color: #0284c7;
+            background: #f0f9ff;
+            padding: 1px 6px;
+            border-radius: 3px;
+            border: 1px solid #bae6fd;
+            display: inline-block;
+            margin-bottom: 3px;
+            font-weight: 500;
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 2px;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 12px;
+            font-size: 8.4pt;
+            color: #334155;
+            margin-bottom: 2.5px;
+            line-height: 1.35;
+        }
+
+        .bullet-list li::before {
+            content: '▪';
+            position: absolute;
+            left: 0;
+            color: #2563eb;
+            font-size: 9pt;
+            top: -1px;
+        }
+
+        .bullet-list li strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        /* Achievements */
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Header ── -->
+    <header class="header">
+        <div class="header-left">
+            <h1>Priyank Khatri</h1>
+            <div class="title-badge">
+                MERN / Full-Stack Developer
+                <span class="location">· Ahmedabad, India</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="contact-item">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span>+91 78782 82036</span>
+            </div>
+            <div class="contact-item">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <a href="mailto:priyank.khatri.cg@gmail.com">priyank.khatri.cg@gmail.com</a>
+            </div>
+            <div class="contact-item">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <a href="https://priyankkhatri.vercel.app" target="_blank">priyankkhatri.vercel.app</a>
+            </div>
+            <div class="contact-item">
+                <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                <a href="https://github.com/Priyankkhatri" target="_blank">github.com/Priyankkhatri</a>
+            </div>
+            <div class="contact-item">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                <a href="https://www.linkedin.com/in/priyankkhatrii/" target="_blank">linkedin.com/in/priyankkhatrii</a>
+            </div>
+            <div class="contact-item">
+                <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                <a href="https://leetcode.com/u/Priyank_Khatri/" target="_blank">leetcode.com/u/Priyank_Khatri</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── Resume Body ── -->
+    <div class="resume-body">
+        
+        <!-- ── Left Sidebar ── -->
+        <aside class="sidebar">
+            
+            <!-- Technical Skills -->
+            <section>
+                <h2 class="section-title">Technical Skills</h2>
+                
+                <div class="skill-group">
+                    <div class="skill-group-title">Frontend</div>
+                    <div class="skill-tags">React.js, Next.js, HTML5, CSS3, Tailwind CSS, Framer Motion, UI/UX</div>
+                </div>
+
+                <div class="skill-group">
+                    <div class="skill-group-title">Backend & Database</div>
+                    <div class="skill-tags">Node.js, Express.js, MongoDB Atlas, Supabase, RESTful APIs</div>
+                </div>
+
+                <div class="skill-group">
+                    <div class="skill-group-title">Languages</div>
+                    <div class="skill-tags">JavaScript (ES6+), C, C++</div>
+                </div>
+
+                <div class="skill-group">
+                    <div class="skill-group-title">Tools & Deployment</div>
+                    <div class="skill-tags">Git, GitHub, Vercel, Netlify, Render, Postman, Razorpay, Chrome DevTools</div>
+                </div>
+            </section>
+
+            <!-- Education -->
+            <section>
+                <h2 class="section-title">Education</h2>
+                <div class="edu-card">
+                    <div class="edu-degree">B.Tech — Computer Science & Engineering</div>
+                    <div class="edu-inst">Coding Gita (Offline Institute)</div>
+                    <div class="edu-date">2nd Sem · 2025 – Present</div>
+                </div>
+            </section>
+
+            <!-- Certifications & Awards -->
+            <section>
+                <h2 class="section-title">Certifications & Awards</h2>
+                
+                <div class="cert-card">
+                    <div class="cert-title">Meta — Front-End Development</div>
+                    <div class="cert-issuer">
+                        <span>Coursera</span>
+                        <span class="cert-grade">Grade: 99%</span>
+                    </div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-title">Hacksagon 2026 Ideation Phase</div>
+                    <div class="cert-issuer">
+                        <span>ABV-IIITM IEEE</span>
+                        <span>2026</span>
+                    </div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-title">Elite Hack 1.0 Participation</div>
+                    <div class="cert-issuer">
+                        <span>Elite Coders</span>
+                        <span>2026</span>
+                    </div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-title">Dhirubhai Ambani Hackathon</div>
+                    <div class="cert-issuer">
+                        <span>DA-IICT</span>
+                        <span>2026</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Strengths -->
+            <section>
+                <h2 class="section-title">Core Strengths</h2>
+                <div class="skill-tags">
+                    • Rapid Prototyping & Shipping<br>
+                    • Full-Stack Architecture<br>
+                    • Clean Component Design<br>
+                    • API & Webhook Integration<br>
+                    • Performance & SEO Optimization
+                </div>
+            </section>
+
+        </aside>
+
+        <!-- ── Main Column ── -->
+        <main class="main-content">
+            
+            <!-- Summary -->
+            <section>
+                <h2 class="section-title">Professional Summary</h2>
+                <p class="summary-text">
+                    B.Tech Computer Science student with hands-on experience architecting, building, and deploying production-ready full-stack web applications. Proficient in React, Node.js, Express, and MongoDB, with a proven track record of shipping <strong>4+ live SaaS-style platforms</strong> in the first year of studies. Passionate about performant system design, clean UI/UX, and solving real-world engineering challenges.
+                </p>
+            </section>
+
+            <!-- Featured Technical Projects -->
+            <section>
+                <h2 class="section-title">Featured Technical Projects</h2>
+
+                <!-- Project 1: Stockply -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title-area">
+                            <span class="project-title">Stockply</span>
+                            <span class="project-role">— Digital Supply Chain SaaS Platform</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://stockply.vercel.app" target="_blank">↗ Live Demo</a>
+                            <a href="https://github.com/Priyankkhatri/stockply" target="_blank">↗ Source Code</a>
+                        </div>
+                    </div>
+                    <div class="project-tech">React.js · Node.js · Express · MongoDB · Tailwind CSS</div>
+                    <ul class="bullet-list">
+                        <li>Architected a high-fidelity, full-stack B2B SaaS ecosystem connecting retail shop owners with suppliers for synchronized inventory management and procurement.</li>
+                        <li>Engineered real-time inventory tracking with automated low-stock threshold alerts and one-click purchase order dispatch to streamline supply replenishment.</li>
+                        <li>Implemented responsive data-driven analytics dashboards with optimized MongoDB aggregations and sub-second latency state synchronization.</li>
+                    </ul>
+                </div>
+
+                <!-- Project 2: Vestiga -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title-area">
+                            <span class="project-title">Vestiga</span>
+                            <span class="project-role">— Freemium SaaS with Subscription Billing</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://vestiga.vercel.app" target="_blank">↗ Live Demo</a>
+                            <a href="https://github.com/Priyankkhatri/Vestiga" target="_blank">↗ Source Code</a>
+                        </div>
+                    </div>
+                    <div class="project-tech">React.js · Node.js · Supabase Auth · Razorpay Payments · Express</div>
+                    <ul class="bullet-list">
+                        <li>Built an end-to-end SaaS platform featuring secure authentication via Supabase and a synchronized local database schema for high reliability.</li>
+                        <li>Integrated tamper-proof Razorpay payment gateway workflows with secure HMAC webhook signature verification and automated tier provisioning.</li>
+                        <li>Configured strict CORS policies, resilient error boundaries, and environment-segregated deployment on Vercel and Render.</li>
+                    </ul>
+                </div>
+
+                <!-- Project 3: AI-Adaptive Onboarding Engine -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title-area">
+                            <span class="project-title">AI-Adaptive Onboarding Engine</span>
+                            <span class="project-role">— Career Upskilling Platform</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://ai-onboarding-engine.netlify.app" target="_blank">↗ Live Demo</a>
+                            <a href="https://github.com/Priyankkhatri/AI-Onboarding-Engine" target="_blank">↗ Source Code</a>
+                        </div>
+                    </div>
+                    <div class="project-tech">React.js · Node.js · Express · MongoDB · OpenAI API · Tailwind</div>
+                    <ul class="bullet-list">
+                        <li>Engineered an intelligent career accelerator that parses resumes against target job specs to identify granular technical skill gaps.</li>
+                        <li>Dynamically generates interactive, dependency-aware learning roadmaps with progressive disclosure UI, instant demo mode, and PDF exports.</li>
+                        <li>Implemented JWT-secured API routes, isolated state machines, and real-time visualization analytics for seamless onboarding workflows.</li>
+                    </ul>
+                </div>
+
+            </section>
+
+            <!-- Key Achievements -->
+            <section>
+                <h2 class="section-title">Key Achievements & Impact</h2>
+                <ul class="bullet-list">
+                    <li><strong>Rapid Product Delivery:</strong> Conceptualized, engineered, and deployed 4+ full-cycle frontend and backend platforms within first two semesters of college.</li>
+                    <li><strong>Algorithmic Problem Solving:</strong> Actively solving competitive programming problems on LeetCode in C++ & JavaScript, mastering fundamental DSA concepts.</li>
+                    <li><strong>Open-Source & Developer Community:</strong> Actively publishes code on GitHub and shares end-to-end project walkthroughs on YouTube for peer learning.</li>
+                </ul>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>
