@@ -115,42 +115,6 @@ My-Portfolio/
 
 ---
 
-## ⚡ Quick Start & Local Setup
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/Priyankkhatri/My-Portfolio.git
-cd My-Portfolio
-```
-
-### 2. Install dependencies
-```bash
-npm install
-```
-
-### 3. Set up environment variables
-Create a `.env` file in the root directory:
-```env
-VITE_EMAILJS_SERVICE_ID=your_service_id
-VITE_EMAILJS_TEMPLATE_ID=your_template_id
-VITE_EMAILJS_PUBLIC_KEY=your_public_key
-```
-
-### 4. Start local development server
-```bash
-npm run dev
-```
-Open [http://localhost:5173](http://localhost:5173) in your browser to explore the portfolio.
-
-### 5. Build for production
-```bash
-npm run build
-```
-
-<br/>
-
----
-
 ## 🎓 Academic Record & Certifications
 
 - 🎓 **B.Tech — Computer Science & Engineering (3rd Semester)** at **Coding Gita** (Offline Institute, Ahmedabad, India)
@@ -176,6 +140,5 @@ npm run build
   [![Email](https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:priyank.khatri.cg@gmail.com)
 
   <br/>
-  <sub>Designed & Developed with ❤️ by <strong>Priyank Khatri</strong></sub>
 
 </div>
