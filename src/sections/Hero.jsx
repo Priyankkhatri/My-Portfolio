@@ -315,18 +315,17 @@ export default function Hero() {
                                 <div className="flex items-center justify-between p-4 border-b border-[var(--border-color)] bg-[var(--bg-secondary)] relative z-10">
                                     <h3 className="text-sm font-semibold tracking-wide text-[var(--text-primary)]">Resume</h3>
                                     <div className="flex items-center gap-2">
-                                        {/* Open in New Tab / Download Button */}
+                                        {/* Open in New Tab Button */}
                                         <a
                                             href="/Priyank_Resume.pdf"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            download="Priyank_Khatri_Resume.pdf"
-                                            className="p-2 text-[#60a5fa] hover:text-[#3b82f6] hover:bg-[#60a5fa]/10 rounded-lg transition-colors border border-transparent flex items-center gap-2"
-                                            title="Download Resume"
+                                            className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--accent-1)] hover:bg-[var(--accent-1)]/10 rounded-lg transition-colors border border-[var(--accent-1)]/20 hover:border-[var(--accent-1)]/40 flex items-center gap-1.5"
+                                            title="Open in New Tab"
                                             onClick={(e) => e.stopPropagation()}
                                         >
-                                            <span className="text-xs font-semibold uppercase tracking-wider hidden sm:block">Open Full / Download</span>
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <span className="hidden sm:inline">Open in New Tab</span>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                                                 <polyline points="15 3 21 3 21 9" />
                                                 <line x1="10" y1="14" x2="21" y2="3" />
@@ -336,10 +335,10 @@ export default function Hero() {
                                         {/* Close Button */}
                                         <button
                                             onClick={() => setShowResume(false)}
-                                            className="p-2 text-[var(--text-secondary)] hover:text-white hover:bg-red-500/20 hover:border-red-500/50 rounded-lg transition-colors border border-transparent"
+                                            className="p-1.5 text-[var(--text-secondary)] hover:text-white hover:bg-red-500/20 hover:border-red-500/50 rounded-lg transition-colors border border-transparent"
                                             title="Close Modal"
                                         >
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <line x1="18" y1="6" x2="6" y2="18" />
                                                 <line x1="6" y1="6" x2="18" y2="18" />
                                             </svg>
