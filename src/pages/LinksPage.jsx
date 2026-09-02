@@ -22,6 +22,10 @@ import {
     Share2,
     Mail,
     FileText,
+    Activity,
+    Layers,
+    Radio,
+    Cpu,
 } from 'lucide-react'
 import {
     SiGithub as GithubIcon,
@@ -46,6 +50,7 @@ const PLATFORMS = [
         href: 'https://github.com/Priyankkhatri',
         handle: '@Priyankkhatri',
         badge: 'Open Source & Repositories',
+        metric: '30+ Public Repos',
         tagline: 'Full-stack MERN apps, 3D WebGL experiments, and open-source contributions.',
         cta: 'Open GitHub',
         icon: GithubIcon,
@@ -59,6 +64,7 @@ const PLATFORMS = [
         href: 'https://leetcode.com/u/Priyank_Khatri/',
         handle: '@Priyank_Khatri',
         badge: 'Algorithms & Data Structures',
+        metric: '150+ DSA Solved',
         tagline: 'Consistent algorithmic problem solving with dynamic programming, trees, and graphs.',
         cta: 'Open LeetCode',
         icon: LeetcodeIcon,
@@ -72,6 +78,7 @@ const PLATFORMS = [
         href: 'https://www.linkedin.com/in/priyankkhatrii/',
         handle: 'in/priyankkhatrii',
         badge: 'Professional Network',
+        metric: 'Open For Work',
         tagline: 'Connect for software developer internships, full-time opportunities, and collabs.',
         cta: 'Connect on LinkedIn',
         icon: LinkedinIcon,
@@ -85,6 +92,7 @@ const PLATFORMS = [
         href: 'https://www.youtube.com/@PriyankCreates',
         handle: '@PriyankCreates',
         badge: 'Devlogs & Breakdowns',
+        metric: 'Technical Videos',
         tagline: 'Project walkthroughs, architectural breakdowns, frontend engineering, and dev vlogs.',
         cta: 'Open YouTube',
         icon: YoutubeIcon,
@@ -98,6 +106,7 @@ const PLATFORMS = [
         href: 'https://www.instagram.com/priyankhatrii/',
         handle: '@priyankhatrii',
         badge: 'Visual Design & Workspace',
+        metric: 'Creative UI Logs',
         tagline: 'Design logs, UI prototypes, setup aesthetics, and visual developer experiments.',
         cta: 'Open Instagram',
         icon: InstagramIcon,
@@ -111,6 +120,7 @@ const PLATFORMS = [
         href: 'https://x.com/PriyankKhatrii',
         handle: '@PriyankKhatrii',
         badge: 'Tech Broadcasts & Insights',
+        metric: 'Daily Broadcasts',
         tagline: 'Daily software engineering updates, WebGL explorations, and tech opinions.',
         cta: 'Follow on X',
         icon: XIcon,
@@ -537,12 +547,11 @@ function PinnedSection({ platform, index, setCursorVariant, children }) {
     const auraOpacity = useSpring(rawAuraOpacity, { stiffness: 110, damping: 24 })
 
     // 🌊 BUTTERY SMOOTH KINETIC SWEEPING TYPOGRAPHY (Right to Left on scroll)
-    // Moves from +45vw (entering right) to -45vw (exiting left) with spring physics
     const rawWordX = useTransform(scrollYProgress, [0, 1], ['42vw', '-42vw'])
     const wordX = useSpring(rawWordX, { stiffness: 65, damping: 22, mass: 0.3 })
     const wordOpacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 0.28, 0.28, 0])
 
-    // Secondary reverse parallax sub-track (Left to Right) for ultra-rich depth
+    // Secondary reverse parallax micro-ticker (Left to Right)
     const rawTickerX = useTransform(scrollYProgress, [0, 1], ['-25vw', '25vw'])
     const tickerX = useSpring(rawTickerX, { stiffness: 60, damping: 24, mass: 0.35 })
 
@@ -803,7 +812,7 @@ function MobileDock({ activeId, onNavigate }) {
     )
 }
 
-/* ═══════════════════ INTRO & DIRECTORY SECTIONS ═══════════════════ */
+/* ═══════════════════ NEW INNOVATIVE FIRST SCREEN (TELEMETRY DECK) ═══════════════════ */
 
 function IntroSection({ setCursorVariant }) {
     const ref = useRef(null)
@@ -813,101 +822,148 @@ function IntroSection({ setCursorVariant }) {
     const y = useSpring(rawY, { stiffness: 120, damping: 22 })
     const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
+    const scrollToPlatform = (id) => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+
     return (
-        <section ref={ref} id="intro" className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 pt-24 pb-16">
-            <motion.div style={reduced ? {} : { y, opacity }} className="relative z-10 text-center max-w-4xl mx-auto flex flex-col items-center">
-                {/* Hero Badge Pill */}
+        <section ref={ref} id="intro" className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 pt-28 pb-16">
+            <motion.div style={reduced ? {} : { y, opacity }} className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center">
+                
+                {/* 1. Futuristic Status Pill */}
                 <motion.div
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7 }}
-                    className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#60a5fa]/30 bg-[#60a5fa]/10 backdrop-blur-xl mb-6 shadow-inner"
+                    transition={{ duration: 0.6 }}
+                    className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-[var(--border-color)] bg-[var(--bg-primary)]/80 backdrop-blur-2xl mb-6 shadow-xl"
                 >
-                    <span className="w-2 h-2 rounded-full bg-[#60a5fa] animate-pulse" />
-                    <span className="text-[10px] font-mono tracking-[0.25em] text-[#93c5fd] uppercase font-bold">
-                        ✦ Digital Ecosystem · Priyank Khatri
+                    <span className="flex items-center gap-1.5 font-mono text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        6 Channels Active
+                    </span>
+                    <span className="w-px h-3 bg-white/10" />
+                    <span className="font-mono text-[10px] text-[var(--text-muted)] tracking-widest uppercase">
+                        PRIYANK KHATRI // HUB v2.6
                     </span>
                 </motion.div>
 
-                {/* Main Hero Title */}
-                <motion.h1
-                    initial={{ opacity: 0, y: 25 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.12 }}
-                    className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tight text-[var(--text-primary)] leading-[1.04]"
-                    style={{ fontFamily: "'Poppins', sans-serif" }}
-                >
-                    Every Channel<span className="text-[#60a5fa]">.</span>
-                    <br />
-                    <span className="text-gradient-silver bg-clip-text">One Unified Stream</span>
-                    <span className="text-[#a78bfa]">.</span>
-                </motion.h1>
+                {/* 2. High-Impact Kinetic Headline */}
+                <div className="text-center space-y-3 mb-10 max-w-3xl">
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.7, delay: 0.1 }}
+                        className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.02] text-[var(--text-primary)]"
+                        style={{ fontFamily: "'Poppins', sans-serif" }}
+                    >
+                        The Digital <span className="text-gradient-silver bg-clip-text">Spectrum</span>
+                        <span className="text-[#60a5fa]">.</span>
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.7, delay: 0.2 }}
+                        className="text-xs sm:text-base text-[var(--text-secondary)] font-sans max-w-lg mx-auto leading-relaxed"
+                    >
+                        A unified portal spanning source code, algorithmic problem solving, professional network, devlogs, and design logs.
+                    </motion.p>
+                </div>
 
-                {/* Subtitle */}
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.25 }}
-                    className="mt-6 text-xs sm:text-base text-[var(--text-secondary)] max-w-xl mx-auto leading-relaxed font-sans"
-                >
-                    A continuous scroll across six channels. The 3D particle swarm shifts and morphs into each destination glyph as you explore.
-                </motion.p>
-
-                {/* Interactive Platform Teaser Dock */}
+                {/* 3. Interactive Holographic 6-Quadrant Telemetry Bento Grid */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.38 }}
-                    className="mt-8 flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto"
+                    transition={{ duration: 0.8, delay: 0.3 }}
+                    className="w-full grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-4 max-w-4xl"
                 >
-                    {PLATFORMS.map((p) => {
+                    {PLATFORMS.map((p, idx) => {
                         const IconComp = p.icon
                         return (
-                            <button
+                            <motion.div
                                 key={p.id}
-                                onClick={() => document.getElementById(p.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                                onClick={() => scrollToPlatform(p.id)}
                                 onMouseEnter={() => setCursorVariant('hover')}
                                 onMouseLeave={() => setCursorVariant('default')}
-                                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border bg-[var(--bg-primary)]/80 hover:bg-white/[0.08] backdrop-blur-md text-xs font-mono text-[var(--text-secondary)] hover:text-white transition-all duration-300 hover:scale-105 cursor-pointer shadow-sm"
-                                style={{
-                                    borderColor: `${p.color}40`,
-                                }}
+                                whileHover={{ y: -5, scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+                                className="group/tile relative p-4 sm:p-5 rounded-3xl border border-[var(--border-color)] bg-[var(--bg-primary)]/70 hover:bg-[var(--bg-primary)]/90 backdrop-blur-3xl transition-all duration-300 cursor-pointer overflow-hidden shadow-[0_15px_35px_-10px_rgba(0,0,0,0.5)]"
                             >
-                                <span style={{ color: p.color }}>
-                                    <IconComp size={12} />
-                                </span>
-                                <span>{p.label}</span>
-                            </button>
+                                {/* Platform Aura on Hover */}
+                                <div
+                                    className="absolute -top-12 -right-12 w-28 h-28 rounded-full blur-2xl opacity-0 group-hover/tile:opacity-40 transition-opacity duration-500 pointer-events-none"
+                                    style={{ background: p.color }}
+                                />
+
+                                {/* Top Row: Icon + Index */}
+                                <div className="flex items-center justify-between mb-4">
+                                    <div
+                                        className="w-10 h-10 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover/tile:scale-110 shadow-md"
+                                        style={{
+                                            background: `${p.color}18`,
+                                            color: p.color,
+                                            border: `1px solid ${p.color}40`,
+                                        }}
+                                    >
+                                        <IconComp size={18} />
+                                    </div>
+                                    <span className="font-mono text-[10px] text-[var(--text-muted)] font-bold tracking-widest group-hover/tile:text-white transition-colors">
+                                        0{idx + 1}
+                                    </span>
+                                </div>
+
+                                {/* Content Info */}
+                                <div>
+                                    <div className="flex items-baseline justify-between gap-1">
+                                        <h3 className="text-sm sm:text-base font-bold text-[var(--text-primary)] font-mono group-hover/tile:translate-x-0.5 transition-transform">
+                                            {p.label}
+                                        </h3>
+                                        <ArrowUpRight
+                                            size={14}
+                                            className="text-[var(--text-muted)] group-hover/tile:text-white group-hover/tile:translate-x-0.5 group-hover/tile:-translate-y-0.5 transition-all"
+                                            style={{ color: p.color }}
+                                        />
+                                    </div>
+                                    <div className="text-[11px] font-mono text-[var(--text-secondary)] mt-1 truncate">
+                                        {p.metric}
+                                    </div>
+                                </div>
+
+                                {/* Bottom Glow Line */}
+                                <div
+                                    className="absolute bottom-0 left-0 right-0 h-[2px] opacity-0 group-hover/tile:opacity-100 transition-opacity duration-300"
+                                    style={{ background: `linear-gradient(90deg, ${p.color}, transparent)` }}
+                                />
+                            </motion.div>
                         )
                     })}
                 </motion.div>
 
-                {/* Animated Scroll Indicator */}
+                {/* 4. Bottom Launch Indicator */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.7, duration: 1 }}
-                    className="mt-14 flex flex-col items-center gap-3 cursor-pointer"
-                    onClick={() => document.getElementById('github')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                    onMouseEnter={() => setCursorVariant('hover')}
-                    onMouseLeave={() => setCursorVariant('default')}
-                    aria-hidden="true"
+                    transition={{ delay: 0.6, duration: 0.8 }}
+                    className="mt-12 flex flex-col items-center gap-3"
                 >
-                    <span className="text-[10px] font-mono tracking-[0.35em] text-[var(--text-muted)] uppercase">
-                        Scroll to Explore
-                    </span>
-                    <div className="w-5 h-9 border border-[var(--border-color)] rounded-full flex items-start justify-center p-1 bg-black/20 backdrop-blur-sm">
-                        <motion.div
-                            animate={{ y: [0, 12, 0] }}
-                            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-                            className="w-1.5 h-2.5 bg-gradient-to-b from-[#60a5fa] to-[#a78bfa] rounded-full"
-                        />
-                    </div>
+                    <button
+                        onClick={() => scrollToPlatform('github')}
+                        onMouseEnter={() => setCursorVariant('hover')}
+                        onMouseLeave={() => setCursorVariant('default')}
+                        className="group flex items-center gap-3 px-6 py-2.5 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] backdrop-blur-xl text-xs font-mono text-[var(--text-primary)] transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg"
+                    >
+                        <Radio size={14} className="text-[#60a5fa] animate-pulse" />
+                        <span className="tracking-wider uppercase font-semibold">Initiate Scroll Sequence</span>
+                        <span className="text-[#60a5fa] group-hover:translate-y-0.5 transition-transform">↓</span>
+                    </button>
                 </motion.div>
+
             </motion.div>
         </section>
     )
 }
+
+/* ═══════════════════ DIRECTORY INDEX SECTION ═══════════════════ */
 
 function IndexSection({ setCursorVariant }) {
     const [copiedId, setCopiedId] = useState(null)
