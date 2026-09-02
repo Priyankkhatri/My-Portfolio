@@ -24,13 +24,14 @@ export default function Cursor() {
     const springY = useSpring(mouseY, { stiffness: 150, damping: 15, mass: 0.5 })
 
     useEffect(() => {
+        if (isTouchOnly) return
         const handler = (e) => {
             mouseX.set(e.clientX)
             mouseY.set(e.clientY)
         }
-        window.addEventListener('mousemove', handler)
+        window.addEventListener('mousemove', handler, { passive: true })
         return () => window.removeEventListener('mousemove', handler)
-    }, [mouseX, mouseY])
+    }, [mouseX, mouseY, isTouchOnly])
 
     if (isTouchOnly) return null
 

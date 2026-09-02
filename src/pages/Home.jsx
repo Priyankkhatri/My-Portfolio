@@ -29,7 +29,7 @@ function MarqueeStrip() {
             <div className="flex w-max animate-marquee hover:[animation-play-state:paused] items-center">
                 {[...marqueeLogos, ...marqueeLogos, ...marqueeLogos, ...marqueeLogos].map((item, i) => (
                     <div 
-                        key={i} 
+                        key={`${item.label}-${i}`} 
                         className="flex items-center justify-center mx-6 md:mx-10 opacity-90 hover:opacity-100 transition-all duration-300 select-none group cursor-pointer" 
                         title={item.label}
                     >
