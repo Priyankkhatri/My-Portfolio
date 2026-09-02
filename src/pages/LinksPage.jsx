@@ -512,60 +512,79 @@ function PinnedSection({ platform, index, setCursorVariant, children }) {
     const reduced = useReducedMotion()
     const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
 
-    // Spring-smoothed kinematics: completely eliminates trackpad/mouse-wheel jerkiness
-    const rawWordX = useTransform(scrollYProgress, [0, 1], ['20vw', '-28vw'])
-    const wordX = useSpring(rawWordX, { stiffness: 90, damping: 24, mass: 0.25 })
-    const wordOpacity = useTransform(scrollYProgress, [0, 0.18, 0.82, 1], [0, 0.22, 0.22, 0])
+    // Extended 210vh scroll with 68% stationary plateau time
+    // Entrance: 0.00 -> 0.16 | Settle/Plateau: 0.16 -> 0.84 | Exit: 0.84 -> 1.00
+    const rawCardY = useTransform(scrollYProgress, [0, 0.16, 0.84, 1], [55, 0, 0, -55])
+    const cardY = useSpring(rawCardY, { stiffness: 120, damping: 20, mass: 0.2 })
 
-    const rawCardY = useTransform(scrollYProgress, [0, 0.26, 0.74, 1], [70, 0, 0, -70])
-    const cardY = useSpring(rawCardY, { stiffness: 130, damping: 22, mass: 0.2 })
+    const rawCardOpacity = useTransform(scrollYProgress, [0.02, 0.14, 0.86, 0.98], [0, 1, 1, 0])
+    const cardOpacity = useSpring(rawCardOpacity, { stiffness: 140, damping: 22, mass: 0.2 })
 
-    const rawCardOpacity = useTransform(scrollYProgress, [0.03, 0.22, 0.78, 0.97], [0, 1, 1, 0])
-    const cardOpacity = useSpring(rawCardOpacity, { stiffness: 150, damping: 24, mass: 0.2 })
+    const rawCardRotateX = useTransform(scrollYProgress, [0, 0.16, 0.84, 1], [5, 0, 0, -4])
+    const cardRotateX = useSpring(rawCardRotateX, { stiffness: 120, damping: 20, mass: 0.2 })
 
-    const rawCardRotateX = useTransform(scrollYProgress, [0, 0.26, 0.74, 1], [7, 0, 0, -6])
-    const cardRotateX = useSpring(rawCardRotateX, { stiffness: 130, damping: 22, mass: 0.2 })
+    const rawCardScale = useTransform(scrollYProgress, [0, 0.16, 0.84, 1], [0.96, 1, 1, 0.97])
+    const cardScale = useSpring(rawCardScale, { stiffness: 120, damping: 20, mass: 0.2 })
 
-    const rawCardScale = useTransform(scrollYProgress, [0, 0.26, 0.74, 1], [0.94, 1, 1, 0.96])
-    const cardScale = useSpring(rawCardScale, { stiffness: 130, damping: 22, mass: 0.2 })
-
-    const rawBeamScaleX = useTransform(scrollYProgress, [0.08, 0.32], [0, 1])
+    const rawBeamScaleX = useTransform(scrollYProgress, [0.04, 0.18], [0, 1])
     const beamScaleX = useSpring(rawBeamScaleX, { stiffness: 140, damping: 24 })
 
-    const rawMetaY = useTransform(scrollYProgress, [0.06, 0.26], [25, 0])
-    const metaY = useSpring(rawMetaY, { stiffness: 130, damping: 22 })
-    const metaOpacity = useTransform(scrollYProgress, [0.06, 0.26], [0, 1])
+    const rawMetaY = useTransform(scrollYProgress, [0.04, 0.18], [20, 0])
+    const metaY = useSpring(rawMetaY, { stiffness: 120, damping: 22 })
+    const metaOpacity = useTransform(scrollYProgress, [0.04, 0.18], [0, 1])
 
-    const rawAuraOpacity = useTransform(scrollYProgress, [0.1, 0.3, 0.7, 0.9], [0, 0.25, 0.25, 0])
-    const auraOpacity = useSpring(rawAuraOpacity, { stiffness: 120, damping: 24 })
+    const rawAuraOpacity = useTransform(scrollYProgress, [0.08, 0.2, 0.8, 0.92], [0, 0.22, 0.22, 0])
+    const auraOpacity = useSpring(rawAuraOpacity, { stiffness: 110, damping: 24 })
+
+    // Centered, non-clipped kinetic typography parallax
+    const rawWordY = useTransform(scrollYProgress, [0, 1], [30, -30])
+    const wordY = useSpring(rawWordY, { stiffness: 80, damping: 22 })
+    const rawWordScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.96, 1.04, 0.96])
+    const wordScale = useSpring(rawWordScale, { stiffness: 80, damping: 22 })
+    const wordOpacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 0.18, 0.18, 0])
 
     const stageStyle = reduced ? {} : { y: cardY, opacity: cardOpacity, rotateX: cardRotateX, scale: cardScale }
-    const wordStyle = reduced ? { x: 0, opacity: 0.15 } : { x: wordX, opacity: wordOpacity }
 
     const IconComponent = platform.icon
     const titleText = platform.word.charAt(0) + platform.word.slice(1).toLowerCase()
 
     return (
-        <section ref={ref} id={platform.id} className={reduced ? 'relative min-h-screen' : 'relative h-[145vh]'}>
+        <section ref={ref} id={platform.id} className={reduced ? 'relative min-h-screen' : 'relative h-[210vh]'}>
             <div className={`${reduced ? 'min-h-screen' : 'sticky top-0 h-screen'} flex items-center justify-center overflow-hidden [perspective:1200px] px-4 sm:px-6`}>
 
-                {/* Giant outlined word sweeping across the background with spring-smoothed parallax */}
-                <motion.span
-                    style={{
-                        ...wordStyle,
-                        WebkitTextStroke: `1.5px ${platform.color}40`,
-                        color: 'transparent',
-                    }}
-                    className="absolute top-1/2 -translate-y-1/2 left-1/2 text-[22vw] font-black whitespace-nowrap select-none pointer-events-none leading-none tracking-tight z-0"
-                    aria-hidden="true"
-                >
-                    {platform.word}
-                </motion.span>
+                {/* Centered Luxury Background Watermark (Clean, centered, never cut off) */}
+                <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none select-none z-0">
+                    <motion.span
+                        style={reduced ? { opacity: 0.12 } : {
+                            y: wordY,
+                            scale: wordScale,
+                            opacity: wordOpacity,
+                            WebkitTextStroke: `1.5px ${platform.color}40`,
+                            color: 'transparent',
+                            filter: `drop-shadow(0 0 35px ${platform.color}25)`,
+                        }}
+                        className="text-[17vw] sm:text-[15vw] font-black tracking-tighter leading-none uppercase select-none text-center"
+                        aria-hidden="true"
+                    >
+                        {platform.word}
+                    </motion.span>
+                </div>
 
-                {/* Section meta badge — floating index + handle */}
+                {/* Right-Hand Architectural Deck Indicator */}
+                <div className="hidden 2xl:flex absolute right-16 top-1/2 -translate-y-1/2 flex-col items-center gap-4 font-mono select-none pointer-events-none z-10">
+                    <span className="text-[10px] tracking-[0.4em] uppercase text-[var(--text-muted)] [writing-mode:vertical-lr] rotate-180">
+                        ENDPOINT // 0{index + 1}
+                    </span>
+                    <div className="w-px h-16 bg-gradient-to-b from-transparent via-[var(--border-color)] to-transparent" />
+                    <span className="text-xs tracking-[0.3em] font-bold [writing-mode:vertical-lr] rotate-180" style={{ color: platform.color }}>
+                        {platform.word}
+                    </span>
+                </div>
+
+                {/* Section Meta Badge — Floating Index + Handle */}
                 <motion.div
                     style={reduced ? {} : { y: metaY, opacity: metaOpacity }}
-                    className="absolute top-[10vh] left-6 sm:left-12 lg:left-24 font-mono select-none pointer-events-none z-20"
+                    className="absolute top-[8vh] left-6 sm:left-12 lg:left-24 font-mono select-none pointer-events-none z-20"
                     aria-hidden="true"
                 >
                     <div className="flex items-center gap-2">
@@ -580,7 +599,7 @@ function PinnedSection({ platform, index, setCursorVariant, children }) {
                 {/* The Luxury Glass Card */}
                 <motion.div
                     style={stageStyle}
-                    className="relative w-full max-w-3xl bg-[var(--bg-primary)]/80 border border-[var(--border-color)] rounded-[2.5rem] backdrop-blur-3xl p-7 sm:p-12 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.8)] overflow-hidden z-10"
+                    className="relative w-full max-w-3xl bg-[var(--bg-primary)]/85 border border-[var(--border-color)] rounded-[2.5rem] backdrop-blur-3xl p-7 sm:p-12 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.8)] overflow-hidden z-10"
                 >
                     {/* Drawing Top Laser Beam */}
                     <motion.div
@@ -723,7 +742,7 @@ function SectionCounter({ activeId }) {
     const platform = PLATFORMS.find((p) => p.id === activeId)
     const color = platform?.color || '#a78bfa'
     return (
-        <div className="hidden md:flex fixed top-28 right-8 z-40 items-baseline gap-1.5 font-mono select-none pointer-events-none" aria-hidden="true">
+        <div className="hidden md:flex fixed top-20 right-8 sm:right-12 z-40 items-baseline gap-1.5 font-mono select-none pointer-events-none" aria-hidden="true">
             <span className="relative w-9 h-8 overflow-hidden inline-block">
                 <AnimatePresence mode="popLayout">
                     <motion.span
