@@ -809,56 +809,98 @@ function IntroSection({ setCursorVariant }) {
     const ref = useRef(null)
     const reduced = useReducedMotion()
     const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-    const rawY = useTransform(scrollYProgress, [0, 1], [0, -120])
+    const rawY = useTransform(scrollYProgress, [0, 1], [0, -100])
     const y = useSpring(rawY, { stiffness: 120, damping: 22 })
     const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
     return (
-        <section ref={ref} id="intro" className="relative h-screen flex items-center justify-center overflow-hidden px-4">
-            <motion.div style={reduced ? {} : { y, opacity }} className="relative z-10 text-center max-w-4xl">
+        <section ref={ref} id="intro" className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 pt-24 pb-16">
+            <motion.div style={reduced ? {} : { y, opacity }} className="relative z-10 text-center max-w-4xl mx-auto flex flex-col items-center">
+                {/* Hero Badge Pill */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.15 }}
-                    className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#a78bfa]/30 bg-[#a78bfa]/10 backdrop-blur-md mb-7"
+                    transition={{ duration: 0.7 }}
+                    className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#60a5fa]/30 bg-[#60a5fa]/10 backdrop-blur-xl mb-6 shadow-inner"
                 >
-                    <span className="w-2 h-2 rounded-full bg-[#a78bfa] animate-pulse" />
-                    <span className="text-[10px] font-mono tracking-[0.3em] text-[#a78bfa] uppercase font-bold">
-                        Priyank Khatri // Connect Network
+                    <span className="w-2 h-2 rounded-full bg-[#60a5fa] animate-pulse" />
+                    <span className="text-[10px] font-mono tracking-[0.25em] text-[#93c5fd] uppercase font-bold">
+                        ✦ Digital Ecosystem · Priyank Khatri
                     </span>
                 </motion.div>
 
-                <h1
-                    className="text-[15vw] sm:text-[12vw] lg:text-[7.5rem] font-black leading-[0.92] text-[var(--text-primary)] tracking-tight"
+                {/* Main Hero Title */}
+                <motion.h1
+                    initial={{ opacity: 0, y: 25 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.12 }}
+                    className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tight text-[var(--text-primary)] leading-[1.04]"
                     style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
-                    EVERY LINK.
+                    Every Channel<span className="text-[#60a5fa]">.</span>
                     <br />
-                    <span className="text-gradient-silver">ONE SCROLL.</span>
-                </h1>
+                    <span className="text-gradient-silver bg-clip-text">One Unified Stream</span>
+                    <span className="text-[#a78bfa]">.</span>
+                </motion.h1>
 
+                {/* Subtitle */}
                 <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.8 }}
-                    className="mt-7 text-xs sm:text-base text-[var(--text-secondary)] max-w-lg mx-auto leading-relaxed font-sans"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.25 }}
+                    className="mt-6 text-xs sm:text-base text-[var(--text-secondary)] max-w-xl mx-auto leading-relaxed font-sans"
                 >
-                    One continuous scroll across six platforms. The 3D particle swarm shifts and morphs into each destination glyph as you navigate.
+                    A continuous scroll across six channels. The 3D particle swarm shifts and morphs into each destination glyph as you explore.
                 </motion.p>
 
+                {/* Interactive Platform Teaser Dock */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.38 }}
+                    className="mt-8 flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto"
+                >
+                    {PLATFORMS.map((p) => {
+                        const IconComp = p.icon
+                        return (
+                            <button
+                                key={p.id}
+                                onClick={() => document.getElementById(p.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                                onMouseEnter={() => setCursorVariant('hover')}
+                                onMouseLeave={() => setCursorVariant('default')}
+                                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border bg-[var(--bg-primary)]/80 hover:bg-white/[0.08] backdrop-blur-md text-xs font-mono text-[var(--text-secondary)] hover:text-white transition-all duration-300 hover:scale-105 cursor-pointer shadow-sm"
+                                style={{
+                                    borderColor: `${p.color}40`,
+                                }}
+                            >
+                                <span style={{ color: p.color }}>
+                                    <IconComp size={12} />
+                                </span>
+                                <span>{p.label}</span>
+                            </button>
+                        )
+                    })}
+                </motion.div>
+
+                {/* Animated Scroll Indicator */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1.2 }}
-                    className="mt-12 flex flex-col items-center gap-2.5"
+                    transition={{ delay: 0.7, duration: 1 }}
+                    className="mt-14 flex flex-col items-center gap-3 cursor-pointer"
+                    onClick={() => document.getElementById('github')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    onMouseEnter={() => setCursorVariant('hover')}
+                    onMouseLeave={() => setCursorVariant('default')}
                     aria-hidden="true"
                 >
-                    <span className="text-[9px] font-mono tracking-[0.35em] text-[var(--text-muted)] uppercase">Scroll to Discover</span>
-                    <div className="w-5 h-9 border border-[var(--border-color)] rounded-full flex items-start justify-center p-1">
+                    <span className="text-[10px] font-mono tracking-[0.35em] text-[var(--text-muted)] uppercase">
+                        Scroll to Explore
+                    </span>
+                    <div className="w-5 h-9 border border-[var(--border-color)] rounded-full flex items-start justify-center p-1 bg-black/20 backdrop-blur-sm">
                         <motion.div
-                            animate={{ y: [0, 10, 0] }}
+                            animate={{ y: [0, 12, 0] }}
                             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-                            className="w-1 h-2 bg-[#a78bfa] rounded-full"
+                            className="w-1.5 h-2.5 bg-gradient-to-b from-[#60a5fa] to-[#a78bfa] rounded-full"
                         />
                     </div>
                 </motion.div>

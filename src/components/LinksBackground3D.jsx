@@ -6,7 +6,7 @@ import useStore from '../store/useStore'
 
 const COUNT = 2200
 
-/* ── Refined mathematical shape targets — clean, elegant, recognizable ── */
+/* ── Refined mathematical shape targets — clean, elegant, volumetric ── */
 const SHAPES = (() => {
     const shapes = []
     const make = (fn) => {
@@ -20,16 +20,15 @@ const SHAPES = (() => {
         shapes.push(arr)
     }
 
-    // 0. Spiral galaxy — gentle organic spiral disk
-    make(() => {
-        const arm = Math.floor(Math.random() * 2)
-        const t = Math.pow(Math.random(), 0.6)
-        const angle = arm * Math.PI + t * 4.2 + (Math.random() - 0.5) * 0.35
-        const r = 0.2 + t * 2.3
+    // 0. Cosmic Spherical Nebula Halo — True 3D volume (never flattens into a 2D beam on rotation)
+    make((i) => {
+        const phi = Math.acos(1 - (2 * (i + 0.5)) / COUNT)
+        const theta = Math.PI * (1 + Math.sqrt(5)) * i
+        const r = 1.6 + Math.pow(Math.random(), 0.7) * 1.5
         return [
-            Math.cos(angle) * r,
-            Math.sin(angle) * r * 0.85,
-            (Math.random() - 0.5) * 0.35 * (1 - t),
+            r * Math.sin(phi) * Math.cos(theta) * 1.25,
+            r * Math.sin(phi) * Math.sin(theta) * 0.95,
+            r * Math.cos(phi) * 1.15,
         ]
     })
 
@@ -121,7 +120,7 @@ const SHAPE_COLORS = {
     light: ['#7c3aed', '#2563eb', '#d97706', '#0284c7', '#dc2626', '#db2777', '#475569'],
 }
 
-const BG = { dark: '#090d16', light: '#f8fafc' }
+const BG = { dark: '#080c14', light: '#f8fafc' }
 
 function ParticleSystem({ activeIdx, velocity, theme }) {
     const pointsRef = useRef()
@@ -138,12 +137,12 @@ function ParticleSystem({ activeIdx, velocity, theme }) {
     const positions = useMemo(() => SHAPES[0].slice(), [])
 
     const uniforms = useMemo(() => ({
-        uSize: { value: 0.15 },
+        uSize: { value: 0.14 },
         uTime: { value: 0 },
         uJitter: { value: 0 },
         uBurst: { value: 0 },
         uColor: { value: new THREE.Color(SHAPE_COLORS.dark[0]) },
-        uOpacity: { value: 0.85 },
+        uOpacity: { value: 0.8 },
     }), [])
 
     useFrame((state, delta) => {
@@ -153,7 +152,7 @@ function ParticleSystem({ activeIdx, velocity, theme }) {
         uniforms.uTime.value = time
 
         if (prevIdxRef.current !== activeIdx) {
-            burstRef.current = 0.7
+            burstRef.current = 0.6
             prevIdxRef.current = activeIdx
         }
         burstRef.current += (0 - burstRef.current) * (1.0 - Math.pow(0.01, dt))
@@ -181,8 +180,8 @@ function ParticleSystem({ activeIdx, velocity, theme }) {
         uniforms.uColor.value.lerp(targetColor, 1.0 - Math.pow(0.005, dt))
 
         // Ambient rotation
-        pointsRef.current.rotation.y = time * 0.04
-        pointsRef.current.rotation.x = Math.sin(time * 0.08) * 0.06
+        pointsRef.current.rotation.y = time * 0.035
+        pointsRef.current.rotation.x = Math.sin(time * 0.07) * 0.05
 
         // Camera parallax
         const targetCamX = state.pointer.x * 0.35
@@ -194,7 +193,7 @@ function ParticleSystem({ activeIdx, velocity, theme }) {
 
     const isDark = theme !== 'light'
     useEffect(() => {
-        uniforms.uOpacity.value = isDark ? 0.88 : 0.92
+        uniforms.uOpacity.value = isDark ? 0.82 : 0.88
     }, [isDark, uniforms])
 
     return (
@@ -224,7 +223,7 @@ function ParticleSystem({ activeIdx, velocity, theme }) {
                             cos(ph * 13.0 + uTime * 3.0),
                             sin(ph * 17.0 + uTime * 2.6)
                         );
-                        p *= 1.0 + uBurst * aRand * 0.35;
+                        p *= 1.0 + uBurst * aRand * 0.3;
                         vec4 mv = modelViewMatrix * vec4(p, 1.0);
                         gl_Position = projectionMatrix * mv;
                         gl_PointSize = uSize * (0.65 + aRand * 0.8) * (300.0 / -mv.z);
@@ -236,7 +235,7 @@ function ParticleSystem({ activeIdx, velocity, theme }) {
                     void main() {
                         float dist = length(gl_PointCoord - vec2(0.5));
                         if (dist > 0.5) discard;
-                        float alpha = smoothstep(0.5, 0.05, dist);
+                        float alpha = smoothstep(0.5, 0.08, dist);
                         gl_FragColor = vec4(uColor, alpha * uOpacity);
                     }
                 `}
@@ -282,12 +281,12 @@ export default function LinksBackground3D({ activeIdx = 0, velocity = null }) {
                 <fog attach="fog" args={[BG[theme] || BG.dark, 3.2, 10]} />
                 <SceneBackground theme={theme} />
 
-                {/* Clean, central morphing particle system */}
+                {/* Clean volumetric morphing particle system */}
                 <ParticleSystem activeIdx={activeIdx} velocity={velocity} theme={theme} />
 
                 {theme !== 'light' && (
                     <EffectComposer disableNormalPass multisampling={0}>
-                        <Bloom luminanceThreshold={0.12} luminanceSmoothing={0.9} intensity={1.2} mipmapBlur />
+                        <Bloom luminanceThreshold={0.14} luminanceSmoothing={0.9} intensity={1.1} mipmapBlur />
                     </EffectComposer>
                 )}
             </Canvas>
