@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect, useState } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import * as THREE from 'three'
@@ -283,20 +283,10 @@ function SceneBackground({ theme }) {
  */
 export default function LinksBackground3D({ activeIdx = 0, velocity = null }) {
     const theme = useStore((s) => s.theme)
-    const [isVisible, setIsVisible] = useState(true)
-
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            setIsVisible(!document.hidden)
-        }
-        document.addEventListener('visibilitychange', handleVisibilityChange)
-        return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }, [])
 
     return (
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" style={{ background: BG[theme] || BG.dark }}>
             <Canvas
-                frameloop={isVisible ? 'always' : 'never'}
                 camera={{ position: [0, 0, 4.6], fov: 60 }}
                 gl={{ antialias: false, powerPreference: 'high-performance' }}
                 dpr={[1, 1.5]}
