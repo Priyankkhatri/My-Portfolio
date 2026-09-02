@@ -536,12 +536,15 @@ function PinnedSection({ platform, index, setCursorVariant, children }) {
     const rawAuraOpacity = useTransform(scrollYProgress, [0.08, 0.2, 0.8, 0.92], [0, 0.22, 0.22, 0])
     const auraOpacity = useSpring(rawAuraOpacity, { stiffness: 110, damping: 24 })
 
-    // Centered, non-clipped kinetic typography parallax
-    const rawWordY = useTransform(scrollYProgress, [0, 1], [30, -30])
-    const wordY = useSpring(rawWordY, { stiffness: 80, damping: 22 })
-    const rawWordScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.96, 1.04, 0.96])
-    const wordScale = useSpring(rawWordScale, { stiffness: 80, damping: 22 })
-    const wordOpacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 0.18, 0.18, 0])
+    // 🌊 BUTTERY SMOOTH KINETIC SWEEPING TYPOGRAPHY (Right to Left on scroll)
+    // Moves from +45vw (entering right) to -45vw (exiting left) with spring physics
+    const rawWordX = useTransform(scrollYProgress, [0, 1], ['42vw', '-42vw'])
+    const wordX = useSpring(rawWordX, { stiffness: 65, damping: 22, mass: 0.3 })
+    const wordOpacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 0.28, 0.28, 0])
+
+    // Secondary reverse parallax sub-track (Left to Right) for ultra-rich depth
+    const rawTickerX = useTransform(scrollYProgress, [0, 1], ['-25vw', '25vw'])
+    const tickerX = useSpring(rawTickerX, { stiffness: 60, damping: 24, mass: 0.35 })
 
     const stageStyle = reduced ? {} : { y: cardY, opacity: cardOpacity, rotateX: cardRotateX, scale: cardScale }
 
@@ -552,33 +555,41 @@ function PinnedSection({ platform, index, setCursorVariant, children }) {
         <section ref={ref} id={platform.id} className={reduced ? 'relative min-h-screen' : 'relative h-[210vh]'}>
             <div className={`${reduced ? 'min-h-screen' : 'sticky top-0 h-screen'} flex items-center justify-center overflow-hidden [perspective:1200px] px-4 sm:px-6`}>
 
-                {/* Centered Luxury Background Watermark (Clean, centered, never cut off) */}
-                <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none select-none z-0">
+                {/* ─── KINETIC SCROLL-DRIVEN BACKGROUND TYPOGRAPHY ─── */}
+                <div
+                    className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none select-none z-0"
+                    style={{
+                        maskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
+                        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
+                    }}
+                >
+                    {/* Primary Giant Outline Word sweeping Right to Left */}
                     <motion.span
-                        style={reduced ? { opacity: 0.12 } : {
-                            y: wordY,
-                            scale: wordScale,
+                        style={reduced ? { opacity: 0.15 } : {
+                            x: wordX,
                             opacity: wordOpacity,
-                            WebkitTextStroke: `1.5px ${platform.color}40`,
+                            WebkitTextStroke: `2px ${platform.color}50`,
                             color: 'transparent',
-                            filter: `drop-shadow(0 0 35px ${platform.color}25)`,
+                            filter: `drop-shadow(0 0 50px ${platform.color}35)`,
                         }}
-                        className="text-[17vw] sm:text-[15vw] font-black tracking-tighter leading-none uppercase select-none text-center"
+                        className="text-[24vw] md:text-[20vw] font-black tracking-tighter leading-none uppercase select-none whitespace-nowrap"
                         aria-hidden="true"
                     >
                         {platform.word}
                     </motion.span>
-                </div>
 
-                {/* Right-Hand Architectural Deck Indicator */}
-                <div className="hidden 2xl:flex absolute right-16 top-1/2 -translate-y-1/2 flex-col items-center gap-4 font-mono select-none pointer-events-none z-10">
-                    <span className="text-[10px] tracking-[0.4em] uppercase text-[var(--text-muted)] [writing-mode:vertical-lr] rotate-180">
-                        ENDPOINT // 0{index + 1}
-                    </span>
-                    <div className="w-px h-16 bg-gradient-to-b from-transparent via-[var(--border-color)] to-transparent" />
-                    <span className="text-xs tracking-[0.3em] font-bold [writing-mode:vertical-lr] rotate-180" style={{ color: platform.color }}>
-                        {platform.word}
-                    </span>
+                    {/* Secondary Parallax Micro-Ticker floating in reverse (Left to Right) */}
+                    <motion.div
+                        style={reduced ? { color: platform.color, opacity: 0 } : {
+                            x: tickerX,
+                            color: platform.color,
+                            opacity: wordOpacity,
+                        }}
+                        className="absolute bottom-[18vh] whitespace-nowrap font-mono text-[10px] tracking-[0.5em] uppercase"
+                        aria-hidden="true"
+                    >
+                        {`// PRIYANK KHATRI · ${platform.label.toUpperCase()} · ${platform.badge.toUpperCase()} //`}
+                    </motion.div>
                 </div>
 
                 {/* Section Meta Badge — Floating Index + Handle */}
