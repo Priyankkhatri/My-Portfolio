@@ -1,10 +1,14 @@
-import { motion } from 'framer-motion'
-import { Suspense } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { Suspense, useRef } from 'react'
 import { TechOrbitCanvas } from './TechOrbitCanvas'
 
 export function TechStackSection() {
+    const sectionRef = useRef(null)
+    const isInView = useInView(sectionRef, { margin: '300px 0px 300px 0px', once: true })
+
     return (
         <section
+            ref={sectionRef}
             id="tech-stack"
             style={{
                 position: 'relative',
@@ -18,10 +22,12 @@ export function TechStackSection() {
                 WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 150px, black calc(100% - 150px), transparent)',
             }}
         >
-            {/* 3D Scene */}
-            <Suspense fallback={null}>
-                <TechOrbitCanvas />
-            </Suspense>
+            {/* 3D Scene - Mounts only when near viewport to save GPU resources */}
+            {isInView && (
+                <Suspense fallback={null}>
+                    <TechOrbitCanvas />
+                </Suspense>
+            )}
 
             {/* Text overlay — centered horizontally, upper third of screen */}
             <div style={{

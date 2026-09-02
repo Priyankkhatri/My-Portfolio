@@ -1,7 +1,6 @@
 import { Canvas } from '@react-three/fiber'
-import { Stars, OrbitControls, Float } from '@react-three/drei'
+import { OrbitControls, Float } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
-import { BlendFunction } from 'postprocessing'
 import { Planet } from './Planet'
 import { OrbitalRing } from './OrbitalRing'
 import { techRings } from './techData'
@@ -13,10 +12,11 @@ export function TechOrbitCanvas() {
       gl={{ 
         antialias: true, 
         alpha: true, 
+        powerPreference: 'high-performance',
         toneMapping: 4,           // ACESFilmic
         toneMappingExposure: 1.1,
       }}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       style={{ width: '100%', height: '100%', background: 'transparent' }}
     >
       {/* Brighter lighting setup */}

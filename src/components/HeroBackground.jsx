@@ -354,12 +354,22 @@ export default function HeroBackground() {
     const colors = THEMES[theme] || THEMES.dark
     const tier = useResponsive()
     const r = RESPONSIVE[tier]
+    const [isVisible, setIsVisible] = useState(true)
 
     const loaderPhase = useStore((s) => s.loaderPhase)
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            setIsVisible(!document.hidden)
+        }
+        document.addEventListener('visibilitychange', handleVisibilityChange)
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }, [])
 
     return (
         <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: -1 }}>
             <Canvas
+                frameloop={isVisible ? 'always' : 'never'}
                 camera={{ position: [0, 0, 5], fov: r.fov }}
                 gl={{ antialias: false, powerPreference: "high-performance" }}
                 dpr={r.dpr}
