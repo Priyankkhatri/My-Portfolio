@@ -162,53 +162,57 @@ function ParticleSystem({ activeIdx, velocity, theme }) {
     useFrame((state, delta) => {
         if (!pointsRef.current) return
         const time = state.clock.getElapsedTime()
+        const dt = Math.min(delta, 0.1) // clamp delta to avoid hitching on frame drops
         uniforms.uTime.value = time
 
-        // Shape-change burst: particles flare outward, then settle
+        // Shape-change burst: smooth flare outward from center
         if (prevIdxRef.current !== activeIdx) {
-            burstRef.current = 1
+            burstRef.current = 0.85
             prevIdxRef.current = activeIdx
         }
-        burstRef.current *= Math.pow(0.06, delta) // fast exponential decay
+        burstRef.current += (0 - burstRef.current) * (1.0 - Math.pow(0.01, dt))
         uniforms.uBurst.value = burstRef.current
 
-        // Scroll velocity → turbulence
-        const v = velocity ? Math.min(Math.abs(velocity.get()) / 3000, 1) : 0
-        jitterRef.current += (v * 0.16 - jitterRef.current) * Math.min(delta * 4, 1)
+        // Scroll velocity → smooth turbulence
+        const v = velocity ? Math.min(Math.abs(velocity.get()) / 2500, 1.2) : 0
+        jitterRef.current += (v * 0.22 - jitterRef.current) * (1.0 - Math.pow(0.02, dt))
         uniforms.uJitter.value = jitterRef.current
 
-        // Morph each particle toward its target at its own pace
+        // Delta-independent particle morphing with per-particle inertia
         const targets = SHAPES[activeIdx] || SHAPES[0]
         const posAttr = pointsRef.current.geometry.attributes.position
         const pos = posAttr.array
-        const k = Math.min(delta * 60, 2)
         for (let i = 0; i < COUNT; i++) {
             const i3 = i * 3
-            const speed = (0.04 + rand[i] * 0.07) * k
-            pos[i3] += (targets[i3] - pos[i3]) * speed
-            pos[i3 + 1] += (targets[i3 + 1] - pos[i3 + 1]) * speed
-            pos[i3 + 2] += (targets[i3 + 2] - pos[i3 + 2]) * speed
+            const rate = 0.035 + rand[i] * 0.065
+            const factor = 1.0 - Math.pow(1.0 - rate, dt * 60)
+            pos[i3] += (targets[i3] - pos[i3]) * factor
+            pos[i3 + 1] += (targets[i3 + 1] - pos[i3 + 1]) * factor
+            pos[i3 + 2] += (targets[i3 + 2] - pos[i3 + 2]) * factor
         }
         posAttr.needsUpdate = true
 
-        // Color drifts toward the active platform's hue
+        // Color smoothly shifts toward the active platform hue
         const palette = SHAPE_COLORS[theme] || SHAPE_COLORS.dark
-        uniforms.uColor.value.lerp(new THREE.Color(palette[activeIdx] || palette[0]), 0.04)
+        const targetColor = new THREE.Color(palette[activeIdx] || palette[0])
+        uniforms.uColor.value.lerp(targetColor, 1.0 - Math.pow(0.004, dt))
 
-        // Gentle rotation, sped up by scroll energy
-        pointsRef.current.rotation.y = time * 0.05
-        pointsRef.current.rotation.x = Math.sin(time * 0.11) * 0.12
+        // Gentle ambient rotation with soft dynamic momentum
+        pointsRef.current.rotation.y = time * 0.045
+        pointsRef.current.rotation.x = Math.sin(time * 0.09) * 0.08
 
-        // Mouse parallax on the camera
-        state.camera.position.x += (state.pointer.x * 0.5 - state.camera.position.x) * 0.04
-        state.camera.position.y += (state.pointer.y * 0.3 - state.camera.position.y) * 0.04
+        // Smooth camera parallax
+        const targetCamX = state.pointer.x * 0.4
+        const targetCamY = state.pointer.y * 0.25
+        state.camera.position.x += (targetCamX - state.camera.position.x) * (1.0 - Math.pow(0.05, dt))
+        state.camera.position.y += (targetCamY - state.camera.position.y) * (1.0 - Math.pow(0.05, dt))
         state.camera.lookAt(0, 0, 0)
     })
 
     // Additive blending washes out on light backgrounds — switch per theme
     const isDark = theme !== 'light'
     useEffect(() => {
-        uniforms.uOpacity.value = isDark ? 0.85 : 0.9
+        uniforms.uOpacity.value = isDark ? 0.9 : 0.95
     }, [isDark, uniforms])
 
     return (
@@ -227,24 +231,24 @@ function ParticleSystem({ activeIdx, velocity, theme }) {
                     uniform float uBurst;
                     void main() {
                         vec3 p = position;
-                        float ph = aRand * 6.2831;
-                        // idle breathing drift
-                        p += 0.05 * vec3(
-                            sin(uTime * 0.6 + ph),
-                            cos(uTime * 0.5 + ph * 1.3),
-                            sin(uTime * 0.4 + ph * 2.0)
+                        float ph = aRand * 6.283185;
+                        // idle organic breathing drift
+                        p += 0.045 * vec3(
+                            sin(uTime * 0.55 + ph),
+                            cos(uTime * 0.45 + ph * 1.3),
+                            sin(uTime * 0.35 + ph * 2.0)
                         );
-                        // scroll turbulence
+                        // scroll velocity turbulence
                         p += uJitter * vec3(
-                            sin(ph * 13.0 + uTime * 3.0),
-                            cos(ph * 17.0 + uTime * 3.2),
-                            sin(ph * 19.0 + uTime * 2.8)
+                            sin(ph * 11.0 + uTime * 2.8),
+                            cos(ph * 13.0 + uTime * 3.0),
+                            sin(ph * 17.0 + uTime * 2.6)
                         );
-                        // morph burst — flare outward from center
-                        p *= 1.0 + uBurst * aRand * 0.55;
+                        // morph transition burst expansion
+                        p *= 1.0 + uBurst * aRand * 0.45;
                         vec4 mv = modelViewMatrix * vec4(p, 1.0);
                         gl_Position = projectionMatrix * mv;
-                        gl_PointSize = uSize * (0.55 + aRand * 0.9) * (300.0 / -mv.z);
+                        gl_PointSize = uSize * (0.65 + aRand * 0.85) * (320.0 / -mv.z);
                     }
                 `}
                 fragmentShader={`
@@ -253,7 +257,7 @@ function ParticleSystem({ activeIdx, velocity, theme }) {
                     void main() {
                         float dist = length(gl_PointCoord - vec2(0.5));
                         if (dist > 0.5) discard;
-                        float alpha = smoothstep(0.5, 0.12, dist);
+                        float alpha = smoothstep(0.5, 0.08, dist);
                         gl_FragColor = vec4(uColor, alpha * uOpacity);
                     }
                 `}
