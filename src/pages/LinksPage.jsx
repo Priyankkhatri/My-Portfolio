@@ -9,6 +9,28 @@ import {
     useVelocity,
     useReducedMotion,
 } from 'framer-motion'
+import {
+    Copy,
+    Check,
+    ExternalLink,
+    Play,
+    Sparkles,
+    ArrowUpRight,
+    Terminal,
+    Compass,
+    Code2,
+    Share2,
+    Mail,
+    FileText,
+} from 'lucide-react'
+import {
+    SiGithub as GithubIcon,
+    SiLeetcode as LeetcodeIcon,
+    SiYoutube as YoutubeIcon,
+    SiInstagram as InstagramIcon,
+    SiX as XIcon,
+} from 'react-icons/si'
+import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa6'
 import useStore from '../store/useStore'
 import LinksBackground3D from '../components/LinksBackground3D'
 
@@ -17,99 +39,81 @@ import LinksBackground3D from '../components/LinksBackground3D'
 const PLATFORMS = [
     {
         id: 'github',
+        glyphIdx: 1,
         label: 'GitHub',
         word: 'COMMIT',
         color: '#60a5fa',
         href: 'https://github.com/Priyankkhatri',
         handle: '@Priyankkhatri',
-        tagline: 'Repositories, experiments, and everything I ship.',
+        badge: 'Open Source & Repositories',
+        tagline: 'Full-stack MERN apps, 3D WebGL experiments, and open-source contributions.',
         cta: 'Open GitHub',
-        icon: (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-            </svg>
-        ),
+        icon: GithubIcon,
     },
     {
         id: 'leetcode',
+        glyphIdx: 2,
         label: 'LeetCode',
         word: 'SOLVE',
         color: '#f59e0b',
         href: 'https://leetcode.com/u/Priyank_Khatri/',
         handle: '@Priyank_Khatri',
-        tagline: 'Data structures, algorithms, and daily problem grind.',
+        badge: 'Algorithms & Data Structures',
+        tagline: 'Consistent algorithmic problem solving with dynamic programming, trees, and graphs.',
         cta: 'Open LeetCode',
-        icon: (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-            </svg>
-        ),
+        icon: LeetcodeIcon,
     },
     {
         id: 'linkedin',
+        glyphIdx: 3,
         label: 'LinkedIn',
         word: 'CONNECT',
         color: '#38bdf8',
         href: 'https://www.linkedin.com/in/priyankkhatrii/',
         handle: 'in/priyankkhatrii',
-        tagline: 'Professional profile — open to internships and collabs.',
-        cta: 'Connect',
-        icon: (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                <rect x="2" y="9" width="4" height="12" />
-                <circle cx="4" cy="4" r="2" />
-            </svg>
-        ),
+        badge: 'Professional Network',
+        tagline: 'Connect for software developer internships, full-time opportunities, and collabs.',
+        cta: 'Connect on LinkedIn',
+        icon: LinkedinIcon,
     },
     {
         id: 'youtube',
+        glyphIdx: 4,
         label: 'YouTube',
         word: 'CREATE',
         color: '#ef4444',
         href: 'https://www.youtube.com/@PriyankCreates',
         handle: '@PriyankCreates',
-        tagline: 'Build breakdowns, dev setups, and project vlogs.',
+        badge: 'Devlogs & Breakdowns',
+        tagline: 'Project walkthroughs, architectural breakdowns, frontend engineering, and dev vlogs.',
         cta: 'Open YouTube',
-        icon: (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
-                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
-            </svg>
-        ),
+        icon: YoutubeIcon,
     },
     {
         id: 'instagram',
+        glyphIdx: 5,
         label: 'Instagram',
         word: 'DESIGN',
         color: '#ec4899',
         href: 'https://www.instagram.com/priyankhatrii/',
         handle: '@priyankhatrii',
-        tagline: 'Design logs, setups, palettes, and visual experiments.',
+        badge: 'Visual Design & Workspace',
+        tagline: 'Design logs, UI prototypes, setup aesthetics, and visual developer experiments.',
         cta: 'Open Instagram',
-        icon: (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-            </svg>
-        ),
+        icon: InstagramIcon,
     },
     {
         id: 'twitter',
+        glyphIdx: 6,
         label: 'X / Twitter',
         word: 'BROADCAST',
-        color: '#e2e8f0',
+        color: '#cbd5e1',
         href: 'https://x.com/PriyankKhatrii',
         handle: '@PriyankKhatrii',
-        tagline: 'Dev thoughts, design opinions, and micro-interactions.',
-        cta: 'Follow',
-        icon: (
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-        ),
+        badge: 'Tech Broadcasts & Insights',
+        tagline: 'Daily software engineering updates, WebGL explorations, and tech opinions.',
+        cta: 'Follow on X',
+        icon: XIcon,
     },
 ]
 
@@ -130,52 +134,25 @@ const mockCommits = [
     'docs(dossier): update skill catalog references',
 ]
 
-/* Decorative contribution matrix — generated once at module load so the
-   pattern and tooltips stay stable across re-renders. Not real GitHub data. */
-const contributionCells = [...Array(140)].map((_, i) => {
+const contributionCells = [...Array(120)].map((_, i) => {
     const density = Math.random()
     return {
-        colorClass: density < 0.3 ? 'bg-white/5'
-            : density < 0.6 ? 'bg-emerald-950/40'
-            : density < 0.85 ? 'bg-emerald-800/60 shadow-[0_0_4px_rgba(16,185,129,0.15)]'
-            : 'bg-emerald-500/90 shadow-[0_0_6px_rgba(16,185,129,0.45)]',
+        colorClass: density < 0.28 ? 'bg-white/5'
+            : density < 0.58 ? 'bg-[#60a5fa]/25'
+            : density < 0.85 ? 'bg-[#60a5fa]/65 shadow-[0_0_6px_rgba(96,165,250,0.3)]'
+            : 'bg-[#60a5fa] shadow-[0_0_8px_rgba(96,165,250,0.6)]',
         msg: mockCommits[i % mockCommits.length],
-        date: `2026-07-${String((i % 9) + 1).padStart(2, '0')}`,
+        date: `2026-08-${String((i % 28) + 1).padStart(2, '0')}`,
     }
 })
 
-/* ═══════════════════ MOTION PRIMITIVES ═══════════════════ */
+/* ═══════════════════ MOTION HELPERS ═══════════════════ */
 
-/** Per-character rising reveal, triggered when scrolled into view. */
-function CharReveal({ text, className = '', style, delay = 0 }) {
-    const reduced = useReducedMotion()
-    if (reduced) {
-        return <span className={className} style={style}>{text}</span>
-    }
-    return (
-        <span className={className} style={style} aria-label={text} role="text">
-            {text.split('').map((ch, i) => (
-                <span key={i} className="inline-block overflow-hidden align-bottom" aria-hidden="true">
-                    <motion.span
-                        className="inline-block"
-                        initial={{ y: '105%', rotate: 6 }}
-                        whileInView={{ y: '0%', rotate: 0 }}
-                        viewport={{ once: true, margin: '-10%' }}
-                        transition={{ duration: 0.7, delay: delay + i * 0.028, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                        {ch === ' ' ? ' ' : ch}
-                    </motion.span>
-                </span>
-            ))}
-        </span>
-    )
-}
-
-/** Magnetic hover wrapper — element leans toward the cursor. */
-function Magnetic({ children, strength = 0.35, className = '' }) {
+/** Magnetic hover button wrapper */
+function Magnetic({ children, strength = 0.3, className = '' }) {
     const ref = useRef(null)
-    const x = useSpring(0, { stiffness: 220, damping: 16, mass: 0.4 })
-    const y = useSpring(0, { stiffness: 220, damping: 16, mass: 0.4 })
+    const x = useSpring(0, { stiffness: 200, damping: 15, mass: 0.4 })
+    const y = useSpring(0, { stiffness: 200, damping: 15, mass: 0.4 })
     const reduced = useReducedMotion()
 
     const handleMove = (e) => {
@@ -196,247 +173,256 @@ function Magnetic({ children, strength = 0.35, className = '' }) {
     )
 }
 
-/** Primary CTA link with magnetic pull + sliding arrow. */
+/** Primary CTA link with animated hover */
 function PlatformCta({ platform, setCursorVariant }) {
     return (
-        <Magnetic strength={0.3}>
-            <a
-                href={platform.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                onMouseEnter={() => setCursorVariant('hover')}
-                onMouseLeave={() => setCursorVariant('default')}
-                className="group/cta inline-flex items-center gap-3 px-7 py-3.5 rounded-full border font-mono text-[10px] tracking-[0.2em] uppercase transition-colors duration-300 relative overflow-hidden"
-                style={{ borderColor: `${platform.color}44`, color: 'var(--text-primary)' }}
-            >
-                <span
-                    className="absolute inset-0 translate-y-[101%] group-hover/cta:translate-y-0 transition-transform duration-400 ease-out"
-                    style={{ background: `${platform.color}18` }}
-                />
-                <span className="relative z-10">{platform.cta}</span>
-                <span className="relative z-10 overflow-hidden w-3.5 h-3.5">
-                    <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 group-hover/cta:translate-x-[150%]" style={{ color: platform.color }}>→</span>
-                    <span className="absolute inset-0 flex items-center justify-center -translate-x-[150%] transition-transform duration-300 group-hover/cta:translate-x-0" style={{ color: platform.color }}>→</span>
-                </span>
-            </a>
-        </Magnetic>
-    )
-}
-
-/* ═══════════════════ PINNED SCROLL SECTION ═══════════════════
-   Each platform gets ~190vh of scroll. The stage stays pinned while
-   scroll progress choreographs: a giant outlined word sweeping across,
-   the card rising/flattening in 3D, a color beam drawing itself, and
-   everything lifting away as the next section takes over.            */
-function PinnedSection({ platform, index, setCursorVariant, children }) {
-    const ref = useRef(null)
-    const reduced = useReducedMotion()
-    const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-
-    const wordX = useTransform(scrollYProgress, [0, 1], ['16vw', '-42vw'])
-    const wordOpacity = useTransform(scrollYProgress, [0, 0.12, 0.85, 1], [0, 1, 1, 0])
-    const cardY = useTransform(scrollYProgress, [0, 0.24, 0.76, 1], [130, 0, 0, -130])
-    const cardOpacity = useTransform(scrollYProgress, [0.02, 0.2, 0.8, 0.98], [0, 1, 1, 0])
-    const cardRotateX = useTransform(scrollYProgress, [0, 0.24], [22, 0])
-    const cardScale = useTransform(scrollYProgress, [0, 0.24, 0.76, 1], [0.92, 1, 1, 0.95])
-    const beamScaleX = useTransform(scrollYProgress, [0.08, 0.32], [0, 1])
-    const metaY = useTransform(scrollYProgress, [0.05, 0.25], [40, 0])
-    const metaOpacity = useTransform(scrollYProgress, [0.05, 0.25], [0, 1])
-
-    const stageStyle = reduced ? {} : { y: cardY, opacity: cardOpacity, rotateX: cardRotateX, scale: cardScale }
-    const wordStyle = reduced ? { x: 0, opacity: 0.6 } : { x: wordX, opacity: wordOpacity }
-
-    return (
-        <section ref={ref} id={platform.id} className={reduced ? 'relative min-h-screen' : 'relative h-[190vh]'}>
-            <div className={`${reduced ? 'min-h-screen' : 'sticky top-0 h-screen'} flex items-center justify-center overflow-hidden [perspective:1200px]`}>
-
-                {/* Giant outlined word sweeping across the stage */}
-                <motion.span
+        <div className="flex items-center gap-3 pt-2">
+            <Magnetic strength={0.35}>
+                <a
+                    href={platform.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onMouseEnter={() => setCursorVariant('hover')}
+                    onMouseLeave={() => setCursorVariant('default')}
+                    className="group/cta relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full font-mono text-xs tracking-wider uppercase font-semibold transition-all duration-300 overflow-hidden shadow-lg"
                     style={{
-                        ...wordStyle,
-                        WebkitTextStroke: `1.5px ${platform.color}30`,
-                        color: 'transparent',
+                        background: `linear-gradient(135deg, ${platform.color}25, ${platform.color}08)`,
+                        borderColor: `${platform.color}50`,
+                        borderWidth: '1px',
+                        borderStyle: 'solid',
+                        color: 'var(--text-primary)',
+                        boxShadow: `0 10px 25px -5px ${platform.color}20`,
                     }}
-                    className="absolute top-1/2 -translate-y-1/2 left-1/2 text-[24vw] font-black whitespace-nowrap select-none pointer-events-none leading-none tracking-tight"
-                    aria-hidden="true"
                 >
-                    {platform.word}
-                </motion.span>
-
-                {/* Section meta — floating index + handle */}
-                <motion.div
-                    style={reduced ? {} : { y: metaY, opacity: metaOpacity }}
-                    className="absolute top-[12vh] left-6 sm:left-12 lg:left-20 font-mono select-none pointer-events-none"
-                    aria-hidden="true"
-                >
-                    <div className="text-[10px] tracking-[0.35em] uppercase" style={{ color: platform.color }}>
-                        {String(index + 1).padStart(2, '0')} / {String(PLATFORMS.length).padStart(2, '0')}
-                    </div>
-                    <div className="text-[10px] tracking-wider text-[var(--text-muted)] mt-1.5">{platform.handle}</div>
-                </motion.div>
-
-                {/* The card */}
-                <motion.div
-                    style={stageStyle}
-                    className="relative w-[calc(100%-2.5rem)] max-w-3xl bg-[var(--bg-primary)]/55 border border-[var(--border-color)] rounded-[2rem] backdrop-blur-2xl p-7 sm:p-12 shadow-[0_40px_90px_-20px_rgba(0,0,0,0.65)] overflow-hidden"
-                >
-                    {/* self-drawing color beam */}
-                    <motion.div
-                        style={reduced ? {} : { scaleX: beamScaleX }}
-                        className="absolute top-0 left-0 right-0 h-[2px] origin-left"
-                        aria-hidden="true"
-                    >
-                        <div className="h-full w-full" style={{ background: `linear-gradient(90deg, ${platform.color}, transparent)` }} />
-                    </motion.div>
-
-                    {/* corner glow */}
-                    <div
-                        className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-[70px] pointer-events-none opacity-[0.07]"
+                    <span
+                        className="absolute inset-0 translate-y-[101%] group-hover/cta:translate-y-0 transition-transform duration-300 ease-out"
                         style={{ background: platform.color }}
-                        aria-hidden="true"
                     />
-
-                    <div className="relative z-10 space-y-7">
-                        <div className="flex items-center gap-3">
-                            <span className="w-9 h-9 rounded-xl border flex items-center justify-center" style={{ borderColor: `${platform.color}40`, color: platform.color }}>
-                                {platform.icon}
-                            </span>
-                            <span className="text-[10px] font-mono tracking-[0.3em] uppercase font-bold" style={{ color: platform.color }}>
-                                {platform.label}
-                            </span>
-                        </div>
-
-                        <h2 className="text-4xl sm:text-6xl font-bold text-[var(--text-primary)] leading-[1.02]" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                            <CharReveal text={platform.word.charAt(0) + platform.word.slice(1).toLowerCase()} />
-                            <span style={{ color: platform.color }}>.</span>
-                        </h2>
-
-                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-md font-sans">
-                            {platform.tagline}
-                        </p>
-
-                        {children}
-
-                        <PlatformCta platform={platform} setCursorVariant={setCursorVariant} />
-                    </div>
-                </motion.div>
-            </div>
-        </section>
+                    <span className="relative z-10 transition-colors duration-300 group-hover/cta:text-black font-bold">
+                        {platform.cta}
+                    </span>
+                    <span className="relative z-10 transition-transform duration-300 group-hover/cta:translate-x-1 group-hover/cta:text-black">
+                        <ArrowUpRight size={16} />
+                    </span>
+                </a>
+            </Magnetic>
+        </div>
     )
 }
 
 /* ═══════════════════ PLATFORM WIDGETS ═══════════════════ */
 
-/* Contribution board with local tooltip state so hovering a cell only
-   re-renders this component, not the whole page. */
-function ContributionBoard({ setCursorVariant }) {
+function GithubWidget({ setCursorVariant }) {
     const [activeTooltip, setActiveTooltip] = useState(null)
 
     return (
-        <div className="space-y-2.5">
-            <span className="text-[9px] font-mono text-[var(--text-muted)] uppercase tracking-[0.25em] block">Decorative contribution matrix</span>
-            <motion.div
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: '-40px' }}
-                variants={{ hidden: {}, show: { transition: { staggerChildren: 0.004 } } }}
-                className="flex flex-wrap gap-1 bg-black/10 p-4 rounded-2xl border border-white/5 relative max-w-xl"
-            >
-                {contributionCells.map((cell, i) => (
-                    <motion.div
-                        key={i}
-                        variants={{ hidden: { scale: 0, opacity: 0 }, show: { scale: 1, opacity: 1 } }}
-                        onMouseEnter={() => {
-                            setCursorVariant('hover')
-                            setActiveTooltip({ id: i, msg: cell.msg, date: cell.date })
-                        }}
-                        onMouseLeave={() => {
-                            setCursorVariant('default')
-                            setActiveTooltip(null)
-                        }}
-                        className={`w-3 h-3 rounded-[3px] cursor-pointer transition-colors duration-300 hover:scale-110 ${cell.colorClass}`}
-                    />
-                ))}
-                <AnimatePresence>
-                    {activeTooltip && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="absolute -top-11 left-4 right-4 bg-black/95 backdrop-blur border border-emerald-500/20 px-3 py-2 rounded-lg font-mono text-[9px] text-emerald-400 shadow-lg text-left z-20"
-                        >
-                            {`[Commit: ${activeTooltip.date}] ${activeTooltip.msg}`}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </motion.div>
-        </div>
-    )
-}
-
-function GithubWidget({ setCursorVariant }) {
-    return (
         <div className="space-y-4">
-            <div className="rounded-2xl border border-white/5 bg-white/[0.01] p-2 hidden sm:flex items-center justify-center overflow-hidden max-w-lg">
-                <img
-                    src="https://github-readme-stats.vercel.app/api?username=Priyankkhatri&theme=transparent&text_color=e8edf5&icon_color=60a5fa&border_color=60a5fa/10&show_icons=true"
-                    alt="Live GitHub statistics for Priyankkhatri"
-                    className="max-w-full h-auto select-none"
-                    loading="lazy"
-                />
+            {/* Top stats pill row */}
+            <div className="flex flex-wrap items-center gap-2 font-mono text-[10px]">
+                <span className="px-2.5 py-1 rounded-lg bg-[#60a5fa]/10 text-[#60a5fa] border border-[#60a5fa]/20 font-semibold">
+                    30+ Public Repos
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Daily Active Commits
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-white/5 text-[var(--text-secondary)] border border-white/10">
+                    Open Source
+                </span>
             </div>
-            <ContributionBoard setCursorVariant={setCursorVariant} />
+
+            {/* Contribution heat matrix */}
+            <div className="space-y-2">
+                <div className="flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider">
+                    <span>Recent Contribution Matrix</span>
+                    <span className="text-[#60a5fa]">August 2026</span>
+                </div>
+                <div className="relative p-3 rounded-2xl bg-black/30 border border-white/10 overflow-hidden">
+                    <div className="grid grid-flow-col grid-rows-4 gap-1.5">
+                        {contributionCells.map((cell, i) => (
+                            <div
+                                key={i}
+                                onMouseEnter={() => {
+                                    setCursorVariant('hover')
+                                    setActiveTooltip({ id: i, msg: cell.msg, date: cell.date })
+                                }}
+                                onMouseLeave={() => {
+                                    setCursorVariant('default')
+                                    setActiveTooltip(null)
+                                }}
+                                className={`w-3.5 h-3.5 rounded-[3px] cursor-pointer transition-all duration-200 hover:scale-125 ${cell.colorClass}`}
+                            />
+                        ))}
+                    </div>
+
+                    <AnimatePresence>
+                        {activeTooltip && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                className="absolute bottom-2 left-3 right-3 bg-black/95 backdrop-blur border border-[#60a5fa]/30 px-3 py-2 rounded-xl font-mono text-[10px] text-[#60a5fa] shadow-xl z-20 flex items-center justify-between"
+                            >
+                                <span className="truncate">{activeTooltip.msg}</span>
+                                <span className="text-[var(--text-muted)] ml-2 shrink-0">{activeTooltip.date}</span>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </div>
+
+            {/* Tech tags */}
+            <div className="flex flex-wrap gap-1.5 pt-1">
+                {['React.js', 'Node.js', 'Express', 'MongoDB', 'Three.js', 'Tailwind CSS'].map((tech, i) => (
+                    <span key={i} className="text-[10px] font-mono px-2.5 py-0.5 rounded-md bg-white/[0.04] text-[var(--text-secondary)] border border-white/5">
+                        {tech}
+                    </span>
+                ))}
+            </div>
         </div>
     )
 }
 
 function LeetCodeWidget() {
+    const difficulties = [
+        { label: 'Easy', count: '65+', color: '#10b981', percent: '45%' },
+        { label: 'Medium', count: '75+', color: '#f59e0b', percent: '48%' },
+        { label: 'Hard', count: '10+', color: '#ef4444', percent: '7%' },
+    ]
+
     return (
-        <div className="rounded-2xl border border-white/5 bg-white/[0.01] p-2 flex items-center justify-center overflow-hidden max-w-lg">
-            <img
-                src="https://leetcard.jacoblin.cool/Priyank_Khatri?theme=dark&font=Outfit&ext=activity"
-                alt="Live LeetCode statistics for Priyank_Khatri"
-                className="max-w-full h-auto object-contain select-none"
-                loading="lazy"
-            />
+        <div className="space-y-4">
+            {/* Top Stats Banner */}
+            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono font-bold text-sm">
+                        150+
+                    </div>
+                    <div>
+                        <div className="text-xs font-mono font-bold text-amber-300 uppercase tracking-wider">Problems Solved</div>
+                        <div className="text-[10px] font-mono text-[var(--text-muted)]">Data Structures & Algorithms</div>
+                    </div>
+                </div>
+                <span className="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold">
+                    ACTIVE
+                </span>
+            </div>
+
+            {/* Progress Bars */}
+            <div className="space-y-2.5 p-4 rounded-2xl bg-black/30 border border-white/10">
+                {difficulties.map((diff, i) => (
+                    <div key={i} className="space-y-1">
+                        <div className="flex justify-between text-xs font-mono">
+                            <span style={{ color: diff.color }} className="font-semibold">{diff.label}</span>
+                            <span className="text-[var(--text-primary)] font-bold">{diff.count}</span>
+                        </div>
+                        <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
+                            <div
+                                className="h-full rounded-full transition-all duration-700"
+                                style={{
+                                    width: diff.percent,
+                                    backgroundColor: diff.color,
+                                    boxShadow: `0 0 10px ${diff.color}80`,
+                                }}
+                            />
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Topic Focus Pills */}
+            <div className="flex flex-wrap gap-1.5">
+                {['Dynamic Programming', 'Graphs', 'Trees', 'Binary Search', 'Sliding Window'].map((topic, i) => (
+                    <span key={i} className="text-[10px] font-mono px-2.5 py-0.5 rounded-md bg-amber-500/5 text-amber-200/80 border border-amber-500/15">
+                        {topic}
+                    </span>
+                ))}
+            </div>
         </div>
     )
 }
 
 function LinkedInWidget() {
     return (
-        <div className="bg-white/[0.01] border border-white/5 p-6 rounded-2xl max-w-lg space-y-3 relative overflow-hidden">
-            <div className="flex items-center gap-2.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[9px] font-mono tracking-[0.2em] text-emerald-400 uppercase font-semibold">Available for internships</span>
+        <div className="space-y-4">
+            {/* Status & Availability Badge */}
+            <div className="p-4 rounded-2xl bg-sky-500/10 border border-sky-500/25 flex items-center gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-pulse shrink-0" />
+                <div>
+                    <div className="text-xs font-mono font-bold text-sky-300">
+                        Open for Software Developer Internships
+                    </div>
+                    <div className="text-[10px] font-mono text-sky-200/60 mt-0.5">
+                        Available for Summer & Fall Opportunities
+                    </div>
+                </div>
             </div>
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] font-mono">Priyank Khatri</h3>
-            <div className="text-xs text-[#38bdf8] font-mono">Creative Full Stack Developer · Student</div>
-            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-sans">
-                React, Node, Vite, Three.js. Building clean interactive systems and high-fidelity products.
-            </p>
+
+            {/* Candidate Summary Card */}
+            <div className="p-5 rounded-2xl bg-black/30 border border-white/10 space-y-3">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h4 className="text-base font-bold text-[var(--text-primary)] font-mono">Priyank Khatri</h4>
+                        <p className="text-xs text-sky-400 font-mono">Creative Full-Stack Developer · B.Tech CSE</p>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-lg bg-sky-500/15 text-sky-300 font-mono text-[10px] font-semibold border border-sky-500/30">
+                        VERIFIED
+                    </span>
+                </div>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans">
+                    Specializing in high-performance React architectures, Node.js REST APIs, and immersive 3D WebGL experiences.
+                </p>
+                <div className="grid grid-cols-3 gap-2 pt-1 text-center font-mono">
+                    <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5">
+                        <div className="text-[9px] text-[var(--text-muted)] uppercase">Degree</div>
+                        <div className="text-xs font-bold text-[var(--text-primary)] mt-0.5">B.Tech CSE</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5">
+                        <div className="text-[9px] text-[var(--text-muted)] uppercase">Institute</div>
+                        <div className="text-xs font-bold text-[var(--text-primary)] mt-0.5">Coding Gita</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5">
+                        <div className="text-[9px] text-[var(--text-muted)] uppercase">Location</div>
+                        <div className="text-xs font-bold text-[var(--text-primary)] mt-0.5">India</div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
 
 function YouTubeWidget() {
+    const devlogs = [
+        { title: 'Interactive 3D Portfolio Build & R3F Performance', tag: 'DEVLOG_01', length: 'In-Depth' },
+        { title: 'Full Stack MERN Architecture & Deployment Guide', tag: 'TUTORIAL_02', length: 'Full Stack' },
+    ]
+
     return (
-        <div className="space-y-2.5 max-w-lg">
-            <span className="text-[9px] font-mono text-[var(--text-muted)] uppercase tracking-[0.25em] block">Preview concepts</span>
-            <div className="grid grid-cols-2 gap-3">
-                {[
-                    { title: '3D Portfolio Build BTS', tag: 'BTS_LOG_01' },
-                    { title: 'Advanced React Routing', tag: 'CODE_LOG_02' },
-                ].map((vid, idx) => (
-                    <div key={idx} className="group/vid rounded-xl border border-white/5 bg-white/[0.01] overflow-hidden hover:border-[#ef4444]/30 transition-all duration-500">
-                        <div className="aspect-video bg-white/5 flex items-center justify-center group-hover/vid:bg-white/10 transition-colors">
-                            <div className="w-9 h-9 rounded-full bg-black/40 border border-white/15 flex items-center justify-center text-white group-hover/vid:scale-110 transition-transform duration-300">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+        <div className="space-y-3">
+            <div className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider">
+                Featured Technical Devlogs
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {devlogs.map((vid, idx) => (
+                    <div
+                        key={idx}
+                        className="group/vid rounded-2xl border border-white/10 bg-black/30 p-3.5 space-y-2.5 hover:border-red-500/40 transition-all duration-300"
+                    >
+                        <div className="aspect-video rounded-xl bg-gradient-to-br from-red-950/40 via-black to-black border border-red-500/20 flex items-center justify-center relative overflow-hidden group-hover/vid:border-red-500/50 transition-colors">
+                            <div className="w-10 h-10 rounded-full bg-red-600/80 text-white flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.5)] group-hover/vid:scale-110 transition-transform">
+                                <Play size={14} className="fill-current ml-0.5" />
                             </div>
+                            <span className="absolute bottom-2 right-2 text-[8px] font-mono px-1.5 py-0.5 rounded bg-black/80 text-red-200 border border-red-500/20">
+                                {vid.length}
+                            </span>
                         </div>
-                        <div className="p-3 space-y-0.5">
-                            <span className="text-[7px] font-mono text-[#ef4444] uppercase tracking-wider">{vid.tag}</span>
-                            <h3 className="text-[11px] font-semibold text-[var(--text-primary)] font-mono">{vid.title}</h3>
+                        <div>
+                            <span className="text-[9px] font-mono text-red-400 font-bold uppercase tracking-wider block">
+                                {vid.tag}
+                            </span>
+                            <h4 className="text-xs font-bold text-[var(--text-primary)] font-mono line-clamp-2 mt-0.5">
+                                {vid.title}
+                            </h4>
                         </div>
                     </div>
                 ))}
@@ -446,18 +432,30 @@ function YouTubeWidget() {
 }
 
 function InstagramWidget() {
+    const tiles = [
+        { label: 'Creative Code', sub: '3D UI', color: 'from-pink-500/20 to-purple-500/20' },
+        { label: 'Dev Setup', sub: 'Workspace', color: 'from-purple-500/20 to-indigo-500/20' },
+        { label: 'Dark Palette', sub: 'Aesthetics', color: 'from-pink-500/20 to-rose-500/20' },
+        { label: 'Motion', sub: 'Framer', color: 'from-indigo-500/20 to-pink-500/20' },
+    ]
+
     return (
-        <div className="space-y-2.5 max-w-lg">
-            <span className="text-[9px] font-mono text-[var(--text-muted)] uppercase tracking-[0.25em] block">Visual index</span>
-            <div className="grid grid-cols-4 gap-2.5">
-                {['Mesh', 'Setup', 'Vector', 'Grad'].map((label, idx) => (
+        <div className="space-y-3">
+            <div className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider">
+                Visual Development Log
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {tiles.map((tile, idx) => (
                     <motion.div
                         key={idx}
-                        whileHover={{ y: -5, rotate: idx % 2 === 0 ? -2 : 2 }}
-                        className="aspect-square rounded-xl bg-white/[0.01] border border-white/5 flex flex-col items-center justify-center gap-1 group/pic hover:border-[#ec4899]/40 transition-colors duration-300"
+                        whileHover={{ y: -4, scale: 1.03 }}
+                        className={`aspect-square rounded-2xl bg-gradient-to-br ${tile.color} border border-pink-500/20 p-3 flex flex-col justify-between hover:border-pink-500/50 transition-colors`}
                     >
-                        <span className="text-[10px] font-mono font-bold text-[var(--text-primary)]">{label}</span>
-                        <span className="text-[7px] font-mono text-white/15 group-hover/pic:text-[#ec4899]/60 transition-colors">0{idx + 1}</span>
+                        <span className="text-[9px] font-mono text-pink-400 font-bold">0{idx + 1}</span>
+                        <div>
+                            <div className="text-xs font-mono font-bold text-[var(--text-primary)]">{tile.label}</div>
+                            <div className="text-[9px] font-mono text-pink-200/60">{tile.sub}</div>
+                        </div>
                     </motion.div>
                 ))}
             </div>
@@ -466,16 +464,29 @@ function InstagramWidget() {
 }
 
 function TwitterWidget() {
+    const tweets = [
+        'Crafting butter-smooth 60fps WebGL transitions with React Three Fiber and Three.js. Direct shader math makes all the difference. ⚡',
+        'Performance first: granular chunking, viewport-gating heavy 3D canvases, and zero layout shift. Clean code always wins. 🚀',
+    ]
+
     return (
-        <div className="space-y-2.5 max-w-lg">
-            <span className="text-[9px] font-mono text-[var(--text-muted)] uppercase tracking-[0.25em] block">Sample broadcasts</span>
+        <div className="space-y-2.5">
+            <div className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider">
+                Recent Broadcast Insights
+            </div>
             <div className="space-y-2.5">
-                {[
-                    'Just completed the Quantum Aurora portal. Direct DOM styling at 60fps makes it feel like absolute butter. 🚀',
-                    'Coffee, code, and compositor animations. Exploring Three.js camera transitions tonight. ☕',
-                ].map((tweet, idx) => (
-                    <div key={idx} className="bg-white/[0.01] border border-white/5 px-4 py-3 rounded-xl hover:border-white/10 transition-colors">
-                        <p className="text-[11px] text-[var(--text-primary)] font-sans leading-relaxed">{tweet}</p>
+                {tweets.map((t, idx) => (
+                    <div key={idx} className="p-4 rounded-2xl bg-black/30 border border-white/10 space-y-2 hover:border-white/20 transition-colors">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs font-bold text-[var(--text-primary)] font-mono">Priyank Khatri</span>
+                                <span className="text-[10px] font-mono text-[var(--text-muted)]">@PriyankKhatrii</span>
+                            </div>
+                            <span className="text-[10px] font-mono text-[var(--text-muted)]">Verified</span>
+                        </div>
+                        <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
+                            {t}
+                        </p>
                     </div>
                 ))}
             </div>
@@ -490,6 +501,151 @@ const WIDGETS = {
     youtube: YouTubeWidget,
     instagram: InstagramWidget,
     twitter: TwitterWidget,
+}
+
+/* ═══════════════════ PINNED SCROLL SECTION ═══════════════════ */
+
+function PinnedSection({ platform, index, setCursorVariant, children }) {
+    const ref = useRef(null)
+    const reduced = useReducedMotion()
+    const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+
+    // Fine-tuned scroll transformations for buttery fluid motion
+    const wordX = useTransform(scrollYProgress, [0, 1], ['25vw', '-35vw'])
+    const wordOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 0.25, 0.25, 0])
+
+    const cardY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [90, 0, 0, -90])
+    const cardOpacity = useTransform(scrollYProgress, [0.02, 0.2, 0.8, 0.98], [0, 1, 1, 0])
+    const cardRotateX = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [10, 0, 0, -8])
+    const cardScale = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [0.93, 1, 1, 0.95])
+    const beamScaleX = useTransform(scrollYProgress, [0.06, 0.3], [0, 1])
+    const metaY = useTransform(scrollYProgress, [0.05, 0.25], [30, 0])
+    const metaOpacity = useTransform(scrollYProgress, [0.05, 0.25], [0, 1])
+
+    const stageStyle = reduced ? {} : { y: cardY, opacity: cardOpacity, rotateX: cardRotateX, scale: cardScale }
+    const wordStyle = reduced ? { x: 0, opacity: 0.15 } : { x: wordX, opacity: wordOpacity }
+
+    const IconComponent = platform.icon
+
+    // Display title derived from action word
+    const titleText = platform.word.charAt(0) + platform.word.slice(1).toLowerCase()
+
+    return (
+        <section ref={ref} id={platform.id} className={reduced ? 'relative min-h-screen' : 'relative h-[150vh]'}>
+            <div className={`${reduced ? 'min-h-screen' : 'sticky top-0 h-screen'} flex items-center justify-center overflow-hidden [perspective:1200px] px-4 sm:px-6`}>
+
+                {/* Giant outlined word sweeping across the stage in the background */}
+                <motion.span
+                    style={{
+                        ...wordStyle,
+                        WebkitTextStroke: `1.5px ${platform.color}40`,
+                        color: 'transparent',
+                    }}
+                    className="absolute top-1/2 -translate-y-1/2 left-1/2 text-[22vw] font-black whitespace-nowrap select-none pointer-events-none leading-none tracking-tight z-0"
+                    aria-hidden="true"
+                >
+                    {platform.word}
+                </motion.span>
+
+                {/* Section meta badge — floating index + handle */}
+                <motion.div
+                    style={reduced ? {} : { y: metaY, opacity: metaOpacity }}
+                    className="absolute top-[10vh] left-6 sm:left-12 lg:left-24 font-mono select-none pointer-events-none z-20"
+                    aria-hidden="true"
+                >
+                    <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full" style={{ background: platform.color, boxShadow: `0 0 8px ${platform.color}` }} />
+                        <span className="text-xs tracking-[0.3em] uppercase font-bold" style={{ color: platform.color }}>
+                            {String(index + 1).padStart(2, '0')} / {String(PLATFORMS.length).padStart(2, '0')}
+                        </span>
+                    </div>
+                    <div className="text-xs tracking-wider text-[var(--text-muted)] mt-1">{platform.handle}</div>
+                </motion.div>
+
+                {/* The Luxury Glass Card */}
+                <motion.div
+                    style={stageStyle}
+                    className="relative w-full max-w-3xl bg-[var(--bg-primary)]/80 border border-[var(--border-color)] rounded-[2.5rem] backdrop-blur-3xl p-7 sm:p-12 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.8)] overflow-hidden z-10"
+                >
+                    {/* Drawing Top Laser Beam */}
+                    <motion.div
+                        style={reduced ? {} : { scaleX: beamScaleX }}
+                        className="absolute top-0 left-0 right-0 h-[2px] origin-left z-20"
+                        aria-hidden="true"
+                    >
+                        <div className="h-full w-full" style={{ background: `linear-gradient(90deg, ${platform.color}, transparent)` }} />
+                    </motion.div>
+
+                    {/* Corner Ambient Glow */}
+                    <div
+                        className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-[90px] pointer-events-none opacity-20"
+                        style={{ background: platform.color }}
+                        aria-hidden="true"
+                    />
+
+                    <div className="relative z-10 space-y-6 sm:space-y-7">
+                        {/* Header Row */}
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3.5">
+                                <div
+                                    className="w-12 h-12 rounded-2xl border flex items-center justify-center shadow-lg"
+                                    style={{
+                                        borderColor: `${platform.color}50`,
+                                        background: `linear-gradient(135deg, ${platform.color}20, ${platform.color}05)`,
+                                        color: platform.color,
+                                    }}
+                                >
+                                    <IconComponent size={22} />
+                                </div>
+                                <div>
+                                    <span className="text-xs font-mono tracking-[0.3em] uppercase font-bold block" style={{ color: platform.color }}>
+                                        {platform.label}
+                                    </span>
+                                    <span className="text-[10px] font-mono text-[var(--text-muted)]">
+                                        {platform.badge}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <span
+                                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-semibold uppercase tracking-wider border"
+                                style={{
+                                    borderColor: `${platform.color}30`,
+                                    background: `${platform.color}10`,
+                                    color: platform.color,
+                                }}
+                            >
+                                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: platform.color }} />
+                                Active Hub
+                            </span>
+                        </div>
+
+                        {/* Title — Clean, bug-free, cinematic */}
+                        <div>
+                            <h2
+                                className="text-4xl sm:text-6xl font-bold text-[var(--text-primary)] leading-[1.05] tracking-tight"
+                                style={{ fontFamily: "'Poppins', sans-serif" }}
+                            >
+                                <span>{titleText}</span>
+                                <span style={{ color: platform.color }}>.</span>
+                            </h2>
+                            <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed max-w-lg font-sans mt-2">
+                                {platform.tagline}
+                            </p>
+                        </div>
+
+                        {/* Specific Platform Widget */}
+                        <div className="pt-1">
+                            {children}
+                        </div>
+
+                        {/* Platform CTA */}
+                        <PlatformCta platform={platform} setCursorVariant={setCursorVariant} />
+                    </div>
+                </motion.div>
+            </div>
+        </section>
+    )
 }
 
 /* ═══════════════════ HUD: RAIL + COUNTER + MOBILE DOCK ═══════════════════ */
@@ -516,19 +672,19 @@ function ProgressRail({ activeId, onNavigate, setCursorVariant, scrollProgress }
                             onClick={() => onNavigate(id)}
                             onMouseEnter={() => setCursorVariant('hover')}
                             onMouseLeave={() => setCursorVariant('default')}
-                            className="group/rail flex items-center gap-2.5 text-left"
+                            className="group/rail flex items-center gap-2.5 text-left cursor-pointer"
                             aria-label={`Scroll to ${label}`}
                         >
                             <span
                                 className="w-1.5 h-1.5 rounded-full transition-all duration-300"
                                 style={{
                                     background: isActive ? color : 'var(--text-muted)',
-                                    boxShadow: isActive ? `0 0 8px ${color}` : 'none',
-                                    transform: isActive ? 'scale(1.6)' : 'scale(1)',
+                                    boxShadow: isActive ? `0 0 10px ${color}` : 'none',
+                                    transform: isActive ? 'scale(1.8)' : 'scale(1)',
                                 }}
                             />
                             <span
-                                className={`font-mono text-[9px] tracking-[0.25em] uppercase transition-all duration-300 ${isActive ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2 group-hover/rail:opacity-60 group-hover/rail:translate-x-0'}`}
+                                className={`font-mono text-[9px] tracking-[0.25em] uppercase transition-all duration-300 ${isActive ? 'opacity-100 translate-x-0 font-bold' : 'opacity-0 -translate-x-2 group-hover/rail:opacity-60 group-hover/rail:translate-x-0'}`}
                                 style={{ color: isActive ? color : 'var(--text-secondary)' }}
                             >
                                 {label}
@@ -569,7 +725,7 @@ function SectionCounter({ activeId }) {
 
 function MobileDock({ activeId, onNavigate }) {
     return (
-        <div className="lg:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 px-3 py-2.5 rounded-full bg-[var(--bg-primary)]/80 border border-[var(--border-color)] backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.4)]">
+        <div className="lg:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 px-3 py-2.5 rounded-full bg-[var(--bg-primary)]/80 border border-[var(--border-color)] backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
             {SECTION_IDS.map((id) => {
                 const platform = PLATFORMS.find((p) => p.id === id)
                 const color = platform?.color || '#a78bfa'
@@ -579,12 +735,12 @@ function MobileDock({ activeId, onNavigate }) {
                         key={id}
                         onClick={() => onNavigate(id)}
                         aria-label={`Scroll to ${id}`}
-                        className="p-1.5"
+                        className="p-1.5 cursor-pointer"
                     >
                         <span
                             className="block rounded-full transition-all duration-300"
                             style={{
-                                width: isActive ? 18 : 6,
+                                width: isActive ? 20 : 6,
                                 height: 6,
                                 background: isActive ? color : 'var(--text-muted)',
                             }}
@@ -596,58 +752,61 @@ function MobileDock({ activeId, onNavigate }) {
     )
 }
 
-/* ═══════════════════ INTRO + INDEX ═══════════════════ */
+/* ═══════════════════ INTRO & DIRECTORY SECTIONS ═══════════════════ */
 
 function IntroSection({ setCursorVariant }) {
     const ref = useRef(null)
     const reduced = useReducedMotion()
     const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-    const y = useTransform(scrollYProgress, [0, 1], [0, -160])
+    const y = useTransform(scrollYProgress, [0, 1], [0, -140])
     const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
     return (
-        <section ref={ref} id="intro" className="relative h-screen flex items-center justify-center overflow-hidden">
-            <motion.div style={reduced ? {} : { y, opacity }} className="relative z-10 text-center px-6 max-w-4xl">
+        <section ref={ref} id="intro" className="relative h-screen flex items-center justify-center overflow-hidden px-4">
+            <motion.div style={reduced ? {} : { y, opacity }} className="relative z-10 text-center max-w-4xl">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.15 }}
-                    className="flex items-center justify-center gap-3 mb-7"
+                    className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#a78bfa]/30 bg-[#a78bfa]/10 backdrop-blur-md mb-7"
                 >
-                    <span className="w-10 h-px bg-[#a78bfa]/40" />
-                    <span className="text-[10px] font-mono tracking-[0.4em] text-[#a78bfa] uppercase font-bold">Priyank Khatri — Everywhere</span>
-                    <span className="w-10 h-px bg-[#a78bfa]/40" />
+                    <span className="w-2 h-2 rounded-full bg-[#a78bfa] animate-pulse" />
+                    <span className="text-[10px] font-mono tracking-[0.3em] text-[#a78bfa] uppercase font-bold">
+                        Priyank Khatri // Connect Network
+                    </span>
                 </motion.div>
 
-                <h1 className="text-[17vw] sm:text-[13vw] lg:text-[9rem] font-black leading-[0.9] text-[var(--text-primary)] tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                    <CharReveal text="EVERY" delay={0.25} />
+                <h1
+                    className="text-[15vw] sm:text-[12vw] lg:text-[7.5rem] font-black leading-[0.92] text-[var(--text-primary)] tracking-tight"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
+                >
+                    EVERY LINK.
                     <br />
-                    <CharReveal text="LINK." delay={0.5} className="text-gradient-silver" />
+                    <span className="text-gradient-silver">ONE SCROLL.</span>
                 </h1>
 
                 <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 1.1 }}
-                    className="mt-8 text-sm text-[var(--text-secondary)] max-w-md mx-auto leading-relaxed font-sans"
+                    transition={{ duration: 1, delay: 0.8 }}
+                    className="mt-7 text-xs sm:text-base text-[var(--text-secondary)] max-w-lg mx-auto leading-relaxed font-sans"
                 >
-                    One page, six platforms. Scroll — the particle field rebuilds itself
-                    into each destination as you travel.
+                    One continuous scroll across six platforms. The 3D particle swarm shifts and morphs into each destination glyph as you navigate.
                 </motion.p>
 
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1.5 }}
-                    className="mt-14 flex flex-col items-center gap-3"
+                    transition={{ delay: 1.2 }}
+                    className="mt-12 flex flex-col items-center gap-2.5"
                     aria-hidden="true"
                 >
-                    <span className="text-[9px] font-mono tracking-[0.35em] text-[var(--text-muted)] uppercase">Scroll</span>
-                    <div className="w-px h-14 bg-[var(--border-color)] relative overflow-hidden">
+                    <span className="text-[9px] font-mono tracking-[0.35em] text-[var(--text-muted)] uppercase">Scroll to Discover</span>
+                    <div className="w-5 h-9 border border-[var(--border-color)] rounded-full flex items-start justify-center p-1">
                         <motion.div
-                            animate={reduced ? {} : { y: ['-100%', '100%'] }}
-                            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-                            className="absolute inset-x-0 h-1/2 bg-gradient-to-b from-transparent via-[#a78bfa] to-transparent"
+                            animate={{ y: [0, 10, 0] }}
+                            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                            className="w-1 h-2 bg-[#a78bfa] rounded-full"
                         />
                     </div>
                 </motion.div>
@@ -656,93 +815,116 @@ function IntroSection({ setCursorVariant }) {
     )
 }
 
-/** Final section — every link as a big interactive index row. */
 function IndexSection({ setCursorVariant }) {
+    const [copiedId, setCopiedId] = useState(null)
+
+    const copyHandle = (text, id) => {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                setCopiedId(id)
+                setTimeout(() => setCopiedId(null), 2500)
+            })
+        }
+    }
+
     return (
-        <section id="index" className="relative min-h-screen flex items-center justify-center py-32 px-6">
+        <section id="index" className="relative min-h-screen flex items-center justify-center py-32 px-4 sm:px-6">
             <div className="w-full max-w-4xl relative z-10">
-                <div className="flex items-center gap-3 mb-12">
+                <div className="flex items-center gap-3 mb-10">
                     <span className="w-8 h-px bg-[var(--text-muted)]/40" />
-                    <span className="text-[10px] font-mono tracking-[0.35em] text-[var(--text-muted)] uppercase font-bold">Full index — pick a destination</span>
+                    <span className="text-xs font-mono tracking-[0.35em] text-[var(--text-muted)] uppercase font-bold">
+                        Direct Directory Index
+                    </span>
                 </div>
 
-                <motion.div
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: '-15%' }}
-                    variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09 } } }}
-                >
+                <div className="rounded-3xl border border-[var(--border-color)] bg-[var(--bg-primary)]/80 backdrop-blur-2xl p-6 sm:p-10 divide-y divide-[var(--border-color)]/60">
                     {PLATFORMS.map((p, i) => (
-                        <motion.a
+                        <div
                             key={p.id}
-                            href={p.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } } }}
-                            onMouseEnter={() => setCursorVariant('hover')}
-                            onMouseLeave={() => setCursorVariant('default')}
-                            className="group/row relative flex items-center justify-between gap-4 py-6 sm:py-8 border-t border-[var(--border-color)] last:border-b overflow-hidden px-2 sm:px-4"
+                            className="group/row flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-6 first:pt-0 last:pb-0"
                         >
-                            {/* hover fill */}
-                            <span
-                                className="absolute inset-0 translate-y-[101%] group-hover/row:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-                                style={{ background: `${p.color}14` }}
-                                aria-hidden="true"
-                            />
-                            <span
-                                className="absolute left-0 top-0 bottom-0 w-[3px] scale-y-0 group-hover/row:scale-y-100 origin-bottom transition-transform duration-500"
-                                style={{ background: p.color }}
-                                aria-hidden="true"
-                            />
-
-                            <span className="relative z-10 flex items-center gap-5 sm:gap-8 min-w-0">
-                                <span className="font-mono text-[10px] text-[var(--text-muted)] w-6 shrink-0">{String(i + 1).padStart(2, '0')}</span>
-                                <span className="text-2xl sm:text-4xl font-bold text-[var(--text-primary)] tracking-tight transition-transform duration-500 group-hover/row:translate-x-3" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                                    {p.label}
+                            <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+                                <span className="font-mono text-xs text-[var(--text-muted)] w-6 shrink-0">
+                                    0{i + 1}
                                 </span>
-                                <span className="hidden md:block text-[11px] text-[var(--text-secondary)] font-sans truncate max-w-[240px] opacity-0 group-hover/row:opacity-100 transition-opacity duration-500">
-                                    {p.tagline}
-                                </span>
-                            </span>
-
-                            <span className="relative z-10 flex items-center gap-4 shrink-0">
-                                <span className="hidden sm:block font-mono text-[10px] text-[var(--text-muted)] group-hover/row:text-[var(--text-secondary)] transition-colors">{p.handle}</span>
-                                <span
-                                    className="w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-500 group-hover/row:rotate-45"
-                                    style={{ borderColor: `${p.color}40`, color: p.color }}
+                                <div
+                                    className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
+                                    style={{
+                                        background: `${p.color}15`,
+                                        color: p.color,
+                                        border: `1px solid ${p.color}35`,
+                                    }}
                                 >
-                                    ↗
-                                </span>
-                            </span>
-                        </motion.a>
-                    ))}
-                </motion.div>
+                                    <p.icon size={18} />
+                                </div>
+                                <div className="min-w-0">
+                                    <h3
+                                        className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-mono transition-transform duration-300 group-hover/row:translate-x-1"
+                                    >
+                                        {p.label}
+                                    </h3>
+                                    <p className="text-xs text-[var(--text-secondary)] font-mono truncate max-w-sm">
+                                        {p.tagline}
+                                    </p>
+                                </div>
+                            </div>
 
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.8 }}
-                    className="mt-12 text-center font-mono text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase"
-                >
-                    priyank.khatri.cg@gmail.com
-                </motion.p>
+                            <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
+                                <button
+                                    onClick={() => copyHandle(p.href, p.id)}
+                                    onMouseEnter={() => setCursorVariant('hover')}
+                                    onMouseLeave={() => setCursorVariant('default')}
+                                    className="px-3 py-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/60 text-[var(--text-secondary)] hover:text-white text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
+                                >
+                                    {copiedId === p.id ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                                    <span>{copiedId === p.id ? 'Copied' : 'Copy'}</span>
+                                </button>
+                                <a
+                                    href={p.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onMouseEnter={() => setCursorVariant('hover')}
+                                    onMouseLeave={() => setCursorVariant('default')}
+                                    className="px-4 py-1.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                                    style={{
+                                        background: `${p.color}20`,
+                                        color: p.color,
+                                        border: `1px solid ${p.color}40`,
+                                    }}
+                                >
+                                    <span>Visit</span>
+                                    <ExternalLink size={12} />
+                                </a>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Footer Direct Email */}
+                <div className="mt-12 text-center font-mono text-xs text-[var(--text-muted)] space-y-2">
+                    <p>PRIYANK KHATRI · PORTFOLIO DOSSIER 2026</p>
+                    <a
+                        href="mailto:priyank.khatri.cg@gmail.com"
+                        className="text-[var(--text-secondary)] hover:text-[#60a5fa] transition-colors underline underline-offset-4"
+                    >
+                        priyank.khatri.cg@gmail.com
+                    </a>
+                </div>
             </div>
         </section>
     )
 }
 
-/* ═══════════════════ PAGE ═══════════════════ */
+/* ═══════════════════ MAIN LINKS PAGE ═══════════════════ */
 
 export default function LinksPage() {
     const [activeSection, setActiveSection] = useState('intro')
     const setCursorVariant = useStore((s) => s.setCursorVariant)
     const reduced = useReducedMotion()
 
-    // Global scroll: progress feeds the rail, velocity feeds skew + 3D turbulence
     const { scrollY, scrollYProgress } = useScroll()
     const velocity = useVelocity(scrollY)
-    const skewRaw = useTransform(velocity, [-2500, 2500], [-2.5, 2.5])
+    const skewRaw = useTransform(velocity, [-2500, 2500], [-1.8, 1.8])
     const skew = useSpring(skewRaw, { stiffness: 280, damping: 35 })
 
     useEffect(() => {
@@ -752,7 +934,7 @@ export default function LinksPage() {
                     if (entry.isIntersecting) setActiveSection(entry.target.id)
                 })
             },
-            { root: null, rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+            { root: null, rootMargin: '-40% 0px -40% 0px', threshold: 0 }
         )
         SECTION_IDS.forEach((id) => {
             const el = document.getElementById(id)
@@ -769,7 +951,10 @@ export default function LinksPage() {
         <>
             <Helmet>
                 <title>Links | Priyank Khatri — Every Platform, One Scroll</title>
-                <meta name="description" content="Scroll-driven link hub for Priyank Khatri — GitHub, LeetCode, LinkedIn, YouTube, Instagram, and X, each with its own morphing particle scene." />
+                <meta
+                    name="description"
+                    content="Scroll-driven link hub for Priyank Khatri — GitHub, LeetCode, LinkedIn, YouTube, Instagram, and X, each with its own morphing particle scene."
+                />
                 <link rel="canonical" href="https://priyankkhatri.vercel.app/links" />
             </Helmet>
 
