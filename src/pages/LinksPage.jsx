@@ -138,9 +138,9 @@ const contributionCells = [...Array(120)].map((_, i) => {
     const density = Math.random()
     return {
         colorClass: density < 0.28 ? 'bg-white/5'
-            : density < 0.58 ? 'bg-[#60a5fa]/25'
-            : density < 0.85 ? 'bg-[#60a5fa]/65 shadow-[0_0_6px_rgba(96,165,250,0.3)]'
-            : 'bg-[#60a5fa] shadow-[0_0_8px_rgba(96,165,250,0.6)]',
+            : density < 0.58 ? 'bg-[#60a5fa]/30'
+            : density < 0.85 ? 'bg-[#60a5fa]/70 shadow-[0_0_6px_rgba(96,165,250,0.35)]'
+            : 'bg-[#60a5fa] shadow-[0_0_8px_rgba(96,165,250,0.65)]',
         msg: mockCommits[i % mockCommits.length],
         date: `2026-08-${String((i % 28) + 1).padStart(2, '0')}`,
     }
@@ -148,11 +148,11 @@ const contributionCells = [...Array(120)].map((_, i) => {
 
 /* ═══════════════════ MOTION HELPERS ═══════════════════ */
 
-/** Magnetic hover button wrapper */
+/** Magnetic hover button wrapper with spring dynamics */
 function Magnetic({ children, strength = 0.3, className = '' }) {
     const ref = useRef(null)
-    const x = useSpring(0, { stiffness: 200, damping: 15, mass: 0.4 })
-    const y = useSpring(0, { stiffness: 200, damping: 15, mass: 0.4 })
+    const x = useSpring(0, { stiffness: 220, damping: 16, mass: 0.35 })
+    const y = useSpring(0, { stiffness: 220, damping: 16, mass: 0.35 })
     const reduced = useReducedMotion()
 
     const handleMove = (e) => {
@@ -184,7 +184,7 @@ function PlatformCta({ platform, setCursorVariant }) {
                     rel="noopener noreferrer"
                     onMouseEnter={() => setCursorVariant('hover')}
                     onMouseLeave={() => setCursorVariant('default')}
-                    className="group/cta relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full font-mono text-xs tracking-wider uppercase font-semibold transition-all duration-300 overflow-hidden shadow-lg"
+                    className="group/cta relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full font-mono text-xs tracking-wider uppercase font-semibold transition-all duration-300 overflow-hidden shadow-lg cursor-pointer"
                     style={{
                         background: `linear-gradient(135deg, ${platform.color}25, ${platform.color}08)`,
                         borderColor: `${platform.color}50`,
@@ -250,7 +250,7 @@ function GithubWidget({ setCursorVariant }) {
                                     setCursorVariant('default')
                                     setActiveTooltip(null)
                                 }}
-                                className={`w-3.5 h-3.5 rounded-[3px] cursor-pointer transition-all duration-200 hover:scale-125 ${cell.colorClass}`}
+                                className={`w-3.5 h-3.5 rounded-[3px] cursor-pointer transition-all duration-200 hover:scale-125 hover:z-10 ${cell.colorClass}`}
                             />
                         ))}
                     </div>
@@ -261,6 +261,7 @@ function GithubWidget({ setCursorVariant }) {
                                 initial={{ opacity: 0, y: 8, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
+                                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
                                 className="absolute bottom-2 left-3 right-3 bg-black/95 backdrop-blur border border-[#60a5fa]/30 px-3 py-2 rounded-xl font-mono text-[10px] text-[#60a5fa] shadow-xl z-20 flex items-center justify-between"
                             >
                                 <span className="truncate">{activeTooltip.msg}</span>
@@ -318,7 +319,7 @@ function LeetCodeWidget() {
                         </div>
                         <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
                             <div
-                                className="h-full rounded-full transition-all duration-700"
+                                className="h-full rounded-full transition-all duration-700 ease-out"
                                 style={{
                                     width: diff.percent,
                                     backgroundColor: diff.color,
@@ -406,10 +407,10 @@ function YouTubeWidget() {
                 {devlogs.map((vid, idx) => (
                     <div
                         key={idx}
-                        className="group/vid rounded-2xl border border-white/10 bg-black/30 p-3.5 space-y-2.5 hover:border-red-500/40 transition-all duration-300"
+                        className="group/vid rounded-2xl border border-white/10 bg-black/30 p-3.5 space-y-2.5 hover:border-red-500/40 transition-all duration-300 cursor-pointer"
                     >
                         <div className="aspect-video rounded-xl bg-gradient-to-br from-red-950/40 via-black to-black border border-red-500/20 flex items-center justify-center relative overflow-hidden group-hover/vid:border-red-500/50 transition-colors">
-                            <div className="w-10 h-10 rounded-full bg-red-600/80 text-white flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.5)] group-hover/vid:scale-110 transition-transform">
+                            <div className="w-10 h-10 rounded-full bg-red-600/80 text-white flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.5)] group-hover/vid:scale-110 transition-transform duration-300">
                                 <Play size={14} className="fill-current ml-0.5" />
                             </div>
                             <span className="absolute bottom-2 right-2 text-[8px] font-mono px-1.5 py-0.5 rounded bg-black/80 text-red-200 border border-red-500/20">
@@ -449,7 +450,8 @@ function InstagramWidget() {
                     <motion.div
                         key={idx}
                         whileHover={{ y: -4, scale: 1.03 }}
-                        className={`aspect-square rounded-2xl bg-gradient-to-br ${tile.color} border border-pink-500/20 p-3 flex flex-col justify-between hover:border-pink-500/50 transition-colors`}
+                        transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+                        className={`aspect-square rounded-2xl bg-gradient-to-br ${tile.color} border border-pink-500/20 p-3 flex flex-col justify-between hover:border-pink-500/50 transition-colors cursor-pointer`}
                     >
                         <span className="text-[9px] font-mono text-pink-400 font-bold">0{idx + 1}</span>
                         <div>
@@ -510,31 +512,44 @@ function PinnedSection({ platform, index, setCursorVariant, children }) {
     const reduced = useReducedMotion()
     const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
 
-    // Fine-tuned scroll transformations for buttery fluid motion
-    const wordX = useTransform(scrollYProgress, [0, 1], ['25vw', '-35vw'])
-    const wordOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 0.25, 0.25, 0])
+    // Spring-smoothed kinematics: completely eliminates trackpad/mouse-wheel jerkiness
+    const rawWordX = useTransform(scrollYProgress, [0, 1], ['20vw', '-28vw'])
+    const wordX = useSpring(rawWordX, { stiffness: 90, damping: 24, mass: 0.25 })
+    const wordOpacity = useTransform(scrollYProgress, [0, 0.18, 0.82, 1], [0, 0.22, 0.22, 0])
 
-    const cardY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [90, 0, 0, -90])
-    const cardOpacity = useTransform(scrollYProgress, [0.02, 0.2, 0.8, 0.98], [0, 1, 1, 0])
-    const cardRotateX = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [10, 0, 0, -8])
-    const cardScale = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [0.93, 1, 1, 0.95])
-    const beamScaleX = useTransform(scrollYProgress, [0.06, 0.3], [0, 1])
-    const metaY = useTransform(scrollYProgress, [0.05, 0.25], [30, 0])
-    const metaOpacity = useTransform(scrollYProgress, [0.05, 0.25], [0, 1])
+    const rawCardY = useTransform(scrollYProgress, [0, 0.26, 0.74, 1], [70, 0, 0, -70])
+    const cardY = useSpring(rawCardY, { stiffness: 130, damping: 22, mass: 0.2 })
+
+    const rawCardOpacity = useTransform(scrollYProgress, [0.03, 0.22, 0.78, 0.97], [0, 1, 1, 0])
+    const cardOpacity = useSpring(rawCardOpacity, { stiffness: 150, damping: 24, mass: 0.2 })
+
+    const rawCardRotateX = useTransform(scrollYProgress, [0, 0.26, 0.74, 1], [7, 0, 0, -6])
+    const cardRotateX = useSpring(rawCardRotateX, { stiffness: 130, damping: 22, mass: 0.2 })
+
+    const rawCardScale = useTransform(scrollYProgress, [0, 0.26, 0.74, 1], [0.94, 1, 1, 0.96])
+    const cardScale = useSpring(rawCardScale, { stiffness: 130, damping: 22, mass: 0.2 })
+
+    const rawBeamScaleX = useTransform(scrollYProgress, [0.08, 0.32], [0, 1])
+    const beamScaleX = useSpring(rawBeamScaleX, { stiffness: 140, damping: 24 })
+
+    const rawMetaY = useTransform(scrollYProgress, [0.06, 0.26], [25, 0])
+    const metaY = useSpring(rawMetaY, { stiffness: 130, damping: 22 })
+    const metaOpacity = useTransform(scrollYProgress, [0.06, 0.26], [0, 1])
+
+    const rawAuraOpacity = useTransform(scrollYProgress, [0.1, 0.3, 0.7, 0.9], [0, 0.25, 0.25, 0])
+    const auraOpacity = useSpring(rawAuraOpacity, { stiffness: 120, damping: 24 })
 
     const stageStyle = reduced ? {} : { y: cardY, opacity: cardOpacity, rotateX: cardRotateX, scale: cardScale }
     const wordStyle = reduced ? { x: 0, opacity: 0.15 } : { x: wordX, opacity: wordOpacity }
 
     const IconComponent = platform.icon
-
-    // Display title derived from action word
     const titleText = platform.word.charAt(0) + platform.word.slice(1).toLowerCase()
 
     return (
-        <section ref={ref} id={platform.id} className={reduced ? 'relative min-h-screen' : 'relative h-[150vh]'}>
+        <section ref={ref} id={platform.id} className={reduced ? 'relative min-h-screen' : 'relative h-[145vh]'}>
             <div className={`${reduced ? 'min-h-screen' : 'sticky top-0 h-screen'} flex items-center justify-center overflow-hidden [perspective:1200px] px-4 sm:px-6`}>
 
-                {/* Giant outlined word sweeping across the stage in the background */}
+                {/* Giant outlined word sweeping across the background with spring-smoothed parallax */}
                 <motion.span
                     style={{
                         ...wordStyle,
@@ -573,13 +588,19 @@ function PinnedSection({ platform, index, setCursorVariant, children }) {
                         className="absolute top-0 left-0 right-0 h-[2px] origin-left z-20"
                         aria-hidden="true"
                     >
-                        <div className="h-full w-full" style={{ background: `linear-gradient(90deg, ${platform.color}, transparent)` }} />
+                        <div
+                            className="h-full w-full"
+                            style={{
+                                background: `linear-gradient(90deg, ${platform.color}, ${platform.color}80, transparent)`,
+                                boxShadow: `0 0 12px ${platform.color}80`,
+                            }}
+                        />
                     </motion.div>
 
-                    {/* Corner Ambient Glow */}
-                    <div
-                        className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-[90px] pointer-events-none opacity-20"
-                        style={{ background: platform.color }}
+                    {/* Corner Ambient Glow with Spring Pacing */}
+                    <motion.div
+                        style={reduced ? { background: platform.color } : { opacity: auraOpacity, background: platform.color }}
+                        className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-[90px] pointer-events-none"
                         aria-hidden="true"
                     />
 
@@ -620,7 +641,7 @@ function PinnedSection({ platform, index, setCursorVariant, children }) {
                             </span>
                         </div>
 
-                        {/* Title — Clean, bug-free, cinematic */}
+                        {/* Title & Tagline */}
                         <div>
                             <h2
                                 className="text-4xl sm:text-6xl font-bold text-[var(--text-primary)] leading-[1.05] tracking-tight"
@@ -758,7 +779,8 @@ function IntroSection({ setCursorVariant }) {
     const ref = useRef(null)
     const reduced = useReducedMotion()
     const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-    const y = useTransform(scrollYProgress, [0, 1], [0, -140])
+    const rawY = useTransform(scrollYProgress, [0, 1], [0, -120])
+    const y = useSpring(rawY, { stiffness: 120, damping: 22 })
     const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
     return (
@@ -924,8 +946,8 @@ export default function LinksPage() {
 
     const { scrollY, scrollYProgress } = useScroll()
     const velocity = useVelocity(scrollY)
-    const skewRaw = useTransform(velocity, [-2500, 2500], [-1.8, 1.8])
-    const skew = useSpring(skewRaw, { stiffness: 280, damping: 35 })
+    const skewRaw = useTransform(velocity, [-2500, 2500], [-1.5, 1.5])
+    const skew = useSpring(skewRaw, { stiffness: 260, damping: 32 })
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -934,7 +956,7 @@ export default function LinksPage() {
                     if (entry.isIntersecting) setActiveSection(entry.target.id)
                 })
             },
-            { root: null, rootMargin: '-40% 0px -40% 0px', threshold: 0 }
+            { root: null, rootMargin: '-35% 0px -35% 0px', threshold: 0 }
         )
         SECTION_IDS.forEach((id) => {
             const el = document.getElementById(id)
