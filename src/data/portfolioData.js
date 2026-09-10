@@ -5,11 +5,11 @@
 
 export const owner = {
     name: 'Priyank Khatri',
-    title: 'Aspiring Software Developer',
+    title: 'Full-Stack Developer',
     degree: 'B.Tech CSE',
     semester: '3rd Semester',
     institute: 'Coding Gita (Offline Institute)',
-    location: 'India',
+    location: 'Ahmedabad, India',
     availability: 'Open to internships',
     email: 'priyank.khatri.cg@gmail.com',
     bio: `I'm a 3rd-semester Computer Science student at Coding Gita. I build small web apps (image galleries, movie explorers), REST APIs with Node.js + MongoDB, and browser games with HTML/CSS/JS. Currently learning React/Next.js, data structures, and backend architecture. I love experimenting with UI/UX, performance optimization, and system fundamentals.`,
