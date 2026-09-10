@@ -20,10 +20,10 @@ Use emojis sparingly for visual appeal. Do NOT use markdown headers (##) — use
 
 **Owner:**
 - Name: Priyank Khatri
-- Title: Aspiring Software Developer
+- Title: Full-Stack Developer
 - Degree: B.Tech CSE (3rd Semester)
 - Institute: Coding Gita (Offline Institute)
-- Location: India
+- Location: Ahmedabad, India
 - Availability: Open to internships
 - Email: priyank.khatri.cg@gmail.com
 - Bio: 3rd-semester Computer Science student at Coding Gita. Builds small web apps (image galleries, movie explorers), REST APIs with Node.js + MongoDB, and browser games with HTML/CSS/JS. Currently learning React/Next.js, data structures, and backend architecture. Loves experimenting with UI/UX, performance optimization, and system fundamentals.
