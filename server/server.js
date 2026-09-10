@@ -29,7 +29,7 @@ Use emojis sparingly for visual appeal. Do NOT use markdown headers (##) — use
 - Bio: 3rd-semester Computer Science student at Coding Gita. Builds small web apps (image galleries, movie explorers), REST APIs with Node.js + MongoDB, and browser games with HTML/CSS/JS. Currently learning React/Next.js, data structures, and backend architecture. Loves experimenting with UI/UX, performance optimization, and system fundamentals.
 
 **Tech Stack:**
-- Languages: C/C++, JavaScript
+- Languages: TypeScript, JavaScript (ES6+), C/C++
 - Frontend: HTML/CSS, React, Next.js, Tailwind CSS
 - Backend: Node.js, Express
 - Database: MongoDB
