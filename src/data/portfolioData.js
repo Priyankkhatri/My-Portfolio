@@ -16,9 +16,10 @@ export const owner = {
 }
 
 export const techStack = [
+    { label: 'TypeScript', icon: '🔷', category: 'Language' },
+    { label: 'JavaScript', icon: '💛', category: 'Language' },
     { label: 'C / C++', icon: '⚡', category: 'Language' },
     { label: 'HTML / CSS', icon: '🎨', category: 'Frontend' },
-    { label: 'JavaScript', icon: '💛', category: 'Language' },
     { label: 'React / Next.js', icon: '⚛️', category: 'Frontend' },
     { label: 'Node.js', icon: '🟢', category: 'Backend' },
     { label: 'Express', icon: '🔲', category: 'Backend' },
